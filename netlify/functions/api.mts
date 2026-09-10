@@ -3,6 +3,7 @@ import { getDatabase } from "@netlify/database";
 import { getUser } from "@netlify/identity";
 import { isAdminUser } from "../../lib/admin-auth.mjs";
 import { assessReflection } from "../../lib/assessment.mjs";
+import { CAPSTONES, assessChapterCapstone } from "../../lib/chapter-capstone.mjs";
 
 const json = (data: unknown, status=200) => new Response(JSON.stringify(data), {
   status,
@@ -45,6 +46,25 @@ function assessmentRecord(row:any) {
     teacherComment:row.teacher_comment || null,
     reviewedBy:row.reviewed_by || null,
     assessedAt:row.assessed_at,
+    reviewedAt:row.reviewed_at || null,
+    effectiveLevel:row.teacher_level || row.suggested_level,
+    formative:true
+  };
+}
+
+function chapterAssessmentRecord(row:any) {
+  return {
+    blockId:row.block_id,
+    answers:row.answers || {},
+    suggestedLevel:row.suggested_level,
+    suggestedScore:row.suggested_score,
+    criteria:row.criteria || {},
+    strengths:row.strengths || [],
+    nextSteps:row.next_steps || [],
+    teacherLevel:row.teacher_level || null,
+    teacherComment:row.teacher_comment || null,
+    reviewedBy:row.reviewed_by || null,
+    submittedAt:row.submitted_at,
     reviewedAt:row.reviewed_at || null,
     effectiveLevel:row.teacher_level || row.suggested_level,
     formative:true
@@ -114,6 +134,37 @@ export default async (req: Request) => {
       return json({ assessment:assessmentRecord(rows[0]) });
     }
 
+    const chapterMatch = path.match(/^chapter-assessment\/([^/]+)$/);
+    if (chapterMatch && req.method === "POST") {
+      const learner = await currentLearner();
+      if (!learner) return json({ error:"Authentication required." }, 401);
+      const blockId = decodeURIComponent(chapterMatch[1]).slice(0,80);
+      if (!(blockId in CAPSTONES)) return json({ error:"Unknown chapter assessment." }, 404);
+      const progressRows = await db.sql`SELECT state FROM learner_progress WHERE identity_user_id=${learner.id}`;
+      const state:any = progressRows[0]?.state || {};
+      const requiredSessions = blockId === 'block1' ? ['b1s1','b1s2','b1s3','b1s4'] : ['b2s1','b2s2','b2s3','b2s4','b2s5','b2s6'];
+      const completed = new Set(Array.isArray(state.completed) ? state.completed : []);
+      if (!requiredSessions.every(id=>completed.has(id))) return json({ error:"Complete all chapter practical sessions before submitting the chapter assessment." }, 409);
+      const body:any = await req.json().catch(()=>({}));
+      const answers = body.answers && typeof body.answers === 'object' && !Array.isArray(body.answers) ? body.answers : {};
+      const cleanAnswers:any = {};
+      for (const [key,value] of Object.entries(answers).slice(0,6)) cleanAnswers[String(key).slice(0,20)] = String(value || '').trim().slice(0,5000);
+      if (Object.keys(cleanAnswers).length < 3 || Object.values(cleanAnswers).some((v:any)=>v.length<25)) return json({ error:"Complete all chapter assessment responses with enough detail to show your reasoning." }, 400);
+      const result:any = assessChapterCapstone({blockId,answers:cleanAnswers});
+      const encodedAnswers=JSON.stringify(cleanAnswers), criteria=JSON.stringify(result.criteria), strengths=JSON.stringify(result.strengths), nextSteps=JSON.stringify(result.nextSteps);
+      const rows = await db.sql`
+        INSERT INTO chapter_assessments
+          (identity_user_id, block_id, answers, suggested_level, suggested_score, criteria, strengths, next_steps, submitted_at)
+        VALUES
+          (${learner.id}, ${blockId}, ${encodedAnswers}::jsonb, ${result.level}, ${result.score}, ${criteria}::jsonb, ${strengths}::jsonb, ${nextSteps}::jsonb, NOW())
+        ON CONFLICT (identity_user_id, block_id)
+        DO UPDATE SET answers=${encodedAnswers}::jsonb, suggested_level=${result.level}, suggested_score=${result.score}, criteria=${criteria}::jsonb,
+                      strengths=${strengths}::jsonb, next_steps=${nextSteps}::jsonb, submitted_at=NOW()
+        RETURNING *
+      `;
+      return json({ assessment:chapterAssessmentRecord(rows[0]) });
+    }
+
     if (path === "admin/me" && req.method === "GET") {
       const admin = await requireAdmin();
       if (admin.error) return admin.error;
@@ -125,7 +176,8 @@ export default async (req: Request) => {
       const rows = await db.sql`
         SELECT l.identity_user_id, l.display_name, l.created_at, l.last_login_at, p.updated_at, p.state,
           (SELECT COUNT(*)::int FROM formative_assessments a WHERE a.identity_user_id=l.identity_user_id) assessment_count,
-          (SELECT COUNT(*)::int FROM formative_assessments a WHERE a.identity_user_id=l.identity_user_id AND a.teacher_level IS NOT NULL) reviewed_count
+          (SELECT COUNT(*)::int FROM formative_assessments a WHERE a.identity_user_id=l.identity_user_id AND a.teacher_level IS NOT NULL) reviewed_count,
+          (SELECT COUNT(*)::int FROM chapter_assessments c WHERE c.identity_user_id=l.identity_user_id) chapter_assessment_count
         FROM learners l LEFT JOIN learner_progress p ON p.identity_user_id=l.identity_user_id
         ORDER BY COALESCE(p.updated_at, l.last_login_at, l.created_at) DESC
       `;
@@ -133,7 +185,7 @@ export default async (req: Request) => {
         id:row.identity_user_id, displayName:row.display_name, createdAt:row.created_at, lastLoginAt:row.last_login_at, updatedAt:row.updated_at,
         completedCount:Array.isArray(state.completed)?new Set(state.completed).size:0, badgeCount:Array.isArray(state.badges)?new Set(state.badges).size:0,
         reflectionCount:state.reflections&&typeof state.reflections==="object"?Object.keys(state.reflections).length:0,
-        assessmentCount:Number(row.assessment_count||0), reviewedCount:Number(row.reviewed_count||0)
+        assessmentCount:Number(row.assessment_count||0), reviewedCount:Number(row.reviewed_count||0), chapterAssessmentCount:Number(row.chapter_assessment_count||0)
       }; });
       return json({ students });
     }
@@ -145,8 +197,9 @@ export default async (req: Request) => {
       const rows=await db.sql`SELECT l.identity_user_id,l.display_name,l.created_at,l.last_login_at,p.updated_at,p.state FROM learners l LEFT JOIN learner_progress p ON p.identity_user_id=l.identity_user_id WHERE l.identity_user_id=${learnerId}`;
       if(!rows.length)return json({error:"Student not found."},404);
       const assessmentRows=await db.sql`SELECT * FROM formative_assessments WHERE identity_user_id=${learnerId} ORDER BY assessed_at DESC`;
+      const chapterRows=await db.sql`SELECT * FROM chapter_assessments WHERE identity_user_id=${learnerId} ORDER BY submitted_at DESC`;
       const row:any=rows[0];
-      return json({ student:{id:row.identity_user_id,displayName:row.display_name,createdAt:row.created_at,lastLoginAt:row.last_login_at,updatedAt:row.updated_at}, state:row.state&&typeof row.state==="object"?row.state:{}, assessments:assessmentRows.map(assessmentRecord) });
+      return json({ student:{id:row.identity_user_id,displayName:row.display_name,createdAt:row.created_at,lastLoginAt:row.last_login_at,updatedAt:row.updated_at}, state:row.state&&typeof row.state==="object"?row.state:{}, assessments:assessmentRows.map(assessmentRecord), chapterAssessments:chapterRows.map(chapterAssessmentRecord) });
     }
 
     const reviewMatch = path.match(/^admin\/assessment\/([^/]+)\/([^/]+)$/);
@@ -164,6 +217,23 @@ export default async (req: Request) => {
       `;
       if(!rows.length)return json({error:"Assessment not found."},404);
       return json({assessment:assessmentRecord(rows[0])});
+    }
+
+    const chapterReviewMatch = path.match(/^admin\/chapter-assessment\/([^/]+)\/([^/]+)$/);
+    if (chapterReviewMatch && req.method === "PUT") {
+      const admin = await requireAdmin(); if (admin.error) return admin.error;
+      const learnerId=decodeURIComponent(chapterReviewMatch[1]), blockId=decodeURIComponent(chapterReviewMatch[2]);
+      const body:any=await req.json().catch(()=>({}));
+      const level=String(body.level||"");
+      const allowed=new Set(["Getting started","Getting there","Going further"]);
+      if(!allowed.has(level))return json({error:"Invalid assessment level."},400);
+      const comment=String(body.comment||"").trim().slice(0,2000);
+      const rows=await db.sql`
+        UPDATE chapter_assessments SET teacher_level=${level}, teacher_comment=${comment}, reviewed_by=${admin.identity.email}, reviewed_at=NOW()
+        WHERE identity_user_id=${learnerId} AND block_id=${blockId} RETURNING *
+      `;
+      if(!rows.length)return json({error:"Chapter assessment not found."},404);
+      return json({assessment:chapterAssessmentRecord(rows[0])});
     }
 
     return json({ error:"Not found." }, 404);
