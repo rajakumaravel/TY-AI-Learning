@@ -12,7 +12,8 @@
   "dependencies": {
     "@netlify/database": "latest",
     "@netlify/functions": "latest",
-    "@netlify/identity": "latest"
+    "@netlify/identity": "latest",
+    "@supabase/supabase-js": "latest"
   },
   "devDependencies": {
     "vite": "latest"
