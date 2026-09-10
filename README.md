@@ -1,27 +1,30 @@
-# AI in Practice — TY Student Portal V2
+# AI in Practice — TY Student Portal V2.1
 
-A Netlify-hosted Transition Year learning portal for the **AI in Practice** curriculum.
+The portal follows **AI in Practice · Student Book v1.0 · September 2026** as the curriculum source of truth.
 
-## V2 pilot features
+## Pilot features
 
-- Student code + PIN sign-in
-- Signed HTTP-only session cookie
-- Netlify Database (Postgres) progress persistence
-- Local browser cache as a resilience layer
-- Study-first material before activities and reflection questions
-- Sequential block gating: Block 2 unlocks only after Block 1 is complete
-- Progress, reflections, activities, badges and portfolio state
+- Chapters 1–2 mapped directly to the redesigned student book
+- Study-first explanations before activities and reflections
+- Required portfolio evidence before a session can be completed
+- Sequential chapter unlocking
+- Google login through Netlify Identity
+- Netlify Database progress persistence across devices
+- Local anonymous progress with migration into the student's account after first sign-in
 - Netlify Functions API
-- Automated unit/integrity tests
+- Automated curriculum/auth/build checks
 
-## Local development
+## Authentication setup
+
+Netlify Identity must be enabled for the project and **Google** added under Identity → Registration → External providers. The pilot can use Netlify's default shared Google OAuth integration, so custom Google client credentials are not required.
+
+## Development
 
 ```bash
 npm install
-npm test
+npm run check
+npm run build
 npx netlify dev
 ```
 
-The `SESSION_SECRET` must be configured as a server-side Netlify environment variable in production.
-
-<!-- deployment trigger: 2026-09-10 -->
+Production deploys are triggered from the `main` branch.
