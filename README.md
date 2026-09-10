@@ -23,3 +23,5 @@ npx netlify dev
 ```
 
 The `SESSION_SECRET` must be configured as a server-side Netlify environment variable in production.
+
+<!-- deployment trigger: 2026-09-10 -->
