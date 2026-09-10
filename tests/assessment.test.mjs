@@ -31,7 +31,7 @@ test('assessment persistence preserves automated and teacher judgements separate
   assert.match(migration,/suggested_level/i);
   assert.match(migration,/teacher_level/i);
   assert.match(migration,/teacher_comment/i);
-  assert.match(api,/admin\/assessment/);
+  assert.match(api,/reviewMatch\s*=\s*path\.match/);
   assert.match(api,/reviewed_by/);
 });
 
