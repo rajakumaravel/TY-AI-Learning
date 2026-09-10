@@ -2,7 +2,7 @@ import type { Config } from '@netlify/functions';
 import { getDatabase } from '@netlify/database';
 import { getUser } from '@netlify/identity';
 import { isAdminUser } from '../../lib/admin-auth.mjs';
-import { PROJECT_BRIEFS, emptyProjectWorkspace, projectReadyForSubmission, validProjectId } from '../../lib/project-briefs.mjs';
+import { PROJECT_BRIEFS, emptyProjectWorkspace, projectReadyForSubmission, safeEvidenceUrl, validProjectId } from '../../lib/project-briefs.mjs';
 
 const json = (data: unknown, status=200) => new Response(JSON.stringify(data), {
   status,
@@ -37,7 +37,7 @@ function cleanWorkspace(value:any) {
   })) : [];
   const evidence = Array.isArray(raw.evidence) ? raw.evidence.slice(0,50).map((item:any) => ({
     label:String(item?.label||'').slice(0,240),
-    url:String(item?.url||'').slice(0,2000),
+    url:safeEvidenceUrl(item?.url),
     note:String(item?.note||'').slice(0,4000)
   })) : [];
   return { workLog, evidence, finalRecommendation:String(raw.finalRecommendation||'').slice(0,8000) };
