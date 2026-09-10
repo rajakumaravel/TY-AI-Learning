@@ -2,7 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
-const sql=fs.readFileSync('supabase/migrations/20260910123000_initial_platform_schema.sql','utf8');
+const migrationFiles=fs.readdirSync('supabase/migrations');
+const initialSchemaFiles=migrationFiles.filter((name)=>name.endsWith('_initial_platform_schema.sql'));
+assert.equal(initialSchemaFiles.length,1,'expected exactly one initial platform schema migration');
+const sql=fs.readFileSync(`supabase/migrations/${initialSchemaFiles[0]}`,'utf8');
 const ci=fs.readFileSync('.github/workflows/ci.yml','utf8');
 
 test('Supabase schema uses auth UUIDs instead of Netlify identity ids as primary ownership',()=>{
