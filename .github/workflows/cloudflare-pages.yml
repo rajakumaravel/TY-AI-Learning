@@ -2,6 +2,8 @@ name: Deploy Cloudflare Pages
 
 on:
   workflow_dispatch:
+  push:
+    branches: [infra-cloudflare-supabase]
 
 permissions:
   contents: read
@@ -10,12 +12,16 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - run: npm install
+          cache: npm
+      - run: npm ci
       - run: npm run check
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
