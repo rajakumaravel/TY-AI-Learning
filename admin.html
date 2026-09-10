@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>AI in Practice · Admin Dashboard</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/admin.css" />
+</head>
+<body class="admin-body">
+  <header class="topbar admin-topbar">
+    <a class="brand admin-brand" href="/admin">
+      <span class="brand-mark">AI</span>
+      <span><strong>AI in Practice</strong><small>Admin Dashboard</small></span>
+    </a>
+    <nav>
+      <a class="nav-btn admin-link" href="/">Student portal</a>
+      <button id="adminAuthBtn" class="google-btn"><span class="gmark">G</span><span>Continue with Google</span></button>
+    </nav>
+  </header>
+
+  <main class="admin-shell">
+    <section id="adminGate" class="admin-gate">
+      <div class="eyebrow">TEACHER / ADMIN</div>
+      <h1>Student progress & evidence</h1>
+      <p>Sign in with an authorised Google account to review student progress, reflections and activity evidence.</p>
+      <button id="adminSignIn" class="google-btn large"><span class="gmark">G</span><span>Continue with Google</span></button>
+      <div id="gateMessage" class="admin-message"></div>
+    </section>
+
+    <section id="adminDashboard" class="hidden">
+      <div class="admin-heading">
+        <div><div class="eyebrow">PILOT COHORT</div><h1>Learning overview</h1><p id="adminIdentity"></p></div>
+        <button id="refreshBtn" class="secondary">Refresh data</button>
+      </div>
+
+      <div class="admin-metrics">
+        <article><span>Students</span><strong id="metricStudents">0</strong></article>
+        <article><span>Average progress</span><strong id="metricProgress">0%</strong></article>
+        <article><span>Chapter 1 complete</span><strong id="metricChapter1">0</strong></article>
+        <article><span>Pilot complete</span><strong id="metricPilot">0</strong></article>
+      </div>
+
+      <section class="admin-panel">
+        <div class="admin-toolbar">
+          <div><h2>Students</h2><p>Select a student to inspect their portfolio evidence.</p></div>
+          <label class="admin-search"><span>Search</span><input id="studentSearch" type="search" placeholder="Student name"></label>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Student</th><th>Progress</th><th>Current chapter</th><th>Badges</th><th>Last activity</th><th></th></tr></thead>
+            <tbody id="studentRows"></tbody>
+          </table>
+        </div>
+        <div id="emptyStudents" class="admin-empty hidden">No student records yet.</div>
+      </section>
+
+      <section id="studentDetail" class="admin-panel student-detail hidden">
+        <div class="detail-head">
+          <div><div class="eyebrow">STUDENT EVIDENCE</div><h2 id="detailName"></h2><p id="detailMeta"></p></div>
+          <button id="closeDetail" class="secondary">Close</button>
+        </div>
+        <div id="detailStats" class="detail-stats"></div>
+        <div id="detailContent"></div>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="/admin.js"></script>
+</body>
+</html>
