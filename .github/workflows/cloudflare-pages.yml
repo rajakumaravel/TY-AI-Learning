@@ -23,12 +23,6 @@ jobs:
           node-version: 24
       - run: npm install
       - run: npm run check
-      - name: Create Cloudflare Pages project
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages project create ty-ai-learning --production-branch=main
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
