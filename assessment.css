@@ -1,0 +1,4 @@
+.assessment-card,.assessment-review-card{border:1px solid rgba(0,0,0,.12);border-radius:14px;padding:16px;margin-top:14px;background:rgba(255,255,255,.72)}
+.assessment-card h3,.assessment-review-card h3{margin:.3rem 0 .7rem}
+.assessment-criteria{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 12px}.assessment-criteria span{padding:6px 9px;border-radius:999px;background:rgba(0,0,0,.06);font-size:.85rem}
+.assessment-review-panel{margin-top:22px}.assessment-review-card{display:grid;gap:10px}.assessment-review-head{display:flex;justify-content:space-between;gap:12px;align-items:center}.assessment-review-card label{display:grid;gap:6px;font-weight:600}.assessment-review-card select,.assessment-review-card textarea{width:100%;padding:10px;border:1px solid rgba(0,0,0,.18);border-radius:10px;font:inherit}.assessment-review-card textarea{min-height:90px}.review-status{font-size:.85rem;opacity:.75}
