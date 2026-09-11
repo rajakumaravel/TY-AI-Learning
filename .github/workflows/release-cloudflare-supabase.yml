@@ -1,0 +1,70 @@
+name: Release Cloudflare + Supabase
+
+# Production release is manual only until every roadmap phase is accepted on Preview
+# (operator decision 2026-09-11, recorded in ADR-007).
+on:
+  workflow_dispatch:
+    inputs:
+      head_sha:
+        description: "Optional commit SHA to deploy; defaults to main"
+        required: false
+        type: string
+
+concurrency:
+  group: production-cloudflare-supabase
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  release:
+    name: Migrate database and deploy application
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      DEPLOY_SHA: ${{ inputs.head_sha || 'main' }}
+      VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+    steps:
+      - name: Checkout exact release commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.DEPLOY_SHA }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify release commit
+        run: npm run check
+
+      - name: Dry-run Supabase migrations
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: npx --yes supabase@latest db push --db-url "$SUPABASE_DB_URL" --dry-run
+
+      - name: Apply Supabase migrations
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: npx --yes supabase@latest db push --db-url "$SUPABASE_DB_URL"
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Verify production bundle
+        run: test -f dist/index.html && test -f dist/admin.html
+
+      - name: Deploy exact commit to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=main --commit-hash=${{ env.DEPLOY_SHA }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

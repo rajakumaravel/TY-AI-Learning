@@ -9,6 +9,10 @@ let state=emptyState();
 let activeBlock=null;
 let activeSession=null;
 let syncTimer=null;
+// Set when Google sign-in succeeded but the progress API is unreachable/misconfigured.
+// While set, work is kept on this device only and never pushed to the cloud, so a
+// stale local copy cannot overwrite the learner's cloud progress when the API recovers.
+let cloudError=null;
 
 const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
 function sanitizeState(v){
@@ -21,12 +25,12 @@ function sanitizeState(v){
   s.chapterAssessments=v.chapterAssessments&&typeof v.chapterAssessments==='object'?v.chapterAssessments:{};
   return s;
 }
-function localKey(){return user?.id?`ty-ai-progress:${user.id}`:ANON_KEY}
+function localKey(){return user?.id&&!cloudError?`ty-ai-progress:${user.id}`:ANON_KEY}
 function loadLocal(key=localKey()){try{return sanitizeState(JSON.parse(localStorage.getItem(key)||'{}'))}catch{return emptyState()}}
 function saveLocal(){localStorage.setItem(localKey(),JSON.stringify(state))}
 function isEmpty(s){return !s.completed.length&&!Object.keys(s.reflections).length&&!Object.keys(s.activity).length&&!Object.keys(s.chapterAssessments).length}
 
-async function api(path,opts={}){const r=await fetch('/api/'+path,{credentials:'same-origin',headers:{'content-type':'application/json',...(opts.headers||{})},...opts});let d={};try{d=await r.json()}catch{}if(!r.ok)throw new Error(d.error||'Request failed');return d}
+async function api(path,opts={}){const r=await fetch('/api/'+path,{credentials:'same-origin',headers:{'content-type':'application/json',...(opts.headers||{})},...opts});let d={};try{d=await r.json()}catch{}if(!r.ok){const e=new Error(d.error||`Request failed (HTTP ${r.status})`);e.status=r.status;throw e}return d}
 function setSync(text,kind=''){const el=document.getElementById('syncStatus');if(!el)return;el.textContent=text;el.className='sync '+kind}
 function allSessions(){return COURSE.blocks.flatMap(b=>b.sessions)}
 function blockDone(b){return b.sessions.every(s=>state.completed.includes(s.id))}
@@ -37,7 +41,7 @@ function pct(){return Math.round(state.completed.length/allSessions().length*100
 function renderProgress(){const p=pct();document.getElementById('coursePct').textContent=p+'%';document.getElementById('courseBar').style.width=p+'%'}
 function show(id){['homeView','blockView','portfolioView'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id))}
 
-async function scheduleSync(){saveLocal();renderProgress();if(!user)return;clearTimeout(syncTimer);setSync('Saving…');syncTimer=setTimeout(async()=>{try{await api('progress',{method:'PUT',body:JSON.stringify({state})});setSync('Cloud synced','online')}catch{setSync('Saved on this device','error')}},400)}
+async function scheduleSync(){saveLocal();renderProgress();if(!user||cloudError)return;clearTimeout(syncTimer);setSync('Saving…');syncTimer=setTimeout(async()=>{try{await api('progress',{method:'PUT',body:JSON.stringify({state})});setSync('Cloud synced','online')}catch{setSync('Saved on this device','error')}},400)}
 
 function renderHome(){
   reconcileBadges();
@@ -46,8 +50,8 @@ function renderHome(){
   document.getElementById('welcomeName').textContent=signed?`Welcome, ${user.displayName}`:'';
   document.getElementById('authBtn').innerHTML=signed?'Sign out':'<span class="gmark">G</span><span>Continue with Google</span>';
   document.getElementById('authBtn').classList.toggle('google-btn',!signed);
-  document.getElementById('accountTitle').textContent=signed?`Progress saved for ${user.displayName}`:'Sign in to save across devices';
-  document.getElementById('accountText').textContent=signed?`Signed in with ${user.email}. Your evidence and progress are stored against your Netlify Identity account.`:'Use a Google account to continue your course from another browser or device.';
+  document.getElementById('accountTitle').textContent=!signed?'Sign in to save across devices':cloudError?'Signed in · cloud sync unavailable':`Progress saved for ${user.displayName}`;
+  document.getElementById('accountText').textContent=!signed?'Use a Google account to continue your course from another browser or device.':cloudError?`Signed in with ${user.email}, but the progress service could not be reached (${cloudError}). Your work is being saved on this device only. Reload the page to try again.`:`Signed in with ${user.email}. Your evidence and progress are stored against your account.`;
   document.getElementById('accountAction').innerHTML=signed?'Sign out':'<span class="gmark">G</span><span>Continue with Google</span>';
   document.getElementById('blockGrid').innerHTML=COURSE.blocks.map((b,i)=>{
     const unlocked=blockUnlocked(i),sessionsDone=blockDone(b),qualified=blockQualified(b),done=sessionsDone&&qualified;
@@ -85,6 +89,7 @@ function capstoneHTML(){
 function renderChapterCapstone(){const existing=document.getElementById('chapterCapstoneHost');if(existing)existing.remove();if(!activeBlock||!blockDone(activeBlock))return;const host=document.createElement('div');host.id='chapterCapstoneHost';host.innerHTML=capstoneHTML();document.getElementById('lessonPanel').appendChild(host);const btn=document.getElementById('submitCapstone');if(btn)btn.onclick=submitChapterAssessment}
 
 async function submitChapterAssessment(){
+  if(cloudError){feedback('capstoneFeedback','Cloud sync is unavailable right now, so the assessment cannot be submitted. Reload the page to reconnect, then submit again.','warn');return}
   const cap=CAPSTONES[activeBlock.id];
   const answers={};
   document.querySelectorAll('[data-capstone]').forEach(x=>answers[x.dataset.capstone]=x.value.trim());
@@ -110,8 +115,8 @@ function saveSession(s){const reflection=document.getElementById('reflectionText
 function renderPortfolio(){reconcileBadges();document.getElementById('portfolioPct').textContent=pct()+'%';document.getElementById('portfolioSessions').textContent=state.completed.length;document.getElementById('portfolioBadges').textContent=state.badges.length;document.getElementById('portfolioContent').innerHTML=COURSE.blocks.map(b=>`<section class="portfolio-block"><div class="eyebrow">CHAPTER ${b.number}</div><h2>${esc(b.title)}</h2><p><strong>Mission:</strong> ${esc(b.mission)}</p>${blockQualified(b)?`<span class="complete-chip">🏅 ${esc(b.badge)} · chapter assessment complete</span>`:blockDone(b)?'<span class="muted">Practical work complete · chapter assessment pending</span>':''}${b.sessions.filter(s=>state.completed.includes(s.id)).map(s=>`<article><h3>${esc(s.title)}</h3><p><strong>My reflection:</strong> ${esc(state.reflections[s.id]||'')}</p></article>`).join('')}</section>`).join('')}
 
 async function signIn(){try{setSync('Opening Google…');await oauthLogin('google')}catch(err){setSync('Google sign-in unavailable','error');console.error(err)}}
-async function signOut(){try{await logout()}catch(err){console.error(err)}user=null;state=loadLocal(ANON_KEY);reconcileBadges();setSync('Local mode');renderHome();show('homeView')}
-async function initAuth(){state=loadLocal(ANON_KEY);try{await handleAuthCallback()}catch(err){console.warn('Identity callback',err)}try{const identityUser=await getUser();if(!identityUser){reconcileBadges();renderHome();return}const session=await api('session');user=session.student;const cloud=sanitizeState(session.state);const anon=loadLocal(ANON_KEY);if(isEmpty(cloud)&&!isEmpty(anon)){state=anon;reconcileBadges();saveLocal();await api('progress',{method:'PUT',body:JSON.stringify({state})});localStorage.removeItem(ANON_KEY)}else{state=cloud;reconcileBadges();saveLocal()}setSync('Cloud synced','online')}catch(err){console.warn('Session restore',err);user=null;state=loadLocal(ANON_KEY);reconcileBadges();setSync('Local mode','error')}renderHome()}
+async function signOut(){try{await logout()}catch(err){console.error(err)}user=null;cloudError=null;state=loadLocal(ANON_KEY);reconcileBadges();setSync('Local mode');renderHome();show('homeView')}
+async function initAuth(){state=loadLocal(ANON_KEY);try{await handleAuthCallback()}catch(err){console.warn('Identity callback',err)}let identityUser=null;try{identityUser=await getUser()}catch(err){console.warn('Identity lookup',err)}if(!identityUser){reconcileBadges();setSync('Local mode');renderHome();return}try{const session=await api('session');user=session.student;cloudError=null;const cloud=sanitizeState(session.state);const anon=loadLocal(ANON_KEY);if(isEmpty(cloud)&&!isEmpty(anon)){state=anon;reconcileBadges();saveLocal();await api('progress',{method:'PUT',body:JSON.stringify({state})});localStorage.removeItem(ANON_KEY)}else{state=cloud;reconcileBadges();saveLocal()}setSync('Cloud synced','online')}catch(err){console.error('Session restore failed',err.status||'',err);user={id:identityUser.id,email:identityUser.email,displayName:String(identityUser.userMetadata?.full_name||identityUser.email||'Student').slice(0,80)};cloudError=err.status?`HTTP ${err.status}: ${err.message}`:(err.message||'network error');state=loadLocal(ANON_KEY);reconcileBadges();setSync('Signed in · cloud sync unavailable','error')}renderHome()}
 
 function bind(){document.getElementById('homeBtn').onclick=()=>{renderHome();show('homeView')};document.getElementById('backBtn').onclick=()=>{renderHome();show('homeView')};document.getElementById('portfolioBack').onclick=()=>{renderHome();show('homeView')};document.getElementById('portfolioBtn').onclick=()=>{renderPortfolio();show('portfolioView')};document.getElementById('authBtn').onclick=()=>user?signOut():signIn();document.getElementById('accountAction').onclick=()=>user?signOut():signIn()}
 
