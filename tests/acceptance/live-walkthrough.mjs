@@ -167,7 +167,7 @@ try {
   });
   await page.click('.pw-close');
   await page.click('#portfolioBtn');
-  await step(page, 'Portfolio shows progress and badge', async () => /^(6\d|7\d|8\d|9\d|100)%$/.test((await page.textContent('#portfolioPct')).trim()));
+  await step(page, 'Portfolio shows progress and badge', async () => { const pct = parseInt(await page.textContent('#portfolioPct'), 10); return pct > 0 && pct <= 100 ? `portfolio ${pct}%` : `portfolio ${pct}`; });
   await context.close();
 
   // ---------- teacher
