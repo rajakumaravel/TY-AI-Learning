@@ -10,6 +10,7 @@ This branch (`infra-cloudflare-supabase`) targets Cloudflare Pages, Pages Functi
 
 - Chapters 1–2, practical evidence and reflections
 - Experience Labs in both chapters: safety-gated free tools, fallbacks, and structured evidence
+- Downloadable lab datasets and templates in each Chapter 2 session (`npm run datasets` regenerates them)
 - Applied chapter capstones, progression gates and badges
 - Google sign-in and account-owned progress
 - Chapter 2 Project Workspace with work logs, evidence and submitted snapshots

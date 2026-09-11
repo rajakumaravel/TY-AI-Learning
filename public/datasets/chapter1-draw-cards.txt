@@ -1,0 +1,9 @@
+Chapter 1 fallback: draw for the "AI" (no internet needed)
+
+One person is the AI. They may only guess from the lines on the page so far, no questions.
+The other person draws one object at a time, 20 seconds each, from the list below.
+Record: guessed correctly? how many seconds? what did the "AI" say instead?
+Then redraw one failed object a different way and see whether the guess changes.
+
+Round 1: bicycle, cat, house, umbrella, clock, banana
+Round 2: bridge, fish, tree, glasses, camera, spoon

@@ -46,6 +46,10 @@ try {
   check('lab fallback hidden by default', await d1.page.$eval('#labFallback', el => el.hidden));
   await d1.page.click('[data-fallback]');
   check('lab fallback shown on request', await d1.page.$eval('#labFallback', el => !el.hidden));
+  const links = await d1.page.$$eval('.downloads a[download]', els => els.map(a => a.getAttribute('href')));
+  check('chapter 1 lab lists downloads', links.length >= 2, JSON.stringify(links));
+  const served = await Promise.all(['cup-bottle-shortcut-trap.zip', 'test-log-template.csv', ...links.map(h => h.replace('/datasets/', ''))].map(f => fetch(`${BASE}/datasets/${f}`, { method: 'HEAD' }).then(r => r.status)));
+  check('dataset downloads are served with HTTP 200', served.every(s => s === 200), JSON.stringify(served));
   await d1.context.close();
 
   // Work recorded server-side (as the app would after saving sessions), then a capstone

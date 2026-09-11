@@ -109,36 +109,28 @@ Formalise the existing Teachable Machine activity as the canonical Experience La
 
 ---
 
-# Phase 3 — Cohort Schedule and Weekly Mission Model
+# Phase 3 — Cohort Schedule and Weekly Mission Model (withdrawn)
 
-**Goal:** support the real school pattern where TY students have fixed AI/project hours each week but can continue work independently at other times.
+**Withdrawn 2026-09-11 by operator decision.** The programme totals roughly 20–30 hours and students complete it at their own pace, so cohort configuration, weekly missions and a scheduled "This Week" view are not required. Progress, gating and evidence already work without any timetable. Any future need for group reporting is covered by Phase 10.
+
+---
+
+# Phase 3a — Lab datasets and templates
+
+**Goal:** no student is blocked by a missing camera, a blocked tool or a blank template. Every lab session that can use a dataset or template offers it as a download inside the session.
 
 ## Scope
 
-- Add cohort configuration for:
-  - programme start date;
-  - preferred training/project day(s);
-  - target guided hours per week;
-  - independent-project target;
-  - programme duration.
-- Do not assume instructor-led delivery.
-- Add a student **This Week** view showing:
-  - current mission;
-  - expected work;
-  - project status;
-  - due/target date;
-  - evidence still required;
-  - latest feedback;
-  - next action.
-- Add admin cohort overview.
-- Avoid punitive time tracking. Record optional work-log duration for reflection/planning, not surveillance.
+- Deterministic generator script, committed outputs under `public/datasets/`, served as static files.
+- Chapter 1 fallback cards for the drawing lab.
+- Chapter 2 synthetic cup/bottle image sets: training v1, unseen test with labels, a shortcut-trap set where background predicts the class, and a v2 fix set. Drawn shapes, clearly labelled as such; real objects still encouraged when a camera is available.
+- Test-log and confusion-matrix CSV templates.
+- Session UI lists downloads with a note and size.
 
 ## Exit criteria
 
-- schedule is configurable rather than hard-coded;
-- students can understand what to work on this week without teacher explanation;
-- overdue/unfinished work is visible but not shaming;
-- independent work can be continued outside the scheduled slot;
+- every download listed in the curriculum exists on disk and resolves with HTTP 200 on Preview;
+- the shortcut-trap set reproduces the background-shortcut failure in Teachable Machine;
 - tests/build/deploy pass.
 
 ---
@@ -355,6 +347,8 @@ Every development phase must satisfy all of the following before production acce
 
 Do not start multiple major phases in parallel. Complete the current phase, verify it with real/pilot usage where appropriate, record findings, then proceed to the next phase.
 
-**Current work: Phase 2 — Experience Labs for Chapters 1–2.**
+**Current work: Phase 3a — lab datasets and templates; then Phase 4 — Chapter 3: Data Detective.**
+
+Phase 2 merged 2026-09-11 (PR #6).
 
 The ADR-007 platform migration and Phase 1 acceptance are evidenced on the Cloudflare Preview environment (2026-09-11) with `npm run acceptance`. By operator decision, Production deployment is deferred until every phase has been accepted on Preview; `main` deploys to `preview-main` and the Production release workflow is manual only. Each phase's "deploy" exit criterion therefore means: Preview deployment verified and `npm run acceptance` green against it, until the final Production release.
