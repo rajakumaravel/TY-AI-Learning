@@ -36,6 +36,7 @@ function currentChapterFromCount(completedCount) {
 }
 function activityLabel(activity, key) {
   if (!activity) return key;
+  if (key === "ack") return "Safety notice acknowledged";
   if (activity.kind === "daymap") return `AI Day Map row ${Number(key)+1}`;
   if (activity.kind === "chain") return `Chain row ${Number(key)+1}`;
   if (activity.kind === "textfields") return activity.fields?.[Number(key)] || `Response ${Number(key)+1}`;
@@ -45,6 +46,7 @@ function activityLabel(activity, key) {
   if (activity.kind === "lab") { if (key === "ack") return "Safety notice acknowledged"; if (key === "mode") return "Lab mode"; return activity.fields?.[Number(key)] || `Response ${Number(key)+1}`; }
   if (activity.kind === "quiz") return activity.items?.[Number(key)]?.[0] || `Answer ${Number(key)+1}`;
   if (activity.kind === "dataset") { if (key === "findings") return "Audit findings"; return `Finding ${Number(key)+1}`; }
+  if (activity.kind === "prompt") { if (key === "builder") return "C-T-C-F builder"; if (key === "versions") return "Prompt versions"; if (key === "extras") return "Extra notes"; if (/^v\d+$/.test(key)) return `Prompt ${key}`; return `Extra ${Number(key)+1}`; }
   return `Response ${Number(key)+1}`;
 }
 function renderValue(value) {

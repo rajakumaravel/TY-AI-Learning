@@ -1,0 +1,16 @@
+Red-team prompt cards (Chapter 4, Generative AI & Prompting, session "Red-team a prompt")
+
+Use one of these if you have no partner's prompt to red-team. For the prompt you pick, find one ambiguity, one
+missing constraint and one claim in its likely answer that would need checking. Run it in the tool if you can;
+you can also red-team it on paper by asking what the most likely continuation would be.
+
+=== Prompt 1 ===
+Write a short piece for the school newsletter about the history of our town, and include the year it was founded and its population.
+
+=== Prompt 2 ===
+Explain why electric cars are better for the environment, with some statistics to back it up.
+
+=== Prompt 3 ===
+Make me a two-week revision plan for my exams with the best memory techniques, backed by research.
+
+Then apply the same three checks to your own reusable prompt template.

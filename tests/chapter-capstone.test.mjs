@@ -8,13 +8,27 @@ const api=fs.readFileSync('netlify/functions/api.mts','utf8');
 const adr=fs.readFileSync('docs/decisions/ADR-004-chapter-capstone-assessment.md','utf8');
 
 test('pilot chapters each have applied capstones',()=>{
-  assert.equal(Object.keys(CAPSTONES).length,3);
+  assert.equal(Object.keys(CAPSTONES).length,4);
   assert.match(CAPSTONES.block1.brief,/school|adviser/i);
   assert.match(CAPSTONES.block2.brief,/model|failure/i);
   assert.match(CAPSTONES.block3.brief,/homework.*question.*infer.*ability band/is);
   assert.equal(CAPSTONES.block3.id,'block3-capstone');
   assert.equal(CAPSTONES.block3.title,'Responsible Data Card review');
   assert.equal(CAPSTONES.block3.prompts.length,3);
+  assert.match(CAPSTONES.block4.brief,/weak prompt.*renewable energy in Ireland.*two figures.*citation/is);
+  assert.equal(CAPSTONES.block4.id,'block4-capstone');
+  assert.equal(CAPSTONES.block4.title,'Prompt Lab review');
+  assert.equal(CAPSTONES.block4.prompts.length,3);
+});
+
+test('block4 capstone scoring counts prompting vocabulary as concept and action',()=>{
+  const weak=assessChapterCapstone({blockId:'block4',answers:{0:'Make it longer.',1:'Some of it.',2:'It would be different.'}});
+  const strong=assessChapterCapstone({blockId:'block4',answers:{0:'I would rebuild the prompt with context (a TY student preparing a five-minute talk), one task (list the main renewable sources with one figure each), constraints (Ireland only, say when unsure) and a format (a table with a source column), because the weak prompt gave the model nothing to aim at.',1:'The wind percentage, the target year and the citation all need verification against the SEAI or CSO report, therefore I would search for the report title; a hallucination here would be a fluent figure or an invented report that no search can find.',2:'Asking why wind is better invites confirmation bias, so the answer would argue one side and drop the trade-offs, which means I have to compare both and check the claims myself before anything goes in the talk.'}});
+  assert.ok(strong.score>weak.score);
+  assert.equal(strong.criteria.understanding,2);
+  assert.equal(strong.criteria.evidence,2);
+  assert.equal(strong.criteria.reasoning,2);
+  assert.ok(['Getting there','Going further'].includes(strong.level));
 });
 
 test('block3 capstone scoring counts data-detective vocabulary as concept and action',()=>{
@@ -26,7 +40,10 @@ test('block3 capstone scoring counts data-detective vocabulary as concept and ac
   assert.ok(['Getting there','Going further'].includes(strong.level));
 });
 
-test('existing chapter scoring is unchanged by the block3 keywords',()=>{
+test('existing chapter scoring is unchanged by the block3 and block4 keywords',()=>{
+  const genai='Prompt, context, constraint, format, iteration, hallucination, verification, source, framing, confirmation bias, LLM and generative AI: rebuild, verify, cite, ask questions.';
+  assert.equal(assessChapterCapstone({blockId:'block4',answers:{0:genai}}).criteria.understanding,1);
+  for(const id of ['block1','block2','block3'])assert.equal(assessChapterCapstone({blockId:id,answers:{0:genai}}).criteria.understanding,0,`${id} ignores block4 vocabulary`);
   const weak=assessChapterCapstone({blockId:'block2',answers:{0:'Accuracy is 80%.',1:'Background.',2:'Retest.'}});
   assert.deepEqual(weak.criteria,{understanding:1,evidence:1,reasoning:1,ownWords:0});
   assert.equal(weak.level,'Getting started');

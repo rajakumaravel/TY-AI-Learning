@@ -1,0 +1,16 @@
+Weak question card (Chapter 4, Generative AI & Prompting, session "Same task, different prompts")
+
+Ask this, exactly as written, with nothing added:
+
+    Tell me about the River Shannon.
+
+Why it is weak:
+- No context. The model does not know who is asking, what it is for, or what you already know, so it guesses the
+  most average reader and the most average purpose.
+- No task. "Tell me about" is not one clear verb. List? Compare? Explain? Summarise for a talk? The model picks.
+- No constraints. No length, no level, nothing to avoid, and no "say unsure if you are not certain", so every figure
+  arrives in the same confident tone whether it was checked or invented.
+- No format. Paragraphs, bullets, a table? Whatever comes back is whatever shape the pattern produced.
+
+Ask it once. Then ask it again, or in a second model. Compare: what varied, what was missing, and what sounded
+confident with nothing behind it? Keep both answers. They are the "before" for Prompt Lab 1.

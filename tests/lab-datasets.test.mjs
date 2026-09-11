@@ -49,6 +49,52 @@ test('chapter 3 book-aligned downloads: policy extracts in the Sherlock lab, sce
   for(const re of [/Quality/,/Provenance/,/Limitations/])assert.match(card,re);
 });
 
+test('chapter 4 downloads are generated, in the manifest and offered in the right sessions; the teacher key stays outside public/',()=>{
+  const files=['genai-weak-question-card.txt','genai-sample-outputs.txt','genai-verification-topics.txt','genai-red-team-prompts.txt','prompt-experiment-sheet-A4.csv','verification-log-A2.csv','reusable-prompt-template.md'];
+  for(const file of files){
+    assert.ok(fs.existsSync(`public/datasets/${file}`),`${file} missing`);
+    assert.ok(manifest[file]>0,`${file} not in manifest`);
+  }
+  assert.ok(fs.existsSync('docs/teacher/genai-sample-outputs.KEY.txt'),'teacher key generated outside public/');
+  assert.ok(!fs.existsSync('public/datasets/genai-sample-outputs.KEY.txt')&&!fs.readdirSync('public/datasets').some(f=>/KEY/i.test(f)),'teacher key is never served');
+  assert.ok(!downloads.some(d=>/KEY/i.test(d.file)),'the teacher key is not offered to students');
+  assert.ok(downloads.some(d=>d.session==='b4s1'&&d.file==='genai-weak-question-card.txt'),'b4s1 weak question card');
+  assert.ok(downloads.some(d=>d.session==='b4s1'&&d.file==='genai-sample-outputs.txt'),'b4s1 sample outputs');
+  assert.ok(downloads.some(d=>d.session==='b4s3'&&d.file==='prompt-experiment-sheet-A4.csv'),'b4s3 Sheet A4');
+  for(const file of ['genai-verification-topics.txt','genai-sample-outputs.txt','verification-log-A2.csv'])assert.ok(downloads.some(d=>d.session==='b4s6'&&d.file===file),`b4s6 ${file}`);
+  assert.ok(downloads.some(d=>d.session==='b4s8'&&d.file==='reusable-prompt-template.md'),'b4s8 template');
+  assert.ok(downloads.some(d=>d.session==='b4s9'&&d.file==='genai-red-team-prompts.txt'),'b4s9 red-team cards');
+});
+
+test('chapter 4 sample outputs are labelled synthetic, mix verdicts, and every claim is marked in the teacher key',()=>{
+  const card=fs.readFileSync('public/datasets/genai-weak-question-card.txt','utf8');
+  assert.match(card,/Tell me about the River Shannon\./);
+  for(const re of [/No context/,/No task/,/No constraints/,/No format/])assert.match(card,re);
+  const samples=fs.readFileSync('public/datasets/genai-sample-outputs.txt','utf8');
+  assert.match(samples,/SYNTHETIC SAMPLES/);
+  assert.equal((samples.match(/^=== Answer \d /gm)||[]).length,2,'two answers');
+  assert.doesNotMatch(samples,/\[(SUPPORTED|UNCERTAIN|WRONG)\]/,'verdicts are not marked for students');
+  const key=fs.readFileSync('docs/teacher/genai-sample-outputs.KEY.txt','utf8');
+  const marked=[...key.matchAll(/^\d+\. \[(SUPPORTED|UNCERTAIN|WRONG)\] (.+)$/gm)];
+  assert.ok(marked.length>=20,'every claim marked');
+  for(const [,verdict,claim] of marked)assert.ok(samples.includes(claim),`marked claim appears in the samples: ${claim}`);
+  for(const v of ['SUPPORTED','UNCERTAIN','WRONG'])assert.ok(marked.some(m=>m[1]===v),`at least one ${v}`);
+  assert.match(key,/Shannon Bridge Act/);
+  assert.match(key,/Fabricated citation/);
+  assert.match(key,/Red-team prompt cards: planted issues/);
+  const topics=fs.readFileSync('public/datasets/genai-verification-topics.txt','utf8');
+  assert.equal((topics.match(/^=== Topic \d: /gm)||[]).length,3,'three topics');
+  for(const re of [/River Shannon/,/Transition Year/,/Apollo 11/])assert.match(topics,re);
+  assert.equal((topics.match(/^[1-5]\. /gm)||[]).length,15,'five checkable facts per topic');
+  const red=fs.readFileSync('public/datasets/genai-red-team-prompts.txt','utf8');
+  assert.equal((red.match(/^=== Prompt \d ===/gm)||[]).length,3,'three red-team prompts');
+  assert.match(fs.readFileSync('public/datasets/prompt-experiment-sheet-A4.csv','utf8'),/^Version,Prompt,Prompt change,What changed in output,Was it better\? Why\?\nV1 - baseline,,,,\nV2,,,,\nV3,,,,\n$/);
+  assert.match(fs.readFileSync('public/datasets/verification-log-A2.csv','utf8'),/^Claim,Source checked,Supported \/ uncertain \/ wrong,What I changed\n(,,,\n){3}$/);
+  const template=fs.readFileSync('public/datasets/reusable-prompt-template.md','utf8');
+  for(const h of ['## Context','## Task','## Constraints','## Format'])assert.ok(template.includes(h),h);
+  assert.match(template,/\[unsure\]/);
+});
+
 test('dataset archives stay small enough for school connections',()=>{
   for(const [file,size] of Object.entries(manifest))assert.ok(size<1_000_000,`${file} is ${size} bytes`);
 });

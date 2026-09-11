@@ -340,7 +340,202 @@ Who is missing?
 For each card, write your before and after: fields removed, a representation check added, how long data is kept,
 and the decisions that must have a human reviewing them before anything happens to a person.
 `);
+
+// ---------- Chapter 4: Generative AI & Prompting. The sample outputs are built from tagged sentences so the teacher key
+// is derived from the same data and marks every claim. No real AI tool produced them.
+const WEAK_QUESTION = 'Tell me about the River Shannon.';
+writeFileSync(join(OUT, 'genai-weak-question-card.txt'), `Weak question card (Chapter 4, Generative AI & Prompting, session "Same task, different prompts")
+
+Ask this, exactly as written, with nothing added:
+
+    ${WEAK_QUESTION}
+
+Why it is weak:
+- No context. The model does not know who is asking, what it is for, or what you already know, so it guesses the
+  most average reader and the most average purpose.
+- No task. "Tell me about" is not one clear verb. List? Compare? Explain? Summarise for a talk? The model picks.
+- No constraints. No length, no level, nothing to avoid, and no "say unsure if you are not certain", so every figure
+  arrives in the same confident tone whether it was checked or invented.
+- No format. Paragraphs, bullets, a table? Whatever comes back is whatever shape the pattern produced.
+
+Ask it once. Then ask it again, or in a second model. Compare: what varied, what was missing, and what sounded
+confident with nothing behind it? Keep both answers. They are the "before" for Prompt Lab 1.
+`);
+
+// [sentence, verdict, how to check]; null = paragraph break. Verdicts: supported / uncertain / wrong.
+const SAMPLE_A = [
+  ['The River Shannon is the longest river in Ireland.', 'supported', 'Any atlas; Tailte Éireann, formerly Ordnance Survey Ireland (tailte.ie); Wikipedia "River Shannon" and the sources it cites.'],
+  ['It rises at the Shannon Pot on the slopes of Cuilcagh Mountain in County Cavan.', 'supported', 'Geological Survey Ireland (gsi.ie) on the Shannon Pot; Cuilcagh Lakelands Geopark; Tailte Éireann map.'],
+  ['From there it flows south for nearly 500 km before reaching the Atlantic.', 'wrong', 'Every reference gives about 360 km (360.5 km on Wikipedia and Tailte Éireann; some older sources 386 km including the estuary). No source gives 500 km.'],
+  ['On its way it widens into three large lakes: Lough Allen, Lough Ree and Lough Derg.', 'supported', 'Tailte Éireann map; Waterways Ireland Shannon Navigation guide.'],
+  null,
+  ['The river passes through or borders eleven counties, dividing the west of Ireland from the east.', 'uncertain', 'Sources count differently depending on whether estuary counties and county borders are included; check the list against an Tailte Éireann map rather than trusting the number.'],
+  ['The city of Limerick sits at the head of the Shannon Estuary.', 'supported', 'Tailte Éireann map; Limerick City and County Council.'],
+  ['In 1925 the new Irish state began building the Ardnacrusha hydroelectric scheme, which was completed in 1929.', 'supported', 'ESB Archives (esbarchives.ie) Shannon Scheme pages: construction 1925–1929, official opening July 1929.'],
+  ['The scheme was run by the Electricity Supply Board, set up in 1927.', 'supported', 'ESB Archives; Electricity (Supply) Act 1927 on irishstatutebook.ie.'],
+  ['For its first decade Ardnacrusha supplied about 80% of Ireland\'s electricity.', 'uncertain', 'Widely repeated, but the share fell every year as demand grew, so any percentage needs a year attached. Check the ESB Archives (esbarchives.ie) Shannon Scheme pages for dated figures.'],
+  null,
+  ['The Shannon Bridge Act of 1873 required every crossing of the river to be approved by Parliament.', 'wrong', 'No such Act exists. The nearest real Acts on legislation.gov.uk are the Shannon Navigation Acts (1839 onward) and the Shannon Act 1874, which deal with navigation and drainage works and say nothing about Parliament approving crossings. That is the tell: a plausible name, a nearby year, an invented provision.'],
+  ['The river is named after Sionann, a figure from Irish mythology.', 'supported', 'Placenames Database of Ireland (logainm.ie) entry for the Shannon; any dictionary of Irish mythology.'],
+  ['For a fuller history see Ó Braonáin, T. (2011), The Shannon from Pot to Sea, Athlone Riverside Press, p. 42.', 'wrong', 'Fabricated citation. No such author, title or publisher in the National Library of Ireland catalogue, WorldCat or any bookshop search.']
+];
+const SAMPLE_B = [
+  ['The Shannon is the longest river on the island of Ireland at about 360 km.', 'supported', 'OSI; Wikipedia "River Shannon" (360.5 km).'],
+  ['Some references give 386 km, a figure that includes the estuary.', 'uncertain', 'Older references do give 386 km; whether that includes the estuary depends on the reference. The point is that "the length" depends on where you say the river ends.'],
+  ['Its source, the Shannon Pot, is a small pool in County Cavan fed by underground streams from Cuilcagh Mountain.', 'supported', 'Geological Survey Ireland; Cuilcagh Lakelands Geopark.'],
+  ['The river drains roughly one fifth of the island.', 'uncertain', 'The Shannon catchment is often given as about a fifth of the island; the exact share depends on how the catchment is defined. Check the EPA catchment data (catchments.ie).'],
+  ['Major towns along it include Carrick-on-Shannon, Athlone and Limerick.', 'supported', 'Tailte Éireann map.'],
+  null,
+  ['The Ardnacrusha power station, built by the German firm Siemens-Schuckert, opened in 1937.', 'wrong', 'The firm is right; the year is wrong. ESB Archives: construction 1925–1929, official opening July 1929.'],
+  ['At the time it was one of the largest hydroelectric schemes in the world.', 'uncertain', 'Often described that way, but "largest" claims need a stated comparison and date. Check the ESB Archives Shannon Scheme pages for what they actually say.'],
+  ['The Shannon–Erne Waterway, which links the river to Lough Erne, was reopened in 1994.', 'supported', 'Waterways Ireland; the restored canal opened in 1994.'],
+  ['The river also gives its name to Shannon Airport, where the world\'s first airport duty-free shop opened in 1947.', 'supported', 'Shannon Airport history pages; widely documented, opened 1947.'],
+  null,
+  ['Because the Shannon is so slow and flat, it has never flooded seriously.', 'wrong', 'Major floods in November 2009 and winter 2015–16 are documented by the Office of Public Works (floodinfo.ie) and in national news archives.'],
+  ['Salmon still migrate up the river, though numbers are lower than in the past.', 'uncertain', 'Inland Fisheries Ireland publishes counts; "lower than in the past" needs a date range and a figure before it can be used.']
+];
+const prose = s => s.map(x => x === null ? '\n' : x[0]).join(' ').replace(/ \n /g, '\n\n');
+const keyRows = s => s.filter(Boolean).map((x, i) => `${i + 1}. [${x[1].toUpperCase()}] ${x[0]}\n   Check: ${x[2]}`).join('\n');
+const verdictCount = s => ['supported', 'uncertain', 'wrong'].map(v => `${s.filter(x => x && x[1] === v).length} ${v}`).join(', ');
+writeFileSync(join(OUT, 'genai-sample-outputs.txt'), `Sample AI outputs (Chapter 4, Generative AI & Prompting, sessions "Same task, different prompts" and "Verification challenge")
+
+SYNTHETIC SAMPLES. These two answers were written for this course in the style of a chatbot. No real AI tool produced
+them. Each contains claims that are supported, claims that are uncertain and claims that are wrong, mixed together and
+deliberately not marked. Read them the way you would read a real output: which sentences would you need to check
+before repeating them?
+
+The question, both times: ${WEAK_QUESTION}
+
+=== Answer 1 (first run) ===
+Certainly! Here is an overview of the River Shannon.
+
+${prose(SAMPLE_A)}
+
+Let me know if you would like more detail on any of these points!
+
+=== Answer 2 (second run, different model) ===
+Sure. The River Shannon is one of Ireland's best-known natural features. Here are the key facts.
+
+${prose(SAMPLE_B)}
+
+I hope this helps. Feel free to ask if you want me to expand on the history or the geography!
+
+Compare the two answers. What varied? What was missing from both? What sounded confident with nothing behind it?
+For the verification challenge: pick three claims, find a reliable source for each, and label them supported,
+uncertain or wrong on Sheet A2.
+`);
+
+writeFileSync(join(OUT, 'genai-verification-topics.txt'), `Verification topic cards (Chapter 4, Generative AI & Prompting, session "Verification challenge")
+
+Pick one topic. Ask the AI about it in your own words. Then choose three claims it made, find a reliable source
+for each (name it and say where you found it), and label each claim supported, uncertain or wrong on Sheet A2.
+The five facts under each topic are checkable. No answers are given here: that is the point.
+
+=== Topic 1: the River Shannon ===
+1. How long is the river, and does the figure change depending on where the "end" is measured?
+2. Where is its source: which pool, on which mountain, in which county?
+3. Which three large lakes does it widen into on its way south?
+4. In which year did the Ardnacrusha power station open, and which company built it?
+5. Which city sits at the head of the Shannon Estuary?
+Good sources: Tailte Éireann (formerly Ordnance Survey Ireland), Geological Survey Ireland, ESB Archives, Waterways Ireland.
+
+=== Topic 2: Transition Year in Ireland ===
+1. In which year was Transition Year first introduced as a pilot, and in how many schools?
+2. In which year was it made widely available to schools across the country?
+3. Is it compulsory in every school, optional, or does that depend on the school?
+4. Which two stages of second-level education does it sit between?
+5. Roughly how many students, or what share of schools, take part each year?
+Good sources: the Department of Education (gov.ie), the NCCA, the Transition Year programme guidelines.
+
+=== Topic 3: the Apollo 11 landing ===
+1. On what date did the lunar module land on the Moon?
+2. Who were the three astronauts, and which one stayed in orbit around the Moon?
+3. What was the landing site called?
+4. How long did the astronauts spend outside the module on the surface?
+5. Where did the crew splash down, and on what date?
+Good sources: NASA history pages (history.nasa.gov), the Smithsonian National Air and Space Museum.
+
+A reliable source is one where you can say who made it, why, and how it can be checked. A page that repeats the
+chatbot's wording is not an independent source.
+`);
+
+// Each prompt carries one planted ambiguity, one missing constraint and one claim that would need checking.
+const RED_TEAM = [
+  { prompt: 'Write a short piece for the school newsletter about the history of our town, and include the year it was founded and its population.', ambiguity: '"our town": the model does not know which town, so it will pick a likely one or invent a generic history. "Short" is undefined.', missing: 'No audience or level, no word limit, and no "say if unsure", so the model fills every gap with its most average guess.', claim: 'The founding year and the population figure. The model will supply both confidently whether or not any record exists.' },
+  { prompt: 'Explain why electric cars are better for the environment, with some statistics to back it up.', ambiguity: '"Better" than what: petrol cars, buses, bicycles? And where: emissions depend on how a country generates its electricity.', missing: 'No country, no year, no requirement to name the source of each statistic, and no length.', claim: 'Every statistic. The framing is also leading ("why is X better"), so expect a one-sided answer with no drawbacks.' },
+  { prompt: 'Make me a two-week revision plan for my exams with the best memory techniques, backed by research.', ambiguity: 'Which subjects, how many exams, and how many hours a day are available? The plan will be for an imaginary student.', missing: 'No format (a table by day?), no level, and nothing about what to avoid (for example, no all-night sessions).', claim: '"Backed by research": any named study, author or percentage the model attaches to a technique needs checking. Citations here are often invented.' }
+];
+writeFileSync(join(OUT, 'genai-red-team-prompts.txt'), `Red-team prompt cards (Chapter 4, Generative AI & Prompting, session "Red-team a prompt")
+
+Use one of these if you have no partner's prompt to red-team. For the prompt you pick, find one ambiguity, one
+missing constraint and one claim in its likely answer that would need checking. Run it in the tool if you can;
+you can also red-team it on paper by asking what the most likely continuation would be.
+
+${RED_TEAM.map((x, i) => `=== Prompt ${i + 1} ===\n${x.prompt}`).join('\n\n')}
+
+Then apply the same three checks to your own reusable prompt template.
+`);
+
+mkdirSync('docs/teacher', { recursive: true });
+writeFileSync(join('docs/teacher', 'genai-sample-outputs.KEY.txt'), `Sample AI outputs (Chapter 4, Generative AI & Prompting). TEACHER KEY: every claim in genai-sample-outputs.txt
+marked supported / uncertain / wrong, with the source to check it against, plus the planted issues in
+genai-red-team-prompts.txt. This key lives in docs/teacher and is never deployed with the site.
+
+Both answers are synthetic. They were written for this course in the style of a chatbot; no AI tool produced them.
+The question both times: ${WEAK_QUESTION}
+
+=== Answer 1 (first run): ${verdictCount(SAMPLE_A)} ===
+${keyRows(SAMPLE_A)}
+
+=== Answer 2 (second run, different model): ${verdictCount(SAMPLE_B)} ===
+${keyRows(SAMPLE_B)}
+
+Points worth drawing out in discussion:
+- The two answers disagree on the length (nearly 500 km vs about 360 km) and on the Ardnacrusha year (1929 vs 1937)
+  in the same confident tone. Neither answer flags the disagreement; only checking finds it.
+- The fabricated citation in Answer 1 (Ó Braonáin, 2011) looks exactly like a real one. A library catalogue search
+  finds nothing. That is the myth-buster "If it gives a citation, the source exists" in one line.
+- The uncertain claims are not wrong so much as unfinished: "about 80%", "one fifth", "eleven counties" all need a
+  year, a definition or a list before they can be used. "Uncertain" is the right verdict, and the change to make is
+  a hedge or a question mark, not deletion.
+
+=== Red-team prompt cards: planted issues ===
+${RED_TEAM.map((x, i) => `Prompt ${i + 1}: ${x.prompt}\n- Ambiguity: ${x.ambiguity}\n- Missing constraint: ${x.missing}\n- Claim to check: ${x.claim}`).join('\n\n')}
+`);
+
+// Sheets A4 and A2 (curriculum pilot v1, Appendix A) as headers with empty rows.
+writeFileSync(join(OUT, 'prompt-experiment-sheet-A4.csv'), 'Version,Prompt,Prompt change,What changed in output,Was it better? Why?\nV1 - baseline,,,,\nV2,,,,\nV3,,,,\n');
+writeFileSync(join(OUT, 'verification-log-A2.csv'), 'Claim,Source checked,Supported / uncertain / wrong,What I changed\n,,,\n,,,\n,,,\n');
+writeFileSync(join(OUT, 'reusable-prompt-template.md'), `# Reusable prompt template (C-T-C-F)
+
+Task this template is for: ________________
+
+Replace every [placeholder] each time you use it. Keep the constraints and format the same between runs so the
+outputs stay comparable.
+
+## Context
+I am [who you are, without personal details, e.g. "a Transition Year student"]. This is for [what it is for].
+I already know [what you already know, so the model does not repeat it].
+
+## Task
+[One verb.] [The one clear thing you want it to do.]
+
+## Constraints
+- Length: [e.g. under 150 words / no more than 5 items]
+- Level: [e.g. plain language for 15-year-olds]
+- Avoid: [what to leave out]
+- Must include: [what has to be there]
+- Mark any figure, date, name or source you are not certain of with [unsure].
+
+## Format
+[Table / bullets / numbered list / three options / ask me questions first, then answer]
+
+## Before you rely on the output
+- Which claims will you check by hand, and where?
+- What did this template get wrong last time, and what did you change?
+`);
+
 rmSync(WORK, { recursive: true, force: true });
-const manifest = Object.fromEntries(readdirSync(OUT).filter(f => !f.startsWith('.')).sort().map(f => [f, statSync(join(OUT, f)).size]));
+const manifest =Object.fromEntries(readdirSync(OUT).filter(f => !f.startsWith('.')).sort().map(f => [f, statSync(join(OUT, f)).size]));
 writeFileSync(join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
 console.log(manifest);

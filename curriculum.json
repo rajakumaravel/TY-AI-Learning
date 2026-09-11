@@ -644,6 +644,408 @@
         "Going further": ["I can evaluate who's represented and propose safeguards", "I can justify why some available data shouldn't be used"]
       },
       "levelUp": "Compare two services that do a similar job. Using only publicly available information, explain which one appears to take the more data-minimising approach, and what evidence you're relying on."
+    },
+    {
+      "id": "block4",
+      "number": "04",
+      "title": "Generative AI & Prompting",
+      "duration": "4 hours",
+      "badge": "Prompt Engineer",
+      "outcomes": ["LO7", "LO9"],
+      "description": "Chatbots and image generators are the AI most people mean when they say “AI”. This chapter teaches you to work with them as a thinking and creating tool while staying in charge of the goal, the checking and the final call.",
+      "mission": "Run a three-version prompt experiment: v1 weak, v2 improved, v3 tested and revised. Keep the outputs. Then produce a verification log for at least three factual claims the AI made.",
+      "route": [
+        ["0–20 min", "Same task, different prompts"],
+        ["20–40 min", "Discover: what an LLM actually does"],
+        ["40–70 min", "Prompt Lab 1: C-T-C-F"],
+        ["70–100 min", "Prompt Lab 2: iterate"],
+        ["100–130 min", "Four useful roles"],
+        ["130–160 min", "Verification challenge"],
+        ["160–185 min", "Injecting doubt"],
+        ["185–215 min", "Build a reusable prompt"],
+        ["215–235 min", "Peer red-team"],
+        ["235–240 min", "Exit rule"]
+      ],
+      "final": "Prompts v1, v2, v3 with their outputs (Sheet A4), your output comparison notes, your three-claim verification log (Sheet A2), your reusable prompt template, your reflection and exit rule.",
+      "sessions": [
+        {
+          "id": "b4s1",
+          "title": "Same task, different prompts",
+          "minutes": 20,
+          "type": "PREDICT + TEST",
+          "pageRef": "Student Book pp. 18–22",
+          "intro": "Ask the AI one deliberately weak question, then ask it again. Compare what came back before you learn anything about prompting.",
+          "study": {
+            "title": "Same question, different answers",
+            "body": ["Generative AI is AI that creates new text, images, audio or code from learned patterns. A chatbot is the text version: you type a prompt, the instructions and context you give it, and it produces an answer that reads smoothly. Smooth is the problem. The wording sounds the same whether the content is right, half-right or invented.", "So the first experiment is not about getting a good answer. It is about noticing. Everyone asks the same weak question, then asks it again or in a second model, and compares. Some parts will be the same every time; those are the patterns the model has seen most often. Some parts will change between runs for no reason you gave it; those were never checked facts to begin with.", "Keep three lists as you read: what varied, what was missing, and what sounded confident with nothing behind it. A sentence that would need a source to be believed, but comes with none, is your first sight of hallucination: a fluent, confident output that's wrong or made up. You will check claims like that properly in the verification challenge later."],
+            "example": "Ask “Tell me about the River Shannon.” twice. Both answers say it is Ireland's longest river. One says it is about 360 km long, the other says nearly 500 km. Same confident tone; at least one is wrong, and nothing in either answer tells you which.",
+            "keywords": ["generative AI", "prompt", "hallucination", "verification"]
+          },
+          "activity": {
+            "kind": "lab",
+            "title": "Output comparison notes",
+            "instructions": "Read the safety notice and tick it, open DuckDuckGo AI Chat, ask the weak question from the card exactly as written, then ask it again or in a second model. Record the comparison in the fields below. If the tool is blocked, use the fallback.",
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."],
+            "steps": ["Read the weak question on the card. It is weak on purpose: no context, no task, no constraints, no format.", "Ask it exactly as written. Do not improve it yet.", "Read what came back. Which sentences would you need to check before repeating them?", "Ask the same question a second time, or switch to a second model in the tool and ask it there.", "Note what varied between the two answers, what was missing from both, and what sounded confident with nothing behind it."],
+            "fallback": {
+              "title": "Tool blocked?",
+              "steps": ["Try Microsoft Copilot at copilot.microsoft.com without signing in, and ask the same weak question there.", "Otherwise open the sample outputs download, which has two answers to the same weak question from two runs.", "Do the same comparison: what varied, what was missing, what sounded confident with nothing behind it. Record it below."]
+            },
+            "fields": ["The weak question I asked…", "What came back, in a sentence or two…", "What was missing…", "What sounded confident but had nothing behind it…"],
+            "downloads": [
+              {
+                "label": "Weak question card (text)",
+                "file": "genai-weak-question-card.txt",
+                "note": "The deliberately weak question everyone asks first, and why it is weak."
+              },
+              {
+                "label": "Sample AI outputs, two answers to the weak question (text)",
+                "file": "genai-sample-outputs.txt",
+                "note": "Two synthetic chatbot-style answers to \"Tell me about the River Shannon.\" Supported, uncertain and wrong claims are mixed and unmarked, on purpose."
+              }
+            ]
+          },
+          "reflection": "What changed between the two answers, and what does that tell you about where the answer came from?"
+        },
+        {
+          "id": "b4s2",
+          "title": "What an LLM actually does",
+          "minutes": 20,
+          "type": "DISCOVER",
+          "pageRef": "Student Book pp. 18–22",
+          "intro": "Before you improve a single prompt, get the mental model right: what is the machine actually doing when it answers you?",
+          "study": {
+            "title": "Discover: what an LLM actually does",
+            "body": ["A large language model (LLM) is a generative model trained on huge amounts of text to predict and produce language. It has read an enormous amount of text and learned to predict what usually comes next. When you ask a question, it generates a likely continuation. That's why it's fluent.", "It's also why it's not a database of checked facts. Pattern prediction is the LLM's basic move: predict what most likely comes next, word by word. Nothing in that move looks anything up, and nothing in it knows whether the sentence it just produced is true. It can produce a smooth, confident paragraph about something that never happened.", "Confident wording is not confident truth. Keep that sentence. You'll need it. When the model is right, it is because the pattern it followed happened to match the world; when it is wrong, the wording gives you no warning. That is what hallucination means, and it is why anything you rely on has to be checked somewhere other than the chatbot."],
+            "example": "Ask for the opening year of a power station and the model produces a plausible four-digit year in a confident sentence. It is not reading a record; it is continuing a pattern. The year might be right. The sentence would look identical if it were wrong.",
+            "keywords": ["large language model (LLM)", "pattern prediction", "generative AI", "hallucination"]
+          },
+          "activity": {
+            "kind": "quiz",
+            "title": "Pattern prediction or fact lookup?",
+            "instructions": "For each statement, decide what an LLM is doing when it does this: predicting a likely continuation, looking the fact up in a checked record, or neither, because it is not something an LLM does at all. You can change your answers after reading the study material.",
+            "items": [
+              ["Writes a fluent paragraph about an event that never happened", "Pattern prediction"],
+              ["Continues “The River Shannon flows through…” with the most likely next words", "Pattern prediction"],
+              ["Confirms a date against an official record", "Neither"],
+              ["Produces a tidy-looking citation for a paper nobody can find", "Pattern prediction"],
+              ["Gives a slightly different answer when you ask the same question again", "Pattern prediction"],
+              ["Opens the official record and reads the figure off it", "Neither"],
+              ["Sounds certain about a figure it has never checked", "Pattern prediction"],
+              ["Knows which of its own sentences are true", "Neither"]
+            ],
+            "options": ["Pattern prediction", "Checked fact lookup", "Neither"]
+          },
+          "reflection": "In your own words, why can a system that is very good at producing language still be a poor source of facts?"
+        },
+        {
+          "id": "b4s3",
+          "title": "Prompt Lab 1: C-T-C-F",
+          "minutes": 30,
+          "type": "TRY",
+          "pageRef": "Student Book pp. 18–22",
+          "intro": "Take one weak prompt and rebuild it with four parts. Save the before and after outputs side by side. That's your v1 and v2.",
+          "study": {
+            "title": "Context, Task, Constraints, Format",
+            "body": ["Context is the background the model needs: who you are, what this is for, what you already know. Without it the model guesses an audience and a purpose, and it usually guesses the most average one. Task is the one clear thing you want it to do. One verb. “Tell me about” is not a task; “list”, “compare”, “explain” and “draft” are.", "Constraints are the limits you set: length, level, what to avoid, what must be included. A constraint is how you stop the answer sprawling and how you make the model say “unsure” instead of inventing. Output format is the shape you want the answer in: a table, bullets, three options, questions first. Format decides whether you can actually use what comes back.", "Rebuild your weak prompt with all four parts, run the original (v1) and the rebuilt version (v2) in the same tool, and save both outputs. Record what you changed and what the output did differently. Then the honest question: was it better, and why? Some of the change is your prompt. Some is just the model varying between runs. Telling those apart is the whole skill."],
+            "example": "v1: “Tell me about the River Shannon.” v2: “I am a Transition Year student preparing a two-minute talk for my class (context). List the five most important facts about the River Shannon (task). Under 120 words, plain language, and write ‘unsure’ next to any figure you are not certain of (constraints). Numbered list, one fact per line (format).”",
+            "keywords": ["prompt", "context", "constraint", "output format"]
+          },
+          "activity": {
+            "kind": "prompt",
+            "title": "Prompt Lab 1: C-T-C-F",
+            "instructions": "Fill in the four parts, compose v2, then run v1 (the weak prompt) and v2 in DuckDuckGo AI Chat. For each version record the prompt exactly as sent, what you changed, what the output did, and whether it was better.",
+            "builder": true,
+            "versions": [
+              ["v1", "V1 – baseline (the weak prompt)"],
+              ["v2", "V2 – rebuilt with C-T-C-F"]
+            ],
+            "fields": [
+              ["prompt", "The prompt, exactly as sent"],
+              ["change", "What I changed"],
+              ["output", "What the output did (short extract or summary)"],
+              ["better", "Was it better? Why?"]
+            ],
+            "downloads": [
+              {
+                "label": "Prompt experiment sheet, Sheet A4 (CSV)",
+                "file": "prompt-experiment-sheet-A4.csv",
+                "note": "Version, prompt change, what changed in the output, was it better and why: rows for V1, V2 and V3. Fill it in as you go, then copy across."
+              }
+            ],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."]
+          },
+          "reflection": "What changed because of your prompt, and what changed just randomly between runs?"
+        },
+        {
+          "id": "b4s4",
+          "title": "Prompt Lab 2: iterate",
+          "minutes": 30,
+          "type": "IMPROVE",
+          "pageRef": "Student Book pp. 18–22",
+          "intro": "Now try adding one thing at a time and compare each version. Which additions actually helped, and which just made the prompt longer?",
+          "study": {
+            "title": "One change per round",
+            "body": ["Iteration is improving in rounds, comparing each version. The rule for this lab is one change per round. If you add three things at once and the answer improves, you have no idea which of the three did it, and next time you will add all three again out of superstition.", "Four additions are worth trying, one at a time: an example of what good looks like; the audience; success criteria, meaning how you will judge the answer; or “ask me questions before you answer”. Each changes something different. An example shapes the style, the audience shapes the level, success criteria shape what the model prioritises, and asking questions first surfaces the context you forgot to give.", "Keep the constraints and format from v2 while you test additions, so the comparison is fair. When you have found the additions that genuinely helped, write your v3: tested and revised. A longer prompt that produced the same answer is not a better prompt. Clear beats long."],
+            "example": "Adding “the audience is 15-year-olds who have never seen the river” changed the vocabulary and cut the jargon. Adding “be as detailed as possible” doubled the length and added two more unchecked figures. One helped; one just made the prompt longer.",
+            "keywords": ["iteration", "constraint", "output format", "prompt"]
+          },
+          "activity": {
+            "kind": "prompt",
+            "title": "Prompt Lab 2: iterate",
+            "instructions": "Starting from your v2, add one thing at a time and run each version. When you know which additions helped, record your v3 below, then note the additions you tried and which ones earned their place.",
+            "builder": false,
+            "versions": [
+              ["v3", "V3 – tested and revised"]
+            ],
+            "fields": [
+              ["prompt", "The prompt, exactly as sent"],
+              ["change", "What I changed"],
+              ["output", "What the output did (short extract or summary)"],
+              ["better", "Was it better? Why?"]
+            ],
+            "extras": ["Additions I tried, one at a time (example, audience, success criteria, ask-me-questions-first)…", "Which additions actually helped, and which just made the prompt longer…"],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."]
+          },
+          "reflection": "Which single addition changed the output most, and how do you know the change came from the addition rather than from the model varying between runs?"
+        },
+        {
+          "id": "b4s5",
+          "title": "Four useful roles",
+          "minutes": 30,
+          "type": "TRY + BREAK",
+          "pageRef": "Student Book pp. 18–22",
+          "intro": "Try the AI in four different jobs. Each has a different prompt style and a different risk.",
+          "study": {
+            "title": "Tutor, brainstorm partner, critic, transformer",
+            "body": ["Tutor: “Explain X to me, then quiz me.” The prompt sets up a loop: an explanation, then questions back to you. Risk: it explains something wrong, fluently, and then quizzes you on the wrong thing. Brainstorm partner: “Give me 10 unusual angles on X.” Good for getting unstuck. Risk: you stop generating your own, and every idea starts sounding like the model's.", "Critic: “Here's my draft. What's weak?” You give it your own work and ask for problems. Risk: it's too polite, or invents problems so that it has something to say. Transformer: “Turn this into a table / a summary / simpler language.” You give it text and ask for a different shape. Risk: it drops or changes meaning while making it look tidier.", "Run each role once. For each, record the prompt, what it did well, and the risk you actually saw, not only the one the book warned you about. Use a made-up draft or a topic from this chapter, never personal writing about yourself or anyone else. The roles where the AI helps you think are usually more useful than the ones where it thinks for you."],
+            "example": "As a transformer, the model turned a paragraph about Ardnacrusha into a neat three-row table and quietly changed “completed in 1929” to “opened in the 1920s”. Tidier, and less precise. That is the transformer risk in one row.",
+            "keywords": ["prompt", "context", "output format", "hallucination"]
+          },
+          "activity": {
+            "kind": "chain",
+            "title": "Four useful roles",
+            "instructions": "One row per role. Tutor: “Explain X to me, then quiz me.” Risk: it explains something wrong, fluently. Brainstorm partner: “Give me 10 unusual angles on X.” Risk: you stop generating your own. Critic: “Here's my draft. What's weak?” Risk: it's too polite, or invents problems. Transformer: “Turn this into a table / a summary / simpler language.” Risk: it drops or changes meaning. Record the prompt you sent, what it did well, and the risk you saw.",
+            "columns": [
+              ["role", "Role (tutor, brainstorm partner, critic, transformer)"],
+              ["prompt", "My prompt"],
+              ["did", "What it did well"],
+              ["risk", "The risk I saw"]
+            ],
+            "rows": 4,
+            "minRows": 4,
+            "head": "TUTOR · BRAINSTORM PARTNER · CRITIC · TRANSFORMER",
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."]
+          },
+          "reflection": "Which parts of the answer need evidence from outside the AI?"
+        },
+        {
+          "id": "b4s6",
+          "title": "Verification challenge",
+          "minutes": 30,
+          "type": "TEST + INVESTIGATE",
+          "pageRef": "Student Book pp. 18–22",
+          "intro": "Ask the AI about a topic with several checkable facts. Then pick three claims and verify each one yourself using reliable sources. Record it on Sheet A2.",
+          "study": {
+            "title": "Supported, uncertain or wrong",
+            "body": ["Verification is checking a claim against independent, reliable evidence. Independent means not the chatbot, and not a page that copied the chatbot. Reliable is about source quality: how trustworthy a source is: who made it, why, and how it can be checked. An official record, a national body, a museum, a peer-reviewed paper or a primary document beats a blog, a forum answer or a page with no author.", "Pick a topic from the download, ask the AI about it, and choose three claims that would matter if wrong: figures, dates, names, causes. For each one find a source, note its name and where you found it, and give a verdict. Supported: a reliable source says the same. Uncertain: sources disagree, or you found nothing either way. Wrong: a reliable source contradicts it.", "The last column is the one people skip: what you changed because of the check. A wrong claim comes out of your talk. An uncertain one gets a hedge or a question mark. A supported one gets its source written next to it. If the AI gave you a citation, check that too. LLMs generate citations the same way they generate everything else: by pattern."],
+            "example": "Claim: “Lough Derg is the largest lake in Ireland.” Source: Tailte Éireann lake data and Waterways Ireland. Verdict: wrong. It is the largest lake on the Shannon, but Lough Neagh is far larger. What I changed: reworded the sentence to what the source supports and wrote the source next to it. That row is Sheet A2 done properly.",
+            "keywords": ["verification", "source quality", "hallucination"]
+          },
+          "activity": {
+            "kind": "chain",
+            "title": "Verification log (Sheet A2)",
+            "instructions": "Choose a topic from the verification topic cards, ask the AI about it in DuckDuckGo AI Chat, then pick three claims it made. For each, name the source you checked and where you found it, give the verdict, and say what you changed because of it. If the tool is blocked, verify three claims from the sample outputs instead.",
+            "columns": [
+              ["claim", "Claim the AI made"],
+              ["source", "Source I checked (name and where)"],
+              ["verdict", "Supported / uncertain / wrong"],
+              ["changed", "What I changed because of it"]
+            ],
+            "rows": 3,
+            "minRows": 3,
+            "head": "CLAIM → SOURCE → VERDICT → WHAT I CHANGED",
+            "downloads": [
+              {
+                "label": "Verification topic cards (text)",
+                "file": "genai-verification-topics.txt",
+                "note": "Three topics, five checkable facts each, to ask the AI about. No answers: that is the point."
+              },
+              {
+                "label": "Sample AI outputs, two answers to the weak question (text)",
+                "file": "genai-sample-outputs.txt",
+                "note": "Two synthetic chatbot-style answers to \"Tell me about the River Shannon.\" Supported, uncertain and wrong claims are mixed and unmarked, on purpose."
+              },
+              {
+                "label": "Verification log, Sheet A2 (CSV)",
+                "file": "verification-log-A2.csv",
+                "note": "Claim, source checked, supported / uncertain / wrong, what I changed. Three empty rows."
+              }
+            ],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."]
+          },
+          "reflection": "Are you asking the model to think for you, or to help you think?"
+        },
+        {
+          "id": "b4s7",
+          "title": "Injecting doubt",
+          "minutes": 25,
+          "type": "BREAK",
+          "pageRef": "Student Book pp. 18–22",
+          "intro": "Ask the model leading questions on purpose and watch how the framing of your question shapes the answer.",
+          "study": {
+            "title": "The question that answers itself",
+            "body": ["“Why is X better than Y?” already contains an answer: X is better, please justify it. A pattern-predictor that has read millions of persuasive articles will oblige. “Compare X and Y” contains no answer, so the most likely continuation is a balanced comparison. Same topic, same model, and the framing of the question decides what you get.", "This is confirmation bias: the habit of looking for evidence that agrees with what you already think. The model will happily feed yours. It is not lying and it is not agreeing with you on purpose; it is continuing the pattern your question started. That makes leading questions the fastest way to get a confident answer that only sounds like evidence.", "Run the pair. Ask a leading version and a neutral version of the same question, keep everything else identical, and record how the two answers differ. Then write down what this means for your own responsibility: if the framing is yours, the bias in the answer is yours too. A prompt that is fair to both sides is also the prompt that is safer for the other people who will read the output."],
+            "example": "“Why is wind power better than solar in Ireland?” produced four reasons for wind and none against. “Compare wind and solar power in Ireland” produced two columns with costs and drawbacks for each. Only the second could be used honestly in a talk.",
+            "keywords": ["prompt", "context", "framing", "confirmation bias"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Injecting doubt",
+            "instructions": "Pick a topic with two sides. Ask the leading version and the neutral version in the same tool, one after the other, and record what happened.",
+            "fields": ["The leading question I asked (for example ‘Why is X better than Y?’)…", "The neutral version (‘Compare X and Y’)…", "How the two answers differed…", "What this shows about confirmation bias and my own responsibility…"],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."]
+          },
+          "reflection": "What would make this prompt safer or fairer for other people?"
+        },
+        {
+          "id": "b4s8",
+          "title": "Build a reusable prompt",
+          "minutes": 30,
+          "type": "MAKE",
+          "pageRef": "Student Book pp. 18–22",
+          "intro": "Design a prompt template for a real TY task: preparing for work experience, learning a topic, planning an event, or making sense of survey feedback. Something you'd actually use again.",
+          "study": {
+            "title": "A template with placeholders",
+            "body": ["A template is a prompt with the parts that change taken out and replaced by [placeholders]. The four parts are the same as Lab 1: context, task, constraints, output format. What makes it reusable is that the constraints and format stay fixed while the topic and audience swap in, so every run is comparable with the last.", "Pick a task you genuinely have. Write the template, then explain why each part is there. If you cannot say what a line does, it is probably one of the additions from Lab 2 that just made the prompt longer, and it should go.", "Finish with the honest section: when you would use it again, and what you would still check by hand. A good template includes its own verification step, something like “mark any figure or name you are not sure of”, because iteration can make the answer more useful, but it cannot turn a pattern-predictor into a fact-checker."],
+            "example": "Context: I am a TY student going on work experience at [type of workplace]. Task: list the [number] questions I should be ready to answer on day one. Constraints: plain language, no more than [number] words each, mark anything that depends on the specific employer with [check]. Format: numbered list, then three questions I could ask them.",
+            "keywords": ["prompt", "context", "constraint", "output format", "iteration"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Reusable prompt template",
+            "instructions": "Use the template download as a skeleton if you like. Write your template with [placeholders] for the parts that change, then explain it. Test it once in the tool before you call it finished.",
+            "fields": ["The real task my template is for (work experience, learning a topic, planning an event, survey feedback)…", "My reusable prompt template, with [placeholders] for the parts that change…", "Why each part of the template is there…", "When I would use it again, and what I would still check by hand…"],
+            "downloads": [
+              {
+                "label": "Reusable prompt template, C-T-C-F skeleton (Markdown)",
+                "file": "reusable-prompt-template.md",
+                "note": "Context, Task, Constraints, Format with [placeholders], plus a built-in verification line. Fill it in, then paste your version above."
+              }
+            ],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."]
+          },
+          "reflection": "Which line of your template would you refuse to remove, and what goes wrong without it?"
+        },
+        {
+          "id": "b4s9",
+          "title": "Red-team a prompt",
+          "minutes": 20,
+          "type": "QUESTION + BREAK",
+          "pageRef": "Student Book pp. 18–22",
+          "intro": "Red-team a prompt: use a partner's if you have one, otherwise one of the three prompts in the download. Find what it leaves open.",
+          "study": {
+            "title": "One ambiguity, one missing constraint, one claim to check",
+            "body": ["Red-teaming means attacking your own work before someone else does. For a prompt, three things go wrong most often. An ambiguity: a word or phrase the model could read two ways, so the answer might be about the wrong thing. A missing constraint: no length, level, date range or “say if unsure”, so the model fills the gap with its most average guess.", "The third is a claim that would need checking: something the prompt invites the model to state as fact, such as a year, a statistic or a quotation, with no instruction to source it. Those are the sentences most likely to be hallucinated, and they are also the ones most likely to be copied straight into someone's work without anyone judging the source quality.", "Run the prompt if you can, but you can red-team it on paper too. Read it the way the model would: what is the most likely continuation, and where would a fluent wrong answer slip in? Write one of each, give the notes back if it was a partner's, and keep a copy: you will want the same three checks for your own template."],
+            "example": "“Write about the history of our town and include the year it was founded.” Ambiguity: which town? Missing constraint: how long, and for whom? Claim to check: the founding year, which the model will supply confidently whether or not any record exists.",
+            "keywords": ["constraint", "verification", "source quality"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Red-team a prompt",
+            "instructions": "Red-team a prompt: use a partner's if you have one, otherwise one of the three prompts in the download. Find one ambiguity, one missing constraint and one claim in its likely answer that would need checking.",
+            "fields": ["The prompt I red-teamed (paste it, or say which card)…", "One ambiguity in the prompt…", "One missing constraint…", "One claim in its likely answer that would need checking…"],
+            "downloads": [
+              {
+                "label": "Red-team prompt cards (text)",
+                "file": "genai-red-team-prompts.txt",
+                "note": "Three prompts, each carrying one ambiguity, one missing constraint and one claim that would need checking. Use them if you have no partner's prompt."
+              }
+            ]
+          },
+          "reflection": "Which of the three problems would be easiest for the prompt's author to miss, and why?"
+        },
+        {
+          "id": "b4s10",
+          "title": "Exit rule",
+          "minutes": 5,
+          "type": "REFLECT + EVIDENCE",
+          "pageRef": "Student Book pp. 18–22",
+          "intro": "Finish Chapter 4 with one sentence you will keep.",
+          "study": {
+            "title": "One rule to keep",
+            "body": ["You have run the same task through weak and improved prompts, verified three claims, and watched a leading question bend an answer. Every one of those is the same lesson from a different side: the model produces likely language, and likely is not the same as true.", "Your portfolio for this chapter is prompts v1, v2 and v3 with their outputs, your output comparison notes, your three-claim verification log, your reusable prompt template, and your reflection and exit rule. Check that each one exists before you move on.", "The exit rule is a sentence you can say to yourself the next time an answer arrives looking finished. Make it specific to something you saw today: a citation that did not exist, a figure that changed between runs, a question that answered itself, a source you could not find."],
+            "example": "“I should never trust an AI answer just because it gives a source” is a good rule if you checked a citation today and found nothing behind it.",
+            "keywords": ["verification", "hallucination", "source quality"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Exit rule",
+            "instructions": "Write one sentence completing the exit rule. Make it specific to something you saw in this chapter.",
+            "fields": ["I should never trust an AI answer just because…"]
+          },
+          "reflection": "Which moment in this chapter gave you that rule, and what exactly did you see?"
+        }
+      ],
+      "lab": {
+        "title": "Make prompts compete",
+        "summary": "You run the same task through weak and improved prompts, compare what changed, verify what the AI claimed, then build a prompt you would actually reuse.",
+        "stages": [
+          ["DO", "b4s3", "Rebuild a weak prompt with C-T-C-F"],
+          ["TEST", "b4s1", "Same task, different prompts"],
+          ["MAKE", "b4s8", "Build a reusable prompt"],
+          ["BREAK", "b4s7", "Inject doubt and watch the framing"],
+          ["IMPROVE", "b4s4", "Iterate one addition at a time"],
+          ["PROVE", "b4s6", "Verify three claims"]
+        ]
+      },
+      "myths": [
+        ["Longer prompts are always better.", "Your Lab 2 comparison probably showed some additions did nothing. Clear beats long."],
+        ["If it gives a citation, the source exists.", "LLMs generate citations the same way they generate everything else: by pattern. Some are real. Some are invented. Check."],
+        ["Good prompt engineering guarantees a true answer.", "A better prompt gets a more useful answer. It doesn't turn a pattern-predictor into a fact-checker."],
+        ["AI should give me the final answer.", "For learning, the answer is the least useful thing it can give you. The questions, examples and critique are worth more."]
+      ],
+      "selfCheck": {
+        "Getting started": ["I can write a usable prompt", "I notice when outputs differ"],
+        "Getting there": ["I improve prompts systematically", "I verify important factual claims"],
+        "Going further": ["I build criteria to judge outputs", "I compare outputs critically", "I can explain how framing and confirmation bias affect results"]
+      },
+      "levelUp": "Write an evaluation rubric with four criteria. Score two AI outputs against it. Then justify which one is better using the scores, not just which one you prefer."
     }
   ]
 }

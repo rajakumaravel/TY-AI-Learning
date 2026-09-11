@@ -6,7 +6,7 @@
 // Creates three throwaway auth users (two students, one app-metadata admin), exercises the API and RLS, then deletes them.
 
 import { randomUUID } from 'node:crypto';
-import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS } from './lib.mjs';
+import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS } from './lib.mjs';
 
 const users = [];
 try {
@@ -129,6 +129,28 @@ try {
   const submit3 = await api('projects/block3/submit', a.token, { method: 'POST' });
   check('student A submits Chapter 3 project', submit3.status === 200 && submit3.body?.project?.status === 'submitted' && submit3.body?.project?.submittedSnapshot?.finalRecommendation === workspace3.finalRecommendation, JSON.stringify(submit3.body));
   check('student B Chapter 3 project save is still 409 without Chapter 2 qualification', (await api('projects/block3', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
+
+  // Chapter 3 → 4 gate: student A is Chapter 3 qualified (cap3 above), so Chapter 4 needs only its ten sessions
+  const cap4early = await api('chapter-assessment/block4', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE4_ANSWERS }) });
+  check('Chapter 4 capstone is 409 before Chapter 4 sessions complete', cap4early.status === 409, `status ${cap4early.status}`);
+  const done4 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { ...state, completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS, ...CHAPTER3_SESSIONS, ...CHAPTER4_SESSIONS] } }) });
+  check('student A marks all Chapter 4 sessions complete', done4.status === 200);
+  const cap4 = await api('chapter-assessment/block4', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE4_ANSWERS }) });
+  check('Chapter 4 capstone accepted after sessions complete', cap4.status === 200 && Boolean(cap4.body?.assessment?.submittedAt) && Boolean(cap4.body?.assessment?.suggestedLevel), JSON.stringify(cap4.body));
+  const workspace4 = {
+    workLog: [{ planned: 'Run the three-version prompt experiment and verify three claims', did: 'Asked the weak River Shannon question, rebuilt it with C-T-C-F, iterated v3 one addition at a time, tried the four roles and checked three claims against independent sources.', result: 'v2 output fitted the task; one of the three claims was wrong and one citation did not exist.', blocker: '', decision: 'Keep the ask-me-questions-first addition; drop the example, it added length only', next: 'Write the reusable template', minutes: 45, date: '2026-09-11' }],
+    evidence: [
+      { label: 'Lab: Prompt Lab 1: C-T-C-F', url: '', note: 'v1: Tell me about the River Shannon. → No, generic and confident; v2: rebuilt with context, task, constraints and format → Yes, it answered the actual task.' },
+      { label: 'Lab: Verification challenge', url: '', note: 'Length about 360 km → OSI → supported → kept; Shannon Bridge Act 1931 → no record → wrong → removed.' },
+      { label: 'Lab: Build a reusable prompt', url: '', note: 'Template for preparing for work experience with [role], [company] and [what I already know] placeholders.' }
+    ],
+    finalRecommendation: 'Use the C-T-C-F template for real tasks, keep the ask-me-questions-first addition, and verify every figure and citation against an independent source before relying on it; confident wording is not confident truth.'
+  };
+  const save4 = await api('projects/block4', a.token, { method: 'PUT', body: JSON.stringify({ workspace: workspace4 }) });
+  check('student A PUT /api/projects/block4 ok after Chapter 3 qualified, brief carries its chapter', save4.status === 200 && save4.body?.project?.status === 'in_progress' && typeof save4.body?.project?.brief?.chapter === 'string' && save4.body.project.brief.chapter.length > 0, JSON.stringify(save4.body));
+  const submit4 = await api('projects/block4/submit', a.token, { method: 'POST' });
+  check('student A submits Chapter 4 project', submit4.status === 200 && submit4.body?.project?.status === 'submitted' && submit4.body?.project?.submittedSnapshot?.finalRecommendation === workspace4.finalRecommendation, JSON.stringify(submit4.body));
+  check('student B Chapter 4 project save is 409 without Chapter 3 qualification', (await api('projects/block4', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
 } catch (error) {
   check('run completed without exception', false, error.message);
 } finally {

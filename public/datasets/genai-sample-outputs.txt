@@ -1,0 +1,34 @@
+Sample AI outputs (Chapter 4, Generative AI & Prompting, sessions "Same task, different prompts" and "Verification challenge")
+
+SYNTHETIC SAMPLES. These two answers were written for this course in the style of a chatbot. No real AI tool produced
+them. Each contains claims that are supported, claims that are uncertain and claims that are wrong, mixed together and
+deliberately not marked. Read them the way you would read a real output: which sentences would you need to check
+before repeating them?
+
+The question, both times: Tell me about the River Shannon.
+
+=== Answer 1 (first run) ===
+Certainly! Here is an overview of the River Shannon.
+
+The River Shannon is the longest river in Ireland. It rises at the Shannon Pot on the slopes of Cuilcagh Mountain in County Cavan. From there it flows south for nearly 500 km before reaching the Atlantic. On its way it widens into three large lakes: Lough Allen, Lough Ree and Lough Derg.
+
+The river passes through or borders eleven counties, dividing the west of Ireland from the east. The city of Limerick sits at the head of the Shannon Estuary. In 1925 the new Irish state began building the Ardnacrusha hydroelectric scheme, which was completed in 1929. The scheme was run by the Electricity Supply Board, set up in 1927. For its first decade Ardnacrusha supplied about 80% of Ireland's electricity.
+
+The Shannon Bridge Act of 1873 required every crossing of the river to be approved by Parliament. The river is named after Sionann, a figure from Irish mythology. For a fuller history see Ó Braonáin, T. (2011), The Shannon from Pot to Sea, Athlone Riverside Press, p. 42.
+
+Let me know if you would like more detail on any of these points!
+
+=== Answer 2 (second run, different model) ===
+Sure. The River Shannon is one of Ireland's best-known natural features. Here are the key facts.
+
+The Shannon is the longest river on the island of Ireland at about 360 km. Some references give 386 km, a figure that includes the estuary. Its source, the Shannon Pot, is a small pool in County Cavan fed by underground streams from Cuilcagh Mountain. The river drains roughly one fifth of the island. Major towns along it include Carrick-on-Shannon, Athlone and Limerick.
+
+The Ardnacrusha power station, built by the German firm Siemens-Schuckert, opened in 1937. At the time it was one of the largest hydroelectric schemes in the world. The Shannon–Erne Waterway, which links the river to Lough Erne, was reopened in 1994. The river also gives its name to Shannon Airport, where the world's first airport duty-free shop opened in 1947.
+
+Because the Shannon is so slow and flat, it has never flooded seriously. Salmon still migrate up the river, though numbers are lower than in the past.
+
+I hope this helps. Feel free to ask if you want me to expand on the history or the geography!
+
+Compare the two answers. What varied? What was missing from both? What sounded confident with nothing behind it?
+For the verification challenge: pick three claims, find a reliable source for each, and label them supported,
+uncertain or wrong on Sheet A2.
