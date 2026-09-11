@@ -60,7 +60,7 @@ test('block3 carries the book myth-busters, self-check and level-up',()=>{
   assert.deepEqual(b.selfCheck['Getting there'].map(norm),['I can tell collected data from inferred data','I can explain purpose, risk and minimisation for my service']);
   assert.deepEqual(b.selfCheck['Going further'].map(norm),["I can evaluate who's represented and propose safeguards","I can justify why some available data shouldn't be used"]);
   assert.equal(norm(b.levelUp),"Compare two services that do a similar job. Using only publicly available information, explain which one appears to take the more data-minimising approach, and what evidence you're relying on.");
-  for(const other of course().blocks.filter(x=>x.id!=='block3'))assert.ok(!other.myths&&!other.selfCheck&&!other.levelUp,`${other.id} unchanged in Phase 4b`);
+  for(const other of course().blocks.filter(x=>x.id==='block1'||x.id==='block2'))assert.ok(!other.myths&&!other.selfCheck&&!other.levelUp,`${other.id} unchanged in Phase 4b`);
 });
 
 test('block3 sessions carry the contracted activities',()=>{

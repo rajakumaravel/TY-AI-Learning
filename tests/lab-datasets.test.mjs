@@ -88,8 +88,8 @@ test('chapter 4 sample outputs are labelled synthetic, mix verdicts, and every c
   assert.equal((topics.match(/^[1-5]\. /gm)||[]).length,15,'five checkable facts per topic');
   const red=fs.readFileSync('public/datasets/genai-red-team-prompts.txt','utf8');
   assert.equal((red.match(/^=== Prompt \d ===/gm)||[]).length,3,'three red-team prompts');
-  assert.match(fs.readFileSync('public/datasets/prompt-experiment-sheet-A4.csv','utf8'),/^version,prompt,prompt_change,what_changed_in_output,was_it_better_why\nV1 - baseline,,,,\nV2,,,,\nV3,,,,\n$/);
-  assert.match(fs.readFileSync('public/datasets/verification-log-A2.csv','utf8'),/^claim,source_checked,supported_uncertain_wrong,what_i_changed\n(,,,\n){3}$/);
+  assert.match(fs.readFileSync('public/datasets/prompt-experiment-sheet-A4.csv','utf8'),/^Version,Prompt,Prompt change,What changed in output,Was it better\? Why\?\nV1 - baseline,,,,\nV2,,,,\nV3,,,,\n$/);
+  assert.match(fs.readFileSync('public/datasets/verification-log-A2.csv','utf8'),/^Claim,Source checked,Supported \/ uncertain \/ wrong,What I changed\n(,,,\n){3}$/);
   const template=fs.readFileSync('public/datasets/reusable-prompt-template.md','utf8');
   for(const h of ['## Context','## Task','## Constraints','## Format'])assert.ok(template.includes(h),h);
   assert.match(template,/\[unsure\]/);

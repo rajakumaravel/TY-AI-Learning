@@ -504,8 +504,8 @@ ${RED_TEAM.map((x, i) => `Prompt ${i + 1}: ${x.prompt}\n- Ambiguity: ${x.ambigui
 `);
 
 // Sheets A4 and A2 (curriculum pilot v1, Appendix A) as headers with empty rows.
-writeFileSync(join(OUT, 'prompt-experiment-sheet-A4.csv'), 'version,prompt,prompt_change,what_changed_in_output,was_it_better_why\nV1 - baseline,,,,\nV2,,,,\nV3,,,,\n');
-writeFileSync(join(OUT, 'verification-log-A2.csv'), 'claim,source_checked,supported_uncertain_wrong,what_i_changed\n,,,\n,,,\n,,,\n');
+writeFileSync(join(OUT, 'prompt-experiment-sheet-A4.csv'), 'Version,Prompt,Prompt change,What changed in output,Was it better? Why?\nV1 - baseline,,,,\nV2,,,,\nV3,,,,\n');
+writeFileSync(join(OUT, 'verification-log-A2.csv'), 'Claim,Source checked,Supported / uncertain / wrong,What I changed\n,,,\n,,,\n,,,\n');
 writeFileSync(join(OUT, 'reusable-prompt-template.md'), `# Reusable prompt template (C-T-C-F)
 
 Task this template is for: ________________  Name: ________________
