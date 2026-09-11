@@ -40,10 +40,10 @@ npm ci
 npm run check
 ```
 
-Live cutover acceptance against a deployment (needs `supabase login`; creates and deletes throwaway auth users, prints no keys):
+Live cutover acceptance against a deployment (needs `supabase login` and `npx playwright install chromium`; creates and deletes throwaway auth users, prints no keys). The API script covers persistence, the capstone gate, RLS isolation, admin authorisation and project submit/review; the browser script covers cross-device persistence, the Chapter 1→2 lock as rendered, and admin-page rejection:
 
 ```bash
-ACCEPTANCE_BASE_URL=https://<deployment>.ty-ai-learning.pages.dev node tests/acceptance/cutover-acceptance.mjs
+ACCEPTANCE_BASE_URL=https://<deployment>.ty-ai-learning.pages.dev npm run acceptance
 ```
 
 Branch pushes trigger the Pages preview workflow. The Production release workflow is configured for successful CI on `main` and manual dispatch; it applies database migrations before deployment. The dependency lockfile required by `npm ci` is committed.

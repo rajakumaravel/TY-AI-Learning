@@ -3,11 +3,14 @@
   "version": "2.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "build": "vite build",
     "test": "node --test tests/*.test.mjs",
-    "check": "npm test && npm run build"
+    "check": "npm test && npm run build",
+    "acceptance": "node tests/acceptance/cutover-acceptance.mjs && node tests/acceptance/ui-acceptance.mjs"
   },
   "dependencies": {
     "@netlify/database": "latest",
@@ -16,6 +19,7 @@
     "@supabase/supabase-js": "latest"
   },
   "devDependencies": {
+    "playwright": "^1.63.0",
     "vite": "latest"
   }
 }

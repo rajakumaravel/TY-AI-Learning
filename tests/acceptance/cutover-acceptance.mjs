@@ -5,48 +5,8 @@
 //
 // Creates three throwaway auth users (two students, one app-metadata admin), exercises the API and RLS, then deletes them.
 
-import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
-
-const BASE = (process.env.ACCEPTANCE_BASE_URL || '').replace(/\/$/, '');
-const REF = process.env.SUPABASE_PROJECT_REF || 'fnnftbsalquzwgzlsovx';
-if (!BASE) { console.error('Set ACCEPTANCE_BASE_URL to the deployment under test.'); process.exit(2); }
-
-const keys = JSON.parse(execFileSync('supabase', ['projects', 'api-keys', '--project-ref', REF, '-o', 'json'], { encoding: 'utf8' }));
-const ANON = keys.find(k => k.name === 'anon')?.api_key;
-const SERVICE = keys.find(k => k.name === 'service_role')?.api_key;
-if (!ANON || !SERVICE) { console.error('Could not read anon/service_role keys from Supabase CLI.'); process.exit(2); }
-const SUPABASE_URL = `https://${REF}.supabase.co`;
-
-const results = [];
-function check(name, ok, detail = '') { results.push({ name, ok, detail }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail && !ok ? `  (${detail})` : ''}`); }
-
-async function api(path, token, init = {}) {
-  const headers = { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) };
-  const res = await fetch(`${BASE}/api/${path}`, { ...init, headers });
-  let body = null; try { body = await res.json(); } catch { /* non-JSON */ }
-  return { status: res.status, body };
-}
-async function rest(table, query, token, init = {}) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`, { ...init, headers: { apikey: ANON, authorization: `Bearer ${token}`, 'content-type': 'application/json', prefer: 'return=representation', ...(init.headers || {}) } });
-  let body = null; try { body = await res.json(); } catch { /* non-JSON */ }
-  return { status: res.status, body };
-}
-async function createUser(label, appMetadata = {}) {
-  const email = `acceptance-${label}-${randomUUID().slice(0, 8)}@ty-ai-learning.test`;
-  const password = randomUUID() + randomUUID();
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, { method: 'POST', headers: { apikey: SERVICE, authorization: `Bearer ${SERVICE}`, 'content-type': 'application/json' }, body: JSON.stringify({ email, password, email_confirm: true, user_metadata: { full_name: `Acceptance ${label}` }, app_metadata: appMetadata }) });
-  if (!res.ok) throw new Error(`createUser ${label}: HTTP ${res.status} ${await res.text()}`);
-  const user = await res.json();
-  const login = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, { method: 'POST', headers: { apikey: ANON, 'content-type': 'application/json' }, body: JSON.stringify({ email, password }) });
-  if (!login.ok) throw new Error(`login ${label}: HTTP ${login.status} ${await login.text()}`);
-  const session = await login.json();
-  return { id: user.id, token: session.access_token };
-}
-async function deleteUser(id) {
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${id}`, { method: 'DELETE', headers: { apikey: SERVICE, authorization: `Bearer ${SERVICE}` } });
-  return res.ok;
-}
+import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS } from './lib.mjs';
 
 const users = [];
 try {
@@ -71,6 +31,17 @@ try {
   check('student A progress round-trips', get.status === 200 && get.body?.state?.marker === state.marker);
   const getB = await api('progress', b.token);
   check('student B sees empty progress, not A\'s', getB.status === 200 && !getB.body?.state?.marker);
+
+  // Chapter capstone gate (server side)
+  const early = await api('chapter-assessment/block1', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE1_ANSWERS }) });
+  check('capstone rejected (409) before chapter sessions complete', early.status === 409, `status ${early.status}`);
+  const done = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { ...state, completed: CHAPTER1_SESSIONS } }) });
+  check('student A marks all Chapter 1 sessions complete', done.status === 200);
+  const thin = await api('chapter-assessment/block1', a.token, { method: 'POST', body: JSON.stringify({ answers: { q1: 'too short', q2: 'x', q3: 'y' } }) });
+  check('capstone rejected (400) with thin answers', thin.status === 400, `status ${thin.status}`);
+  const cap = await api('chapter-assessment/block1', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE1_ANSWERS }) });
+  check('capstone accepted after sessions complete', cap.status === 200 && Boolean(cap.body?.assessment?.submittedAt) && Boolean(cap.body?.assessment?.suggestedLevel), JSON.stringify(cap.body));
+  check('capstone unknown chapter is 404', (await api('chapter-assessment/block9', a.token, { method: 'POST', body: '{}' })).status === 404);
 
   // Project workspace save
   const workspace = {
@@ -123,9 +94,6 @@ try {
 } catch (error) {
   check('run completed without exception', false, error.message);
 } finally {
-  for (const u of users) check(`cleanup: deleted test user ${u.id.slice(0, 8)}`, await deleteUser(u.id));
+  await cleanup(users);
 }
-
-const failed = results.filter(r => !r.ok).length;
-console.log(`\n${results.length - failed}/${results.length} checks passed against ${BASE}`);
-process.exit(failed ? 1 : 0);
+finish();
