@@ -78,7 +78,7 @@ test('block3 sessions carry the contracted activities',()=>{
   assert.ok(lab.fallback?.title&&lab.fallback.steps.length>=1);
   assert.ok(lab.downloads.some(d=>d.file==='privacy-policy-extracts.txt'),'sample policy extracts');
   const chain=session('b3s3').activity;
-  assert.deepEqual(chain,{kind:'chain',title:'Why collect it?',instructions:'For five data categories you found, complete the chain. Be fair: some collection is genuinely useful. Some isn\'t.',columns:[['category','Data category'],['purpose','Purpose'],['benefit','User benefit'],['risk','Possible risk']],rows:5,minRows:5,head:'COLLECTION → PURPOSE → USER BENEFIT → POSSIBLE RISK'});
+  assert.deepEqual(chain,{kind:'chain',title:'Why collect it?',instructions:`For five data categories you found, complete the chain. Be fair: some collection is genuinely useful. Some isn't. If a category has no real benefit to you, write "none": every cell needs an answer.`,columns:[['category','Data category'],['purpose','Purpose'],['benefit','User benefit'],['risk','Possible risk']],rows:5,minRows:5,head:'COLLECTION → PURPOSE → USER BENEFIT → POSSIBLE RISK'});
   const ds=session('b3s4').activity;
   assert.equal(ds.file,'club-signups-flawed.csv');
   assert.deepEqual(ds.issueTypes,ISSUE_TYPES);
