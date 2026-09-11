@@ -157,7 +157,7 @@ Prefer a built-in browser table/simulator or a simple spreadsheet-compatible flo
 
 ## Exit criteria
 
-- Chapter 3 outcomes map to the official curriculum source;
+- Chapter 3 outcomes map to the official curriculum source — met (Phase 4b): block3 carries LO5, LO6, LO9, the book's mission, eight-segment route, key words, myth-busters, self-check and level-up from `docs/source/student-book.txt` pp. 14–17 and `docs/source/curriculum-pilot-v1.txt` section 7 and Sheet A5;
 - student completes a real dataset investigation;
 - evidence is captured in Project Workspace;
 - capstone is applied, not recall-based;
