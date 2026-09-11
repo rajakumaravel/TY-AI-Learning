@@ -40,6 +40,12 @@ npm ci
 npm run check
 ```
 
+Live cutover acceptance against a deployment (needs `supabase login`; creates and deletes throwaway auth users, prints no keys):
+
+```bash
+ACCEPTANCE_BASE_URL=https://<deployment>.ty-ai-learning.pages.dev node tests/acceptance/cutover-acceptance.mjs
+```
+
 Branch pushes trigger the Pages preview workflow. The Production release workflow is configured for successful CI on `main` and manual dispatch; it applies database migrations before deployment. The dependency lockfile required by `npm ci` is committed.
 
 Complete the [ADR-007 acceptance checklist](docs/decisions/ADR-007-cloudflare-supabase-platform.md), including cross-device persistence, project submission/review, student isolation and the legacy-data decision, before merging. Phase 2 follows successful cutover and Phase 1 acceptance; see [ROADMAP](ROADMAP.md).
