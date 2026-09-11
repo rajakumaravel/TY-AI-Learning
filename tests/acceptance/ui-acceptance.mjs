@@ -7,7 +7,7 @@
 // the Chapter 1→2 gate as rendered, and admin-page rejection for a non-admin account.
 
 import { chromium } from 'playwright';
-import { BASE, REF, api, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS } from './lib.mjs';
+import { BASE, REF, api, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS } from './lib.mjs';
 
 const STORAGE_KEY = `sb-${REF}-auth-token`;
 
@@ -90,6 +90,7 @@ try {
   let d4 = await device(browser, a.session);
   await d4.page.waitForFunction(() => { const el = document.querySelector('[data-block="2"]'); return el && !el.classList.contains('locked'); }, null, { timeout: 15000 }).catch(() => {});
   check('device 4 Chapter 3 unlocked after Chapter 2 capstone', await d4.page.$eval('[data-block="2"]', el => !el.classList.contains('locked') && !el.disabled));
+  check('device 4 Chapter 4 locked until Chapter 3 qualified', await d4.page.$eval('[data-block="3"]', el => el.classList.contains('locked') && el.disabled));
   await d4.page.click('[data-block="2"]');
   await d4.page.waitForSelector('#labBanner .lab-stage', { timeout: 10000 });
   check('chapter 3 shows six Experience Lab stages', (await d4.page.$$('#labBanner .lab-stage')).length === 6);
@@ -115,6 +116,29 @@ try {
   await d4.page.waitForFunction((n) => (document.querySelector('.dataset-findings')?.textContent || '').includes(n), missing, { timeout: 10000 }).catch(() => {});
   check('a "Who is missing (representation)" finding appears in the findings list', /Who is missing \(representation\)/.test(await d4.page.textContent('.dataset-findings')) && (await d4.page.textContent('.dataset-findings')).includes(missing));
   await d4.context.close();
+
+  // Chapter 3 completed and qualified server-side, then Chapter 4 opens and the b4s3 prompt builder composes v2
+  const done3 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS, ...CHAPTER3_SESSIONS], reflections: {}, activity: {}, badges: [], chapterAssessments: {} } }) });
+  check('server accepts Chapter 3 completion', done3.status === 200);
+  const cap3 = await api('chapter-assessment/block3', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE3_ANSWERS }) });
+  check('Chapter 3 capstone accepted', cap3.status === 200 && Boolean(cap3.body?.assessment?.submittedAt), JSON.stringify(cap3.body));
+
+  let d5 = await device(browser, a.session);
+  await d5.page.waitForFunction(() => { const el = document.querySelector('[data-block="3"]'); return el && !el.classList.contains('locked'); }, null, { timeout: 15000 }).catch(() => {});
+  check('device 5 Chapter 4 unlocked after Chapter 3 capstone', await d5.page.$eval('[data-block="3"]', el => !el.classList.contains('locked') && !el.disabled));
+  await d5.page.click('[data-block="3"]');
+  await d5.page.waitForSelector('#labBanner .lab-stage', { timeout: 10000 });
+  check('chapter 4 shows six Experience Lab stages', (await d5.page.$$('#labBanner .lab-stage')).length === 6);
+  check('chapter 4 renders the Myth-busters section', Boolean(await d5.page.$('#mythBusters')) && /Clear beats long/.test(await d5.page.textContent('#mythBusters')));
+  await d5.page.click('[data-session="b4s3"]');
+  await d5.page.waitForSelector('.prompt-lab', { timeout: 15000 });
+  check('b4s3 renders the C-T-C-F builder and both version blocks', (await d5.page.$$('input[data-builder]')).length === 4 && Boolean(await d5.page.$('textarea[data-version="v1"][data-field="prompt"]')) && Boolean(await d5.page.$('textarea[data-version="v2"][data-field="prompt"]')));
+  const parts = { context: 'I am a TY student preparing a two-minute talk on the River Shannon for classmates.', task: 'Outline the talk.', constraints: '150 words, plain language, no figures without a named source.', format: 'Five bullet points, and ask me two questions first.' };
+  for (const [k, v] of Object.entries(parts)) await d5.page.fill(`input[data-builder="${k}"]`, v);
+  await d5.page.click('#composeV2');
+  const composed = await d5.page.$eval('textarea[data-version="v2"][data-field="prompt"]', el => el.value);
+  check('Compose v2 writes the four C-T-C-F parts into the v2 prompt', Object.values(parts).every(v => composed.includes(v)) && /\n\n/.test(composed), JSON.stringify(composed));
+  await d5.context.close();
 
   // Admin page: student rejected, admin admitted
   const ds = await device(browser, a.session, '/admin');

@@ -54,6 +54,7 @@ test('project workspace supports multi-visit work evidence',()=>{
   assert.match(student,/workLog/);
   assert.match(student,/evidence/);
   assert.match(student,/finalRecommendation/);
+  assert.match(student,/`\$\{k\}: \$\{String\(r\.prompt\)\.trim\(\)\} → \$\{String\(r\.better\|\|''\)\.trim\(\)\}`/);
 });
 
 test('ADR locks project work as first-class TY evidence',()=>{

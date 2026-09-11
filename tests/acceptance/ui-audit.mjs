@@ -1,15 +1,16 @@
 // Visual audit helper: full-page screenshots of every main screen at phone and desktop widths. Not part of npm test.
 // ACCEPTANCE_BASE_URL=... SHOTS=<dir> node tests/acceptance/ui-audit.mjs
 import { chromium } from 'playwright';
-import { BASE, REF, api, createUser, cleanup, CHAPTER1_SESSIONS, CHAPTER2_SESSIONS, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS } from './lib.mjs';
+import { BASE, REF, api, createUser, cleanup, CHAPTER1_SESSIONS, CHAPTER2_SESSIONS, CHAPTER3_SESSIONS, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS } from './lib.mjs';
 const OUT=process.env.SHOTS||'ui-audit-shots';
 const KEY=`sb-${REF}-auth-token`;
 const users=[]; const browser=await chromium.launch();
 try{
   const u=await createUser('audit'); users.push(u);
-  await api('progress',u.token,{method:'PUT',body:JSON.stringify({state:{completed:[...CHAPTER1_SESSIONS,...CHAPTER2_SESSIONS],reflections:{},activity:{},badges:[],chapterAssessments:{}}})});
+  await api('progress',u.token,{method:'PUT',body:JSON.stringify({state:{completed:[...CHAPTER1_SESSIONS,...CHAPTER2_SESSIONS,...CHAPTER3_SESSIONS],reflections:{},activity:{},badges:[],chapterAssessments:{}}})});
   await api('chapter-assessment/block1',u.token,{method:'POST',body:JSON.stringify({answers:CAPSTONE1_ANSWERS})});
   await api('chapter-assessment/block2',u.token,{method:'POST',body:JSON.stringify({answers:CAPSTONE2_ANSWERS})});
+  await api('chapter-assessment/block3',u.token,{method:'POST',body:JSON.stringify({answers:CAPSTONE3_ANSWERS})});
   for(const [w,h,tag] of [[400,860,'phone'],[1280,900,'desktop']]){
     const ctx=await browser.newContext({viewport:{width:w,height:h},deviceScaleFactor:1});
     const p=await ctx.newPage();
@@ -19,6 +20,8 @@ try{
     await shot('home');
     await p.click('[data-block="2"]'); await p.waitForSelector('#labBanner .lab-stage'); await shot('chapter3');
     await p.click('[data-lab-session="b3s4"]'); await p.waitForSelector('.dataset-table tbody tr',{timeout:15000}); await shot('dataset-session');
+    await p.click('[data-block-home], #homeBtn'); await p.click('[data-block="3"]'); await p.waitForSelector('#labBanner .lab-stage'); await shot('chapter4');
+    await p.click('[data-session="b4s3"]'); await p.waitForSelector('.prompt-lab',{timeout:15000}); await shot('prompt-lab');
     await p.click('[data-block-home], #homeBtn'); await p.click('[data-block="0"]'); await p.waitForSelector('#labBanner'); await p.click('[data-lab-session="b1lab"]'); await p.waitForSelector('#labToolLink'); await shot('lab-session');
     await p.waitForSelector('#projectWorkspaceBtn',{timeout:15000}); await p.click('#projectWorkspaceBtn'); await p.waitForSelector('#projectWorkspaceModal.open'); await shot('workspace',false);
     await p.click('.pw-close'); await p.click('#portfolioBtn'); await shot('portfolio');
