@@ -224,34 +224,52 @@ try {
     const label = await page.textContent('#projectWorkspaceBtn-block3');
     return (await page.$$('#labBanner .lab-stage')).length === 6 && /Project: Data Detective/.test(label) ? label : false;
   });
-  await step(page, 'Volunteered, observed, inferred quiz: choose every answer, save', async () => {
+  await step(page, 'Chapter 3 page shows the Myth-busters section', async () => /Public means visible/.test(await page.textContent('#mythBusters')));
+  await step(page, 'Data trail warm-up quiz: choose every answer, save', async () => {
     for (const sel of await page.$$('select[data-i]')) await sel.selectOption({ index: 1 });
     return await saveSession(page, 'b3s2');
   });
-  await step(page, 'Meet the dataset lab: safety gate, CSV download listed, evidence, save', async () => {
+  await step(page, 'Data Tracking Sherlock lab: category-level notice, policy extracts listed, audit fields, save', async () => {
     await page.check('[data-ack]');
     const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
     await fillTextfields(page, 4);
     const fb = await saveSession(page, 'b3s3');
-    return dl.some(h => /club-signups-flawed/.test(h)) ? `${fb} downloads=${dl.length}` : false;
+    return dl.some(h => /privacy-policy-extracts/.test(h)) ? `${fb} downloads=${dl.length}` : false;
   });
-  await step(page, 'Data audit table: all 120 rows rendered, five findings added, save', async () => {
+  await step(page, 'Why collect it? chain: five rows of category → purpose → benefit → risk, save', async () => {
+    const categories = ['Location', 'Listening history', 'Contacts', 'Device type', 'Inferred mood'];
+    for (let i = 0; i < 5; i++) for (const f of ['category', 'purpose', 'benefit', 'risk']) await page.fill(`.chain input[data-i="${i}"][data-f="${f}"]`, f === 'category' ? categories[i] : `${f} of ${categories[i].toLowerCase()}`);
+    return await saveSession(page, 'b3s4');
+  });
+  await step(page, 'Dataset fairness challenge: all 120 rows rendered, six findings including who is missing, save', async () => {
     await page.waitForSelector('.dataset-table tbody tr', { timeout: 15000 });
     const rows = (await page.$$('.dataset-table tbody tr')).length;
-    const notes = ['Nine sign-ups have no club_choice recorded.', 'signup_date mixes ISO, slash and written formats.', 'Rows 17 and 18 are the same student twice.', 'parent_phone is not needed to run a club.', 'Coding club is 88% one gender, so the data is imbalanced.'];
-    for (let i = 0; i < notes.length; i++) {
-      await page.selectOption('#datasetTarget', { index: 1 + i });
-      await page.selectOption('#datasetIssue', { index: 1 + i });
-      await page.fill('#datasetNote', notes[i]);
+    const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
+    const findings = [
+      ['column:club_choice', 'Missing value', 'Nine sign-ups have no club_choice recorded.'],
+      ['column:signup_date', 'Inconsistent format', 'signup_date mixes ISO, slash and written formats.'],
+      ['row:17', 'Duplicate', 'Rows 17 and 18 are the same student twice.'],
+      ['column:parent_phone', 'Sensitive or unnecessary field', 'parent_phone is not needed to recommend a club.'],
+      ['column:inferred_income_band', 'Inferred, not collected', 'inferred_income_band was guessed from the eircode, never asked.'],
+      ['column:year_group', 'Who is missing (representation)', 'No student who joined mid-year appears in the sign-ups.']
+    ];
+    for (const [target, issue, note] of findings) {
+      await page.selectOption('#datasetTarget', target);
+      await page.selectOption('#datasetIssue', { label: issue });
+      await page.fill('#datasetNote', note);
       await page.click('#datasetAdd');
     }
-    await page.waitForFunction((n) => (document.querySelector('.dataset-findings')?.textContent || '').includes(n), notes[4], { timeout: 10000 });
-    const fb = await saveSession(page, 'b3s4');
-    return rows === 120 ? `rows=${rows} · ${fb}` : `rows=${rows}`;
+    await page.waitForFunction((n) => (document.querySelector('.dataset-findings')?.textContent || '').includes(n), findings[5][2], { timeout: 10000 });
+    const fb = await saveSession(page, 'b3s5');
+    return rows === 120 && dl.some(h => /club-signups-flawed/.test(h)) ? `rows=${rows} · ${fb} downloads=${dl.length}` : `rows=${rows} downloads=${dl.length}`;
   });
-  await step(page, 'Propose the fix: save', async () => { await fillTextfields(page, 4); return await saveSession(page, 'b3s5'); });
-  await step(page, 'Responsible Data Card: save, chapter 3 practical complete', async () => { await fillTextfields(page, 6); const fb = await saveSession(page, null); return /chapter assessment/i.test(fb) ? fb : false; });
+  await step(page, 'Your rights and the safeguards: four responses, save', async () => { const n = await fillTextfields(page, 4); const fb = await saveSession(page, 'b3s6'); return n === 4 ? fb : `fields=${n}`; });
+  await step(page, 'Design a better data plan: nine Sheet A5 fields, save, chapter 3 practical complete', async () => { const n = await fillTextfields(page, 9); const fb = await saveSession(page, null); return n === 9 && /chapter assessment/i.test(fb) ? fb : `fields=${n} · ${fb}`; });
   await page.waitForSelector('#chapterCapstoneHost textarea[data-capstone]', { timeout: 10000 });
+  await step(page, 'Capstone card shows the How am I doing? self-check and level-up challenge', async () => {
+    const self = await page.textContent('#chapterCapstoneHost .self-check');
+    return /Getting started/.test(self) && /Going further/.test(self) && Boolean(await page.$('#chapterCapstoneHost .level-up'));
+  });
   await step(page, 'Submit chapter 3 capstone, formative level returned', async () => submitCapstone(page, CAPSTONE3_ANSWERS));
 
   // ---------- chapter 3 project workspace
@@ -261,18 +279,18 @@ try {
     const eyebrow = await page.textContent('#projectWorkspaceModal .eyebrow');
     return /CHAPTER 3 PROJECT/.test(eyebrow) && (await page.$$('#projectWorkspaceModal li')).length >= 6 ? eyebrow : false;
   });
-  await step(page, 'Import chapter 3 lab evidence adds audit findings as evidence', async () => {
+  await step(page, 'Import chapter 3 lab evidence adds the audit, chains and fairness findings as evidence', async () => {
     await page.click('#pwImportLab');
     await page.waitForFunction(() => /Imported/.test(document.getElementById('pwMessage')?.textContent || ''), null, { timeout: 15000 });
     const n = (await page.$$('#pwEvidence .pw-evidence')).length;
     const txt = await page.textContent('#pwEvidence');
-    return n >= 3 && / at (column:|row:|table)/.test(txt) ? `${await page.textContent('#pwMessage')} (${n} items)` : `only ${n} items`;
+    return n >= 3 && / at (column:|row:|table)/.test(txt) && /Location → /.test(txt) ? `${await page.textContent('#pwMessage')} (${n} items)` : `only ${n} items`;
   });
   await step(page, 'Chapter 3 work log entry and recommendation, save', async () => {
     await page.click('#pwAddLog');
-    await page.fill('#pwLog .pw-entry textarea[data-f="did"]', 'Audited every column, logged five findings and drafted the Responsible Data Card.');
-    await page.fill('#pwLog .pw-entry textarea[data-f="result"]', 'Four sensitive columns flagged for removal; dates standardised.');
-    await page.fill('#pwRecommendation', long('Use the cleaned dataset for club planning only after removing eircode, phone, date of birth and the inferred income band.'));
+    await page.fill('#pwLog .pw-entry textarea[data-f="did"]', 'Audited a music service at category level, traced five collection chains, logged six dataset findings and wrote the Responsible Data Card.');
+    await page.fill('#pwLog .pw-entry textarea[data-f="result"]', 'Four sensitive or inferred columns flagged for removal; mid-year joiners missing; representation check added.');
+    await page.fill('#pwRecommendation', long('Use the better data plan for club planning only after removing eircode, phone, date of birth and the inferred income band, with a human reviewing any decision about a student.'));
     await page.click('#pwSave');
     await page.waitForFunction(() => /Saved/.test(document.getElementById('pwMessage')?.textContent || ''), null, { timeout: 15000 });
     return await page.textContent('#pwMessage');
