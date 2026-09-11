@@ -1,0 +1,1991 @@
+# AI in Practice — Student Book v1.0 (September 2026), text extracted with pypdf. Source of truth for chapters; page numbers match the PDF.
+
+
+
+===== PAGE 1 =====
+Transition Year · Student Book · Pilot edition
+AI in
+Practice
+Use it. Test it. Question it. Build with it.
+A 30-hour, hands-on programme in applied
+artificial intelligence, digital skills and real-world
+problem solving.
+Name: ______________________________
+Class: ____________    School: ______________________________
+Version 1.0 · September 2026
+
+
+===== PAGE 2 =====
+Contents
+Eight missions, thirty hours. Chapters 1–5 build the core ideas; 6 and 7 take them into
+study, work and the future; Chapter 8 is your project, where everything comes together.
+– How to use this book 3
+1 AI & Me
+Badge: AI Explorer · 2 hours
+5
+2 Teaching a Machine
+Badge: Machine Trainer · 4 hours
+9
+3 Data Detective
+Badge: Data Detective · 3 hours
+14
+4 Generative AI & Prompting
+Badge: Prompt Engineer · 4 hours
+18
+5 Trust, Bias & Misinformation
+Badge: AI Investigator · 3 hours
+23
+6 AI for Learning & Work
+Badge: Digital Collaborator · 3 hours
+28
+7 Our AI Future
+Badge: Future Thinker · 3 hours
+32
+8 AI Innovation Project
+Badge: AI Innovator · 8 hours
+36
+– Portfolio sheets 42
+– Glossary 45
+– About this programme 47
+The badges you'll earn
+Each chapter has a badge. Your teacher will confirm it when your portfolio evidence for that
+chapter is complete. Collect all eight to finish the programme as an AI Innovator.
+1
+AI Explorer
+2
+Machine Trainer
+3
+Data Detective
+4
+Prompt Engineer
+5
+AI Investigator
+6
+Digital Collaborator
+7
+Future Thinker
+8
+AI Innovator
+2
+
+
+===== PAGE 3 =====
+How to use this book
+This isn't a book about AI that you read and then get tested on. It's a set of eight
+missions. In each one you'll use a real tool, try to break it, measure what happened
+and decide what you think. You'll spend most of your time doing, not listening.
+Every mission follows the same rhythm
+MISSION PREDICT DISCOVER TRY TEST IMPROVE REFLECT EVIDENCE
+…then the next mission begins
+The learning loop. You'll see it in every chapter.
+You'll predict what will happen before you try anything, because being wrong on purpose is the
+fastest way to learn. You'll test rather than trust. And at the end you'll keep evidence: a map, a
+log, a rewrite, a prototype. That evidence builds up into your portfolio across the 30 hours.
+What the boxes mean
+Your mission
+The one thing you must produce in each
+chapter. Everything else builds towards it.
+Discover
+A short explanation of an idea you need
+before you try it. Read it, then go and test it.
+Key words
+Words you'll hear and use in the chapter, with
+a plain meaning. The full glossary is at the
+back.
+Think about it
+Questions with no single right answer. Use
+them in discussions and in your reflections.
+For your portfolio
+The evidence to keep. Your portfolio, not a
+test, shows what you've learned.
+Level up
+An optional extra for when you want to push
+further. Never required.
+What you'll need
+Tools and materials for the chapter. Your
+teacher will tell you which ones your school
+uses.
+Safety rule
+Things that keep you and other people safe
+when working with AI and data.
+3
+
+
+===== PAGE 4 =====
+The one rule that runs through everything
+AI outputs are guesses until you check them
+Every answer an AI gives you is a hypothesis. It might be right. It might be confidently
+wrong. You are responsible for what you hand in, say or build, not the tool. When
+something matters, verify it against a source that doesn't come from an AI.
+Keeping yourself and others safe
+Never type your own or anyone else's private details (full name, address, health, passwords,
+photos of people) into an AI tool. Use made-up examples instead.
+Only use tools your school has approved. If you're not sure, ask.
+You can always choose not to use AI for a task. That's a valid choice, and sometimes the
+better one.
+Some topics in this book (bias, misinformation, the future of work) can be uncomfortable.
+It's fine to say so, and to disagree with each other respectfully.
+How you'll know you're doing well
+There are no marks out of 100 here. Each chapter ends with a How am I doing? box with three
+levels: Getting started, Getting there and Going further. Be honest with yourself. Moving from
+one column to the next is the goal. You'll also earn a badge for each chapter you complete.
+Mistakes and failed models count as evidence. A model that fails in an interesting way teaches
+you more than one that "just works".
+Your portfolio
+Throughout the book, the For your portfolio box lists what to keep. Blank sheets for the most
+common pieces of evidence are at the back (Portfolio sheets). Every piece of evidence should
+show four things: what you predicted, what you tried, what actually happened, and what you'd
+change.
+AI IN PRACTICE  ·  STUDENT BOOK
+HOW TO USE THIS BOOK
+4
+
+
+===== PAGE 5 =====
+Before we get to any technical words, let's find the AI that's already in your day. Some
+of it is obvious. Most of it is hidden inside apps you use without thinking. By the end of
+this chapter you'll be able to spot it, explain roughly what it's doing, and start asking
+who it helps and who it might harm.
+By the end of this chapter you will be able to…
+Name at least five believable uses of AI in everyday life.
+Explain, in your own words, the difference between a fixed rule and a system that learns
+or generates from patterns.
+Give one benefit and one possible limitation of an everyday AI system.
+Ask a good question about how an AI system affects people.
+Key words
+Algorithm – a set of steps or rules for
+getting from an input to an output
+Prediction – a system's best guess about
+something it hasn't seen yet
+Recommendation – an output that
+suggests what you might want next
+Pattern – something that repeats in data
+often enough for a system to pick it up
+Automation – a task done by a machine
+instead of a person; not always AI
+AI system – software that uses data and
+patterns to predict, decide or generate
+Human oversight – a person checking,
+deciding or able to overrule the system
+What you'll need
+A laptop, Chromebook or tablet, one per student or pair
+Sticky notes or a shared digital board
+Mission Sheet 1 (Portfolio sheet A1 works too)
+Optional: an approved AI chatbot for the comparison activity
+AI & Me
+Badge: AI Explorer 2 hours Links to LO1, LO4
+1
+Chapter 1
+1
+5
+
+
+===== PAGE 6 =====
+Your mission
+Create a one-page AI in My Day map showing at least five systems that use AI. For
+two of them, show the full chain: INPUT →  AI ACTION →  OUTPUT →  BENEFIT →
+RISK.
+The route
+0–10 min Hook: AI or not?
+You'll see eight things: a calculator, a spam filter, a playlist recommendation, traffic
+lights, face unlock, autocorrect, a chatbot, a timer. Vote for each one: AI, not AI or
+unsure. Do this before anyone gives you a definition. Your gut answer is data too.
+10–25 min Discover: three questions that help
+There's no perfect test, but three questions get you a long way.
+1 Does it use data?
+Not just a fixed setting or a
+timer, but information about
+things, people or the past.
+2 Does it find patterns?
+Does it recognise or generate
+patterns rather than follow
+one rule written by a person?
+3 Does it adapt or predict?
+Could it give a different answer
+tomorrow, based on what it has
+seen, without being reprogrammed?
+Go back to the eight examples. Some will be clear (a timer fails all three). Some are
+borderline, and that's fine. Don't force every example into one box.
+25–50 min AI in My Day map
+Draw a line for a typical day, waking up to going to sleep. Along it, mark every point
+where an algorithm might be influencing a choice, a ranking, a prediction or
+something generated for you. Think: alarm, phone unlock, messages, music, maps,
+social feeds, games, shopping, homework tools, streaming.
+50–70 min The influence lens
+Pick three systems from your map. For each one, fill in the chain below.
+INPUT
+what data goes in AI ACTION
+what it does with it OUTPUT
+what comes out BENEFIT
+who gains RISK
+what could go wrong
+ xample: your listening history →  finds patterns in what similar people play →  a playlist →  you find new music →  you only ever hear more of the sam
+Add one more question: who might be affected? Not just you. The person who
+didn't get recommended. The shop that didn't appear on the map.
+1
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 1 · AI & ME
+6
+
+
+===== PAGE 7 =====
+70–95 min Human vs AI
+In a small group, answer two questions: What are humans better at? and What are
+current AI systems better at? If you have an approved chatbot, ask it the same
+two questions. Then criticise both lists. Where does the AI's list flatter itself?
+Where does yours?
+95–115
+min
+Micro-debate
+The statement: “Recommendation algorithms mostly help us.” Stand on a line
+from agree to disagree, with unsure in the middle. Give a reason backed by an
+example from your map. You're allowed, and encouraged, to move after hearing
+other people.
+115–120
+min
+Exit reflection
+Write two sentences: One thing I now notice about AI… and One question I want
+answered later… Keep the question. We'll come back to it.
+Think about it
+What evidence makes you think this thing contains AI, rather than just a rule
+someone wrote?
+Who decides what a “good” output is? You, the company, or the system?
+If the system gets it wrong, who notices? How quickly?
+When something is convenient, do we hand it more influence than we mean to?
+Myth-busters
+People say
+“AI means robots.”
+Actually
+Most AI is invisible software: a ranking, a filter, a
+suggestion. Robots are a small corner of it, and
+many robots contain no AI at all.
+People say
+“Every computer program is AI.”
+Actually
+A timer, a calculator and most traffic lights follow
+fixed rules a person wrote. AI systems learn
+patterns from data or generate new output. Run
+the three questions.
+People say
+“If a system uses AI, it must be
+objective.”
+Actually
+AI learns from data made by people, chosen by
+people, about people. It can be very consistent and
+still be very unfair.
+1
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 1 · AI & ME
+7
+
+
+===== PAGE 8 =====
+For your portfolio
+How am I doing? Tick what you can honestly say.
+Getting started Getting there Going further
+Level up (optional challenge)
+Choose one recommendation system (music, video, shopping). Sketch a feedback loop:
+how do your clicks today change what you get shown tomorrow, and how does that change
+what you click next?
+Badge earned: AI Explorer ✓
+Your AI in My Day map
+One human-vs-AI comparison, with your criticism of both lists
+Your exit reflection: one thing you notice, one question you want answered
+I can point to examples
+of AI in everyday life
+I can say one benefit and
+one risk of an example
+I can explain input, AI
+action and output for my
+examples
+I can question one
+limitation of a system
+I can compare systems,
+or human and AI abilities
+I can talk about
+influence, who's affected,
+or feedback loops
+1
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 1 · AI & ME
+8
+
+
+===== PAGE 9 =====
+You're going to teach a computer to tell two objects apart, then do everything you can
+to confuse it. Machine learning is an experiment, not magic. You'll create labelled
+examples, train a small model, test it on things it has never seen, count the mistakes,
+and then discover how a model can cheat without anyone telling it to.
+By the end of this chapter you will be able to…
+Explain labels, features, training data, test data and prediction.
+Train a basic classifier using an approved visual tool or a simulator your teacher provides.
+Record predictions and work out simple accuracy.
+Read a basic confusion matrix.
+Explain how training data that doesn't represent the real world creates poor or biased
+results.
+Key words
+Supervised learning – teaching a model
+with examples that already have the right
+answer attached
+Class label – the category an example
+belongs to, e.g. “cup” or “bottle”
+Feature – something measurable about an
+example: colour, shape, edges, brightness
+Training data – the examples the model
+learns from
+Test data – new examples used to check
+the model; should not be reused from
+training
+Model – the trained system that makes
+predictions
+Prediction – the model's guess for a new
+example
+Accuracy – correct predictions ÷ total
+predictions
+Confusion matrix – a table showing which
+classes got mixed up with which
+Generalisation – how well the model
+handles examples it wasn't trained on
+Shortcut learning – when the model relies
+on an easy, unintended clue (like
+background colour) instead of the real
+thing
+Bias – a systematic skew that makes
+results unfair or unrepresentative
+Teaching a Machine
+Badge: Machine Trainer 4 hours Links to LO1, LO2, LO3, LO9
+2
+Chapter 2
+2
+9
+
+
+===== PAGE 10 =====
+What you'll need
+A visual classifier tool such as Teachable Machine, or an equivalent your school
+approves
+Two safe, everyday objects per group (cup/bottle, pen/eraser…)
+A device with a camera if your school allows it; otherwise your teacher will give you
+images
+A test log (Portfolio sheet A3)
+A calculator or spreadsheet (optional)
+Your mission
+Train a two-class model. Produce a test log with at least 10 rows, build a simple
+confusion matrix, find one failure pattern, and improve the model. Then show the
+before-and-after evidence.
+The route
+0–20 min Be the classifier
+Write a set of rules a stranger could follow to tell your two objects apart. Swap
+rules with another group. Their job: find unusual examples that break your rules. A
+cup with no handle? A bottle lying on its side? Notice how fast written rules run
+out.
+20–40 min Discover: from rules to learning
+Instead of writing every rule, machine learning gives the model lots of examples
+with labels and lets it find the features that separate them. It learns statistical
+patterns. Nobody types “cups have handles”.
+Training data
+examples + labels
+“this is a cup”
+Model
+learns patterns
+Test data
+new examples the
+model has never seen
+Predictions
+right or wrong?
+The test set must be genuinely different from the training set, or you're only testing memory.
+40–75 min Build model v1
+Collect a balanced set of examples for each class, roughly the same number of
+each. Train. Write down how many examples you used and the conditions: lighting,
+background, angles. You'll need this later.
+2
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 2 · TEACHING A MACHINE
+10
+
+
+===== PAGE 11 =====
+75–100
+min
+Break your model
+Now test it on things it hasn't seen: a different cup, a new angle, weird lighting, a
+cluttered background, the object half hidden. Your goal is to find failures, not to
+get a high score. A model that never fails in your tests just means your tests are
+too easy.
+100–120
+min
+Evidence checkpoint
+Record at least 10 tests in your log: the actual class, the predicted class, and
+correct or incorrect. Then work out accuracy: correct ÷ total. Eight out of ten is
+80%.
+120–145
+min
+Discover: the confusion matrix
+Accuracy hides which mistakes you made. Put the same 10 results into a 2×2 grid.
+What the model predicted
+was really
+Cup Bottle
+Cup
+Bottle
+Correct
+cup →  cup
+Missed
+cup called a bottle
+False alarm
+bottle called a cup
+Correct
+bottle →  bottle
+Two kinds of
+mistake. Which
+one matters
+more depends
+on the job.
+Think about a spam filter versus a medical screening test. A spam filter that lets a
+few spam emails through is annoying. A screening test that misses real illness is
+dangerous. Same table, very different stakes. No advanced maths needed, just ask:
+which error hurts more here?
+145–175
+min
+The shortcut experiment
+Now deliberately build a flawed dataset. Put almost all of Class A on a light
+background and almost all of Class B on a dark background. Train. Then test with
+the backgrounds swapped. Did the model learn the object, or did it learn the
+background? This is shortcut learning, and it is how real systems end up biased
+without anyone intending it.
+175–210
+min
+Improve: model v2
+Propose and apply at least two changes: more variety, better balance, more
+examples, mixed backgrounds, clearer labels. Retrain. Test using the same test set
+as v1 wherever possible, so your comparison is fair.
+210–230
+min
+Compare v1 and v2
+Present to another group: what you changed, what improved, and what is still
+uncertain. Numbers plus examples. If v2 is better on your tests but you're not sure
+why, say so.
+2
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 2 · TEACHING A MACHINE
+11
+
+
+===== PAGE 12 =====
+230–240
+min
+Reflection
+Write: Why might “high accuracy” on its own not mean a model can be trusted?
+Use your own shortcut result as evidence.
+Think about it
+What pattern might your model be using that you didn't intend?
+Is your test set genuinely different from your training set?
+Which mistakes matter most for the job this model would do?
+How do you know an improvement is real and not just luck?
+Myth-busters
+People say
+“The model sees the object the
+way I do.”
+Actually
+It sees pixels and statistics. It doesn't know what a
+cup is. It knows which patterns of pixels came with
+the label “cup”.
+People say
+“More examples automatically
+means better data.”
+Actually
+A thousand photos of cups all on the same white
+table teaches the model about white tables. Variety
+and balance beat volume.
+People say
+“Accuracy tells the whole story.”
+Actually
+Two models can have the same accuracy and make
+completely different mistakes. The confusion
+matrix shows which ones.
+People say
+“Bias only happens when someone
+codes unfair rules on purpose.”
+Actually
+Your background experiment proved otherwise.
+Bias creeps in through data nobody looked at
+closely.
+For your portfolio
+Your dataset plan: classes, number of examples, conditions
+v1 test log and accuracy (Sheet A3)
+Your confusion matrix
+The shortcut-learning observation: what you did and what happened
+Your v2 improvement note: what you changed and why
+Your reflection
+2
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 2 · TEACHING A MACHINE
+12
+
+
+===== PAGE 13 =====
+How am I doing? Tick what you can honestly say.
+Getting started Getting there Going further
+Level up (optional challenge)
+Work out precision or recall for one class from your confusion matrix. Then explain, in
+plain words, a situation where that number matters more than overall accuracy.
+Badge earned: Machine Trainer ✓
+I trained and tested a
+model, with help
+I recorded some results
+I tested on unseen
+examples and worked out
+accuracy
+I explained an error
+pattern and improved the
+model
+I can read a confusion
+matrix
+I spotted shortcut
+learning or bias
+I can justify how I chose
+to evaluate
+2
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 2 · TEACHING A MACHINE
+13
+
+
+===== PAGE 14 =====
+Data is the raw material of AI. Every model in this book, and every app on your phone,
+runs on it. This chapter is an investigation: what does a service actually collect, what
+does it work out about you without you telling it, and who gets left out when a dataset
+is built? You'll finish by designing a better data plan than the one you started with.
+By the end of this chapter you will be able to…
+Tell apart volunteered, observed and inferred data.
+Investigate how a digital service may collect and use data.
+Explain why purpose, minimisation and representativeness matter.
+Describe what GDPR and the EU AI Act mean for someone your age.
+Spot a dataset that could leave people out or misrepresent them.
+Key words
+Personal data – any information about a
+person who could be identified from it
+Volunteered data – information you give
+on purpose
+Observed data – information recorded
+while you use something
+Inferred data – information a system
+guesses about you from other data
+Cookies – small files a website stores on
+your device to remember or track you
+Tracking – following what you do across
+pages, apps or time
+Web scraping – automatically copying data
+from public web pages
+Public / private data – whether data is
+openly available or restricted; “public”
+doesn't mean “free to use for anything”
+Data minimisation – collecting only what's
+genuinely needed for a stated purpose
+Consent – agreeing to a use of your data,
+freely and with real understanding
+GDPR – the EU's data protection law; gives
+people rights over their data
+EU AI Act – an EU law that regulates AI by
+how risky its use is
+Representativeness – whether a dataset
+actually reflects all the people it will affect
+Data Detective
+Badge: Data Detective 3 hours Links to LO5, LO6, LO9
+3
+Chapter 3 3
+14
+
+
+===== PAGE 15 =====
+What you'll need
+Data Detective worksheet (Sheet A5 is the responsible data card)
+Short extracts from privacy policies, chosen by your teacher
+A browser
+Scenario cards
+A spreadsheet (optional)
+Investigate at category level only
+You'll look at what kinds of data a service collects (“location”, “contacts”, “viewing
+history”). Never open, screenshot or share your own account data, and never anyone
+else's. The point is the pattern, not your private life.
+Your mission
+Audit one digital service at category level, then design a Responsible Data Card for
+it: what is collected, why, what is inferred, the risks, what controls users have, and what
+should not be collected at all.
+The route
+0–15 min Data trail warm-up
+Pick a music, video or maps service. List what it can know directly and what it
+could work out. Sort your list into three piles.
+Volunteered
+You typed it in or chose it.
+Your name, a playlist name,
+a “like”, a search.
+Observed
+Recorded while you use it.
+How long you watched, where
+you were, what you skipped.
+Inferred
+Guessed from the other two.
+Your mood, your age range,
+what you'll buy, who you know.
+15–40 min Data Tracking Sherlock
+Choose one familiar service. Using its privacy policy or app-store listing, find the
+categories of data it says it collects. Note anything surprising. Note anything
+vague (“to improve our services” covers a lot).
+40–65 min Why collect it?
+For five data categories you found, complete the chain: COLLECTION →
+PURPOSE →  USER BENEFIT →  POSSIBLE RISK. Be fair: some collection is
+genuinely useful. Some isn't.
+3
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 3 · DATA DETECTIVE
+15
+
+
+===== PAGE 16 =====
+65–85 min Cookie and scraping mini-lab
+Your teacher will show how cookies and tracking work, and how web scraping
+copies data from a public page. Then discuss: if something is publicly visible, is
+every reuse of it reasonable? A photo posted for friends is public. Is training a
+face-recognition model on it fair?
+85–110
+min
+Dataset fairness challenge
+Your group gets a scenario: an AI system for school club recommendations, job
+shortlisting or transport planning. Decide what data you'd collect. Then ask the
+hard question: who is missing? Students who joined mid-year? People without
+smartphones? Those who work nights?
+110–135
+min
+Discover: your rights and the safeguards
+GDPR gives you rights. The principles that matter most for you: data should be
+collected for a clear purpose; only what's needed (minimisation); kept accurate
+and secure; used transparently; and you have rights to see it, correct it and
+sometimes delete it. The EU AI Act adds a second idea: the riskier the use of AI
+(say, deciding who gets a job), the stricter the rules. You don't need the legal
+detail. You need the instinct.
+135–165
+min
+Design a better data plan
+Go back to your scenario. Remove fields you don't need. Add a check for who's
+represented. Decide how long data is kept. Mark the decisions that must have a
+human reviewing them before anything happens to a person.
+165–180
+min
+Reflection
+“Just because data is available, does that mean it should be used?” Take a
+position and back it with one concrete example from today.
+Think about it
+Does the service really need this data to do its job?
+Could it achieve the same goal with less information?
+Who is missing from this dataset, and what happens to them?
+What could be inferred about you even if you never typed it in?
+3
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 3 · DATA DETECTIVE
+16
+
+
+===== PAGE 17 =====
+Myth-busters
+People say
+“If data is public, any use of it is
+ethical.”
+Actually
+Public means visible. It doesn't mean the person
+agreed to every possible reuse. Context matters.
+People say
+“Anonymous data can never cause
+harm.”
+Actually
+Combine a few “anonymous” facts (postcode, age,
+school) and you can often identify a person. And
+group-level data can still be used unfairly against a
+whole group.
+People say
+“Consent makes any data use OK.”
+Actually
+Consent buried in 40 pages nobody reads isn't real
+consent. And even genuine consent doesn't make
+a harmful or unfair use acceptable.
+For your portfolio
+How am I doing? Tick what you can honestly say.
+Getting started Getting there Going further
+Level up (optional challenge)
+Compare two services that do a similar job. Using only publicly available information,
+explain which one appears to take the more data-minimising approach, and what evidence
+you're relying on.
+Badge earned: Data Detective ✓
+Your data category audit of one service
+Your Responsible Data Card (Sheet A5)
+Your dataset fairness redesign: before and after
+Your reflection
+I can name categories of
+data a service collects
+I can tell collected data
+from inferred data
+I can explain purpose,
+risk and minimisation for
+my service
+I can evaluate who's
+represented and propose
+safeguards
+I can justify why some
+available data shouldn't
+be used
+3
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 3 · DATA DETECTIVE
+17
+
+
+===== PAGE 18 =====
+Chatbots and image generators are the AI most people mean when they say “AI”. This
+chapter teaches you to work with them as a thinking and creating tool while staying in
+charge of the goal, the checking and the final call. There are no magic words here.
+You'll learn prompting the way you learned model training: by experimenting and
+comparing.
+By the end of this chapter you will be able to…
+Explain, at a high level, what a large language model does and doesn't do.
+Improve a prompt using context, task, constraints and format.
+Compare outputs systematically instead of accepting the first one.
+Use AI for explanation, ideas, critique and transformation.
+Verify important factual claims and spot hallucination risk.
+Generative AI &
+Prompting
+Badge: Prompt Engineer 4 hours Links to LO7, LO9
+4
+Chapter 4
+4
+18
+
+
+===== PAGE 19 =====
+Key words
+Generative AI – AI that creates new text,
+images, audio or code from learned
+patterns
+Large language model (LLM) – a
+generative model trained on huge
+amounts of text to predict and produce
+language
+Pattern prediction – the LLM's basic move:
+predict what most likely comes next
+Prompt – the instructions and context you
+give a generative AI
+Context – background the model needs:
+who you are, what it's for
+Constraint – a limit you set: length, level,
+what to avoid
+Output format – the shape you want the
+answer in
+Iteration – improving in rounds, comparing
+each version
+Hallucination – a fluent, confident output
+that's wrong or made up
+Verification – checking a claim against
+independent, reliable evidence
+Source quality – how trustworthy a source
+is: who made it, why, and how it can be
+checked
+What you'll need
+A school-approved generative AI tool, or a shared demonstration run by your teacher
+Prompt Lab worksheet (Sheet A4)
+A browser for fact-checking (Sheet A2)
+Scenario cards
+Your mission
+Run a three-version prompt experiment: v1 weak, v2 improved, v3 tested and
+revised. Keep the outputs. Then produce a verification log for at least three factual
+claims the AI made.
+The route
+0–20 min Same task, different prompts
+Every group asks the AI the same deliberately weak question. Compare what came
+back. What varies between groups? What's missing? What sounds confident but
+has nothing to back it up?
+4
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 4 · GENERATIVE AI & PROMPTING
+19
+
+
+===== PAGE 20 =====
+20–40 min Discover: what an LLM actually does
+An LLM has read an enormous amount of text and learned to predict what usually
+comes next. When you ask a question, it generates a likely continuation. That's
+why it's fluent. It's also why it's not a database of checked facts. It can produce a
+smooth, confident paragraph about something that never happened. Confident
+wording is not confident truth. Keep that sentence. You'll need it.
+40–70 min Prompt Lab 1: C-T-C-F
+Take one weak prompt and rebuild it with four parts.
+C
+Context
+Who you are, what
+this is for, what
+you already know
+T
+Task
+The one clear thing
+you want it to do.
+One verb.
+C
+Constraints
+Length, level, what
+to avoid, what must
+be included
+F
+Format
+Table? Bullets?
+Three options?
+Questions first?
+Save the before and after outputs side by side. That's your v1 and v2.
+70–100
+min
+Prompt Lab 2: iterate
+Now try adding one thing at a time: an example of what good looks like; the
+audience; success criteria; or “ask me questions before you answer”. Compare
+each version. Which additions actually helped, and which just made the prompt
+longer?
+100–130
+min
+Four useful roles
+Try the AI in four different jobs. Each has a different prompt style and a different
+risk.
+Tutor: “Explain X to me, then quiz me.” Risk: it explains something wrong,
+fluently.
+Brainstorm partner: “Give me 10 unusual angles on X.” Risk: you stop
+generating your own.
+Critic: “Here's my draft. What's weak?” Risk: it's too polite, or invents problems.
+Transformer: “Turn this into a table / a summary / simpler language.” Risk: it
+drops or changes meaning.
+130–160
+min
+Verification challenge
+You'll get a topic with several checkable facts. Ask the AI about it. Then pick three
+claims and verify each one yourself using reliable sources. Label each: supported,
+uncertain or wrong. Record it on Sheet A2.
+160–185
+min
+Injecting doubt
+Ask the model leading questions on purpose. “Why is X better than Y?” versus
+“Compare X and Y.” Watch how the framing of your question shapes the answer.
+This is confirmation bias, and the model will happily feed yours.
+4
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 4 · GENERATIVE AI & PROMPTING
+20
+
+
+===== PAGE 21 =====
+185–215
+min
+Build a reusable prompt
+Design a prompt template for a real TY task: preparing for work experience,
+learning a topic, planning an event, or making sense of survey feedback.
+Something you'd actually use again.
+215–235
+min
+Peer red-team
+Swap prompts with a partner. Run theirs. Find one ambiguity, one missing
+constraint and one claim that would need checking. Give it back with notes.
+235–240
+min
+Exit rule
+Finish this sentence: “I should never trust an AI answer just because…”
+Think about it
+What changed because of your prompt, and what changed just randomly between
+runs?
+Which parts of the answer need evidence from outside the AI?
+Are you asking the model to think for you, or to help you think?
+What would make this prompt safer or fairer for other people?
+Myth-busters
+People say
+“Longer prompts are always
+better.”
+Actually
+Your Lab 2 comparison probably showed some
+additions did nothing. Clear beats long.
+People say
+“If it gives a citation, the source
+exists.”
+Actually
+LLMs generate citations the same way they
+generate everything else: by pattern. Some are real.
+Some are invented. Check.
+People say
+“Good prompt engineering
+guarantees a true answer.”
+Actually
+A better prompt gets a more useful answer. It
+doesn't turn a pattern-predictor into a fact-checker.
+People say
+“AI should give me the final
+answer.”
+Actually
+For learning, the answer is the least useful thing it
+can give you. The questions, examples and critique
+are worth more.
+4
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 4 · GENERATIVE AI & PROMPTING
+21
+
+
+===== PAGE 22 =====
+For your portfolio
+How am I doing? Tick what you can honestly say.
+Getting started Getting there Going further
+Level up (optional challenge)
+Write an evaluation rubric with four criteria. Score two AI outputs against it. Then justify
+which one is better using the scores, not just which one you prefer.
+Badge earned: Prompt Engineer ✓
+Prompts v1, v2, v3 with their outputs (Sheet A4)
+Your output comparison notes
+Your three-claim verification log (Sheet A2)
+Your reusable prompt template
+Your reflection and exit rule
+I can write a usable
+prompt
+I notice when outputs
+differ
+I improve prompts
+systematically
+I verify important factual
+claims
+I build criteria to judge
+outputs
+I compare outputs
+critically
+I can explain how
+framing and confirmation
+bias affect results
+4
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 4 · GENERATIVE AI & PROMPTING
+22
+
+
+===== PAGE 23 =====
+Fluent is not the same as true. In this chapter you'll learn to separate how something
+sounds from how reliable it is, hunt for the different ways bias sneaks into AI systems,
+verify claims the way a good journalist does, and then fix a piece of misleading AI-
+generated content so it's actually trustworthy.
+By the end of this chapter you will be able to…
+Tell plausible-sounding language apart from verified evidence.
+Use lateral reading and source checks to investigate a claim.
+Identify examples of data, selection, framing and automation bias.
+Explain how generative AI can amplify misinformation.
+Produce a more trustworthy version of problematic AI-generated content.
+Trust, Bias &
+Misinformation
+Badge: AI Investigator 3 hours Links to LO4, LO6, LO9
+5
+Chapter 5
+5
+23
+
+
+===== PAGE 24 =====
+Key words
+Misinformation – false or misleading
+information, spread without meaning harm
+Disinformation – false information spread
+on purpose to deceive
+Hallucination – a fluent but wrong or
+invented AI output
+Bias – a systematic skew in data, design or
+use that produces unfair results
+Selection bias – when the data collected
+doesn't fairly represent the whole picture
+Representation bias – when some groups
+are missing or under-counted in the data
+Framing – how wording and emphasis
+shape what a message makes you feel or
+believe
+Automation bias – trusting a machine's
+output more than you should, just because
+it's a machine
+Synthetic media / deepfake – AI-
+generated audio, image or video that looks
+real
+Provenance – where something came from
+and how it got to you
+Lateral reading – checking a source by
+leaving it and seeing what other sources
+say about it
+What you'll need
+Prepared claim cards
+A browser and search access
+AI News Detective worksheet (Sheet A2 for the verification table)
+An approved generative AI tool (optional)
+Three examples of sources of different quality
+Your mission
+Investigate one AI-generated article or set of claims. Produce an evidence table,
+identify at least one bias risk, and publish a corrected version with the uncertain
+parts clearly marked.
+The route
+0–15 min The confidence trap
+You'll see three confident statements. One is true, one is false, one can't be
+verified either way. Rank how confident you are in each before checking. Then
+check. Notice which one fooled you and why.
+5
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 5 · TRUST, BIAS & MISINFORMATION
+24
+
+
+===== PAGE 25 =====
+15–35 min Discover: the trust checklist
+Four habits, easy to remember, that work on news, on social posts and on AI
+output alike.
+S
+Stop
+Don't share or react
+yet. Notice how it
+makes you feel.
+I
+Investigate the source
+Who made this?
+Why? What do others
+say about them?
+F
+Find better coverage
+Open new tabs. Do
+reliable, independent
+sources agree?
+T
+Trace the claim
+Follow it back to the
+original evidence.
+Was context lost?
+35–70 min AI News Detective
+Generate, or receive from your teacher, a short news-style article written by AI. Go
+through it with a highlighter (real or digital). Mark: factual claims, emotional
+framing, missing sources, and certainty that isn't backed up. Count them.
+70–100
+min
+Lateral verification
+Pick 3–5 of the claims. Open new tabs and check each against independent,
+reliable sources. Do not fact-check by asking another chatbot. That's just asking
+a second pattern-predictor. Log each claim as supported, uncertain or wrong.
+100–125
+min
+Bias stations
+Four short scenarios, four stations: hiring data, image generation and stereotypes,
+school discipline analytics, recommendation feeds. At each one, ask: where could
+bias enter (the data? the design? how people use it?) and who would be affected?
+125–150
+min
+Improve the output
+Rewrite the article or a scenario response. Keep only the verified claims. Label
+anything uncertain as uncertain. Add real sources. Take out the loaded framing.
+Your version should be less exciting and more trustworthy. That's the point.
+150–170
+min
+Synthetic media
+Discuss voice, image and video generation. “Seeing is believing” was never fully
+true, and now it's weaker. The focus isn't on scary examples; it's on habits: what
+would you check before believing a clip that made you angry?
+170–180
+min
+Reflection
+Write your own three-step rule for checking important AI-generated information.
+Make it short enough to actually use.
+5
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 5 · TRUST, BIAS & MISINFORMATION
+25
+
+
+===== PAGE 26 =====
+Think about it
+What would change your mind about this claim?
+Is this source independent of the original claim, or just repeating it?
+What's missing from the framing? What's not being said?
+Could a statement be accurate and still be misleading?
+Myth-busters
+People say
+“Bias means the model has
+opinions.”
+Actually
+Models don't have opinions. Bias is a skew in the
+data, the design or the use. It can exist with
+nobody meaning it.
+People say
+“Fake information looks
+unprofessional, so it's easy to
+spot.”
+Actually
+Generative AI produces polished, well-formatted,
+confident text and images on demand. Looking
+professional now costs nothing.
+People say
+“Lots of websites say it, so lots of
+sources confirm it.”
+Actually
+Ten sites copying one original claim is one source,
+not ten. Trace it back.
+For your portfolio
+How am I doing? Tick what you can honestly say.
+Getting started Getting there Going further
+Your annotated AI output
+Your verification table (Sheet A2)
+Your bias analysis from the stations
+Your corrected version
+Your personal three-step trust rule
+I can spot unsupported
+claims or possible bias,
+with prompts
+I use independent
+sources to verify claims
+I can improve misleading
+content
+I trace evidence back to
+its origin
+I can tell different kinds
+of bias apart
+I can explain what's still
+uncertain after checking
+5
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 5 · TRUST, BIAS & MISINFORMATION
+26
+
+
+===== PAGE 27 =====
+Level up (optional challenge)
+Take one claim that's repeated widely online. Trace it back towards its earliest available
+source. Show where along the way context was lost or changed.
+Badge earned: AI Investigator ✓
+5
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 5 · TRUST, BIAS & MISINFORMATION
+27
+
+
+===== PAGE 28 =====
+Everything so far has been about understanding AI. This chapter is about using it well:
+as a tutor that makes you think, an editor that doesn't take over, a planner and an
+analyst. The skill you're building is staying the author of your own work while still
+getting real help. That's what employers and teachers will want to see.
+By the end of this chapter you will be able to…
+Use AI to support understanding, not just to produce answers.
+Choose the right AI role for a task.
+Apply a human-review checklist to AI-assisted work.
+Use spreadsheets, documents or presentations alongside AI on a small productivity
+task.
+Explain when AI use should be disclosed.
+Key words
+AI tutor – using AI to ask you questions
+and explain, rather than hand you answers
+Scaffolding – support that helps you do
+something you couldn't do alone, then gets
+removed
+Metacognition – thinking about your own
+thinking: what do I understand, and how do
+I know?
+Drafting – producing a first version to
+improve, not a final one
+Critique – structured, specific feedback on
+what's weak and why
+Workflow – the sequence of steps a task
+goes through, including who or what does
+each one
+Human-in-the-loop – a person checks,
+decides or approves at key points
+Disclosure – saying clearly when and how
+AI helped
+Authorship – being responsible for the
+work as yours
+Digital productivity – getting useful things
+done with spreadsheets, documents and
+presentations
+AI for Learning &
+Work
+Badge: Digital Collaborator 3 hours Links to LO7
+6
+Chapter 6
+6
+28
+
+
+===== PAGE 29 =====
+What you'll need
+An approved AI tool
+A spreadsheet application
+A document or presentation tool
+Learning contract worksheet
+A messy mini-dataset from your teacher
+Your mission
+Complete a mini workflow that combines an AI tutor task with one spreadsheet,
+document or presentation task, and show the human checks you performed along
+the way.
+The route
+0–20 min “Do it for me” vs “teach me”
+Compare two conversations with the same AI: one that says “Give me the answer”
+and one that says “Teach me through questions.” Which one leaves more
+evidence that a person learned something? Which one would you rather defend to
+a teacher?
+20–50 min AI Tutor challenge
+Pick a concept you genuinely want to understand, from any subject. Prompt the AI
+to: find out what you already know; give an example; ask you questions; and hold
+back the full explanation until you've had a go. Keep the conversation.
+50–70 min Explain it without AI
+Close the tool. Explain the concept from memory, in writing or out loud to a
+partner. Compare with where you started. That gap is what you learned. If there's
+no gap, the tutor prompt needs work.
+70–100
+min
+Workplace workflow
+You'll get messy data: an event budget, survey results, costs. Clean it up in a
+spreadsheet yourself. Calculate a few values. Then ask the AI to suggest
+interpretations or wording for a summary.
+100–125
+min
+Human review
+Check the formulas and the data yourself. Remove any claim the AI made that your
+numbers don't support. Build one chart or one concise summary you'd be happy to
+put your name on.
+6
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 6 · AI FOR LEARNING & WORK
+29
+
+
+===== PAGE 30 =====
+125–150
+min
+Professional communication
+Draft a short professional email or briefing. Use AI as an editor, not as the author.
+Keep a note of what it suggested and what you changed or rejected. That note is
+evidence.
+150–170
+min
+Disclosure scenarios
+In groups, decide whether AI use should be disclosed, and how, in each case:
+private brainstorming; assessed schoolwork; drafting a CV; a workplace report; a
+creative project. Expect disagreement. Work out what the disagreement is really
+about.
+170–180
+min
+Your learning contract
+Write your own rules: “AI helps me with…” and “AI does not replace…” for
+schoolwork. Make them specific enough to catch yourself breaking them.
+Think about it
+What did you understand today that you couldn't explain before?
+Which part of this work are you personally accountable for?
+Which AI suggestion did you reject, and why?
+Would you be comfortable explaining your AI use to a teacher or an employer?
+Myth-busters
+People say
+“Using AI efficiently means
+automating as much as possible.”
+Actually
+Automating the thinking removes the learning and
+the accountability. Efficient means automating the
+right parts.
+People say
+“If AI helped, the student didn't
+really learn.”
+Actually
+A student who used AI as a tutor, then explained
+the idea without it, has learned. The evidence is
+the explanation.
+People say
+“Disclosure is either always
+required or never required.”
+Actually
+It depends on the context and what people expect.
+Private brainstorming and an assessed essay are
+different situations.
+6
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 6 · AI FOR LEARNING & WORK
+30
+
+
+===== PAGE 31 =====
+For your portfolio
+How am I doing? Tick what you can honestly say.
+Getting started Getting there Going further
+Level up (optional challenge)
+Design a repeatable AI-assisted workflow for a real TY activity (work experience prep, an
+event, a fundraiser). Mark every point where a human must verify, decide or approve
+before the workflow continues.
+Badge earned: Digital Collaborator ✓
+Your AI tutor prompt and a note on what you learned
+Your spreadsheet, document or presentation
+Your human-review checklist, filled in
+Your AI-use learning contract
+I used AI for a learning
+or productivity task, with
+support
+I showed my human
+checks
+I can explain what AI
+contributed and what I
+stayed responsible for
+I designed a repeatable
+workflow with human
+checkpoints
+I made disclosure
+choices and rejected
+some AI suggestions,
+with reasons
+6
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 6 · AI FOR LEARNING & WORK
+31
+
+
+===== PAGE 32 =====
+Nobody knows what AI will look like in 2035, including the people building it. That's
+not a reason to stop thinking about it. In this chapter you'll build more than one
+possible future for a career or public service you care about, look at each one through
+the eyes of different people, and work out which outcomes depend on human choices
+rather than on the technology.
+By the end of this chapter you will be able to…
+Tell the difference between today's narrow AI and the idea of AGI.
+Identify plausible opportunities and risks in a domain you choose.
+Build more than one future scenario instead of presenting one prediction as certain.
+Consider effects on jobs, skills, inclusion, sustainability and accountability.
+Communicate a reasoned position on a future AI choice.
+Key words
+Narrow AI – systems built for specific
+tasks: everything you've used so far in this
+book
+AGI – artificial general intelligence: a
+hypothetical AI with broad, human-like
+capability across many tasks; not what
+exists today
+Automation – a task done by a machine
+instead of a person
+Augmentation – a person doing a task
+better or faster with a machine's help
+Scenario – a plausible story about the
+future, built to think with, not to predict
+Uncertainty – the honest gap between
+what we know and what we're guessing
+Trade-off – gaining one thing at the cost
+of another
+Accountability – who answers for a
+decision when it goes wrong
+Future skills – human capabilities that
+become more valuable as AI spreads
+Societal impact – effects on communities,
+fairness, work and wellbeing, not just on
+individuals
+Our AI Future
+Badge: Future Thinker 3 hours Links to LO4, LO8
+7
+Chapter 7
+7
+32
+
+
+===== PAGE 33 =====
+What you'll need
+2035 scenario canvas
+Career and domain cards
+Poster or presentation tool
+An approved AI tool for stress-testing your scenarios (optional)
+Your mission
+Create a 2035 scenario pack for one career or public service. It must show three
+possible futures, the impact on different stakeholders, the future skills that matter,
+and one governance choice you'd argue for.
+The route
+0–20 min 2026 vs 2035
+List the AI capabilities you can actually see now. Then list what you think might
+plausibly exist by 2035. Keep the two lists apart. One is observation. The other is
+prediction. Mixing them up is the most common mistake in this whole topic.
+20–40 min Discover: narrow AI and AGI
+Every system you've used in this book is narrow: trained for a specific job. AGI is
+the idea of an AI with broad general ability across many kinds of tasks. It's a
+serious research goal, and also a word that gets used loosely in headlines.
+Timelines and impacts are genuinely uncertain, and experts disagree. When
+someone tells you exactly when it will arrive, ask how they know.
+40–70 min Career transformation map
+Choose a career: teacher, doctor, farmer, architect, engineer, journalist,
+tradesperson, designer, accountant, or one of your own. Break it into tasks. For
+each task: likely to be automated, augmented, or still strongly human? Notice
+that a job is a bundle of tasks. Technology usually changes the bundle, not the
+whole job at once.
+7
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 7 · OUR AI FUTURE
+33
+
+
+===== PAGE 34 =====
+70–100
+min
+Three futures
+For the same domain, your group builds three scenarios.
+Optimistic
+Things go well.
+What technology change?
+What human response?
+What unintended effect?
+Concerning
+Things go badly.
+Same three questions.
+Who carries the risk?
+Balanced
+Mixed, messy, likely.
+Same three questions.
+Which choices decided it?
+Each scenario needs a technology change, a human response, and an unintended
+consequence. No scenario is allowed to be “everything's fine” or “everything's
+ruined”.
+100–125
+min
+The stakeholder lens
+Go back through your scenarios as five different people: a worker, a customer or
+citizen, an employer, a regulator, and someone at risk of being excluded. Where
+do their interests clash?
+125–150
+min
+Policy choice debate
+Pick a proposal, for example: “AI-generated schoolwork must always be labelled”
+or “High-stakes AI decisions must always have human review.” Prepare the
+arguments for it and the strongest arguments against it. Then debate.
+150–170
+min
+Future skills card
+Identify three human capabilities that become more valuable in your chosen
+future, and one concrete thing you can do during TY to build one of them.
+170–180
+min
+Reflection
+Which future outcome depends most on human choices, rather than on the
+technology itself?
+Think about it
+Which part of your scenario is evidence-based, and which is speculation?
+Who benefits? Who carries the risk?
+Does the technology replace a task, or a whole job?
+Which human capability becomes more important, not less?
+7
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 7 · OUR AI FUTURE
+34
+
+
+===== PAGE 35 =====
+Myth-busters
+People say
+“AGI already exists, in the same
+sense as today's chatbots.”
+Actually
+Today's systems are narrow, however impressive.
+AGI is a hypothesis and a goal, not a product you
+can download.
+People say
+“Every task that can be automated
+should be.”
+Actually
+“Can” and “should” are different questions. Some
+tasks are automated and worse for it. Your
+stakeholder lens showed you who decides.
+People say
+“Future-of-work predictions are
+facts.”
+Actually
+They're forecasts built on assumptions. Reasonable
+experts disagree. Treat them as scenarios.
+For your portfolio
+How am I doing? Tick what you can honestly say.
+Getting started Getting there Going further
+Level up (optional challenge)
+Find two credible but different forecasts about AI and work. Explain why reasonable
+experts can disagree, and identify the assumptions behind each one.
+Badge earned: Future Thinker ✓
+Your 2035 scenario canvas
+Your career transformation map
+Your stakeholder analysis
+Your future skills card
+Your debate reflection
+I can describe a
+plausible AI-related
+change in a career or
+domain
+I built more than one
+scenario
+I identified trade-offs
+and future skills
+I separate evidence from
+speculation
+I analysed stakeholders
+I can defend a
+governance choice
+7
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 7 · OUR AI FUTURE
+35
+
+
+===== PAGE 36 =====
+This is where the whole programme comes together. You'll pick a real problem in your
+school or community, understand the people who have it, design a responsible
+solution, build a rough prototype, test it on real people, improve it, and present it
+honestly, including what didn't work. AI is optional. Part of the project is deciding
+whether it genuinely helps.
+By the end of this chapter you will be able to…
+Define a real user or community problem before choosing any technology.
+Research users and constraints without collecting unnecessary personal data.
+Design and prototype an AI-enabled or AI-informed solution.
+Test the prototype against clear success criteria.
+Identify limitations and risks: bias, misinformation, privacy and human oversight.
+Improve based on evidence.
+Present the solution, the evidence and what's still uncertain.
+AI Innovation Project
+Badge: AI Innovator 8 hours Links to LO1–LO9
+8
+Chapter 8
+8
+36
+
+
+===== PAGE 37 =====
+Key words
+Problem framing – describing the problem
+clearly enough that you could tell if you'd
+solved it
+User need – what the person with the
+problem actually needs, which may not be
+what they first ask for
+Success criteria – how you'll know, before
+you build, whether it worked
+Prototype – a rough, cheap version built to
+learn, not to impress
+Testing – giving the prototype to real
+people and watching what happens
+Iteration – changing it based on what you
+learned, then testing again
+Risk – what could go wrong, for whom, and
+how badly
+Responsible AI – designing so that harm
+is anticipated, limited and owned by a
+person
+Human oversight – the decisions a person
+must keep
+Value proposition – the one sentence that
+says why anyone would want this
+Red-teaming – deliberately trying to break
+your own solution before someone else
+does
+What you'll need
+Innovation Project Canvas
+Approved prototyping tools
+Optional: an AI or LLM tool, spreadsheet, slides, a no-code builder or a coding tool
+Peer test sheets
+The presentation guide at the end of this chapter
+Your mission
+Solve a real school or community problem with a responsible, testable prototype.
+AI is optional: your team must justify whether it adds genuine value, and be ready to
+say “it doesn't” if that's what your evidence shows.
+Research safely
+Only interview or survey people using questions your teacher has approved. Collect no
+personal data you don't need. Everything from Chapter 3 applies here, to your own
+project.
+8
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 8 · AI INNOVATION PROJECT
+37
+
+
+===== PAGE 38 =====
+The route
+Sprint 1 · hours 1–2
+Understand
+Sprint 2 · hours 3–4
+Design
+Sprint 3 · hours 5–6
+Build & test
+Sprint 4 · hours 7–8
+Improve & show
+Four sprints of two hours. You'll want to build in hour one. Don't. The problem comes first.
+Hour 1 Sprint 1 · Problem hunt
+Look at school and community life with fresh eyes. Where do people waste time,
+get confused, or get left out? Generate at least five problems. Choose one using
+five tests: real, understandable, useful, testable, safe.
+Hour 2 Sprint 1 · Understand the user
+Define the user, how they do things now, the pain points, the evidence, and the
+constraints. Run lightweight interviews or surveys, with approved questions only.
+Hour 3 Sprint 2 · Design options
+Generate three solution approaches, and at least one must not use AI. Compare
+them honestly. Decide whether AI genuinely adds value or just adds complexity.
+Hour 4 Sprint 2 · Responsible design
+Map the data flow. Mark the human decision points. List the failure modes and the
+safeguards. Then, before you build anything, write down your success criteria.
+Hour 5 Sprint 3 · Build the prototype
+The smallest version that tests your biggest assumption. A prompt workflow, a
+chatbot mock-up, a spreadsheet, a simple web page, a classifier, a simulated
+presentation, or code. Rough is fine. Rough is the point.
+Hour 6 Sprint 3 · Test
+Give it to classmates or real users. Record what worked, where they got confused,
+what failed, and one thing you didn't expect. Don't help them while they use it.
+Watch.
+Hour 7 Sprint 4 · Improve and red-team
+Make one change driven by test evidence. Then attack your own solution: could it
+hallucinate? Be biased? Leak private data? Be misused? Make people over-rely on
+it? Write down the limitations that remain. Honestly.
+Hour 8 Sprint 4 · Demo and reflection
+A 3–5 minute presentation using the structure below. Then complete your
+individual reflection.
+8
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 8 · AI INNOVATION PROJECT
+38
+
+
+===== PAGE 39 =====
+Your presentation, in order (3–5 minutes)
+1. The problem, and who experiences it.
+2. The evidence you gathered.
+3. The solution, and why AI is or isn't appropriate.
+4. A demonstration of the prototype.
+5. What happened during testing.
+6. One change you made because of evidence.
+7. One important risk, and its safeguard.
+8. What's still uncertain, or what you'd test next.
+Stuck for a problem? Some starting points
+A school FAQ or event assistant
+Study-planning or revision support
+A lost-property workflow
+Canteen or sustainability data analysis
+A local tourism information assistant
+Sports-club coordination
+A career exploration assistant
+Making community information more
+accessible
+A school survey insight tool
+A non-AI solution, because your team
+concluded AI adds no real value here
+Think about it
+Would this problem still be worth solving without AI?
+What's the smallest prototype that can test your biggest assumption?
+What happens when the AI is wrong?
+Which decision must stay with a human?
+What evidence shows your change actually improved things?
+8
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 8 · AI INNOVATION PROJECT
+39
+
+
+===== PAGE 40 =====
+Myth-busters
+People say
+“The project has to use the most
+advanced AI.”
+Actually
+The project has to solve a problem. The best
+answer is the least complex one that works.
+Sometimes that's a spreadsheet.
+People say
+“A working demo proves the idea
+is useful.”
+Actually
+A demo proves it runs. Test evidence from real
+users proves it's useful. They're different.
+People say
+“Hide the limitations in the
+presentation.”
+Actually
+Naming the limitations is one of the things you're
+being assessed on. Teams that hide them look like
+teams that didn't test.
+For your portfolio
+How am I doing? Tick what you can honestly say.
+Getting started Getting there Going further
+Problem statement and user evidence
+Three solution options, including the non-AI one
+Responsible AI and data canvas
+The prototype
+Your test record
+Your iteration log
+Your risk register
+The final presentation
+Your individual reflection
+I defined a problem and
+built a basic prototype
+I can describe what it
+does
+I used evidence from
+users
+I tested, improved and
+identified key risks
+I compared AI and non-
+AI options
+I set success criteria in
+advance
+I red-teamed the solution
+and communicated
+uncertainty honestly
+8
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 8 · AI INNOVATION PROJECT
+40
+
+
+===== PAGE 41 =====
+How your project will be judged
+Your teacher will use these six criteria. Read them before you start, not after.
+Getting started Getting there Going further
+Problem Problem is
+identifiable.
+Problem and user are clearly
+defined with evidence.
+Problem is well-bounded,
+evidence-based and compared
+with other ways of framing it.
+Solution
+choice
+You have a
+solution idea.
+You explain why your
+approach fits the problem.
+You compare AI and non-AI
+options and justify the simplest
+approach that works.
+Prototype A basic
+demonstration.
+The prototype tests a core
+assumption.
+The prototype is designed
+around measurable success
+and failure criteria.
+Testing You got
+feedback.
+You recorded test evidence
+and made a change.
+You ran structured tests, red-
+teamed failure modes and
+compared versions.
+Responsible
+AI
+You named a
+risk.
+You identified privacy, bias,
+hallucination or oversight
+issues and a safeguard.
+You analysed trade-offs,
+remaining risk, who's affected
+and who's accountable.
+Presentation You described
+the idea.
+You communicated problem,
+prototype, test and learning
+clearly.
+You used evidence,
+acknowledged uncertainty and
+handled challenge questions
+thoughtfully.
+Level up (optional challenge)
+Add a simple evaluation plan with one quantitative measure (a number) and one
+qualitative measure (what people say). Run a second test cycle and compare the results
+with the first.
+Badge earned: AI Innovator ✓  · Programme complete
+8
+AI IN PRACTICE  ·  STUDENT BOOK
+CHAPTER 8 · AI INNOVATION PROJECT
+41
+
+
+===== PAGE 42 =====
+Portfolio sheets
+Copy these as often as you need. Each one matches a piece of evidence asked for in
+the chapters. Your teacher may give you printed versions.
+Sheet A1 · Mission evidence sheet (any chapter)
+Use this for any mission. Four things matter: what you predicted, what you tried, what actually
+happened, what you'd change.
+Prompt My response
+Mission / chapter
+My prediction before I started
+What I tried
+Evidence / result
+What surprised me or failed
+What I changed or would change
+What I can now explain
+Where this matters outside the
+activity
+Sheet A2 · AI output verification log (Chapters 4, 5, 8)
+One row per claim. Check against a source that is independent of the AI and of the original
+claim.
+Claim Source I checked Supported / uncertain / wrong What I changed
+SHEETS
+42
+
+
+===== PAGE 43 =====
+Sheet A3 · Model test log (Chapter 2)
+At least ten rows. Then: accuracy = correct ÷ total. Put the same rows into a 2×2 confusion
+matrix.
+# Actual class Prediction Correct? Observation (angle, light, background…)
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+Sheet A4 · Prompt experiment sheet (Chapter 4)
+Change one thing at a time where you can, so you know what caused the difference.
+Version What I changed in the
+prompt
+What changed in the
+output
+Was it better?
+Why?
+V1 –
+baseline
+V2
+V3
+SHEETS
+AI IN PRACTICE  ·  STUDENT BOOK
+PORTFOLIO SHEETS
+43
+
+
+===== PAGE 44 =====
+Sheet A5 · Responsible data card (Chapters 3, 8)
+Question Notes
+What data is collected?
+What is observed rather than typed
+in?
+What might be inferred?
+Why is it needed?
+What could go wrong?
+Who might be missing or
+misrepresented?
+What should be removed or
+minimised?
+What needs human review?
+Exit ticket (end of any session)
+Five quick questions. Your honest answers help make the next version of this programme
+better.
+Question My answer
+What did you discover today that you
+didn't know before?
+Where did you get stuck?
+What did you try when something
+didn't work?
+What part felt most useful or real?
+What would you change about this
+mission for the next group?
+SHEETS
+AI IN PRACTICE  ·  STUDENT BOOK
+PORTFOLIO SHEETS
+44
+
+
+===== PAGE 45 =====
+Glossary
+Plain meanings for the words in this book. Chapter key-word boxes give the short
+version; this is the fuller one.
+AGI Artificial General Intelligence. A hypothetical AI with broad, general
+capability across many kinds of task. Not the same as today's
+specialised systems.
+Algorithm A set of steps or rules for turning an input into an output.
+AI model A system trained or designed to recognise patterns, generate
+outputs or make predictions.
+Automation bias Trusting a machine's output more than the evidence justifies, just
+because a machine produced it.
+Bias A systematic skew that leads to unfair, unrepresentative or
+misleading results.
+Class label The category attached to an example in supervised learning, e.g.
+“cup”.
+Confusion matrix A table comparing what was actually true with what the model
+predicted, so the different kinds of error can be seen.
+Data minimisation Collecting only the data genuinely needed for a stated purpose.
+Deep learning Machine learning that uses multi-layer neural networks. Mentioned
+in this book only as an idea.
+Disclosure Saying clearly when and how AI helped with a piece of work.
+Generalisation A model's ability to perform sensibly on examples it never saw
+during training.
+Generative AI AI that creates new content such as text, images, audio or code
+from learned patterns.
+Hallucination A fluent, confident output that is unsupported, wrong or made up.
+Human-in-the-loop A workflow where a person reviews, decides or approves at
+important points.
+Inferred data Information predicted about a person or situation from other data,
+rather than provided directly.
+Large language model (LLM) A generative model trained on huge amounts of text to predict and
+generate language.
+Lateral reading Checking a source by leaving it and finding out what other,
+independent sources say.
+Machine learning Methods where a system learns patterns from data instead of being
+given every rule explicitly.
+GLOSS
+45
+
+
+===== PAGE 46 =====
+Narrow AI AI built for a specific task or family of tasks. All the AI in this book.
+Prompt The instructions and context given to a generative AI system.
+Provenance Where a piece of content came from and how it reached you.
+Red-teaming Deliberately trying to make your own system fail or misbehave, to
+find weaknesses before someone else does.
+Shortcut learning When a model relies on an easy, unintended clue (like background
+colour) instead of the feature you meant it to learn.
+Test data Examples used to evaluate a model after training. Ideally never
+reused from the training set.
+Training data Examples used to teach a machine-learning model.
+Verification Checking a claim against independent, reliable evidence.
+GLOSS
+AI IN PRACTICE  ·  STUDENT BOOK
+GLOSSARY
+46
+
+
+===== PAGE 47 =====
+About this programme
+AI in Practice is a 30-hour Transition Year programme built around active, inquiry-based and
+self-directed learning. It is designed so that you learn AI by using it, testing it, questioning it
+and building with it. Passive instruction is kept deliberately short.
+What you're working towards
+The programme is aligned to the nine learning outcomes of the NCCA/CSLINC Exploring
+Artificial Intelligence Transition Year micro-module. Each chapter opener tells you which ones
+it links to.
+Outcome You should be able to…
+LO1 Outline fundamental concepts of artificial intelligence.
+LO2 Use and develop a basic AI model to perform tasks.
+LO3 Evaluate AI models using standard metrics.
+LO4 Examine the positive and negative potential of AI models.
+LO5 Investigate how AI developers gather and collect data.
+LO6 Examine ethical considerations around data used for AI.
+LO7 Explore generative AI capabilities, particularly in an educational context.
+LO8 Discuss possible AI futures, with emphasis on societal impacts.
+LO9 Investigate misinformation and bias in AI use and ways to reduce their impact.
+How the hours add up
+Chapter Hours Main outcomes
+1 · AI & Me 2 LO1, LO4
+2 · Teaching a Machine 4 LO1, LO2, LO3, LO9
+3 · Data Detective 3 LO5, LO6, LO9
+4 · Generative AI & Prompting 4 LO7, LO9
+5 · Trust, Bias & Misinformation 3 LO4, LO6, LO9
+6 · AI for Learning & Work 3 LO7
+7 · Our AI Future 3 LO4, LO8
+8 · AI Innovation Project 8 LO1–LO9
+Total 30 LO1–LO9
+47
+
+
+===== PAGE 48 =====
+What this programme deliberately avoids
+Long slide-led lectures on AI terminology.
+Teaching prompting as “secret phrases” to memorise.
+Treating AI output as authoritative evidence.
+Requiring coding from every student.
+Using grades as the main motivator.
+Mistaking a polished prototype for deep learning.
+Sources and alignment
+NCCA / CSLINC, Exploring Artificial Intelligence (AI), Transition Year micro-module, October 2025
+(curriculumonline.ie). NCCA, Transition Year Programme Statement (ncca.ie). This is an independently designed
+pilot curriculum aligned to the themes and learning outcomes of the NCCA/CSLINC Exploring AI micro-module. It
+is not an official NCCA publication and should not be represented as such.
+AI in Practice · Student Book · Pilot edition · Version 1.0 · September 2026
+AI IN PRACTICE  ·  STUDENT BOOK
+ABOUT THIS PROGRAMME
+48

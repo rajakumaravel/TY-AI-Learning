@@ -1,0 +1,1057 @@
+# AI in Practice — Comprehensive Curriculum Review and Data Integrity Plan (recommendations for v1.1). Text extracted from the docx; one line per paragraph or table cell.
+
+AI in Practice
+Comprehensive Curriculum Review,Data Integrity Enhancement Plan & Revision Blueprint
+Review of Student Book · Pilot Edition · Version 1.0 · September 2026
+Purpose
+To identify curriculum strengths, technical and pedagogical gaps, data-integrity risks, assessment issues and opportunities for a stronger Version 1.1/2.0, while preserving the book's practical, student-centred character.
+Executive Summary
+The Student Book has a strong pedagogical identity. It consistently asks learners to use AI, test it, question it, improve it and preserve evidence rather than treating AI as authoritative. Its mission-based design, emphasis on experimentation, visible human oversight, bias awareness, verification and reflection are all significant strengths. The strongest design decision is that failure is treated as evidence: students are encouraged to break models, identify uncertainty and explain what did not work.
+Source anchor: pp. 3–4: the recurring MISSION → PREDICT → DISCOVER → TRY → TEST → IMPROVE → REFLECT → EVIDENCE loop; students are told to verify AI outputs and preserve evidence.
+The principal weakness is not that data is ignored; data is actually central to Chapters 2, 3, 6 and 8. The weakness is that the curriculum largely treats data through the lenses of collection, privacy, representativeness and responsible use. It does not yet give students a systematic method for establishing whether data are accurate, complete, consistent, valid, unique, current, traceable and fit for purpose. In other words, the book needs a formal data-integrity and data-quality strand.
+The recommended revision is therefore not to replace the existing structure. It is to add a cross-curricular 'trust the data only after checking the data' discipline that parallels the book's existing 'trust AI outputs only after checking them' discipline.
+Highest-priority revisions
+Priority
+Issue
+Recommended revision
+Why it matters
+Critical
+No explicit data-integrity framework
+Add a Data Integrity Check and glossary terms covering accuracy, completeness, consistency, validity, uniqueness, timeliness, provenance and fit-for-purpose.
+Students currently learn to question AI output more systematically than they learn to question the underlying dataset.
+Critical
+Responsible Data Card is ethics-heavy but quality-light
+Expand Sheet A5 into a Responsible Data & Integrity Card with provenance, missingness, duplicates, validity, transformations, retention and ownership.
+Makes Chapter 3 operational rather than only conceptual.
+High
+Model evaluation can be overinterpreted
+Add baseline comparison, sample-size caution, data leakage, label quality and a clearer train/validation/test explanation.
+Prevents technically misleading conclusions from small classroom experiments.
+High
+Chapter 6 says 'clean messy data' without teaching a cleaning method
+Introduce a structured profile → clean → validate → analyse workflow and a Data Cleaning Log.
+Builds real spreadsheet and analytical competence.
+High
+Fairness is mainly qualitative
+Add subgroup performance checks, proxy variables, intersectional thinking and lifecycle bias mapping.
+Students learn how unfairness can remain hidden in aggregate performance.
+High
+Chapter 8 project evaluation can remain subjective
+Make one quantitative and one qualitative measure core rather than optional; add baseline, success threshold, risk register and residual-risk review.
+Improves evidence quality and project comparability.
+Medium
+Provenance is framed mainly as content provenance
+Extend to data provenance and lineage.
+Supports traceability, reproducibility and responsible data use.
+Medium
+Governance and security are present implicitly
+Add access, roles, retention, deletion, versioning, change logs and escalation pathways.
+Shows students that responsible AI is a socio-technical process, not only a model property.
+Recommended revision philosophy
+Preserve the practical, inquiry-based structure. Do not turn the programme into a lecture-heavy data-science textbook.
+Teach every new concept through a visible action: inspect, compare, calculate, trace, clean, challenge, document or justify.
+Make data integrity a repeated habit across Chapters 2, 3, 6 and 8 rather than a single isolated definition.
+Separate what is known, observed, inferred, generated, estimated and assumed.
+Make evidence quality assessable: students should earn credit for documenting uncertainty and limitations, not merely for producing a successful prototype.
+Use simple language first, with professional terminology introduced as an optional or secondary label where useful.
+1. What the Student Book Already Does Very Well
+A revision should start from the book's strengths because many of the recommended additions can be attached to mechanisms that already work.
+Strength
+Why it is valuable
+Inquiry before explanation
+Students frequently predict first, test second and explain afterward. This prevents AI literacy becoming vocabulary memorisation.
+Failure as evidence
+Chapter 2 explicitly asks students to break their classifier and treats a model that never fails as evidence that the test may be too easy.
+Human responsibility
+The book states that students remain responsible for what they hand in, say or build, and that important AI outputs require independent verification.
+Privacy-by-default classroom behaviour
+Students are told not to put private details or identifiable photographs into AI tools and to use school-approved tools.
+Useful distinction between output quality and truth
+The prompting and misinformation chapters repeatedly reinforce that fluent language and polished presentation are not evidence of correctness.
+Real model evaluation
+Students encounter a train/test distinction, accuracy, a confusion matrix, error asymmetry and shortcut learning rather than only conceptual descriptions of machine learning.
+Responsible design
+The innovation project requires a problem-first approach, non-AI alternatives, success criteria, testing, red-teaming, safeguards and acknowledgement of residual uncertainty.
+Assessment through artefacts
+Portfolio evidence is structurally aligned to the learning loop and supports reflection, iteration and teacher judgement.
+Source anchor: pp. 4, 10–13, 18–26, 36–41: verification, model breaking/testing, prompt comparison, bias investigation, project red-teaming and assessment criteria.
+2. Data Integrity: The Major Curriculum Gap
+Chapter 3 opens with the correct premise that data is the raw material of AI. It then focuses on data collection categories, inference, minimisation, consent, representativeness, GDPR, public/private data and responsible use. Those topics are important, but a learner can complete the chapter without having to demonstrate that a dataset itself is trustworthy.
+Source anchor: pp. 14–17: Chapter 3 learning outcomes and Responsible Data focus.
+The document does not currently use 'data integrity' as an explicit term. The word 'quality' appears in relation to source quality rather than as a systematic framework for data quality. Provenance is defined in relation to content provenance. This provides a strong foundation, but it leaves an important technical gap.
+2.1 Proposed student-facing definition
+DATA INTEGRITY: Confidence that data remains accurate, complete, consistent, valid and traceable from the point it is collected through the point it is analysed or used by an AI system.
+For Transition Year, the definition should be accompanied by a memorable question: "Can I trust this data enough for this purpose, and can I show why?"
+2.2 Core dimensions students should learn
+Dimension
+Student question
+Example failure
+Expected response
+Accuracy
+Does the value correctly describe the real thing?
+Age entered as 151 instead of 15.
+Check against the original source; correct only when evidence exists.
+Completeness
+Are important values missing?
+A survey has no travel mode for 35% of respondents.
+Measure missingness and ask whether missing values are random or patterned.
+Consistency
+Is the same concept represented in the same way?
+Dublin / DUB / dublin.
+Standardise categories using documented rules.
+Validity
+Does each value obey the rules for that field?
+Satisfaction score 8 on a 1–5 scale.
+Flag impossible values instead of silently fixing them.
+Uniqueness
+Does one real entity appear more than once?
+One respondent appears in rows 8 and 42.
+Identify duplicate records and document removal/merging decisions.
+Timeliness
+Is the data current enough?
+2019 commuter patterns used to design a 2026 service.
+Record collection date and decide whether age of data matters.
+Provenance
+Where did the data originate?
+A spreadsheet has been forwarded several times with no source.
+Record source, collector, date, purpose and transformations.
+Integrity through change
+Has the data been altered correctly and transparently?
+A student manually edits values before analysis.
+Maintain original data and a change log.
+Representativeness
+Does it sufficiently reflect the relevant population?
+Only students with smartphones appear in a transport dataset.
+Compare the sample with the target population.
+Fit for purpose
+Is this data suitable for the decision being made?
+Music preferences used to infer academic ability.
+Define the intended use and explicitly state prohibited or unsupported uses.
+2.3 Why data integrity is different from fairness
+The curriculum should explicitly prevent four concepts from collapsing into one another:
+Concept
+Question it answers
+Important caution
+Data quality
+Is the data suitable and reliable enough for the task?
+High-quality data can still encode unfair historical patterns.
+Data integrity
+Has the data remained accurate, consistent and traceable through its lifecycle?
+Integrity does not guarantee representativeness.
+Fairness
+Are people or groups treated equitably, and are harms distributed acceptably?
+A fair-looking aggregate result can hide subgroup failures.
+Privacy
+Is personal information collected, used, stored and shared appropriately?
+Privacy-compliant data can still be inaccurate or biased.
+3. Add a Student-Friendly Data Lifecycle
+The book would benefit from one visual model that students reuse. This is especially valuable because the current chapters touch different parts of the lifecycle without explicitly joining them.
+Stage
+Student task
+Integrity question
+Evidence to keep
+1. Plan
+Define the question and necessary fields.
+Do we actually need this data?
+Purpose statement / data plan
+2. Collect
+Gather or receive data.
+Who collected it, when and how?
+Source and collection notes
+3. Profile
+Inspect before changing anything.
+What is missing, duplicated, unusual or invalid?
+Data profile
+4. Clean
+Correct documented errors and standardise.
+What did we change and why?
+Cleaning log
+5. Validate
+Check rules after cleaning.
+Did cleaning create new errors?
+Validation results
+6. Analyse / Train
+Calculate or build a model.
+Are methods appropriate and reproducible?
+Analysis/model record
+7. Evaluate
+Test performance and limitations.
+What errors and subgroup differences remain?
+Evaluation table
+8. Share / Deploy
+Communicate results or use the system.
+Could the output be misunderstood or misused?
+Disclosure / limitations
+9. Monitor
+Observe performance over time.
+Has the world or the data changed?
+Monitoring plan
+10. Retain / Delete
+Keep only as long as needed.
+Where are all copies and derivatives?
+Retention / deletion record
+4. Chapter 2 – Teaching a Machine: Detailed Revision
+Chapter 2 already contains real machine-learning practice: labelled examples, train/test separation, accuracy, a confusion matrix, shortcut learning, a deliberate failure experiment, retraining and comparison of model versions. These features should be retained.
+Source anchor: pp. 9–13: supervised learning concepts, 10-row test log, confusion matrix, shortcut experiment, v1/v2 comparison; precision/recall currently optional.
+4.1 Add label integrity and 'ground truth'
+The current cup/bottle task makes labels look unambiguous. In many real systems, the label is itself a human judgement. Students should experience disagreement before being told that labels are 'truth'.
+Give each group 15–20 examples containing a few deliberately ambiguous cases.
+Have two students label the same examples independently.
+Calculate simple percentage agreement.
+Discuss why disagreement occurred.
+Ask which labels should be considered ground truth and who has authority to decide.
+Record disagreements rather than hiding them.
+Key teaching question: If humans disagree about the correct label, what exactly is the machine being trained to learn?
+4.2 Add data leakage
+The book correctly warns that test data should be genuinely different from training data. The next step is to name the failure mode: data leakage.
+DATA LEAKAGE: Information from the test set, future data or the target answer accidentally reaches the training process, making performance look better than it would be in real use.
+Near-duplicate photos from the same burst are split between train and test.
+Students repeatedly modify the training set after examining exactly which final test images failed.
+A field that directly reveals the answer is accidentally included as a feature.
+Future information is used to predict an earlier outcome.
+4.3 Clarify train, validation and test
+Set
+Plain-language purpose
+When students use it
+Training
+The examples the model is allowed to learn from.
+During model building.
+Validation
+Examples used while making improvement choices.
+During model v1 → v2 iteration.
+Final test
+Examples kept aside for the final honest check.
+Only after the improvement decisions are finished.
+The classroom activity can remain simpler if necessary, but the text should note that repeatedly tuning against one test set weakens its value as a final independent evaluation.
+4.4 Add baseline performance
+Accuracy becomes far more meaningful when compared with a baseline. A classic classroom example is an imbalanced dataset with 90 cats and 10 dogs. A useless classifier that predicts 'cat' every time achieves 90% accuracy. This instantly demonstrates why a percentage alone cannot establish quality.
+4.5 Reframe the 10-row test log
+Ten examples are appropriate for teaching the mechanics of a confusion matrix, but not for claiming that a model has a stable real-world accuracy. Add this exact warning:
+Ten test cases are enough to learn the method. They are not enough to prove that a real AI system is reliable. Write '8 of our 10 tests were correct' rather than assuming the model will always be 80% accurate.
+4.6 Make recall conceptually core
+Precision and recall currently appear as an optional level-up task. Because LO3 concerns standard model evaluation metrics, recall should at least be mandatory conceptually, even if the formula remains optional.
+Recall question: Of all the real positive cases, how many did the model find?
+Precision question: Of everything the model flagged, how much was actually positive?
+Application question: Which error is more serious in this context, and why?
+5. Chapter 3 – Data Detective: Major Redesign Opportunity
+This is the natural home for the strongest data-integrity additions. The existing privacy, consent, representativeness and rights material should remain, but the mission should require students to audit both what data are collected and whether those data are trustworthy.
+5.1 Revised learning outcomes
+Distinguish volunteered, observed and inferred data.
+Explain the purpose of data minimisation and representativeness.
+Check a small dataset for accuracy, completeness, consistency, validity, uniqueness and timeliness.
+Trace the source and transformations of data using a simple provenance record.
+Explain why missingness, duplicates, labels and outdated data can distort AI or analysis.
+Create a Responsible Data & Integrity Card that documents privacy, quality, representation and governance risks.
+Explain what conclusions the dataset can and cannot support.
+5.2 Add a 30-minute Data Integrity Lab
+Provide a fictional spreadsheet with 25–40 rows containing deliberately planted problems:
+two duplicate rows;
+one impossible age;
+one date in a different format;
+three missing values;
+inconsistent category spelling;
+mixed kilometres and miles;
+one legitimate extreme outlier;
+one record with an uncertain label;
+one outdated record;
+a column that is unnecessary for the stated purpose.
+Students should not immediately edit the sheet. First they profile it, identify issues and decide whether each issue should be corrected, removed, retained, standardised or investigated.
+5.3 Teach missing data
+Missing values are particularly important because absence itself may be patterned. Avoid heavy statistical terminology, but make students ask: 'Is this missing by accident, or are certain people more likely to be missing?'
+Example: If a transport survey is completed mainly through a smartphone app, people without reliable smartphones may be missing for a reason. The missingness can therefore distort the result.
+5.4 Teach duplicates and identity matching
+Students should see that uniqueness is not always obvious. 'Aoife Murphy', 'A. Murphy' and 'Aoife M Murphy' may represent one person or three different people. The exercise should teach caution: suspected duplicates should be investigated, not automatically deleted.
+5.5 Teach outliers correctly
+An outlier is not automatically an error. A 160 km commute in a dataset where most journeys are 1–20 km might be a typo, a real exceptional case or a unit problem. The correct first response is investigation.
+Recommended rule: unusual data is evidence to investigate, not evidence to delete.
+5.6 Teach metadata and a data dictionary
+A value without context can be meaningless. Students should learn the word metadata and produce a small data dictionary.
+Field
+Meaning
+Type
+Valid values / unit
+Missing allowed?
+Source
+wait_time
+Minutes from arrival to service
+number
+0–240 minutes
+Yes
+Event log
+year_group
+Student year
+category
+TY / 5th / 6th
+No
+Survey
+satisfaction
+Self-reported rating
+integer
+1–5
+No
+Survey
+6. Replace Sheet A5 with a Responsible Data & Integrity Card
+The current A5 is useful but should become a richer worksheet. A revised version can still fit on one or two pages if questions are grouped.
+Section
+Questions to include
+Purpose
+What problem are we trying to solve? What decision will this data support? What should it NOT be used to decide?
+Source & provenance
+Where did it come from? Who collected it? When? Why? Is it primary or secondary data? Can we trace the original source?
+Quality
+What is missing? Are there duplicates? Are values valid? Are units/formats consistent? Are labels reliable? Is it current enough?
+Representation
+Who is included? Who may be missing? Compared with what target population? Are some groups over- or under-represented?
+Privacy
+Does the dataset contain personal or sensitive data? Can fields be removed or aggregated? Could combinations re-identify someone?
+Integrity & change
+What cleaning or transformations were performed? Was the original preserved? Is there a change log?
+Access & security
+Who can view or edit it? Where is it stored? Could it be copied outside the approved environment?
+Retention
+How long is it needed? When should it be deleted? Are copies, screenshots or derived files also accounted for?
+Human oversight
+Which decisions require a person to review, override, stop or escalate?
+Limitations
+What remains uncertain? What conclusions are supported? What conclusions are not supported?
+7. Chapter 4 – Generative AI & Prompting: Add Transformation Integrity
+Chapter 4 is strong on hallucinations, prompt iteration, source checking and confirmation bias. It also already notes that a transformer role can drop or change meaning. That point should be expanded into a formal data-integrity warning.
+Source anchor: pp. 19–22: prompt iteration, verification, transformer risk, confirmation bias and source checking.
+7.1 Add 'AI can corrupt data while helping'
+Summarising a table may omit records or change quantities.
+Categorising survey comments may merge distinct themes or invent a category.
+Converting units may introduce arithmetic errors.
+Extracting dates or names may silently misread text.
+Cleaning data may replace legitimate rare values.
+Filling blank fields may convert an estimate into something that looks observed.
+Students should therefore compare the input and output of any AI-assisted transformation and verify counts, totals, categories and critical fields.
+7.2 Separate observed, inferred and generated values
+Status
+Meaning
+Example
+How it should be labelled
+Observed
+Actually recorded in the source.
+Student selected 'bus'.
+Observed
+Inferred
+Predicted from other information.
+System infers likely commute type.
+Inferred
+Estimated / imputed
+Inserted to handle missing data.
+Median wait time used for a missing value.
+Estimated / imputed
+Generated
+Created by AI rather than present in the source.
+AI invents a plausible explanatory sentence.
+Generated
+8. Chapter 5 – Trust, Bias & Misinformation: Extend Bias Across the Lifecycle
+The existing bias stations are useful because they ask whether bias can enter through data, design or use. The revision should deepen this with a simple lifecycle map.
+Source anchor: pp. 24–26: selection bias, representation bias, automation bias, provenance, lateral verification and bias stations.
+Stage
+Bias type
+Simple example
+World before data
+Historical bias
+Past decisions were unequal, so historical outcomes encode inequality.
+Collection
+Selection / sampling bias
+Only people using an app enter the dataset.
+Measurement
+Measurement bias
+One group's behaviour is measured less accurately.
+Labelling
+Label bias
+Human raters apply an ambiguous label differently across groups.
+Feature choice
+Proxy bias
+Postcode indirectly reveals socioeconomic status.
+Training
+Model/algorithmic bias
+Patterns favour the majority group.
+Evaluation
+Evaluation bias
+Test data under-represent difficult cases.
+Deployment
+Deployment bias
+A model is used for a purpose it was not evaluated for.
+Human response
+Automation bias
+A person trusts the model too much because it appears objective.
+8.1 Add subgroup performance
+Fairness should include at least one numeric demonstration. Students do not need advanced fairness metrics to see why aggregate performance can hide disparate outcomes.
+Group
+Correct
+Total
+Accuracy
+Group A
+18
+20
+90%
+Group B
+11
+20
+55%
+Overall
+29
+40
+72.5%
+Discussion: Is 72.5% enough to describe this system? Which group carries more error? Would the answer change if the false negatives were much more harmful than the false positives?
+8.2 Add proxy variables
+Students should learn that removing an explicitly sensitive field does not automatically remove its influence. Postcode, school, device type, language or travel pattern can act as proxies for other characteristics.
+8.3 Add intersectional thinking
+Looking at one characteristic at a time can conceal failures affecting people at the intersection of several groups. A system might perform acceptably for girls overall and for disabled students overall while still performing poorly for disabled girls. This can be introduced conceptually without requiring complex statistics.
+9. Chapter 6 – AI for Learning & Work: Turn 'Messy Data' into a Real Data-Cleaning Workflow
+Chapter 6 already provides the perfect setting: students receive a messy mini-dataset, clean it in a spreadsheet, calculate values, ask AI for interpretations and then check formulas and remove unsupported claims.
+Source anchor: pp. 28–31, especially p. 29: messy dataset, spreadsheet cleaning, AI interpretation and independent human review.
+9.1 Replace 'clean it up' with a defined workflow
+Step
+Student action
+Evidence
+1. Preserve
+Save an untouched RAW version.
+raw_v1
+2. Profile
+Count rows, fields, blanks, duplicates and suspicious values.
+profile sheet
+3. Define rules
+State valid ranges, units and categories.
+data dictionary
+4. Clean
+Make only justified changes.
+cleaning log
+5. Validate
+Re-run quality checks after changes.
+validation checklist
+6. Analyse
+Calculate totals, averages or charts.
+analysis output
+7. AI assist
+Ask AI to critique or suggest interpretations.
+AI interaction record
+8. Human verify
+Check every numerical claim against the spreadsheet.
+verification sign-off
+9.2 Add a Data Cleaning Log
+Row / field
+Original
+Issue
+Action
+Reason
+Verified by
+17 / location
+Dubln
+Inconsistent spelling
+Changed to Dublin
+Clear typographical error; category exists elsewhere
+Source/rule
+22 / score
+120
+Invalid range
+Flagged; not corrected
+No evidence of intended value
+Teacher/source
+42 / ID
+S014
+Duplicate candidate
+Removed after comparison
+Exact duplicate of row 8
+Record match
+Integrity rule: Never silently change the data. If a change cannot be justified, flag the value rather than inventing a correction.
+10. Add Analytical Integrity, Not Just Data Integrity
+Even perfectly accurate records can be analysed misleadingly. Students should therefore learn that integrity also applies to choices made after data collection.
+Cherry-picking only results that support the preferred conclusion.
+Changing the success measure after seeing the data.
+Deleting inconvenient cases without a documented rule.
+Using a dramatic chart scale to exaggerate a small difference.
+Confusing correlation with causation.
+Reporting percentages without the underlying counts.
+Generalising from a tiny or unrepresentative sample.
+Presenting an estimate or AI-generated value as observed fact.
+10.1 Add correlation vs causation
+This is a high-value general data-literacy addition. A simple rule is sufficient: two things moving together does not prove that one caused the other. Students should be asked to suggest alternative explanations and possible confounding factors.
+10.2 Require counts with percentages
+A statement such as '80% preferred the prototype' is much more informative when accompanied by '8 of 10 test users'. This prevents small samples from sounding more definitive than they are.
+11. Governance, Privacy, Security and Retention
+The book has a strong safety baseline: private details should not be entered into AI systems and schools should approve tools. Chapter 3 also notes accuracy, security, transparency, correction/deletion rights and retention choices. The next revision should make the operational controls visible.
+Source anchor: p. 4: private-data and approved-tool rules; p. 16: accuracy/security/transparency and retention choices.
+11.1 Distinguish privacy from security
+Privacy asks…
+Security asks…
+Should we collect and use this personal information?
+How do we prevent unauthorised access or alteration?
+Is the use proportionate and transparent?
+Who can read, edit, export or delete the data?
+How long should the data be retained?
+Where is it stored and what happens if access is compromised?
+11.2 Student-facing governance controls
+Access control: only people who need the data should have access.
+Least privilege: editing rights should be narrower than viewing rights where possible.
+Storage: know where project files are stored and which tools sync them elsewhere.
+Credentials: never put passwords, API keys or access tokens into prompts or shared documents.
+Version control: preserve the raw source and clearly label later versions.
+Retention: define how long data are needed.
+Deletion: consider copies, exports, screenshots and derived datasets, not only the original file.
+Escalation: define what happens when a student discovers unsafe, sensitive or suspicious information.
+11.3 Anonymisation vs pseudonymisation
+A student identifier such as 'Participant 017' may hide a name but can still be linked back to a person if the key exists. That is better described as pseudonymisation. Truly anonymised information cannot reasonably be linked back to an individual. The book already correctly warns that combinations of seemingly anonymous attributes can re-identify people; this distinction would make that lesson more precise.
+12. Expand Provenance into Data Lineage
+Provenance is currently defined well for information and media. Extend the same habit to data and models.
+Trace backward: OUTPUT → MODEL / ANALYSIS → PROCESSED DATA → RAW DATA → COLLECTION METHOD → ORIGINAL SOURCE.
+For every arrow, students ask: What changed? Who changed it? When? Why? This creates a simple audit trail and supports reproducibility.
+12.1 Suggested dataset provenance record
+Field
+Example
+Dataset name
+School Event Survey
+Original source
+Teacher-approved anonymous survey
+Collection period
+7–10 September 2026
+Original purpose
+Understand event scheduling preferences
+Raw record count
+143
+Cleaning actions
+4 exact duplicates removed; 6 invalid time entries flagged
+Current version
+v2_clean
+Owner
+Project team / teacher
+Allowed use
+Class project analysis only
+Known limitations
+Low response from students absent during survey week
+13. Chapter 8 – AI Innovation Project: Strengthen Evaluation and Governance
+Chapter 8 is already structured around problem definition, user understanding, three solution options including a non-AI option, responsible design, success criteria, prototyping, testing, red-teaming, iteration and honest presentation. This is an excellent foundation.
+Source anchor: pp. 36–41: project outcomes, four-sprint route, responsible design, testing, red-teaming and six-criterion assessment rubric.
+13.1 Make mixed-method evaluation core, not optional
+The current Level Up asks students to add one quantitative and one qualitative measure and run a second test cycle. That is strong practice and should be considered for the core project rather than remaining optional.
+Measure
+Baseline
+Prototype v1
+Prototype v2
+Success target
+Task completion
+55%
+70%
+85%
+≥80%
+Average time
+5.2 min
+4.3 min
+3.5 min
+<4 min
+User rating
+3.0/5
+3.8/5
+4.2/5
+≥4/5
+Critical safety errors
+N/A
+1
+0
+0
+13.2 Add baseline comparison
+Students cannot responsibly claim improvement without some description of the existing process. A baseline can be simple: time taken, completion rate, error count, number of steps or user-reported difficulty.
+13.3 Add a structured risk register
+Risk
+Who could be affected?
+Likelihood
+Impact
+Safeguard
+Residual risk
+Owner
+Incorrect answer
+Student user
+Medium
+Medium
+Source verification + warning
+Low/Medium
+Project team
+Private data entered
+User / third party
+Low
+High
+No personal data rule + input reminder
+Low
+Teacher/team
+Unequal performance
+Under-represented users
+Medium
+High
+Diverse testing + subgroup review
+Medium
+Project team
+13.4 Teach residual risk
+Initial risk → safeguard → residual risk. A safeguard can reduce a risk without making it disappear.
+This prevents students from treating the existence of a human reviewer or warning label as proof that a risk is solved.
+13.5 Add accountability and escalation
+Who can stop the system?
+Who checks uncertain outputs?
+What triggers escalation?
+Who is responsible for correcting a known error?
+Who informs affected users if a serious error is discovered?
+Which decisions must never be automated in this prototype?
+14. Assessment and Portfolio: Make Evidence Quality More Explicit
+The portfolio approach is a major strength. The next version should reward data and evidence discipline explicitly.
+14.1 Add a seventh Chapter 8 criterion: Data & Evidence Integrity
+Level
+Suggested descriptor
+Getting started
+Uses data or evidence and can say where some of it came from.
+Getting there
+Documents sources, checks basic data quality, records important changes and explains limitations.
+Going further
+Demonstrates provenance, validates data, considers missingness and representation, preserves an audit trail and distinguishes known, estimated, inferred and uncertain information.
+14.2 Add a decision log
+Decision
+Evidence available
+Alternatives considered
+Reason chosen
+Would we decide differently now?
+Use a rules-based FAQ instead of an LLM
+Questions are repetitive and fixed
+LLM chatbot; static PDF
+Simpler and lower risk
+No
+Remove postcode
+Not required for scheduling question
+Keep for analysis
+Minimisation and proxy-risk concern
+No
+14.3 Add an assumptions register
+Assumption
+Why it matters
+How we will test it
+Result
+Users understand the wording
+Confusion invalidates completion-time results
+5 unaided user tests
+TBD
+Most users have reliable internet
+Could exclude some users
+Ask non-identifying access question / provide offline alternative
+TBD
+15. Research-with-People Safeguards for Chapter 8
+The book already requires teacher-approved interview/survey questions and minimisation of personal data. A more explicit classroom protocol would improve consistency and safeguarding.
+Participation should be voluntary.
+Participants should know the purpose of the activity.
+Students should not collect names unless genuinely necessary and approved.
+No sensitive questions should be added informally.
+No covert audio, photo, video or screen recording.
+Participants should be able to stop without explanation.
+Raw interview/survey material should not be pasted into public or unapproved AI tools.
+Reports should use aggregate or de-identified results where possible.
+A retention/deletion point should be agreed before collection begins.
+Teachers should define the escalation route for disclosures of harm, safeguarding concerns or sensitive personal information.
+These are curriculum recommendations for safe classroom practice; they are not a substitute for a school's own policies, data-protection procedures or legal guidance.
+16. Clarify Model vs System vs Product
+Term
+Recommended explanation
+Why the distinction matters
+AI model
+The trained component that produces a prediction or generated output.
+A model can perform well while the wider system fails.
+AI system
+Model + data + rules + interface + human roles + monitoring.
+Risk often arises outside the model itself.
+AI-enabled product/service
+The complete tool a user interacts with.
+User experience, access, workflow and governance affect outcomes.
+This distinction would strengthen the current emphasis on human oversight and help students understand why responsibility cannot be reduced to model accuracy.
+17. Add Monitoring and Model/Data Drift
+Evaluation should not stop when a prototype works once. Introduce the idea that the world can change and that a system's input patterns may change with it.
+DRIFT: A change over time in the data, users or environment that can make an earlier model or rule work less well.
+language and slang change;
+consumer preferences change;
+school processes change;
+transport patterns change;
+fraud tactics change;
+device types or input quality change.
+Chapter 8 presentations should include one question: 'If this ran for a year, what would we monitor?'
+18. Accessibility and Digital Exclusion
+The curriculum already asks who is excluded and gives examples such as people without smartphones. The revision should make accessibility a standard design check.
+Can a user with low vision read the interface?
+Does the solution depend entirely on colour?
+Is there an alternative to audio-only or image-only content?
+Would dyslexia or lower literacy make the instructions difficult?
+Can the task be completed with keyboard-only input where relevant?
+Does the solution require a recent phone, high-speed connection or paid account?
+Can language complexity be reduced without changing meaning?
+Did the test group include users with different levels of digital confidence?
+19. Glossary Additions
+Term
+Suggested student-friendly definition
+Data integrity
+Confidence that data stays accurate, complete, consistent, valid and traceable as it is collected, changed and used.
+Data quality
+How suitable and reliable data is for the job you want it to do.
+Metadata
+Information that describes data, such as what a field means, its unit, source or collection date.
+Data provenance
+Where data came from and what happened to it before you used it.
+Data lineage
+The path data follows from its source through cleaning, transformation, analysis or modelling.
+Data leakage
+When information that should be hidden during training accidentally influences the model and makes testing look better.
+Duplicate
+A record that represents the same real thing more than once.
+Missing data
+A value that was not recorded or is unavailable.
+Outlier
+A value that is unusually different from most others; it may be an error or a genuine rare case.
+Validation rule
+A rule used to decide whether a value is allowed, such as a range, unit or date format.
+Data dictionary
+A guide explaining the fields in a dataset and what valid values mean.
+Baseline
+The current or simplest result used for comparison.
+Reproducibility
+Whether another person could follow your method and obtain the same or a comparable result.
+Residual risk
+The risk that remains after safeguards are added.
+Drift
+Change over time that can reduce how well a model or rule works.
+Pseudonymisation
+Replacing direct identifiers with codes while a link back to a person may still exist.
+Synthetic data
+Artificially generated data designed to resemble real data.
+20. Proposed New Portfolio Sheets
+Sheet A6 – Data Quality Profile
+Check
+Result
+Evidence / notes
+Action required?
+Row count
+Missing values
+Duplicates
+Invalid values
+Inconsistent categories
+Mixed units / formats
+Outliers
+Label uncertainty
+Collection date / timeliness
+Representation concerns
+Sheet A7 – Data Cleaning & Transformation Log
+Record/field
+Before
+After
+Reason
+Evidence
+Who changed it?
+Sheet A8 – Provenance & Version Record
+Item
+Entry
+Original source
+Collected by
+Collection date
+Original purpose
+Raw version retained?
+Current version
+Transformations
+Known limitations
+Retention/deletion date
+Sheet A9 – Evaluation & Fairness Record
+Metric / group
+Baseline
+v1
+v2
+Target
+Interpretation / limitation
+21. Sample Revised 3-Hour Chapter 3 Structure
+Time
+Activity
+What students learn
+Evidence
+0–15
+Data trail warm-up
+Volunteered, observed and inferred data
+Classification notes
+15–35
+Privacy-policy investigation
+Collection categories, vague purposes, data minimisation
+Service audit
+35–65
+Data Integrity Lab
+Missingness, duplicates, validity, consistency, outliers, units
+A6 profile
+65–85
+Clean and document
+Justified correction vs unsupported alteration
+A7 cleaning log
+85–105
+Provenance trace
+Source, collection method, version and transformation history
+A8 provenance record
+105–125
+Dataset fairness challenge
+Representation, target population, proxy variables
+Fairness redesign
+125–145
+Rights, retention and security
+Purpose, minimisation, accuracy, access, deletion and human review
+Responsible Data & Integrity Card
+145–165
+Design a better data plan
+Fit for purpose and governance
+Revised plan
+165–180
+Reflection
+Limits of available data and responsible interpretation
+Exit reflection
+22. Proposed Expanded Chapter 8 Rubric
+Criterion
+Getting started
+Getting there
+Going further
+Problem
+Problem is identifiable.
+Problem and user clearly defined with evidence.
+Well-bounded, evidence-based and compared with alternative framings.
+Solution choice
+Has a solution idea.
+Explains fit to problem.
+Compares AI and non-AI approaches and justifies the simplest suitable option.
+Prototype
+Basic demonstration.
+Tests a core assumption.
+Designed around measurable success and failure criteria.
+Data & evidence integrity
+Uses data/evidence.
+Documents sources and basic quality checks.
+Shows provenance, validation, audit trail, representation checks and uncertainty.
+Testing
+Gets feedback.
+Records test evidence and makes a change.
+Uses baseline, structured tests, version comparison and mixed quantitative/qualitative evidence.
+Responsible AI
+Names a risk.
+Identifies privacy/bias/hallucination/oversight issue and safeguard.
+Analyses trade-offs, residual risk, affected stakeholders and accountability.
+Accessibility & inclusion
+Names an affected user.
+Checks obvious access barriers.
+Tests or explicitly designs for differing abilities, devices, language/digital access.
+Presentation
+Describes the idea.
+Communicates problem, test and learning.
+Uses evidence, states uncertainty and limitations, and answers challenge questions thoughtfully.
+23. Version 1.1 / Version 2.0 Revision Plan
+Release
+Change
+Effort
+Impact
+V1.1 – essential
+Add data integrity definition and 6–10 quality dimensions to Chapter 3.
+Low
+Very high
+V1.1 – essential
+Expand A5; add A6 cleaning/quality log.
+Medium
+Very high
+V1.1 – essential
+Add explicit 10-test sample-size warning and data leakage note to Chapter 2.
+Low
+High
+V1.1 – essential
+Structure Chapter 6 messy-data workflow.
+Medium
+High
+V1.1 – essential
+Add data/evidence integrity to Chapter 8 rubric.
+Low
+High
+V1.1
+Add provenance/data lineage and versioning.
+Low
+High
+V1.1
+Add counts alongside percentages and baseline guidance.
+Low
+High
+V2.0
+Add subgroup fairness and proxy-variable exercise.
+Medium
+High
+V2.0
+Add validation/test distinction and optional advanced evaluation material.
+Medium
+Medium/High
+V2.0
+Add accessibility, drift, monitoring and lifecycle governance activities.
+Medium
+High
+V2.0
+Develop teacher answer keys and deliberately flawed datasets.
+High
+Very high
+24. Comprehensive Issue Register
+Issue
+Priority
+Location
+Why it matters
+Suggested action
+Data integrity not named
+Critical
+Ch. 3 / glossary
+Students lack a structured way to establish whether a dataset itself is trustworthy.
+Add definition, dimensions, activity and rubric evidence.
+Data quality dimensions absent
+Critical
+Ch. 3
+Accuracy/security are mentioned, but completeness, validity, uniqueness and timeliness are not operationalised.
+Add Data Integrity Lab and A6.
+Provenance too content-focused
+High
+Ch. 5 / glossary
+Students trace claims but not dataset transformations.
+Add data provenance and lineage.
+No cleaning audit trail
+High
+Ch. 6
+Students are asked to clean data but not document every change.
+Add A7 cleaning log.
+Raw data preservation not explicit
+High
+Ch. 6 / 8
+Students may overwrite source data.
+Require raw read-only/original copy.
+Label quality underdeveloped
+High
+Ch. 2
+Labels are treated as correct rather than potentially subjective.
+Add independent relabelling and agreement exercise.
+Data leakage unnamed
+High
+Ch. 2
+Iterative testing can create over-optimistic results.
+Define leakage; explain validation/final test.
+10-case testing easy to overgeneralise
+High
+Ch. 2
+80% from ten examples may be interpreted as stable model accuracy.
+Require count-based language and caution.
+Baseline absent
+High
+Ch. 2 / 8
+Performance lacks context.
+Add naive baseline and current-process baseline.
+Precision/recall optional
+Medium/High
+Ch. 2
+LO3 treatment remains narrow.
+Make conceptual understanding core.
+Missing-data mechanism absent
+High
+Ch. 3 / 6
+Students may ignore systematic missingness.
+Teach 'missing for a reason'.
+Outlier handling absent
+Medium
+Ch. 3 / 6
+Risk of deleting valid rare cases.
+Investigate-before-delete rule.
+Metadata not named
+Medium
+Ch. 3
+Students lack context for fields, units and definitions.
+Add metadata and data dictionary.
+Units/formats not explicit
+Medium
+Ch. 3 / 6
+Simple integrity errors may contaminate analysis.
+Use mixed-unit/date examples.
+Proxy variables absent
+High
+Ch. 5
+Sensitive influence can remain after removing sensitive fields.
+Add proxy exercise.
+Intersectional fairness absent
+Medium/High
+Ch. 5
+Single-group analysis can hide subgroup harm.
+Add cross-group thought exercise.
+Subgroup metrics absent
+High
+Ch. 5 / 8
+Aggregate accuracy can hide disparities.
+Add group performance table.
+Correlation/causation absent
+High
+Ch. 6 / 8
+Students may overclaim from observational data.
+Add explicit rule and exercise.
+Percentages without sample-size caution
+High
+Ch. 8
+Small tests can sound representative.
+Require n with percentages.
+Retention not a glossary concept
+Medium
+Ch. 3 / 8
+Retention is mentioned operationally but not developed.
+Add retention definition and deletion record.
+Security controls implicit
+Medium/High
+Cross-cutting
+Private-data rule is strong but operational access/security skills are limited.
+Add access, storage, credentials, sharing, deletion.
+Anonymisation/pseudonymisation not distinguished
+Medium
+Ch. 3
+Students may think coded identifiers are anonymous.
+Add distinction.
+AI transformation integrity underdeveloped
+High
+Ch. 4 / 6
+AI may alter source data or meaning during summarisation/extraction.
+Require before/after validation.
+Synthetic data absent
+Medium
+Ch. 4 / 8
+Generated records may be mistaken for observed evidence.
+Add synthetic/observed labels.
+Reproducibility unnamed
+Medium/High
+Portfolio / Ch. 8
+Evidence practices are present but concept not formalised.
+Add reproducibility check.
+Version control weak
+Medium
+Ch. 2 / 4 / 8
+v1/v2/v3 used, but data/model version discipline is not explicit.
+Add naming/version log.
+Residual risk absent
+High
+Ch. 8
+Safeguards may be mistaken for elimination of risk.
+Add risk before/after concept.
+Post-deployment monitoring absent
+Medium/High
+Ch. 8
+AI appears to end at prototype test.
+Add monitoring and drift question.
+Accessibility underdeveloped
+High
+Ch. 8
+Inclusion is discussed but not systematically tested.
+Add accessibility checklist.
+Mixed-method evaluation optional
+High
+Ch. 8
+Strong evaluation practice is left to Level Up.
+Move one quantitative + one qualitative measure into core.
+25. Copy-Ready Student Text for a New Data Integrity Box
+Before you trust the result, trust the data - and before you trust the data, check it.A dataset can look neat and still contain problems. Check whether values are accurate, whether important information is missing, whether the same thing is written consistently, whether values follow the rules, whether records appear more than once and whether the data is recent enough for the job. Then ask where it came from, what was changed and who might be missing.Never change a strange value simply because it is inconvenient. Investigate it. If you make a change, record what you changed and why. Keep the original data. Your goal is not to make the dataset look perfect; your goal is to make your decisions traceable.
+26. Copy-Ready Student Text for AI-Assisted Data Work
+AI can help you organise, summarise or transform data, but it can also silently change it. If an AI tool reformats a table, groups responses, fills blanks, converts units or extracts information, compare the result with the original. Check counts, totals and important values. Keep observed values separate from inferred, estimated or AI-generated values. AI assistance does not remove your responsibility for the final dataset.
+27. Copy-Ready Student Text for Small Samples
+Small tests are useful for learning, but they do not prove how a system will perform everywhere. If 8 out of 10 test users complete a task, report '8 of our 10 test users completed it' rather than claiming that 80% of all students will succeed. Always report the number of people or examples behind a percentage.
+Conclusion
+The Student Book already has the right educational philosophy for responsible AI: students test rather than trust, retain evidence, challenge outputs, identify bias, use human oversight, compare AI and non-AI approaches, and communicate uncertainty. The recommended revision does not require abandoning that approach. It requires applying the same scepticism to the underlying data.
+The most important conceptual shift is simple: responsible AI education should teach three linked questions. First, can we trust the output? Second, can we trust the model or process that produced it? Third, can we trust the data on which that process depends? Version 1.0 handles the first question strongly and much of the second. A stronger Version 1.1/2.0 should make the third equally explicit.
+If the proposed data-integrity strand, structured cleaning workflow, provenance records, subgroup evaluation, baseline comparison, stronger Chapter 8 assessment and governance controls are incorporated, the programme would move from a strong introductory AI-literacy workbook toward a notably more rigorous applied AI, data-literacy and responsible-technology curriculum while remaining accessible to Transition Year students.
+Review Basis
+This review is grounded in the uploaded AI in Practice Student Book, Pilot Edition, Version 1.0 (September 2026). Page references in this report refer to that source. The recommendations marked as additions or revisions are analytical recommendations developed from the reviewed curriculum; they are not presented as text already contained in the Student Book. No external legal or regulatory verification was performed for this document.
