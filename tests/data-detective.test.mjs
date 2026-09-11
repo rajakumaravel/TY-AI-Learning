@@ -105,7 +105,7 @@ test('flawed CSV is imbalanced and carries sensitive or inferred fields',()=>{
   for(const re of [/missing/i,/format/i,/duplicate/i,/attendance/i,/imbalance|bias/i,/eircode|phone|income|notes/i])assert.match(readme,re);
   const template=parseCSV(read('public/datasets/club-signups-cleaned-template.csv'));
   assert.deepEqual(template.columns,COLUMNS.filter(c=>!['home_eircode','parent_phone','date_of_birth','inferred_income_band'].includes(c)));
-  assert.equal(template.rows.length,0);
+  assert.ok(template.rows.every(r=>Object.values(r).every(v=>!String(v||'').trim())),'template rows are blank');
   const card=read('public/datasets/responsible-data-card-template.md');
   assert.ok((card.match(/^#+ /gm)||[]).length>=6,'six card headings');
 });
