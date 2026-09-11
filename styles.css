@@ -10,3 +10,5 @@
 .dataset-col em{font-style:normal;font-size:.72rem;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* Field titles sit with their box */
 .text-fields{gap:14px}.text-fields label,.record{gap:4px}.text-fields label>span,.record>span{font-size:.88rem;font-weight:600;color:#3b4654;line-height:1.3}
+/* Grid items must be allowed to shrink so wide tables scroll inside their container */
+.learning-layout>*,.lesson-panel,.activitybox,.studybox,.reflectbox{min-width:0}
