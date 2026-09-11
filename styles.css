@@ -20,3 +20,5 @@
 /* Medium widths: six day-map columns do not fit the lesson panel */
 @media(min-width:901px) and (max-width:1250px){.dayrow{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:620px){.chainrow{grid-template-columns:1fr}}
+/* Phase 5: Prompt Lab (Sheet A4) — C-T-C-F builder, version blocks, extras */
+.prompt-lab{display:grid;gap:14px;margin:6px 0}.prompt-builder,.prompt-version{padding:12px 14px;border-radius:8px;border:1px solid rgba(0,0,0,.12);background:#fff;min-width:0}.prompt-builder-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}.prompt-builder-grid label{display:grid;gap:4px;min-width:0}.prompt-builder-grid label>span{font-size:.78rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#138f84}.prompt-builder-grid input{min-width:0;width:100%}.prompt-builder .muted{margin:8px 0 0;font-size:.85rem}.prompt-version>strong{display:block;margin-bottom:8px;font-size:1rem}.prompt-lab textarea{min-width:0;width:100%}@media(max-width:900px){.prompt-builder-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:620px){.prompt-builder-grid{grid-template-columns:1fr}}
