@@ -186,7 +186,7 @@ try {
   await step(page, 'Teacher reviews the submitted project', async () => {
     await page.fill('#projectReviewPanel [data-review-comment]', 'Clear evidence of the shortcut and a fair retest. Well done.');
     await page.click('#projectReviewPanel [data-review-project]');
-    await page.waitForFunction(() => /reviewed/i.test(document.getElementById('projectReviewPanel')?.textContent || ''), null, { timeout: 15000 });
+    await page.waitForFunction(() => [...document.querySelectorAll('#projectReviewPanel .review-status')].some(el => /Reviewed · saved/.test(el.textContent)), null, { timeout: 15000 });
     return true;
   });
   await context.close();
