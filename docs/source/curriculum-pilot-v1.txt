@@ -1,0 +1,1083 @@
+# AI in Practice — TY Full Curriculum, Pilot v1.0 (facilitator curriculum: blocks, learning sequences, portfolio templates, rubrics). Text extracted from the docx; one line per paragraph or table cell.
+
+PILOT EDITION · CURRICULUM ONLY
+AI in Practice
+Applied Artificial Intelligence, Digital Skills & Real-World Problem Solving
+Transition Year · Ireland · 30-hour project-based programme
+PROGRAMME PROMISE
+Students learn AI by using it, testing it, questioning it and building with it. Passive instruction is deliberately kept short; the majority of time is spent exploring, creating, discussing, evaluating and reflecting.
+Designed for pilot delivery with Transition Year students. No authentication, LMS or platform dependency is assumed. Activities can be delivered using school-approved browser tools, paper worksheets and standard productivity software.
+Version 1.0 · September 2026
+Contents
+Section
+Title
+1
+Programme overview
+2
+Curriculum alignment and learning outcomes
+3
+Delivery model and facilitator principles
+4
+Assessment and portfolio model
+5
+Block 1 - AI & Me (2h)
+6
+Block 2 - Teaching a Machine (4h)
+7
+Block 3 - Data Detective (3h)
+8
+Block 4 - Generative AI & Prompting (4h)
+9
+Block 5 - Trust, Bias & Misinformation (3h)
+10
+Block 6 - AI for Learning & Work (3h)
+11
+Block 7 - Our AI Future (3h)
+12
+Block 8 - AI Innovation Project (8h)
+A
+Student portfolio templates
+B
+Assessment rubrics
+C
+Pilot observation tools
+D
+Glossary
+E
+Source and alignment notes
+1. Programme overview
+AI in Practice is a 30-hour Transition Year programme built around active, inquiry-based and self-directed learning. It is intentionally designed so that a teacher or facilitator does not need to deliver long technical lectures. Students encounter a challenge, receive a small amount of targeted explanation, use a real or simulated tool, test what happened, produce evidence and reflect.
+Programme aims
+Build a practical understanding of how contemporary AI systems work and fail.
+Develop confident, responsible use of generative AI for learning and real-world tasks.
+Strengthen data literacy, verification habits, bias awareness and digital judgement.
+Develop self-directed learning, collaboration, creativity and communication through hands-on missions.
+Connect AI literacy with careers, citizenship, ethics and future choices.
+Integrate learning through a final innovation project grounded in a real problem.
+Recommended audience and prerequisites
+Designed for TY students, typically around ages 15-16. No previous coding, machine-learning or advanced mathematics knowledge is required. Students should have basic browser, file and document skills. Technical extensions are optional.
+Time model
+Block
+Hours
+Primary emphasis
+AI & Me
+2
+LO1, LO4
+Teaching a Machine
+4
+LO1, LO2, LO3, LO9
+Data Detective
+3
+LO5, LO6, LO9
+Generative AI & Prompting
+4
+LO7, LO9
+Trust, Bias & Misinformation
+3
+LO4, LO6, LO9
+AI for Learning & Work
+3
+LO7
+Our AI Future
+3
+LO4, LO8
+AI Innovation Project
+8
+LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9
+TOTAL
+30
+LO1-LO9
+Schools may timetable the blocks as double periods, workshop days or a combination. The sequence is recommended but not rigid. Blocks 1-5 form the conceptual core; Blocks 6-8 deepen transfer, future thinking and project work.
+Learning loop
+EVERY MISSION FOLLOWS THE SAME RHYTHM
+MISSION → PREDICT → DISCOVER → TRY → TEST → IMPROVE → REFLECT → EVIDENCE. Students should spend more time doing than listening.
+What this curriculum deliberately avoids
+Long slide-led lectures on AI terminology.
+Teaching prompt engineering as “secret phrases” or formula memorisation.
+Treating AI output as authoritative evidence.
+Requiring coding for all students.
+Using grades as the main motivator.
+Equating a polished prototype with deep learning.
+2. Curriculum alignment and learning outcomes
+The curriculum is structured to align with the NCCA/CSLINC Exploring Artificial Intelligence Transition Year micro-module while extending it through applied digital skills and an 8-hour innovation project. The official micro-module identifies nine learning outcomes and is designed for a minimum of 20 hours of class contact time, with scope for self-directed independent learning. This pilot retains those core outcomes within a 30-hour applied experience.
+Exploring AI learning outcomes used in this programme
+LO
+Student should be able to
+LO1
+Outline fundamental concepts of artificial intelligence.
+LO2
+Use and develop a basic AI model to perform tasks.
+LO3
+Evaluate AI models using standard metrics.
+LO4
+Examine the positive and negative potential of AI models.
+LO5
+Investigate how AI developers gather and collect data.
+LO6
+Examine ethical considerations around data used for AI.
+LO7
+Explore generative AI capabilities, particularly in an educational context.
+LO8
+Discuss possible AI futures, with emphasis on societal impacts.
+LO9
+Investigate misinformation and bias in AI use and ways to reduce their impact.
+Transition Year student dimensions
+Student Dimension
+How AI in Practice contributes
+Personal Growth
+Autonomy, confidence, ethical judgement, reflection, willingness to learn from mistakes and present ideas.
+Being a Learner
+Digital creation, self-directed inquiry, experimentation, managing learning, critical thinking and reflection.
+Civic & Community Engagement
+Misinformation, fairness, privacy, stakeholder impact, responsible technology and community problem solving.
+Career Exploration
+AI-enabled work practices, future skills, career scenarios, communication, project design and presentation.
+Senior cycle key competencies developed
+Thinking and solving problems
+Managing learning and self
+Being creative
+Communicating
+Working with others
+Participating in society
+Cultivating wellbeing (through responsible digital practice and boundaries)
+Block-to-LO matrix
+Block
+Hours
+Learning outcomes
+Competency badge
+AI & Me
+2
+LO1, LO4
+AI Explorer
+Teaching a Machine
+4
+LO1, LO2, LO3, LO9
+Machine Trainer
+Data Detective
+3
+LO5, LO6, LO9
+Data Detective
+Generative AI & Prompting
+4
+LO7, LO9
+Prompt Engineer
+Trust, Bias & Misinformation
+3
+LO4, LO6, LO9
+AI Investigator
+AI for Learning & Work
+3
+LO7
+Digital Collaborator
+Our AI Future
+3
+LO4, LO8
+Future Thinker
+AI Innovation Project
+8
+LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9
+AI Innovator
+3. Delivery model and facilitator principles
+The facilitator role
+The facilitator is a guide, questioner and safety guardrail rather than the source of every answer. In most activities, students should encounter the task before receiving the explanation. When students struggle, use staged hints: ask a question first, give a clue second, explain the concept third, and only then demonstrate a solution if required.
+Suggested 2-hour workshop pattern
+Time
+Mode
+Purpose
+0-10 min
+Hook / challenge
+Create curiosity and elicit prior ideas.
+10-25 min
+Short discovery
+Introduce only the concepts needed for the task.
+25-70 min
+Guided + independent activity
+Students use the tool or investigate the problem.
+70-95 min
+Test / compare / red-team
+Students try to find failure, ambiguity or alternative explanations.
+95-110 min
+Share / discuss
+Compare evidence and strategies.
+110-120 min
+Reflection / evidence
+Capture what changed in the student’s understanding.
+Student agency
+Offer choice of examples, domains or project topics where possible.
+Allow pairs/groups for tool-heavy work but retain individual reflection.
+Use optional Level Up tasks rather than forcing the whole class to move at the speed of the fastest students.
+Treat mistakes and failed models/prompts as evidence, not as failure to learn.
+Inclusion and accessibility
+Keep instructions in short, visible steps.
+Allow evidence through writing, screenshots, diagrams or brief oral/video explanation where school policy permits.
+Pair conceptual explanations with examples and visual representations.
+Do not make coding a prerequisite for success.
+Provide pre-prepared datasets/images where camera use or tool access is unsuitable.
+Avoid requiring students to share private personal data with AI systems or the class.
+AI tool rule
+CORE CLASSROOM RULE
+Important AI outputs are hypotheses until verified. Students remain responsible for the final judgement, explanation and work they submit.
+Safety and privacy baseline
+Use school-approved tools and accounts where required.
+Do not ask students to enter sensitive personal information into public AI systems.
+Use fictional or public scenarios for privacy/data investigations.
+For image classifiers, use safe objects rather than faces unless the school explicitly approves an alternative activity.
+For misinformation activities, avoid distressing or age-inappropriate synthetic media.
+When a tool is unavailable, use the provided paper/simulation alternative; the learning outcome is more important than the brand of tool.
+4. Assessment and portfolio model
+Assessment is evidence-based and developmental rather than exam-led. Each block creates at least one portfolio artefact. The programme uses the descriptors Emerging, Developing and Extending to describe the quality and independence visible in student work.
+Whole-programme descriptors
+Descriptor
+Typical evidence
+Emerging
+Completes the core task with support; identifies basic concepts; records what happened but explanation may be mostly descriptive.
+Developing
+Works with increasing independence; explains why something happened; uses evidence; identifies limitations and proposes sensible improvements.
+Extending
+Transfers learning to a new context; compares alternatives; evaluates uncertainty, bias, consequences or trade-offs; justifies decisions with evidence.
+Portfolio evidence
+Block
+Required portfolio evidence
+AI & Me
+AI in My Day map; One comparison between human and AI capability; Exit reflection
+Teaching a Machine
+Dataset plan; v1 test log and accuracy; Confusion matrix; Shortcut-learning observation; v2 improvement note; Reflection
+Data Detective
+Data category audit; Responsible data card; Dataset fairness redesign; Reflection
+Generative AI & Prompting
+Prompt v1/v2/v3; Output comparison; Three-claim verification log; Reusable prompt template; Reflection
+Trust, Bias & Misinformation
+Annotated AI output; Verification table; Bias analysis; Corrected version; Personal trust rule
+AI for Learning & Work
+AI Tutor prompt and learning note; Spreadsheet or document artefact; Human-review checklist; AI-use learning contract
+Our AI Future
+2035 scenario canvas; Career transformation map; Stakeholder analysis; Future skills card; Debate reflection
+AI Innovation Project
+Problem statement and user evidence; Three solution options including non-AI option; Responsible AI/data canvas; Prototype; Test record; Iteration log; Risk register; Final presentation; Individual reflection
+Reflection standard
+Reflections should not ask students whether they “liked” an activity. They should expose learning. Strong prompts ask what the student predicted, what evidence changed their view, what failed, what they would change, and where the concept matters outside the activity.
+Feedback approach
+Prefer one specific praise point + one thinking question + one next step.
+Comment on the evidence or reasoning, not the student’s fixed ability.
+Use peer critique with explicit criteria.
+Do not reward blind use of more complex AI tools; reward appropriate tool choice and judgement.
+5. Block 1 - AI & Me (2 hours)
+BADGE: AI EXPLORER  |  ALIGNMENT: LO1, LO4
+PURPOSE
+Make AI concrete before introducing technical vocabulary. Students identify AI in familiar services, distinguish AI from ordinary automation, and begin thinking critically about influence, benefits and failure.
+Student learning outcomes
+Identify at least five plausible uses of AI in everyday life.
+Explain, in their own words, the difference between a fixed rule and a system that learns or generates from patterns.
+Identify one benefit and one possible limitation of an everyday AI system.
+Form a question about how an AI system affects people.
+Key concepts and vocabulary
+algorithm · prediction · recommendation · pattern · automation · AI system · human oversight
+Preparation and materials
+Laptop/Chromebook or tablet per student/pair
+Sticky notes or shared digital board
+Student Mission Sheet 1
+Optional access to an approved LLM for comparison activity
+Learning sequence
+Timing
+Activity
+Student experience / facilitator move
+0-10 min
+Hook: AI or Not?
+Show 8 examples (calculator, spam filter, playlist recommendation, traffic lights, face unlock, autocorrect, chatbot, timer). Students vote AI / not AI / unsure before definitions.
+10-25 min
+Mini-discovery
+Facilitator introduces three useful questions: Does it use data? Does it recognise/generate patterns? Does it adapt/predict rather than follow only a fixed rule? Avoid insisting every borderline example has one perfect label.
+25-50 min
+AI in My Day map
+Students map a typical day from waking to sleeping and mark where an algorithm may influence a choice, ranking, prediction or generated output.
+50-70 min
+Influence lens
+For three examples students record: data in, output/decision, benefit, what could go wrong, who might be affected.
+70-95 min
+Human vs AI challenge
+Small groups answer: “What are humans better at? What are current AI systems better at?” If an approved LLM is available, compare its list with the class list and critique both.
+95-115 min
+Micro-debate
+Prompt: “Recommendation algorithms mostly help us.” Students place themselves on agree/unsure/disagree, justify with evidence, and may move position after discussion.
+115-120 min
+Exit reflection
+One thing I now notice about AI; one question I want answered later.
+Core student challenge
+MISSION
+Create a one-page “AI in My Day” map with at least five systems. For two systems, show INPUT → AI ACTION → OUTPUT → BENEFIT → RISK.
+Portfolio evidence
+AI in My Day map
+One comparison between human and AI capability
+Exit reflection
+Facilitator questioning
+What evidence makes you think this contains AI?
+Who decides what “good” output means?
+If the system is wrong, who notices?
+Does convenience change how much influence we give a system?
+Common misconceptions to surface
+“AI means robots.”
+“Every computer program is AI.”
+“If a system uses AI, it is objective.”
+Assessment - block-specific features of quality
+Descriptor
+Evidence
+Emerging
+Identifies examples of everyday AI and gives a simple benefit/risk.
+Developing
+Explains input, AI action and output for examples and questions one limitation.
+Extending
+Compares systems or human/AI capabilities and considers influence, stakeholders or feedback loops.
+Level Up extension
+OPTIONAL CHALLENGE
+Choose one recommendation system and sketch a feedback loop showing how your clicks may influence later recommendations.
+6. Block 2 - Teaching a Machine (4 hours)
+BADGE: MACHINE TRAINER  |  ALIGNMENT: LO1, LO2, LO3, LO9
+PURPOSE
+Let students experience machine learning as an experiment: create labelled data, train a simple classifier, test on unseen examples, measure errors, then discover shortcut learning and bias.
+Student learning outcomes
+Explain labels, features, training data, test data and model prediction.
+Train a basic classifier using an approved visual tool or teacher-provided simulator.
+Record predictions and calculate simple accuracy.
+Interpret a basic confusion matrix.
+Explain how unrepresentative training data can create poor or biased performance.
+Key concepts and vocabulary
+supervised learning · class label · feature · training data · test data · model · prediction · accuracy · confusion matrix · generalisation · shortcut learning · bias
+Preparation and materials
+Visual classifier tool such as Teachable Machine or equivalent
+Two safe everyday object classes per group (e.g., cup/bottle, pen/eraser)
+Camera-enabled devices if school policy permits; otherwise teacher-provided images
+Test-recording sheet
+Calculator/spreadsheet optional
+Learning sequence
+Timing
+Activity
+Student experience / facilitator move
+0-20 min
+Human classifier
+Students create a written rule-set for distinguishing two objects. Swap with another group, which tries to break the rules using unusual examples.
+20-40 min
+From rules to learning
+Introduce training examples, labels, features and the idea that ML learns statistical patterns rather than receiving every rule explicitly.
+40-75 min
+Build v1 model
+Groups collect balanced examples for two classes and train a simple classifier. Record dataset size and conditions.
+75-100 min
+Break your model
+Test unseen objects, angles, lighting and backgrounds. The goal is to discover failures, not to maximise a score.
+100-120 min
+Evidence checkpoint
+Record at least 10 tests: actual class, prediction, correct/incorrect. Calculate accuracy.
+120-145 min
+Confusion matrix
+Convert the same results into a 2x2 matrix. Discuss which error matters more in different contexts (e.g., spam filter vs medical screening) without turning this into advanced maths.
+145-175 min
+Shortcut experiment
+Deliberately create a flawed dataset: Class A mostly on light background, Class B mostly on dark background. Test swapped backgrounds and observe whether the model learned the object or the context.
+175-210 min
+Improve v2 model
+Students propose and apply at least two changes: variety, balance, more examples, changed background, clearer labels. Retest using the same test set where possible.
+210-230 min
+Compare v1 vs v2
+Groups present evidence: what changed, what improved, what remained uncertain.
+230-240 min
+Reflection
+Explain why “high accuracy” alone may not mean a model is trustworthy.
+Core student challenge
+MISSION
+Train a two-class model, produce a minimum 10-row test log, create a simple confusion matrix, identify one failure pattern and improve the model.
+Portfolio evidence
+Dataset plan
+v1 test log and accuracy
+Confusion matrix
+Shortcut-learning observation
+v2 improvement note
+Reflection
+Facilitator questioning
+What pattern might the model be using that you did not intend?
+Is your test set genuinely different from the training set?
+Which mistakes matter most in this context?
+How do you know improvement is real rather than luck?
+Common misconceptions to surface
+“The model sees an object the way a human does.”
+“More examples automatically means better data.”
+“Accuracy tells the whole story.”
+“Bias only comes from people deliberately coding unfair rules.”
+Assessment - block-specific features of quality
+Descriptor
+Evidence
+Emerging
+Trains and tests a model with support and records some results.
+Developing
+Uses unseen tests, calculates accuracy, explains an error pattern and improves the model.
+Extending
+Interprets a confusion matrix, identifies shortcut learning/bias and justifies evaluation choices.
+Level Up extension
+OPTIONAL CHALLENGE
+Calculate precision or recall for one class and explain, in plain language, when that metric might matter more than overall accuracy.
+7. Block 3 - Data Detective (3 hours)
+BADGE: DATA DETECTIVE  |  ALIGNMENT: LO5, LO6, LO9
+PURPOSE
+Help students see data as the raw material of AI and investigate how data is collected, inferred, combined and governed. The emphasis is informed judgement, privacy and representation rather than legal memorisation.
+Student learning outcomes
+Distinguish volunteered, observed and inferred data.
+Investigate how a digital service may collect and use data.
+Explain why purpose, minimisation and representativeness matter.
+Identify age-appropriate implications of GDPR and the EU AI Act.
+Spot a dataset that could systematically exclude or misrepresent people.
+Key concepts and vocabulary
+personal data · volunteered data · observed data · inferred data · cookies · tracking · web scraping · public/private data · data minimisation · consent · GDPR · EU AI Act · representativeness
+Preparation and materials
+Data Detective worksheet
+Privacy policy excerpts selected by facilitator
+Browser access
+Optional spreadsheet
+Scenario cards
+Learning sequence
+Timing
+Activity
+Student experience / facilitator move
+0-15 min
+Data trail warm-up
+Students list what a music/video/map service can know directly and what it might infer. Sort into volunteered / observed / inferred.
+15-40 min
+Data Tracking Sherlock
+Each student chooses one familiar service and investigates what data categories it says it collects. Keep the task at category level; students must not expose their own private data.
+40-65 min
+Why collect it?
+For five data categories, students connect COLLECTION → PURPOSE → USER BENEFIT → POSSIBLE RISK.
+65-85 min
+Cookie and scraping mini-lab
+Facilitator demonstrates cookies/tracking conceptually and explains web scraping using a public webpage example. Students discuss public availability versus ethical/reasonable reuse.
+85-110 min
+Dataset fairness challenge
+Groups receive a scenario: build an AI system for school club recommendations, job shortlisting, or transport planning. They decide what data to collect and identify who may be missing.
+110-135 min
+Rights and safeguards
+Plain-language introduction to GDPR principles relevant to students: purpose, minimisation, accuracy, security, transparency and rights. Briefly introduce risk-based AI regulation in the EU without legal detail.
+135-165 min
+Design a better data plan
+Groups revise their scenario dataset: remove unnecessary fields, add representation checks, define retention, and specify what should require human review.
+165-180 min
+Reflection
+“Just because data is available, does that mean it should be used?” Students justify a position with one example.
+Core student challenge
+MISSION
+Audit one digital service at category level and design a “responsible data card” covering what is collected, why, what is inferred, risks, user controls and what should not be collected.
+Portfolio evidence
+Data category audit
+Responsible data card
+Dataset fairness redesign
+Reflection
+Facilitator questioning
+Does the service need this data to perform the task?
+Could the same goal be achieved with less information?
+Who is missing from this dataset?
+What might be inferred even if the user never typed it in?
+Common misconceptions to surface
+“If data is public, any use is automatically ethical.”
+“Anonymous data can never create harm.”
+“Consent makes every data use acceptable.”
+Assessment - block-specific features of quality
+Descriptor
+Evidence
+Emerging
+Identifies categories of data a service may collect.
+Developing
+Distinguishes collected and inferred data and explains purpose, risk and minimisation.
+Extending
+Evaluates representation, proposes safeguards and justifies why some available data should not be used.
+Level Up extension
+OPTIONAL CHALLENGE
+Compare two services that offer a similar function and explain which one appears to use a more data-minimising approach, based only on publicly available information.
+8. Block 4 - Generative AI & Prompting (4 hours)
+BADGE: PROMPT ENGINEER  |  ALIGNMENT: LO7, LO9
+PURPOSE
+Teach students to work with generative AI as a thinking and creation tool while maintaining responsibility for goals, verification and final judgement. Prompting is taught experimentally, not as a list of “magic words”.
+Student learning outcomes
+Explain at a high level what an LLM does and does not do.
+Improve a prompt using context, task, constraints and output format.
+Compare outputs systematically instead of accepting the first response.
+Use AI for explanation, ideation, critique and transformation.
+Verify important factual claims and identify hallucination risk.
+Key concepts and vocabulary
+generative AI · large language model · token/pattern prediction (conceptual) · prompt · context · constraint · output format · iteration · hallucination · verification · source quality
+Preparation and materials
+School-approved generative AI tool or facilitator-run shared demonstration
+Prompt Lab worksheet
+Fact-check sources/browser
+Scenario cards
+Learning sequence
+Timing
+Activity
+Student experience / facilitator move
+0-20 min
+Same task, different prompts
+Every group asks the same weak question. Compare outputs: what varies, what is missing, what looks confident but unsupported?
+20-40 min
+How LLMs work - useful mental model
+Explain that an LLM generates likely continuations from learned patterns; it is not a database of guaranteed facts and confidence of wording is not confidence of truth.
+40-70 min
+Prompt Lab 1
+Students improve one weak prompt using C-T-C-F: Context, Task, Constraints, Format. Save before/after outputs.
+70-100 min
+Prompt Lab 2 - iteration
+Students add examples, audience, success criteria or a request for questions before answering. They compare which additions actually help.
+100-130 min
+Four productive roles
+Students try AI as: tutor, brainstorm partner, critic, transformer. Each role has a different prompt pattern and a different risk.
+130-160 min
+Verification challenge
+Give a topic with several checkable facts. Students ask AI, then independently verify three claims using reliable sources and classify supported / uncertain / wrong.
+160-185 min
+Prompt injection of doubt
+Students deliberately ask the model leading questions and compare how framing affects responses. Discuss confirmation bias and user responsibility.
+185-215 min
+Create a reusable prompt
+Students design a prompt template for a real TY task such as preparing for work experience, learning a topic, planning an event, or analysing survey feedback.
+215-235 min
+Peer red-team
+Pairs try each other’s prompt and identify one ambiguity, one missing constraint and one verification need.
+235-240 min
+Exit rule
+Write one sentence completing: “I should never trust an AI answer just because…”
+Core student challenge
+MISSION
+Create a three-version prompt experiment (v1 weak, v2 improved, v3 tested/revised) and a verification log for at least three factual claims.
+Portfolio evidence
+Prompt v1/v2/v3
+Output comparison
+Three-claim verification log
+Reusable prompt template
+Reflection
+Facilitator questioning
+What changed because of the prompt, and what changed randomly?
+What part of the answer needs external evidence?
+Are you asking the model to think for you or to help you think?
+What would make this prompt safer or fairer?
+Common misconceptions to surface
+“Longer prompts are always better.”
+“A source-looking citation means the source exists.”
+“Prompt engineering can guarantee truth.”
+“AI should give the final answer rather than support the learning process.”
+Assessment - block-specific features of quality
+Descriptor
+Evidence
+Emerging
+Creates a usable prompt and notices output differences.
+Developing
+Improves prompts systematically and verifies important factual claims.
+Extending
+Builds evaluation criteria, compares outputs critically and explains how framing/confirmation bias affects results.
+Level Up extension
+OPTIONAL CHALLENGE
+Design an evaluation rubric with four criteria, score two AI outputs, and justify which response is better rather than simply saying which one you prefer.
+9. Block 5 - Trust, Bias & Misinformation (3 hours)
+BADGE: AI INVESTIGATOR  |  ALIGNMENT: LO4, LO6, LO9
+PURPOSE
+Build practical information resilience. Students learn to separate fluency from reliability, identify common forms of bias, verify AI-generated claims and improve misleading content.
+Student learning outcomes
+Distinguish plausible language from verified evidence.
+Use lateral reading and source checks to investigate claims.
+Identify examples of data, selection, framing and automation bias.
+Explain how generative AI can amplify misinformation.
+Create a more trustworthy revision of problematic AI-generated content.
+Key concepts and vocabulary
+misinformation · disinformation · hallucination · bias · selection bias · representation bias · framing · automation bias · deepfake/synthetic media · provenance · lateral reading
+Preparation and materials
+Prepared claim cards
+Browser/search access
+AI News Detective worksheet
+Optional approved GenAI tool
+Three source-quality examples
+Learning sequence
+Timing
+Activity
+Student experience / facilitator move
+0-15 min
+Confidence trap
+Show three confident statements: one true, one false, one unverifiable. Students rank confidence before checking.
+15-35 min
+Trust checklist
+Introduce SIFT-style habits in plain language: Stop, Investigate the source, Find better coverage, Trace the claim to evidence.
+35-70 min
+AI News Detective
+Students generate or receive a short AI-written news-style article. Highlight factual claims, emotional framing, missing sources and unsupported certainty.
+70-100 min
+Lateral verification
+Open new tabs and verify 3-5 claims using independent reliable sources. Do not “fact-check” only by asking another chatbot.
+100-125 min
+Bias stations
+Four short scenarios: hiring data, image generation stereotypes, school discipline analytics, recommendation feeds. Students identify where bias could enter and who could be affected.
+125-150 min
+Improve the output
+Rewrite the news item or scenario response with verified claims, uncertainty labels, better sourcing and less loaded framing.
+150-170 min
+Synthetic media discussion
+Discuss voice/image/video generation and why “seeing is believing” is weaker than before. Focus on verification habits, not sensational examples.
+170-180 min
+Reflection
+Write a personal three-step rule for checking important AI-generated information.
+Core student challenge
+MISSION
+Investigate one AI-generated article or claim set, produce an evidence table, identify at least one bias risk, and publish a corrected version with uncertainty clearly marked.
+Portfolio evidence
+Annotated AI output
+Verification table
+Bias analysis
+Corrected version
+Personal trust rule
+Facilitator questioning
+What would change your mind?
+Is this source independent of the original claim?
+What is missing from the framing?
+Could an accurate statement still be misleading?
+Common misconceptions to surface
+“Bias means a model has opinions.”
+“False information is easy to spot because it looks unprofessional.”
+“Multiple websites repeating a claim means there are multiple independent sources.”
+Assessment - block-specific features of quality
+Descriptor
+Evidence
+Emerging
+Identifies unsupported claims or possible bias with prompts.
+Developing
+Uses independent sources to verify claims and improves misleading content.
+Extending
+Traces evidence, distinguishes different bias mechanisms and explains residual uncertainty.
+Level Up extension
+OPTIONAL CHALLENGE
+Trace one widely repeated online claim back toward its earliest available source and show where context was lost or changed.
+10. Block 6 - AI for Learning & Work (3 hours)
+BADGE: DIGITAL COLLABORATOR  |  ALIGNMENT: LO7
+PURPOSE
+Transfer AI literacy into useful TY study and workplace behaviours. Students practise using AI as a tutor, editor, planner and analyst while retaining authorship, judgement and accountability.
+Student learning outcomes
+Use AI to support understanding rather than simply produce answers.
+Choose an appropriate AI role for a task.
+Apply a human-review checklist to AI-assisted work.
+Use spreadsheets/documents/presentations alongside AI for a small productivity task.
+Explain when AI use should be disclosed.
+Key concepts and vocabulary
+AI tutor · scaffolding · metacognition · drafting · critique · workflow · human-in-the-loop · disclosure · authorship · digital productivity
+Preparation and materials
+Approved AI tool
+Spreadsheet application
+Document or presentation tool
+Learning contract worksheet
+Messy mini-dataset supplied by facilitator
+Learning sequence
+Timing
+Activity
+Student experience / facilitator move
+0-20 min
+Do it for me vs teach me
+Compare two interactions: “Give me the answer” and “Teach me through questions.” Students identify which produces more evidence of learning.
+20-50 min
+AI Tutor challenge
+Students choose a concept they genuinely want to understand. Prompt AI to diagnose prior knowledge, give an example, ask questions and withhold the final explanation until they attempt it.
+50-70 min
+Explain without AI
+Close the tool. Students write or verbally explain the concept from memory, then compare with their earlier understanding.
+70-100 min
+Workplace workflow
+Students receive messy event/survey/cost data. Clean it in a spreadsheet, calculate a few values, then use AI to suggest interpretations or presentation wording.
+100-125 min
+Human review
+Students check formulas/data themselves, remove unsupported AI claims, and build one chart or concise summary.
+125-150 min
+Professional communication
+Draft a short professional email or briefing using AI as editor, not author-of-record. Students must identify what they changed after AI suggestions.
+150-170 min
+Disclosure scenarios
+Groups decide whether AI use should be disclosed in examples: private brainstorming, assessed work, CV drafting, workplace report, creative project.
+170-180 min
+Learning contract
+Students write their own “AI helps me / AI does not replace” rules for schoolwork.
+Core student challenge
+MISSION
+Complete a mini workflow that combines an AI tutor task with one spreadsheet/document/presentation task and show the human checks you performed.
+Portfolio evidence
+AI Tutor prompt and learning note
+Spreadsheet or document artefact
+Human-review checklist
+AI-use learning contract
+Facilitator questioning
+What did you understand that you could not explain before?
+What part of this work are you personally accountable for?
+Which AI suggestion did you reject, and why?
+Would you be comfortable explaining your AI use to a teacher or employer?
+Common misconceptions to surface
+“Using AI efficiently means automating as much as possible.”
+“If AI helped, the student did not learn.”
+“Disclosure is either always required or never required.”
+Assessment - block-specific features of quality
+Descriptor
+Evidence
+Emerging
+Uses AI for a learning or productivity task with support.
+Developing
+Shows human checking, explains what AI contributed and what they retained responsibility for.
+Extending
+Designs a repeatable workflow with explicit human checkpoints, disclosure choices and rejected AI suggestions.
+Level Up extension
+OPTIONAL CHALLENGE
+Design a repeatable AI-assisted workflow for a TY activity and include checkpoints where a human must verify, decide or approve before continuing.
+11. Block 7 - Our AI Future (3 hours)
+BADGE: FUTURE THINKER  |  ALIGNMENT: LO4, LO8
+PURPOSE
+Develop balanced future thinking. Students explore plausible AI futures, including AGI as a concept, without treating speculation as prediction. They connect technology choices to careers, society and responsibility.
+Student learning outcomes
+Distinguish current narrow/specialised AI from the idea of AGI.
+Identify plausible opportunities and risks in a chosen domain.
+Build more than one future scenario instead of presenting one prediction as certain.
+Consider effects on jobs, skills, inclusion, sustainability and accountability.
+Communicate a reasoned position about a future AI choice.
+Key concepts and vocabulary
+narrow AI · AGI · automation · augmentation · scenario · uncertainty · trade-off · accountability · future skills · societal impact
+Preparation and materials
+2035 scenario canvas
+Career/domain cards
+Poster/presentation tool
+Optional AI tool for scenario stress-testing
+Learning sequence
+Timing
+Activity
+Student experience / facilitator move
+0-20 min
+2026 vs 2035
+Students list AI capabilities they see now, then ideas they think might be plausible by 2035. Separate observed facts from predictions.
+20-40 min
+Narrow AI and AGI
+Explain current specialised systems and the hypothetical idea of more general intelligence. Clarify that timelines and impacts are uncertain.
+40-70 min
+Career transformation map
+Choose teacher, doctor, farmer, architect, engineer, journalist, tradesperson, designer, accountant or another career. Map tasks likely to be automated, augmented or still strongly human.
+70-100 min
+Three futures
+Groups create Optimistic / Concerning / Balanced scenarios for the same domain. Each must include a technology change, human response and unintended consequence.
+100-125 min
+Stakeholder lens
+Revisit the scenarios as worker, customer/citizen, employer, regulator and someone at risk of exclusion.
+125-150 min
+Policy choice debate
+Choose one proposal such as “AI-generated schoolwork must always be labelled” or “High-stakes AI decisions must always have human review.” Prepare arguments and counterarguments.
+150-170 min
+Future skills card
+Each student identifies three human capabilities that become more valuable in their chosen future and one action they can take during TY.
+170-180 min
+Reflection
+What future outcome depends most on human choices rather than the technology itself?
+Core student challenge
+MISSION
+Create a 2035 scenario pack for one career or public service, showing three possible futures, stakeholder impacts, future skills and one governance choice.
+Portfolio evidence
+2035 scenario canvas
+Career transformation map
+Stakeholder analysis
+Future skills card
+Debate reflection
+Facilitator questioning
+Which part of this scenario is evidence-based and which is speculation?
+Who benefits? Who carries the risk?
+Does the technology replace a task or a whole job?
+What human capability becomes more important, not less?
+Common misconceptions to surface
+“AGI exists today in the same sense as current chatbots.”
+“Every task that can be automated should be automated.”
+“Future-of-work predictions are facts.”
+Assessment - block-specific features of quality
+Descriptor
+Evidence
+Emerging
+Describes a plausible AI-related change in a career/domain.
+Developing
+Creates multiple scenarios and identifies trade-offs and future skills.
+Extending
+Separates evidence from speculation, analyses stakeholders and defends a governance choice.
+Level Up extension
+OPTIONAL CHALLENGE
+Find two credible but different forecasts about AI and work. Explain why reasonable experts can disagree and identify assumptions behind each forecast.
+12. Block 8 - AI Innovation Project (8 hours)
+BADGE: AI INNOVATOR  |  ALIGNMENT: LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9
+PURPOSE
+Integrate the entire programme through a student-chosen problem. The goal is not a polished startup or advanced code; it is evidence of problem understanding, responsible design, prototyping, testing, iteration and communication.
+Student learning outcomes
+Define a real user/community problem before selecting technology.
+Research users and constraints without collecting unnecessary personal data.
+Design and prototype an AI-enabled or AI-informed solution.
+Test the prototype with clear success criteria.
+Identify limitations, bias, misinformation, privacy and human-oversight risks.
+Iterate based on evidence.
+Present the solution, evidence and remaining uncertainties.
+Key concepts and vocabulary
+problem framing · user need · success criteria · prototype · testing · iteration · risk · responsible AI · human oversight · value proposition · communication
+Preparation and materials
+Innovation Project Canvas
+Access to approved prototyping tools
+Optional AI/LLM, spreadsheet, slides, no-code or coding tool
+Peer test sheets
+Presentation rubric
+Learning sequence
+Timing
+Activity
+Student experience / facilitator move
+Hour 1
+Sprint 1 - Problem Hunt
+Observe school/community life. Generate at least five problems. Choose one using criteria: real, understandable, useful, testable, safe.
+Hour 2
+Sprint 1 - Understand the user
+Define user, current process, pain points, evidence and constraints. Conduct lightweight interviews/surveys only with facilitator-approved questions and no unnecessary personal data.
+Hour 3
+Sprint 2 - Design options
+Generate three solution approaches, including at least one non-AI alternative. Decide whether AI genuinely adds value.
+Hour 4
+Sprint 2 - Responsible design
+Create data flow, human decision points, failure modes and safeguards. Define success criteria before building.
+Hour 5
+Sprint 3 - Build prototype
+Create minimum viable prototype: prompt workflow, chatbot mock-up, spreadsheet, simple web prototype, classifier, presentation simulation or code.
+Hour 6
+Sprint 3 - Test
+Give the prototype to peers/users. Capture observed success, confusion, failure and one unexpected behaviour.
+Hour 7
+Sprint 4 - Improve and red-team
+Make one evidence-driven change. Red-team for hallucination, bias, privacy, misuse and overreliance. Document remaining limitations honestly.
+Hour 8
+Sprint 4 - Demo and reflection
+3-5 minute presentation: problem, user, prototype, evidence, change made after testing, risk/safeguard, what remains uncertain. Complete final reflection.
+Core student challenge
+MISSION
+Solve a real school/community problem through a responsible, testable prototype. AI is optional: teams must justify whether it adds genuine value.
+Portfolio evidence
+Problem statement and user evidence
+Three solution options including non-AI option
+Responsible AI/data canvas
+Prototype
+Test record
+Iteration log
+Risk register
+Final presentation
+Individual reflection
+Facilitator questioning
+Would this problem still be worth solving without AI?
+What is the smallest prototype that can test your biggest assumption?
+What happens when the AI is wrong?
+Which decision must remain with a human?
+What evidence shows your change improved the solution?
+Common misconceptions to surface
+“The project must use the most advanced AI.”
+“A working demo proves the idea is useful.”
+“The team should hide limitations during the presentation.”
+Assessment - block-specific features of quality
+Descriptor
+Evidence
+Emerging
+Defines a problem, creates a basic prototype and describes what it does.
+Developing
+Uses user evidence, tests the prototype, iterates and identifies key risks.
+Extending
+Compares non-AI and AI options, uses explicit success criteria, red-teams the solution and communicates uncertainty honestly.
+Level Up extension
+OPTIONAL CHALLENGE
+Add a simple evaluation plan with quantitative and qualitative measures, then run a second test cycle and compare results.
+Suggested project themes
+School FAQ or event assistant
+Study-planning or revision support
+Lost-property workflow
+Canteen or sustainability data analysis
+Local tourism information assistant
+Sports-club coordination
+Career exploration assistant
+Community information accessibility
+School survey insight tool
+Non-AI solution where the team concludes AI adds no real value
+Final presentation structure (3-5 minutes)
+The problem and who experiences it.
+What evidence you gathered.
+The solution and why AI is or is not appropriate.
+Prototype demonstration.
+What happened during testing.
+One change you made because of evidence.
+One important risk and safeguard.
+What remains uncertain or would be tested next.
+Appendix A. Student portfolio templates
+A1. Universal mission evidence sheet
+Prompt
+Student response
+Mission / block
+My prediction before I started
+What I tried
+Evidence / result
+What surprised or failed
+What I changed or would change
+What I can now explain
+Where this matters outside the activity
+A2. AI output verification log
+Claim
+Source checked
+Supported / uncertain / wrong
+What I changed
+A3. Model test log
+Test case
+Actual class
+Prediction
+Correct?
+Observation
+A4. Prompt experiment sheet
+Version
+Prompt change
+What changed in output
+Was it better? Why?
+V1 - baseline
+V2
+V3
+A5. Responsible data card
+Question
+Notes
+What data is collected?
+What is observed rather than typed?
+What might be inferred?
+Why is it needed?
+What could go wrong?
+Who might be missing or misrepresented?
+What should be removed or minimised?
+What needs human review?
+Appendix B. Assessment rubrics
+B1. Cross-curricular portfolio rubric
+Dimension
+Emerging
+Developing
+Extending
+Understanding
+Names or describes the main idea.
+Explains the main idea in own words and connects it to evidence.
+Applies the idea in a new context and recognises uncertainty or limits.
+Experimentation
+Completes guided steps.
+Tests variations and records outcomes.
+Designs purposeful tests, controls comparisons or evaluates alternative explanations.
+Critical judgement
+Accepts or rejects outputs mainly at face value.
+Checks important claims and identifies limitations.
+Compares evidence, identifies bias/trade-offs and justifies a position.
+Improvement
+Makes changes when prompted.
+Uses evidence to make a sensible improvement.
+Prioritises improvements, explains trade-offs and evaluates whether the change worked.
+Communication
+Describes what was done.
+Explains process, result and learning clearly.
+Communicates evidence, limitations and implications for different audiences/stakeholders.
+B2. Innovation project rubric
+Criterion
+Emerging
+Developing
+Extending
+Problem
+Problem is identifiable.
+Problem and user are clearly defined with evidence.
+Problem is bounded, evidence-based and compared with alternative framings.
+Solution choice
+Creates a solution idea.
+Explains why chosen approach fits the problem.
+Compares AI and non-AI options and justifies the least-complex suitable approach.
+Prototype
+Basic demonstration.
+Prototype tests a core assumption.
+Prototype is deliberately designed around measurable success/failure criteria.
+Testing
+Receives feedback.
+Records test evidence and makes a change.
+Runs structured tests, red-teams failure modes and compares iterations.
+Responsible AI
+Names a risk.
+Identifies privacy/bias/hallucination/oversight issues and a safeguard.
+Analyses trade-offs, residual risk, stakeholder impact and human accountability.
+Presentation
+Describes idea.
+Communicates problem, prototype, test and learning clearly.
+Uses evidence, acknowledges uncertainty and responds thoughtfully to challenge questions.
+Appendix C. Pilot observation tools
+C1. Facilitator observation sheet
+Observation
+Yes / partly / no
+Notes
+Students understood how to begin without a long explanation.
+Students spent more time doing than listening.
+Students experimented beyond the minimum instructions.
+Students could explain at least one failure or unexpected result.
+Students used evidence rather than AI confidence as justification.
+Students required repeated facilitator intervention at the same step.
+The activity fitted the planned time.
+Portfolio evidence showed genuine understanding.
+C2. Student exit ticket
+What did you discover today that you did not know before?
+Where did you get stuck?
+What did you try when something did not work?
+What part felt most useful or real?
+What would you change about this mission for the next group?
+C3. Pilot decision questions
+Can students complete the learning sequence with limited direct teaching?
+Which instructions create recurring confusion?
+Which activities produce the strongest evidence of conceptual understanding?
+Which tools create access, privacy or account friction?
+Do students understand that AI output requires verification?
+Can a non-specialist facilitator confidently guide the lesson?
+Appendix D. Glossary
+Term
+Student-friendly meaning
+Algorithm
+A set of steps or rules used to solve a problem or produce an output.
+AI model
+A system trained or designed to recognise patterns, generate outputs or make predictions.
+Bias
+A systematic skew that can lead to unfair, unrepresentative or misleading outcomes.
+Class label
+The category assigned to an example in supervised learning.
+Confusion matrix
+A table comparing actual classes with predicted classes so different errors can be seen.
+Data minimisation
+Collecting only the data genuinely needed for a defined purpose.
+Deep learning
+Machine learning using multi-layer neural networks; introduced conceptually only in this programme.
+Generative AI
+AI that creates new content such as text, images, audio or code from learned patterns.
+Generalisation
+A model’s ability to perform sensibly on examples it did not see during training.
+Hallucination
+A fluent but unsupported or incorrect generated output.
+Human-in-the-loop
+A workflow where a person reviews, decides or approves at important points.
+Inferred data
+Information predicted about a person or situation from other data rather than directly provided.
+Large Language Model (LLM)
+A generative model trained on large amounts of text/data to predict and generate language patterns.
+Machine learning
+A family of methods where systems learn patterns from data rather than being given every rule explicitly.
+Prompt
+Instructions and context given to a generative AI system.
+Shortcut learning
+When a model relies on an easy but unintended pattern, such as background colour, instead of the feature we wanted.
+Test data
+Examples used to evaluate a model after training; ideally not reused from the training set.
+Training data
+Examples used to fit or teach a machine-learning model.
+Verification
+Checking a claim against independent, reliable evidence.
+AGI
+Artificial General Intelligence: a hypothetical form of AI with broad general capabilities; not the same as current specialised AI systems.
+Appendix E. Source and alignment notes
+Primary curriculum references used to design this pilot:
+NCCA / CSLINC, Exploring Artificial Intelligence (AI), Transition Year micro-module, October 2025. Curriculum Online PDF: https://www.curriculumonline.ie/getmedia/31bfda57-2981-49b6-86d3-1ecaa2960abb/Exploring-AI-micro-module-CSlinc.pdf
+NCCA, Transition Year Programme Statement. https://ncca.ie/media/fcymvzcq/typs_eng.pdf
+NCCA Transition Year programme information: https://ncca.ie/en/senior-cycle/senior-cycle-programmes/transition-year/
+Alignment note: This document is an independently designed pilot curriculum aligned to the themes and learning outcomes of the NCCA/CSLINC Exploring AI micro-module. It is not an official NCCA publication and should not be represented as such.
+Pilot revision log
+Version
+Date
+Change
+1.0
+September 2026
+Full 30-hour curriculum prepared for student pilot.
+1.1
+1.2

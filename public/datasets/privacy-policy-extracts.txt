@@ -1,0 +1,44 @@
+Sample privacy policy extracts (Chapter 3, Data Detective, session "Data Tracking Sherlock")
+
+Three fictional services. Use one if you have no real privacy policy or app-store listing to hand.
+Read each extract at category level: list the categories, mark anything surprising, quote anything vague.
+Then sort each category into volunteered (you gave it), observed (recorded while you used it) or inferred (guessed).
+
+=== 1. Loopwave (music streaming app) ===
+Data we collect:
+- Your name, email address and date of birth, when you create an account.
+- Playlist names, likes, follows and the searches you type.
+- Listening history: what you play, how long you listen, what you skip and at what time of day.
+- Your approximate location, from your device or your network connection.
+- Device information: model, operating system, language and unique advertising identifiers.
+- Microphone access, when you use voice search.
+- Your mood and activity (for example "workout", "focus", "late night"), estimated from your listening.
+- Your age range and likely interests, estimated from your activity, for recommendations and advertising.
+- Contacts on your device, if you allow it, so we can suggest friends to follow.
+- Usage information, to improve our services.
+
+=== 2. Wayline (maps and directions app) ===
+Data we collect:
+- Places you search for, addresses you save and routes you request.
+- Precise location, continuously while the app is open and, if you allow it, in the background.
+- Movement data: speed, direction and the mode of transport we detect (walking, cycling, driving, bus).
+- Location history: the places you visit and how long you stay, used to build your "timeline".
+- Photos and reviews you post about places, and the camera access needed to take them.
+- Device identifiers, sensor data (motion, barometer) and network information.
+- Contacts, if you allow it, so you can share your live location.
+- Home and work locations, which we infer from where your device rests overnight and during the day.
+- Likely places you will visit next, predicted from your history.
+- Information from partners, for personalisation and to improve our services.
+
+=== 3. Snapnest (photo-sharing app) ===
+Data we collect:
+- Your username, profile photo, bio and the accounts you follow.
+- Photos and videos you upload, including the captions and hashtags you add.
+- Image metadata: the time, camera settings and, unless you turn it off, the exact location each photo was taken.
+- Faces detected in your photos, to suggest tags and to group photos by person.
+- How long you look at each post, what you scroll past and what you tap.
+- Messages you send in the app, and who you send them to.
+- Your contacts and, if you allow it, other apps installed on your device.
+- Interests, age range and life events (for example moving school or a new relationship), estimated from your activity.
+- Public posts, which may be used to train and improve our services, including image-recognition features.
+- Information from other websites that use our sharing button, so we can show you relevant content.

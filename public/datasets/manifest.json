@@ -8,7 +8,9 @@
   "cup-bottle-training-v1.zip": 562337,
   "cup-bottle-training-v2.zip": 563725,
   "cup-bottle-unseen-test.zip": 139798,
-  "manifest.json": 496,
-  "responsible-data-card-template.md": 659,
+  "fairness-scenario-cards.txt": 2460,
+  "manifest.json": 532,
+  "privacy-policy-extracts.txt": 3087,
+  "responsible-data-card-template.md": 897,
   "test-log-template.csv": 110
 }

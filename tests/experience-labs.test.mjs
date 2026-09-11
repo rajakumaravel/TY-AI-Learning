@@ -47,6 +47,17 @@ test('chapter 2 lab is the Teachable Machine train-break-improve sequence',()=>{
   assert.deepEqual(b.lab.stages.map(x=>x[1]),['b2s2','b2s3','b2s4','b2s5','b2s6','b2s7']);
 });
 
+test('chapter 3 lab is the Data Tracking Sherlock audit with the book\'s category-level notice and the policy extracts fallback',()=>{
+  const b=course.blocks[2];
+  const lab=b.sessions.find(s=>s.id==='b3s2');
+  assert.equal(lab.activity.kind,'lab');
+  assert.match(lab.activity.tool.name,/data safety page/);
+  assert.match(lab.activity.privacy[0],/^Investigate at category level only\./);
+  assert.equal(lab.activity.fallback.title,'No policy to hand?');
+  assert.ok(lab.activity.downloads.some(d=>d.file==='privacy-policy-extracts.txt'));
+  assert.deepEqual(b.lab.stages.map(x=>x[1]),['b3s2','b3s3','b3s6','b3s4','b3s6','b3s6']);
+});
+
 test('student UI gates the external tool behind the safety notice and requires lab evidence',()=>{
   assert.match(app,/data-ack/);
   assert.match(app,/id="labToolLink" class="primary external \$\{ack\?'':'disabled'\}/);
