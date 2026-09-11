@@ -39,7 +39,7 @@ async function saveSession(page, expectNext) {
   await page.waitForFunction(() => /complete/i.test(document.getElementById('lessonFeedback')?.textContent || ''), null, { timeout: 10000 });
   const fb = await page.textContent('#lessonFeedback');
   if (/Finish the required|Add a little more/i.test(fb)) throw new Error(fb);
-  if (expectNext) await page.waitForFunction((id) => document.querySelector('.session-link.active')?.dataset.session === id, expectNext, { timeout: 10000 });
+  if (expectNext) { await page.waitForSelector('#nextSession', { timeout: 10000 }); await page.waitForSelector('#lessonFeedback .assessment-card', { timeout: 15000 }).catch(() => {}); await page.click('#nextSession'); await page.waitForFunction((id) => document.querySelector('.session-link.active')?.dataset.session === id, expectNext, { timeout: 10000 }); }
   return fb;
 }
 
