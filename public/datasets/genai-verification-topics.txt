@@ -1,0 +1,32 @@
+Verification topic cards (Chapter 4, Generative AI & Prompting, session "Verification challenge")
+
+Pick one topic. Ask the AI about it in your own words. Then choose three claims it made, find a reliable source
+for each (name it and say where you found it), and label each claim supported, uncertain or wrong on Sheet A2.
+The five facts under each topic are checkable. No answers are given here: that is the point.
+
+=== Topic 1: the River Shannon ===
+1. How long is the river, and does the figure change depending on where the "end" is measured?
+2. Where is its source: which pool, on which mountain, in which county?
+3. Which three large lakes does it widen into on its way south?
+4. In which year did the Ardnacrusha power station open, and which company built it?
+5. Which city sits at the head of the Shannon Estuary?
+Good sources: Ordnance Survey Ireland, Geological Survey Ireland, ESB Archives, Waterways Ireland.
+
+=== Topic 2: Transition Year in Ireland ===
+1. In which year was Transition Year first introduced as a pilot, and in how many schools?
+2. In which year was it made widely available to schools across the country?
+3. Is it compulsory in every school, optional, or does that depend on the school?
+4. Which two stages of second-level education does it sit between?
+5. Roughly how many students, or what share of schools, take part each year?
+Good sources: the Department of Education (gov.ie), the NCCA, the Transition Year programme guidelines.
+
+=== Topic 3: the Apollo 11 landing ===
+1. On what date did the lunar module land on the Moon?
+2. Who were the three astronauts, and which one stayed in orbit around the Moon?
+3. What was the landing site called?
+4. How long did the astronauts spend outside the module on the surface?
+5. Where did the crew splash down, and on what date?
+Good sources: NASA history pages (history.nasa.gov), the Smithsonian National Air and Space Museum.
+
+A reliable source is one where you can say who made it, why, and how it can be checked. A page that repeats the
+chatbot's wording is not an independent source.

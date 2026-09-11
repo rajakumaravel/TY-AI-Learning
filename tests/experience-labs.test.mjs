@@ -58,6 +58,28 @@ test('chapter 3 lab is the Data Tracking Sherlock audit with the book\'s categor
   assert.deepEqual(b.lab.stages.map(x=>x[1]),['b3s2','b3s3','b3s6','b3s4','b3s6','b3s6']);
 });
 
+test('chapter 4 lab runs the weak question through DuckDuckGo AI Chat with the four safety notes, the Copilot and sample-output fallback, and the sample downloads',()=>{
+  const b=course.blocks[3];
+  const lab=b.sessions.find(s=>s.id==='b4s1');
+  assert.equal(lab.activity.kind,'lab');
+  assert.deepEqual(lab.activity.tool,{name:'DuckDuckGo AI Chat',url:'https://duck.ai',free:true});
+  assert.deepEqual(lab.activity.privacy,[
+    'Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.',
+    'No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.',
+    'The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.',
+    'Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here.'
+  ]);
+  assert.equal(lab.activity.steps.length,5);
+  assert.equal(lab.activity.fallback.title,'Tool blocked?');
+  assert.match(lab.activity.fallback.steps.join(' '),/copilot\.microsoft\.com/);
+  assert.match(lab.activity.fallback.steps.join(' '),/sample outputs/);
+  assert.equal(lab.activity.fields.length,4);
+  assert.deepEqual(lab.activity.downloads.map(d=>d.file),['genai-weak-question-card.txt','genai-sample-outputs.txt']);
+  assert.equal(b.lab.title,'Make prompts compete');
+  assert.deepEqual(b.lab.stages.map(x=>x[1]),['b4s3','b4s1','b4s8','b4s7','b4s4','b4s6']);
+  for(const id of ['b4s3','b4s4','b4s5','b4s6','b4s7','b4s8'])assert.match(b.sessions.find(s=>s.id===id).activity.instructions,/safety|personal details/,`${id} repeats the safety rules`);
+});
+
 test('student UI gates the external tool behind the safety notice and requires lab evidence',()=>{
   assert.match(app,/data-ack/);
   assert.match(app,/id="labToolLink" class="primary external \$\{ack\?'':'disabled'\}/);
