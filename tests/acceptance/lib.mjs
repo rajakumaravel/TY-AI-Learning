@@ -56,3 +56,15 @@ export const CAPSTONE1_ANSWERS = {
   q2: 'Benefit: students discover clubs they would not have searched for. Risk: it recommends only popular clubs and hides minority interests. Other stakeholder: club coordinators whose numbers change.',
   q3: 'The final choice of which club to join and any decision to exclude a student should stay with the student and a teacher, because the model cannot see wellbeing or timetable context.'
 };
+export const CHAPTER2_SESSIONS = ['b2s1', 'b2s2', 'b2s3', 'b2s4', 'b2s5', 'b2s6', 'b2s7'];
+export const CAPSTONE2_ANSWERS = {
+  q1: 'The 80% accuracy tells me the model got 8 of 10 unseen tests right, so it usually works. It fails to tell me which class the errors fall on or why, because both cup misses were on dark backgrounds and accuracy hides that pattern.',
+  q2: 'The model learned a background shortcut: light background means cup, dark background means bottle. The evidence is that the training data paired cups with light backgrounds and bottles with dark ones, and the only failures were cups photographed on dark backgrounds.',
+  q3: 'Change the training data so each class has a balanced mix of light and dark backgrounds, then retrain and retest V2 on exactly the same 10 unseen images plus new dark-background cups, and compare the confusion matrix with V1 to check the shortcut is gone.'
+};
+export const CHAPTER3_SESSIONS = ['b3s1', 'b3s2', 'b3s3', 'b3s4', 'b3s5'];
+export const CAPSTONE3_ANSWERS = {
+  q1: 'The library app collects volunteered data such as the search words a student types, observed data such as the time and number of borrows, and inferred data such as a reading level guessed from borrow history, which was never collected from the student.',
+  q2: 'The inferred reading level is the biggest risk because it could be wrong and could label a student unfairly, and the search log is sensitive because it reveals private interests. Students who read slowly or search for personal topics could be harmed if this data leaks or drives decisions.',
+  q3: 'I would remove the inferred reading level, anonymise search logs after 30 days, collect only what the recommendation needs with consent, and state on the data card that the data must not be used to rank or group students by ability.'
+};
