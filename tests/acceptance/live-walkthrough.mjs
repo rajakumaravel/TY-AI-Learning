@@ -235,7 +235,7 @@ try {
     const fb = await saveSession(page, 'b3s3');
     return dl.some(h => /club-signups-flawed/.test(h)) ? `${fb} downloads=${dl.length}` : false;
   });
-  await step(page, 'Data audit table: 60 rows rendered, five findings added, save', async () => {
+  await step(page, 'Data audit table: all 120 rows rendered, five findings added, save', async () => {
     await page.waitForSelector('.dataset-table tbody tr', { timeout: 15000 });
     const rows = (await page.$$('.dataset-table tbody tr')).length;
     const notes = ['Nine sign-ups have no club_choice recorded.', 'signup_date mixes ISO, slash and written formats.', 'Rows 17 and 18 are the same student twice.', 'parent_phone is not needed to run a club.', 'Coding club is 88% one gender, so the data is imbalanced.'];
@@ -247,7 +247,7 @@ try {
     }
     await page.waitForFunction((n) => (document.querySelector('.dataset-findings')?.textContent || '').includes(n), notes[4], { timeout: 10000 });
     const fb = await saveSession(page, 'b3s4');
-    return rows === 60 ? `rows=${rows} · ${fb}` : `rows=${rows}`;
+    return rows === 120 ? `rows=${rows} · ${fb}` : `rows=${rows}`;
   });
   await step(page, 'Propose the fix: save', async () => { await fillTextfields(page, 4); return await saveSession(page, 'b3s5'); });
   await step(page, 'Responsible Data Card: save, chapter 3 practical complete', async () => { await fillTextfields(page, 6); const fb = await saveSession(page, null); return /chapter assessment/i.test(fb) ? fb : false; });

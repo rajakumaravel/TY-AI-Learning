@@ -41,13 +41,13 @@ Curriculum shape:
 }
 ```
 
-Student UI (`app.js`) renders the CSV fetched from `/datasets/<file>` as a table (first 60 rows, all columns), a column summary strip above it (name, filled count, distinct count, sample), and a findings list. A finding is `{ target: "column:<name>" | "row:<n>" | "table", issue: <one of issueTypes>, note: string }`. Students add findings with a small form (target select, issue select, note); findings render as a list with remove buttons. Column headers and row numbers are clickable to prefill the target. State shape: `state.activity["b3s3"] = { findings: [...] }`. `activityReady`: at least `minFindings` findings with a note of 12+ characters, covering at least 3 distinct issue types. Admin label: `activityLabel` for kind `dataset` returns `Finding <n>` and `renderValue` already renders the object.
+Student UI (`app.js`) renders the CSV fetched from `/datasets/<file>` as a table (all rows, all columns, in a scrolling container), a column summary strip above it (name, filled count, distinct count, sample), and a findings list. A finding is `{ target: "column:<name>" | "row:<n>" | "table", issue: <one of issueTypes>, note: string }`. Students add findings with a small form (target select, issue select, note); findings render as a list with remove buttons. Column headers and row numbers are clickable to prefill the target. State shape: `state.activity["b3s3"] = { findings: [...] }`. `activityReady`: at least `minFindings` findings with a note of 12+ characters, covering at least 3 distinct issue types. Admin label: `activityLabel` for kind `dataset` returns `Finding <n>` and `renderValue` already renders the object.
 
 CSV parsing is a small local function (quoted fields, commas, newlines); no library.
 
 ## Dataset files (`scripts/generate-datasets.mjs`, deterministic)
 
-`public/datasets/club-signups-flawed.csv`: 120 rows of after-school club sign-ups for a fictional school. Columns: `student_id, first_name, surname, date_of_birth, year_group, gender, home_eircode, interests, club_choice, signup_date, attendance_pct, parent_phone, inferred_income_band, notes`. Deliberate flaws, each documented in `club-signups-flawed.README.txt`:
+`public/datasets/club-signups-flawed.csv` (answer key generated to `docs/teacher/club-signups-flawed.KEY.txt`, never under `public/`): 120 rows of after-school club sign-ups for a fictional school. Columns: `student_id, first_name, surname, date_of_birth, year_group, gender, home_eircode, interests, club_choice, signup_date, attendance_pct, parent_phone, inferred_income_band, notes`. Deliberate flaws, each documented in the teacher key:
 
 - 9 missing `club_choice`, 6 missing `year_group`, 3 blank rows of `interests`
 - `signup_date` in three formats (`2026-09-03`, `03/09/2026`, `3 Sept 2026`)
@@ -58,7 +58,7 @@ CSV parsing is a small local function (quoted fields, commas, newlines); no libr
 - sensitive or unnecessary: `home_eircode`, `parent_phone`, `date_of_birth`, `inferred_income_band` (inferred, never collected), `notes` containing free-text judgements about students
 - names are synthetic and clearly so (fictional first names, surnames from a fixed list); no real Eircodes (use the format `X99 XX99` with `X` letters not forming real routing keys, e.g. `Z99`)
 
-`public/datasets/club-signups-cleaned-template.csv`: same header minus the four sensitive columns, empty rows, for students who prefer a spreadsheet. `public/datasets/responsible-data-card-template.md`: the six card headings.
+`public/datasets/club-signups-cleaned-template.csv`: same header minus the five sensitive or unnecessary columns (including `notes`), empty rows, for students who prefer a spreadsheet. `public/datasets/responsible-data-card-template.md`: the six card headings.
 
 ## Capstone (`lib/chapter-capstone.mjs`)
 

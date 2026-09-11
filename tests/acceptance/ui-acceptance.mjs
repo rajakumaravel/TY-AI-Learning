@@ -96,7 +96,7 @@ try {
   await d4.page.click('[data-session="b3s3"]');
   await d4.page.waitForSelector('.dataset-table tbody tr', { timeout: 15000 });
   const rows = (await d4.page.$$('.dataset-table tbody tr')).length;
-  check('b3s3 dataset table renders 60 rows from the served CSV', rows === 60, `rows=${rows}`);
+  check('b3s3 dataset table renders all 120 rows from the served CSV', rows === 120, `rows=${rows}`);
   const csv = await fetch(`${BASE}/datasets/club-signups-flawed.csv`);
   check('flawed CSV is served with HTTP 200', csv.status === 200, `status ${csv.status}`);
   const note = 'Nine sign-ups have no club_choice recorded.';

@@ -23,7 +23,9 @@ test('chapter 2 lab sessions each offer a dataset or template',()=>{
 });
 
 test('chapter 3 dataset, teacher key and templates are generated and in the manifest',()=>{
-  for(const file of ['club-signups-flawed.csv','club-signups-flawed.README.txt','club-signups-cleaned-template.csv','responsible-data-card-template.md']){
+  assert.ok(fs.existsSync('docs/teacher/club-signups-flawed.KEY.txt'),'teacher key generated outside public/');
+  assert.ok(!fs.existsSync('public/datasets/club-signups-flawed.README.txt')&&!Object.keys(manifest).some(f=>/README|KEY/i.test(f)),'teacher key is never served');
+  for(const file of ['club-signups-flawed.csv','club-signups-cleaned-template.csv','responsible-data-card-template.md']){
     assert.ok(fs.existsSync(`public/datasets/${file}`),`${file} missing`);
     assert.ok(manifest[file]>0,`${file} not in manifest`);
   }

@@ -146,7 +146,7 @@ const INTERESTS = ['football', 'gaming', 'art', 'music', 'reading', 'coding', 'd
 const NOTES = ['bit lazy needs pushing', 'very bright', 'parents difficult to deal with', 'always late', 'not club material', 'troublemaker in first year', 'quiet and odd', 'teacher favourite', 'sibling was a problem', 'too many activities already', 'likely to drop out', 'attention seeking', 'promising if pushed', 'do not put with Cian S'];
 const INCOME = ['Low', 'Medium', 'Medium', 'High'];
 const COLUMNS = ['student_id', 'first_name', 'surname', 'date_of_birth', 'year_group', 'gender', 'home_eircode', 'interests', 'club_choice', 'signup_date', 'attendance_pct', 'parent_phone', 'inferred_income_band', 'notes'];
-const SENSITIVE = ['home_eircode', 'parent_phone', 'date_of_birth', 'inferred_income_band'];
+const SENSITIVE = ['home_eircode', 'parent_phone', 'date_of_birth', 'inferred_income_band', 'notes'];
 const BASE_ROWS = 120 - 6; // plus 4 exact and 2 near duplicates
 const CODING_ROWS = 25, CODING_MALE = 22; // 88% one value
 
@@ -197,7 +197,7 @@ function clubSignups() {
   const out = rows.slice();
   const insert = (row, copy) => out.splice(out.indexOf(row) + 3 + Math.floor(r() * 10), 0, copy);
   for (const row of exact) insert(row, { ...row });
-  for (const row of near) insert(row, { ...row, first_name: row.first_name.toUpperCase(), surname: row.surname.toLowerCase() });
+  near.forEach((row, i) => insert(row, { ...row, student_id: `S${1001 + BASE_ROWS + i}`, first_name: row.first_name.toUpperCase(), surname: row.surname.toLowerCase() }));
   return { rows: out, exact, near };
 }
 
@@ -207,7 +207,9 @@ const coding = signups.filter(x => x.club_choice === 'Coding');
 const codingMale = coding.filter(x => x.gender === 'Male').length;
 const tyRows = count('year_group', v => TY_SPELLINGS.includes(v));
 writeFileSync(join(OUT, 'club-signups-flawed.csv'), csv(signups));
-writeFileSync(join(OUT, 'club-signups-flawed.README.txt'), `Club sign-ups, flawed on purpose (Chapter 3, Data Detective). TEACHER KEY: this file lists every planted flaw.
+const otherYearCounts = Object.values(signups.filter(x => x.year_group && !TY_SPELLINGS.includes(x.year_group)).reduce((m, x) => ({ ...m, [x.year_group]: (m[x.year_group] || 0) + 1 }), {}));
+mkdirSync('docs/teacher', { recursive: true });
+writeFileSync(join('docs/teacher', 'club-signups-flawed.KEY.txt'), `Club sign-ups, flawed on purpose (Chapter 3, Data Detective). TEACHER KEY: this file lists every planted flaw.
 ${signups.length} rows, ${COLUMNS.length} columns: ${COLUMNS.join(', ')}.
 Purpose the school states for the data: assign students to after-school clubs.
 
@@ -219,14 +221,14 @@ Planted flaws and where to find them:
 - Missing values: ${count('club_choice', v => v === '')} rows with no club_choice, ${count('year_group', v => v === '')} rows with no year_group, ${count('interests', v => v === '')} rows with blank interests.
 - Inconsistent formats: signup_date in three styles (${dateFormats.map((f, i) => `${f(3)}: ${count('signup_date', v => [/^\d{4}-/, /^\d{2}\//, / Sept /][i].test(v))} rows`).join('; ')}).
   year_group spelt four ways for the same year: ${TY_SPELLINGS.map(s => `${s} (${count('year_group', v => v === s)})`).join(', ')}.
-- Duplicates: ${exactDups.length} exact duplicate rows (${exactDups.map(x => x.student_id).join(', ')}) and ${nearDups.length} near-duplicates that differ only in letter case (${nearDups.map(x => x.student_id).join(', ')}).
+- Duplicates: ${exactDups.length} exact duplicate rows (${exactDups.map(x => x.student_id).join(', ')}) and ${nearDups.length} near-duplicates that differ only in letter case and carry a new student_id, so only a name plus date_of_birth match finds them (${nearDups.map(x => x.student_id).join(', ')}).
 - Suspicious values: attendance_pct contains 104, -5 and n/a (one row each); every other value is 55-100.
 - Imbalance: club_choice = Coding has ${coding.length} rows and ${Math.round(100 * codingMale / coding.length)}% of them are Male (${codingMale} of ${coding.length}). Every Coding row is Transition Year.
-  Overall ${tyRows} of ${signups.length} rows (${Math.round(100 * tyRows / signups.length)}%) are Transition Year; the other year groups have between 3 and 8 rows each.
-- Sensitive or unnecessary for the stated purpose: ${SENSITIVE.join(', ')} (inferred_income_band was never collected from anyone; it is a guess), and notes, which holds free-text judgements about students (${count('notes', v => v !== '')} rows).
+  Overall ${tyRows} of ${signups.length} rows (${Math.round(100 * tyRows / signups.length)}%) are Transition Year; the other year groups have between ${Math.min(...otherYearCounts)} and ${Math.max(...otherYearCounts)} rows each.
+- Sensitive or unnecessary for the stated purpose: ${SENSITIVE.join(', ')}. inferred_income_band was never collected from anyone; it is a guess. notes holds free-text judgements about students (${count('notes', v => v !== '')} rows).
 
 club-signups-cleaned-template.csv has the same header minus ${SENSITIVE.join(', ')}, with empty rows, for students who prefer a spreadsheet.
-Students should not need this README; it is served alongside the data for teachers checking findings.
+This key lives in docs/teacher and is never deployed with the site.
 `);
 writeFileSync(join(OUT, 'club-signups-cleaned-template.csv'), `${COLUMNS.filter(c => !SENSITIVE.includes(c)).join(',')}\n${Array.from({ length: signups.length }, () => ','.repeat(COLUMNS.length - SENSITIVE.length - 1)).join('\n')}\n`);
 writeFileSync(join(OUT, 'responsible-data-card-template.md'), `# Responsible Data Card

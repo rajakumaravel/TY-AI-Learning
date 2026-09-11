@@ -1,6 +1,6 @@
 # Phase 4 — Chapter 3: Data Detective
 
-**Status:** in progress on `phase4-chapter3`; content slice implemented per `docs/product/phase-4-contract.md`. Verified on Cloudflare Pages Preview only once the student-UI and workspace/API slices land; Production is deferred until all phases are accepted (ADR-007).
+**Status:** all three slices merged on `phase4-chapter3`; verified on Cloudflare Pages Preview with `npm run acceptance` and the live walkthrough. Production deferred (ADR-007).
 
 Chapter 3 is the first chapter built directly on the Experience Lab standard (ADR-005) without a Student Book chapter to follow. Every `pageRef` reads `Draft · pending Student Book alignment`.
 
@@ -23,7 +23,7 @@ Lab stages: DO b3s2, TEST b3s3, MAKE b3s4, BREAK b3s3, IMPROVE b3s4, PROVE b3s5.
 | File | Contents |
 | --- | --- |
 | `club-signups-flawed.csv` | 120 synthetic after-school club sign-ups, 14 columns, with every flaw in the contract planted: 9 missing `club_choice`, 6 missing `year_group`, 3 blank `interests`; three `signup_date` formats; four spellings of Transition Year; 4 exact and 2 case-only duplicates; `attendance_pct` of 104, -5 and n/a; Coding is 88% one gender and entirely Transition Year; `home_eircode`, `parent_phone`, `date_of_birth`, `inferred_income_band` and judgemental `notes` |
-| `club-signups-flawed.README.txt` | Teacher key: every planted flaw with counts computed from the generated data. Served but never listed as a student download |
+| `club-signups-flawed.README.txt` | Teacher key: every planted flaw with counts computed from the generated data. Teacher key written to `docs/teacher/club-signups-flawed.KEY.txt`, never deployed |
 | `club-signups-cleaned-template.csv` | Same header minus the four sensitive columns, 120 empty rows |
 | `responsible-data-card-template.md` | The six card headings |
 
@@ -34,7 +34,7 @@ Names are clearly synthetic (a fixed list of fictional surnames), Eircodes use t
 ## Delivered by the other Phase 4 slices
 
 - Student UI: `dataset` activity renderer (table, column summary, findings form), `activityReady` rule, capstone `block3-capstone` and data-detective keywords, `block3` project brief.
-- Workspace and API: `projectUnlocked(state, projectId)`, generalised project modal, `requiredSessions.block3`, acceptance scripts, `tests/data-detective.test.mjs`.
+- Workspace and API: `projectUnlocked(state, projectId)`, generalised project modal, `requiredSessions.block3`, acceptance scripts, `tests/data-detective.test.mjs` (student UI slice)js`.
 
 ## Verification
 

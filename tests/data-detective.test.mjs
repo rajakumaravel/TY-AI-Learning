@@ -44,7 +44,8 @@ test('block3 sessions carry the contracted activities',()=>{
   assert.equal(quiz.items.length,8);
   assert.deepEqual(quiz.options,['Volunteered','Observed','Inferred']);
   const lab=session('b3s2').activity;
-  assert.deepEqual(lab.tool,{name:'Dataset viewer (built in)',url:'/datasets/club-signups-flawed.csv',free:true});
+  assert.deepEqual(lab.tool,{name:'the raw CSV file',url:'/datasets/club-signups-flawed.csv',free:true});
+  assert.equal(lab.file,'club-signups-flawed.csv','b3s2 shows the built-in viewer inline');
   assert.equal(lab.privacy.length,4);
   assert.equal(lab.steps.length,5);
   assert.equal(lab.fields.length,4);
@@ -84,7 +85,7 @@ test('flawed CSV has inconsistent formats, duplicates and suspicious values',()=
   const lines=d.rows.map(r=>r.join(''));
   const seen=new Set();let exact=0;for(const l of lines){if(seen.has(l))exact++;seen.add(l)}
   assert.equal(exact,4,'exact duplicate rows');
-  const lower=new Set();let near=0;for(const l of lines){const k=l.toLowerCase();if(lower.has(k))near++;lower.add(k)}
+  const lower=new Set();let near=0;for(const r of d.rows){const k=r.slice(1).join('\u0001').toLowerCase();if(lower.has(k))near++;lower.add(k)}
   assert.equal(near-exact,2,'near-duplicate rows (case differences)');
   const att=new Set(d.col('attendance_pct'));
   for(const v of ['104','-5','n/a'])assert.ok(att.has(v),`attendance_pct ${v}`);
@@ -101,10 +102,10 @@ test('flawed CSV is imbalanced and carries sensitive or inferred fields',()=>{
   assert.ok(Object.keys(yc).length>=2,'year-group imbalance is visible');
   for(const c of ['home_eircode','parent_phone','date_of_birth','inferred_income_band','notes'])assert.ok(d.col(c).some(Boolean),`${c} populated`);
   for(const v of d.col('home_eircode').filter(Boolean))assert.match(v,/^[A-Z]\d{2} [A-Z]{2}\d{2}$/,`synthetic Eircode ${v}`);
-  const readme=read('public/datasets/club-signups-flawed.README.txt');
+  const readme=read('docs/teacher/club-signups-flawed.KEY.txt');
   for(const re of [/missing/i,/format/i,/duplicate/i,/attendance/i,/imbalance|bias/i,/eircode|phone|income|notes/i])assert.match(readme,re);
   const template=parseCSV(read('public/datasets/club-signups-cleaned-template.csv'));
-  assert.deepEqual(template.columns,COLUMNS.filter(c=>!['home_eircode','parent_phone','date_of_birth','inferred_income_band'].includes(c)));
+  assert.deepEqual(template.columns,COLUMNS.filter(c=>!['home_eircode','parent_phone','date_of_birth','inferred_income_band','notes'].includes(c)));
   assert.ok(template.rows.every(r=>Object.values(r).every(v=>!String(v||'').trim())),'template rows are blank');
   const card=read('public/datasets/responsible-data-card-template.md');
   assert.ok((card.match(/^#+ /gm)||[]).length>=6,'six card headings');
@@ -116,7 +117,7 @@ test('student UI renders the dataset activity and enforces the findings rule',()
   assert.match(app,/function parseCSV\(text\)/);
   assert.match(app,/fetch\(`\/datasets\/\$\{file\}`\)/);
   assert.match(app,/if\(a\.kind==='dataset'\)return `<div class="dataset" data-dataset=/);
-  assert.match(app,/d\.rows\.slice\(0,60\)/);
+  assert.match(app,/function datasetHTML\(s,d,readOnly=false\)\{const a=s\.activity,rows=d\.rows;/);
   assert.match(app,/class="dataset-wrap"/);
   assert.match(app,/data-target="column:/);
   assert.match(app,/data-target="row:/);

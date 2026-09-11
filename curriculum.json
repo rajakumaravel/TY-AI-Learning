@@ -480,7 +480,7 @@
             "title": "Experience Lab: meet the dataset",
             "instructions": "Read the notice, open the dataset in the built-in viewer, follow the five steps, and record your first look below. If the viewer does not load, use the fallback.",
             "tool": {
-              "name": "Dataset viewer (built in)",
+              "name": "the raw CSV file",
               "url": "/datasets/club-signups-flawed.csv",
               "free": true
             },
@@ -502,7 +502,8 @@
                 "file": "responsible-data-card-template.md",
                 "note": "The six card headings. Fill it in as you go, then copy your answers into the final session."
               }
-            ]
+            ],
+            "file": "club-signups-flawed.csv"
           },
           "reflection": "Which column surprised you most, and what would you want to ask the person who collected it?"
         },
@@ -558,7 +559,7 @@
               {
                 "label": "Cleaned dataset template (CSV)",
                 "file": "club-signups-cleaned-template.csv",
-                "note": "The same columns minus the four sensitive ones, with empty rows. Use it if you would rather clean the data in a spreadsheet."
+                "note": "The same columns minus the five sensitive or unnecessary ones, with empty rows. Use it if you would rather clean the data in a spreadsheet."
               }
             ]
           },
