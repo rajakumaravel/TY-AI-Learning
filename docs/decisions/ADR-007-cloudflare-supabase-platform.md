@@ -58,7 +58,7 @@ The migration-branch Pages workflow runs on pushes to `infra-cloudflare-supabase
 
 The standalone Supabase migration workflow remains manual. The separate Production release workflow is configured to run after successful CI on `main`, or by manual dispatch; it applies migrations before deploying with `--branch=main`. Do not merge or manually release until the cutover exit criteria below are evidenced.
 
-Before release, commit and verify a dependency lockfile: the Production workflow currently uses `npm ci` and npm caching, which require a lockfile. Disable the obsolete standalone Worker Git build after confirming the Pages workflow is the intended deployment path; keep the rollback source intact.
+The dependency lockfile required by `npm ci` is committed (`0310901`); CI and the release workflow both install with `npm ci`. Disable the obsolete standalone Worker Git build after confirming the Pages workflow is the intended deployment path; keep the rollback source intact.
 
 Required GitHub configuration at cutover:
 
@@ -98,7 +98,8 @@ Do not merge the migration into `main` until all are true:
 - Phase 1 code exists; production acceptance is not yet signed off.
 - Commit `1bc730572812747ba121195ce8641de60b1bed2d` passed 54 tests and Pages deployment; this does not establish authenticated end-to-end acceptance.
 - The operator reports runtime bindings configured in both Preview and Production. Their values have not been read or verified here.
-- Database migration history currently records only `20260910115137_initial_platform_schema`. Reconcile the existing `20260910120000_lock_down_auth_trigger.sql` through the repository migration workflow; do not invent a replacement timestamp. Confirm dry-run output before applying.
+- Database migration history reconciled 2026-09-11. Because the migration workflow only exists on this branch and cannot be dispatched before merge, the operator applied `20260910120000_lock_down_auth_trigger.sql` from a linked Supabase CLI session (project ref `fnnftbsalquzwgzlsovx`) after a dry-run listed exactly that file. `supabase migration list --linked` now reports both `20260910115137` and `20260910120000` applied remotely. The change is a single idempotent `revoke execute` on `public.handle_new_auth_user()`.
+- Latest Preview deployment: `2836a238-f5d3-4d5e-86aa-7d327cc40f23` (commit `1563d39`, https://2836a238.ty-ai-learning.pages.dev). No Production deployment exists yet. `SUPABASE_SERVICE_ROLE_KEY` is confirmed present as an encrypted secret in both Preview and Production; plain-text bindings are not listable via CLI and remain operator-reported.
 - Cross-device persistence, capstone gating, project save/submit/review, student isolation, non-admin rejection, and exact Production deployment remain pending validation.
 - Operator decision (2026-09-11): defer legacy learner-data migration and proceed with Cloudflare/Supabase without importing Netlify progress for this cutover. This satisfies the pilot waiver condition only; it does not waive functional or security acceptance. Existing Supabase data must be preserved. Netlify records must remain untouched; this is not authorisation to delete the legacy site, users or database. A future import requires explicit identity mapping and conflict handling.
 - Update this record with exact commit/deployment IDs and test evidence before marking cutover complete. Phase 2 remains blocked until then.
