@@ -5,7 +5,7 @@
 
 ## Product baseline already established
 
-The current pilot already includes:
+The original Netlify pilot baseline includes the following implemented capabilities. The migration branch replaces the platform with Cloudflare Pages and Supabase; live acceptance on that stack is tracked in ADR-007:
 
 - Google / Netlify Identity student sign-in;
 - persistent learner progress;
@@ -355,4 +355,6 @@ Every development phase must satisfy all of the following before production acce
 
 Do not start multiple major phases in parallel. Complete the current phase, verify it with real/pilot usage where appropriate, record findings, then proceed to the next phase.
 
-**Next active phase: Phase 1 — Project Workspace Foundation.**
+**Current work: ADR-007 platform migration and Phase 1 production acceptance.**
+
+Phase 1 implementation is merged into `main`; its end-to-end deployment acceptance remains pending. Complete the ADR-007 cutover checklist and record evidence before starting **Phase 2 — Experience Labs for Chapters 1–2**. Do not treat green source-regression tests as proof of live cross-device persistence or student isolation.
