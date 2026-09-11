@@ -1,0 +1,35 @@
+Fairness scenario cards (Chapter 3, Data Detective, session "Cookies, scraping and the fairness challenge")
+
+Your group gets a scenario: an AI system for school club recommendations, job shortlisting or transport planning.
+Decide what data you'd collect. Then ask the hard question: who is missing?
+Students who joined mid-year? People without smartphones? Those who work nights?
+
+=== Card 1: school club recommendations ===
+The system: recommends after-school clubs to every student, using last year's club sign-up data (club-signups-flawed.csv).
+Decide what data you'd collect: which fields, from whom, and how (a form, the timetable system, observation?).
+Who is missing?
+- Students who joined mid-year and never filled in a sign-up form.
+- Students who wanted a club that did not run, so there is no row for what they actually wanted.
+- Year groups or genders that are thin or absent in a club, so the system never recommends it to them.
+- Students whose club_choice or year_group was left blank: is that an accident, or a pattern?
+
+=== Card 2: job shortlisting ===
+The system: ranks applicants for a part-time job from their application forms and past employee records.
+Decide what data you'd collect: what actually predicts doing the job well, and what is only a proxy for who was hired before?
+Who is missing?
+- People who never applied because the advert only reached one group.
+- Those who work nights or care for someone, whose availability looks "worse" on a form.
+- Applicants with gaps, different qualifications or an address in the "wrong" area.
+- Everyone the old records rejected: the data only shows who was hired, never who would have been good.
+
+=== Card 3: transport planning ===
+The system: decides where to add bus routes and stops, using journey data from a transport app.
+Decide what data you'd collect: app data, ticket sales, a survey, counts at stops?
+Who is missing?
+- People without smartphones, or without the app, whose journeys are never recorded.
+- Those who work nights, when fewer journeys are logged and fewer surveys are answered.
+- People who stopped travelling because the current service does not work for them.
+- Wheelchair users, older people and rural passengers, if the app mostly logs city-centre commuters.
+
+For each card, write your before and after: fields removed, a representation check added, how long data is kept,
+and the decisions that must have a human reviewing them before anything happens to a person.

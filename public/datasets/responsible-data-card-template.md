@@ -1,21 +1,22 @@
-# Responsible Data Card
+# Responsible Data Card (Sheet A5)
 
-Dataset: club-signups (cleaned by: ________  date: ________)
+Service or dataset: ________________  Name: ________________  Date: ________
 
-## 1. Purpose
-What this dataset is for. One or two sentences.
+| Question | Notes |
+| --- | --- |
+| What data is collected? | |
+| What is observed rather than typed? | |
+| What might be inferred? | |
+| Why is it needed? | |
+| What could go wrong? | |
+| Who might be missing or misrepresented? | |
+| What should be removed or minimised? | |
+| What needs human review? | |
 
-## 2. What is collected
-The columns kept, each in plain words.
+## Integrity (optional)
 
-## 3. Volunteered, observed or inferred
-For each kept column: did the person give it, was it observed, or was it guessed?
-
-## 4. Who could be harmed
-Who is affected if the data is wrong, leaked, or used for something else, and how.
-
-## 5. What was removed or fixed
-Columns removed, values fixed and the exact rule used, rows flagged and left alone.
-
-## 6. What the data must not be used for
-Purposes this data would be unfair or unreliable for.
+| Section | Questions | Notes |
+| --- | --- | --- |
+| Quality | What is missing? Are there duplicates? Are values valid? Are units/formats consistent? Are labels reliable? Is it current enough? | |
+| Provenance | Where did it come from? Who collected it? When? Why? Is it primary or secondary data? Can we trace the original source? | |
+| Limitations | What remains uncertain? What conclusions are supported? What conclusions are not supported? | |

@@ -231,27 +231,114 @@ club-signups-cleaned-template.csv has the same header minus ${SENSITIVE.join(', 
 This key lives in docs/teacher and is never deployed with the site.
 `);
 writeFileSync(join(OUT, 'club-signups-cleaned-template.csv'), `${COLUMNS.filter(c => !SENSITIVE.includes(c)).join(',')}\n${Array.from({ length: signups.length }, () => ','.repeat(COLUMNS.length - SENSITIVE.length - 1)).join('\n')}\n`);
-writeFileSync(join(OUT, 'responsible-data-card-template.md'), `# Responsible Data Card
+// Sheet A5 (curriculum pilot v1, Appendix A) plus the optional Integrity section from the data-integrity review (section 6).
+writeFileSync(join(OUT, 'responsible-data-card-template.md'), `# Responsible Data Card (Sheet A5)
 
-Dataset: club-signups (cleaned by: ________  date: ________)
+Service or dataset: ________________  Name: ________________  Date: ________
 
-## 1. Purpose
-What this dataset is for. One or two sentences.
+| Question | Notes |
+| --- | --- |
+| What data is collected? | |
+| What is observed rather than typed? | |
+| What might be inferred? | |
+| Why is it needed? | |
+| What could go wrong? | |
+| Who might be missing or misrepresented? | |
+| What should be removed or minimised? | |
+| What needs human review? | |
 
-## 2. What is collected
-The columns kept, each in plain words.
+## Integrity (optional)
 
-## 3. Volunteered, observed or inferred
-For each kept column: did the person give it, was it observed, or was it guessed?
+| Section | Questions | Notes |
+| --- | --- | --- |
+| Quality | What is missing? Are there duplicates? Are values valid? Are units/formats consistent? Are labels reliable? Is it current enough? | |
+| Provenance | Where did it come from? Who collected it? When? Why? Is it primary or secondary data? Can we trace the original source? | |
+| Limitations | What remains uncertain? What conclusions are supported? What conclusions are not supported? | |
+`);
 
-## 4. Who could be harmed
-Who is affected if the data is wrong, leaked, or used for something else, and how.
+// Chapter 3, session "Data Tracking Sherlock": fallback policy extracts. Every service is fictional; no real company is named.
+writeFileSync(join(OUT, 'privacy-policy-extracts.txt'), `Sample privacy policy extracts (Chapter 3, Data Detective, session "Data Tracking Sherlock")
 
-## 5. What was removed or fixed
-Columns removed, values fixed and the exact rule used, rows flagged and left alone.
+Three fictional services. Use one if you have no real privacy policy or app-store listing to hand.
+Read each extract at category level: list the categories, mark anything surprising, quote anything vague.
+Then sort each category into volunteered (you gave it), observed (recorded while you used it) or inferred (guessed).
 
-## 6. What the data must not be used for
-Purposes this data would be unfair or unreliable for.
+=== 1. Loopwave (music streaming app) ===
+Data we collect:
+- Your name, email address and date of birth, when you create an account.
+- Playlist names, likes, follows and the searches you type.
+- Listening history: what you play, how long you listen, what you skip and at what time of day.
+- Your approximate location, from your device or your network connection.
+- Device information: model, operating system, language and unique advertising identifiers.
+- Microphone access, when you use voice search.
+- Your mood and activity (for example "workout", "focus", "late night"), estimated from your listening.
+- Your age range and likely interests, estimated from your activity, for recommendations and advertising.
+- Contacts on your device, if you allow it, so we can suggest friends to follow.
+- Usage information, to improve our services.
+
+=== 2. Wayline (maps and directions app) ===
+Data we collect:
+- Places you search for, addresses you save and routes you request.
+- Precise location, continuously while the app is open and, if you allow it, in the background.
+- Movement data: speed, direction and the mode of transport we detect (walking, cycling, driving, bus).
+- Location history: the places you visit and how long you stay, used to build your "timeline".
+- Photos and reviews you post about places, and the camera access needed to take them.
+- Device identifiers, sensor data (motion, barometer) and network information.
+- Contacts, if you allow it, so you can share your live location.
+- Home and work locations, which we infer from where your device rests overnight and during the day.
+- Likely places you will visit next, predicted from your history.
+- Information from partners, for personalisation and to improve our services.
+
+=== 3. Snapnest (photo-sharing app) ===
+Data we collect:
+- Your username, profile photo, bio and the accounts you follow.
+- Photos and videos you upload, including the captions and hashtags you add.
+- Image metadata: the time, camera settings and, unless you turn it off, the exact location each photo was taken.
+- Faces detected in your photos, to suggest tags and to group photos by person.
+- How long you look at each post, what you scroll past and what you tap.
+- Messages you send in the app, and who you send them to.
+- Your contacts and, if you allow it, other apps installed on your device.
+- Interests, age range and life events (for example moving school or a new relationship), estimated from your activity.
+- Public posts, which may be used to train and improve our services, including image-recognition features.
+- Information from other websites that use our sharing button, so we can show you relevant content.
+`);
+
+// Chapter 3, session "Cookies, scraping and the fairness challenge": the three scenarios from the Student Book p.16.
+writeFileSync(join(OUT, 'fairness-scenario-cards.txt'), `Fairness scenario cards (Chapter 3, Data Detective, session "Cookies, scraping and the fairness challenge")
+
+Your group gets a scenario: an AI system for school club recommendations, job shortlisting or transport planning.
+Decide what data you'd collect. Then ask the hard question: who is missing?
+Students who joined mid-year? People without smartphones? Those who work nights?
+
+=== Card 1: school club recommendations ===
+The system: recommends after-school clubs to every student, using last year's club sign-up data (club-signups-flawed.csv).
+Decide what data you'd collect: which fields, from whom, and how (a form, the timetable system, observation?).
+Who is missing?
+- Students who joined mid-year and never filled in a sign-up form.
+- Students who wanted a club that did not run, so there is no row for what they actually wanted.
+- Year groups or genders that are thin or absent in a club, so the system never recommends it to them.
+- Students whose club_choice or year_group was left blank: is that an accident, or a pattern?
+
+=== Card 2: job shortlisting ===
+The system: ranks applicants for a part-time job from their application forms and past employee records.
+Decide what data you'd collect: what actually predicts doing the job well, and what is only a proxy for who was hired before?
+Who is missing?
+- People who never applied because the advert only reached one group.
+- Those who work nights or care for someone, whose availability looks "worse" on a form.
+- Applicants with gaps, different qualifications or an address in the "wrong" area.
+- Everyone the old records rejected: the data only shows who was hired, never who would have been good.
+
+=== Card 3: transport planning ===
+The system: decides where to add bus routes and stops, using journey data from a transport app.
+Decide what data you'd collect: app data, ticket sales, a survey, counts at stops?
+Who is missing?
+- People without smartphones, or without the app, whose journeys are never recorded.
+- Those who work nights, when fewer journeys are logged and fewer surveys are answered.
+- People who stopped travelling because the current service does not work for them.
+- Wheelchair users, older people and rural passengers, if the app mostly logs city-centre commuters.
+
+For each card, write your before and after: fields removed, a representation check added, how long data is kept,
+and the decisions that must have a human reviewing them before anything happens to a person.
 `);
 rmSync(WORK, { recursive: true, force: true });
 const manifest = Object.fromEntries(readdirSync(OUT).filter(f => !f.startsWith('.')).sort().map(f => [f, statSync(join(OUT, f)).size]));
