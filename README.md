@@ -36,10 +36,10 @@ Enable Google in Supabase Auth and configure the Google callback and approved ap
 ## Validation and release
 
 ```bash
-npm install
+npm ci
 npm run check
 ```
 
-Branch pushes trigger the Pages preview workflow. The Production release workflow is configured for successful CI on `main` and manual dispatch; it applies database migrations before deployment. It currently requires a committed dependency lockfile for `npm ci` and npm caching. Resolve that prerequisite before release.
+Branch pushes trigger the Pages preview workflow. The Production release workflow is configured for successful CI on `main` and manual dispatch; it applies database migrations before deployment. The dependency lockfile required by `npm ci` is committed.
 
 Complete the [ADR-007 acceptance checklist](docs/decisions/ADR-007-cloudflare-supabase-platform.md), including cross-device persistence, project submission/review, student isolation and the legacy-data decision, before merging. Phase 2 follows successful cutover and Phase 1 acceptance; see [ROADMAP](ROADMAP.md).
