@@ -11,13 +11,13 @@
   "fairness-scenario-cards.txt": 2460,
   "genai-red-team-prompts.txt": 853,
   "genai-sample-outputs.txt": 3081,
-  "genai-verification-topics.txt": 2063,
+  "genai-verification-topics.txt": 2090,
   "genai-weak-question-card.txt": 980,
   "manifest.json": 798,
   "privacy-policy-extracts.txt": 3087,
   "prompt-experiment-sheet-A4.csv": 104,
   "responsible-data-card-template.md": 897,
-  "reusable-prompt-template.md": 1020,
+  "reusable-prompt-template.md": 996,
   "test-log-template.csv": 110,
   "verification-log-A2.csv": 78
 }

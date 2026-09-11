@@ -336,7 +336,7 @@ try {
   await step(page, 'Prompt Lab 1: C-T-C-F builder composes v2, v1 and v2 recorded on Sheet A4, save', async () => {
     await page.waitForSelector('.prompt-lab', { timeout: 10000 });
     const parts = { context: 'I am a TY student preparing a two-minute talk on the River Shannon for classmates.', task: 'Outline the talk.', constraints: '150 words, plain language, no figures without a named source.', format: 'Five bullet points, and ask me two questions first.' };
-    for (const [k, v] of Object.entries(parts)) await page.fill(`input[data-builder="${k}"]`, v);
+    for (const [k, v] of Object.entries(parts)) await page.fill(`[data-builder="${k}"]`, v);
     await page.click('#composeV2');
     const composed = await page.$eval('textarea[data-version="v2"][data-field="prompt"]', el => el.value);
     if (!Object.values(parts).every(v => composed.includes(v))) throw new Error(`compose v2 missing parts: ${composed}`);

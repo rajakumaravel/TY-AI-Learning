@@ -36,6 +36,7 @@ function currentChapterFromCount(completedCount) {
 }
 function activityLabel(activity, key) {
   if (!activity) return key;
+  if (key === "ack") return "Safety notice acknowledged";
   if (activity.kind === "daymap") return `AI Day Map row ${Number(key)+1}`;
   if (activity.kind === "chain") return `Chain row ${Number(key)+1}`;
   if (activity.kind === "textfields") return activity.fields?.[Number(key)] || `Response ${Number(key)+1}`;

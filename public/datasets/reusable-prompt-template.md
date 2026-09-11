@@ -1,6 +1,6 @@
 # Reusable prompt template (C-T-C-F)
 
-Task this template is for: ________________  Name: ________________
+Task this template is for: ________________
 
 Replace every [placeholder] each time you use it. Keep the constraints and format the same between runs so the
 outputs stay comparable.

@@ -77,7 +77,7 @@ test('chapter 4 lab runs the weak question through DuckDuckGo AI Chat with the f
   assert.deepEqual(lab.activity.downloads.map(d=>d.file),['genai-weak-question-card.txt','genai-sample-outputs.txt']);
   assert.equal(b.lab.title,'Make prompts compete');
   assert.deepEqual(b.lab.stages.map(x=>x[1]),['b4s3','b4s1','b4s8','b4s7','b4s4','b4s6']);
-  for(const id of ['b4s3','b4s4','b4s5','b4s6','b4s7','b4s8'])assert.match(b.sessions.find(s=>s.id===id).activity.instructions,/safety|personal details/,`${id} repeats the safety rules`);
+  for(const id of ['b4s3','b4s4','b4s5','b4s6','b4s7','b4s8'])assert.ok(Array.isArray(b.sessions.find(s=>s.id===id).activity.privacy)&&b.sessions.find(s=>s.id===id).activity.privacy.length===4&&b.sessions.find(s=>s.id===id).activity.tool?.url==='https://duck.ai',`${id} repeats the safety rules`);
 });
 
 test('student UI gates the external tool behind the safety notice and requires lab evidence',()=>{

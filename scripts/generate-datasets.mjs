@@ -364,18 +364,18 @@ confident with nothing behind it? Keep both answers. They are the "before" for P
 
 // [sentence, verdict, how to check]; null = paragraph break. Verdicts: supported / uncertain / wrong.
 const SAMPLE_A = [
-  ['The River Shannon is the longest river in Ireland.', 'supported', 'Any atlas; Ordnance Survey Ireland (osi.ie); Wikipedia "River Shannon" and the sources it cites.'],
-  ['It rises at the Shannon Pot on the slopes of Cuilcagh Mountain in County Cavan.', 'supported', 'Geological Survey Ireland (gsi.ie) on the Shannon Pot; Cuilcagh Lakelands Geopark; OSI map.'],
-  ['From there it flows south for nearly 500 km before reaching the Atlantic.', 'wrong', 'Every reference gives about 360 km (360.5 km on Wikipedia and OSI; some older sources 386 km including the estuary). No source gives 500 km.'],
-  ['On its way it widens into three large lakes: Lough Allen, Lough Ree and Lough Derg.', 'supported', 'OSI map; Waterways Ireland Shannon Navigation guide.'],
+  ['The River Shannon is the longest river in Ireland.', 'supported', 'Any atlas; Tailte Éireann, formerly Ordnance Survey Ireland (tailte.ie); Wikipedia "River Shannon" and the sources it cites.'],
+  ['It rises at the Shannon Pot on the slopes of Cuilcagh Mountain in County Cavan.', 'supported', 'Geological Survey Ireland (gsi.ie) on the Shannon Pot; Cuilcagh Lakelands Geopark; Tailte Éireann map.'],
+  ['From there it flows south for nearly 500 km before reaching the Atlantic.', 'wrong', 'Every reference gives about 360 km (360.5 km on Wikipedia and Tailte Éireann; some older sources 386 km including the estuary). No source gives 500 km.'],
+  ['On its way it widens into three large lakes: Lough Allen, Lough Ree and Lough Derg.', 'supported', 'Tailte Éireann map; Waterways Ireland Shannon Navigation guide.'],
   null,
-  ['The river passes through or borders eleven counties, dividing the west of Ireland from the east.', 'uncertain', 'Sources count differently depending on whether estuary counties and county borders are included; check the list against an OSI map rather than trusting the number.'],
-  ['The city of Limerick sits at the head of the Shannon Estuary.', 'supported', 'OSI map; Limerick City and County Council.'],
+  ['The river passes through or borders eleven counties, dividing the west of Ireland from the east.', 'uncertain', 'Sources count differently depending on whether estuary counties and county borders are included; check the list against an Tailte Éireann map rather than trusting the number.'],
+  ['The city of Limerick sits at the head of the Shannon Estuary.', 'supported', 'Tailte Éireann map; Limerick City and County Council.'],
   ['In 1925 the new Irish state began building the Ardnacrusha hydroelectric scheme, which was completed in 1929.', 'supported', 'ESB Archives (esbarchives.ie) Shannon Scheme pages: construction 1925–1929, official opening July 1929.'],
   ['The scheme was run by the Electricity Supply Board, set up in 1927.', 'supported', 'ESB Archives; Electricity (Supply) Act 1927 on irishstatutebook.ie.'],
   ['For its first decade Ardnacrusha supplied about 80% of Ireland\'s electricity.', 'uncertain', 'Widely repeated, but the share fell every year as demand grew, so any percentage needs a year attached. Check the ESB Archives (esbarchives.ie) Shannon Scheme pages for dated figures.'],
   null,
-  ['The Shannon Bridge Act of 1873 required every crossing of the river to be approved by Parliament.', 'wrong', 'No such Act exists. Search the Irish Statute Book (irishstatutebook.ie) and legislation.gov.uk: nothing by that name in 1873 or any other year.'],
+  ['The Shannon Bridge Act of 1873 required every crossing of the river to be approved by Parliament.', 'wrong', 'No such Act exists. The nearest real Acts on legislation.gov.uk are the Shannon Navigation Acts (1839 onward) and the Shannon Act 1874, which deal with navigation and drainage works and say nothing about Parliament approving crossings. That is the tell: a plausible name, a nearby year, an invented provision.'],
   ['The river is named after Sionann, a figure from Irish mythology.', 'supported', 'Placenames Database of Ireland (logainm.ie) entry for the Shannon; any dictionary of Irish mythology.'],
   ['For a fuller history see Ó Braonáin, T. (2011), The Shannon from Pot to Sea, Athlone Riverside Press, p. 42.', 'wrong', 'Fabricated citation. No such author, title or publisher in the National Library of Ireland catalogue, WorldCat or any bookshop search.']
 ];
@@ -384,7 +384,7 @@ const SAMPLE_B = [
   ['Some references give 386 km, a figure that includes the estuary.', 'uncertain', 'Older references do give 386 km; whether that includes the estuary depends on the reference. The point is that "the length" depends on where you say the river ends.'],
   ['Its source, the Shannon Pot, is a small pool in County Cavan fed by underground streams from Cuilcagh Mountain.', 'supported', 'Geological Survey Ireland; Cuilcagh Lakelands Geopark.'],
   ['The river drains roughly one fifth of the island.', 'uncertain', 'The Shannon catchment is often given as about a fifth of the island; the exact share depends on how the catchment is defined. Check the EPA catchment data (catchments.ie).'],
-  ['Major towns along it include Carrick-on-Shannon, Athlone and Limerick.', 'supported', 'OSI map.'],
+  ['Major towns along it include Carrick-on-Shannon, Athlone and Limerick.', 'supported', 'Tailte Éireann map.'],
   null,
   ['The Ardnacrusha power station, built by the German firm Siemens-Schuckert, opened in 1937.', 'wrong', 'The firm is right; the year is wrong. ESB Archives: construction 1925–1929, official opening July 1929.'],
   ['At the time it was one of the largest hydroelectric schemes in the world.', 'uncertain', 'Often described that way, but "largest" claims need a stated comparison and date. Check the ESB Archives Shannon Scheme pages for what they actually say.'],
@@ -437,7 +437,7 @@ The five facts under each topic are checkable. No answers are given here: that i
 3. Which three large lakes does it widen into on its way south?
 4. In which year did the Ardnacrusha power station open, and which company built it?
 5. Which city sits at the head of the Shannon Estuary?
-Good sources: Ordnance Survey Ireland, Geological Survey Ireland, ESB Archives, Waterways Ireland.
+Good sources: Tailte Éireann (formerly Ordnance Survey Ireland), Geological Survey Ireland, ESB Archives, Waterways Ireland.
 
 === Topic 2: Transition Year in Ireland ===
 1. In which year was Transition Year first introduced as a pilot, and in how many schools?
@@ -508,7 +508,7 @@ writeFileSync(join(OUT, 'prompt-experiment-sheet-A4.csv'), 'Version,Prompt,Promp
 writeFileSync(join(OUT, 'verification-log-A2.csv'), 'Claim,Source checked,Supported / uncertain / wrong,What I changed\n,,,\n,,,\n,,,\n');
 writeFileSync(join(OUT, 'reusable-prompt-template.md'), `# Reusable prompt template (C-T-C-F)
 
-Task this template is for: ________________  Name: ________________
+Task this template is for: ________________
 
 Replace every [placeholder] each time you use it. Keep the constraints and format the same between runs so the
 outputs stay comparable.

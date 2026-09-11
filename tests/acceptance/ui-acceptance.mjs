@@ -132,9 +132,9 @@ try {
   check('chapter 4 renders the Myth-busters section', Boolean(await d5.page.$('#mythBusters')) && /Clear beats long/.test(await d5.page.textContent('#mythBusters')));
   await d5.page.click('[data-session="b4s3"]');
   await d5.page.waitForSelector('.prompt-lab', { timeout: 15000 });
-  check('b4s3 renders the C-T-C-F builder and both version blocks', (await d5.page.$$('input[data-builder]')).length === 4 && Boolean(await d5.page.$('textarea[data-version="v1"][data-field="prompt"]')) && Boolean(await d5.page.$('textarea[data-version="v2"][data-field="prompt"]')));
+  check('b4s3 renders the C-T-C-F builder and both version blocks', (await d5.page.$$('[data-builder]')).length === 4 && Boolean(await d5.page.$('textarea[data-version="v1"][data-field="prompt"]')) && Boolean(await d5.page.$('textarea[data-version="v2"][data-field="prompt"]')));
   const parts = { context: 'I am a TY student preparing a two-minute talk on the River Shannon for classmates.', task: 'Outline the talk.', constraints: '150 words, plain language, no figures without a named source.', format: 'Five bullet points, and ask me two questions first.' };
-  for (const [k, v] of Object.entries(parts)) await d5.page.fill(`input[data-builder="${k}"]`, v);
+  for (const [k, v] of Object.entries(parts)) await d5.page.fill(`[data-builder="${k}"]`, v);
   await d5.page.click('#composeV2');
   const composed = await d5.page.$eval('textarea[data-version="v2"][data-field="prompt"]', el => el.value);
   check('Compose v2 writes the four C-T-C-F parts into the v2 prompt', Object.values(parts).every(v => composed.includes(v)) && /\n\n/.test(composed), JSON.stringify(composed));

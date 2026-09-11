@@ -47,7 +47,7 @@ test('block4 chapter shape follows the Student Book',()=>{
   assert.equal(norm(session('b4s5').reflection),'Which parts of the answer need evidence from outside the AI?');
   assert.equal(norm(session('b4s6').reflection),'Are you asking the model to think for you, or to help you think?');
   assert.equal(norm(session('b4s7').reflection),'What would make this prompt safer or fairer for other people?');
-  assert.equal(norm(session('b4s10').reflection),"Finish this sentence: 'I should never trust an AI answer just because…'");
+  assert.equal(norm(session('b4s10').reflection),'Which moment in this chapter gave you that rule, and what exactly did you see?');
   assert.match(session('b4s10').type,/REFLECT/);
 });
 
@@ -121,7 +121,7 @@ test('block4 sessions carry the contracted activities',()=>{
   assert.match(build.fields.join(' '),/real task.*\[placeholders\].*why each part.*check by hand/is);
   assert.ok(build.downloads.some(d=>d.file==='reusable-prompt-template.md'));
   const red=session('b4s9').activity;
-  assert.equal(red.fields.length,3);
+  assert.equal(red.fields.length,4);
   assert.match(red.fields.join(' '),/ambiguity.*missing constraint.*need checking/is);
   assert.ok(red.downloads.some(d=>d.file==='genai-red-team-prompts.txt'));
   const exit=session('b4s10').activity;
@@ -132,7 +132,7 @@ test('block4 sessions carry the contracted activities',()=>{
 test('student UI renders the prompt activity with the selector contract and enforces its ready rule',()=>{
   const app=read('app.js');
   assert.match(app,/if\(a\.kind==='prompt'\)\{const b=v\.builder\|\|\{\},vs=v\.versions\|\|\{\},ex=v\.extras\|\|\{\};return `<div class="prompt-lab">/);
-  assert.match(app,/<input data-builder="\$\{k\}" placeholder="\$\{esc\(hint\)\}"/,'builder inputs input[data-builder]');
+  assert.match(app,/<textarea data-builder="\$\{k\}" rows="2" placeholder="\$\{esc\(hint\)\}"/,'builder inputs [data-builder]');
   assert.match(app,/<button id="composeV2" type="button"/);
   assert.match(app,/\$\{a\.builder\?`<div class="prompt-builder">/,'builder only when activity.builder is true');
   assert.match(app,/<textarea data-version="\$\{esc\(key\)\}" data-field="\$\{esc\(f\)\}"/,'version fields textarea[data-version][data-field]');

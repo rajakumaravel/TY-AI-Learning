@@ -759,7 +759,7 @@
           "activity": {
             "kind": "prompt",
             "title": "Prompt Lab 1: C-T-C-F",
-            "instructions": "Fill in the four parts, compose v2, then run v1 (the weak prompt) and v2 in DuckDuckGo AI Chat. For each version record the prompt exactly as sent, what you changed, what the output did, and whether it was better. Same safety rules as the first session: no personal details, made-up names if a prompt needs one, no sign-in, and paste back only short extracts.",
+            "instructions": "Fill in the four parts, compose v2, then run v1 (the weak prompt) and v2 in DuckDuckGo AI Chat. For each version record the prompt exactly as sent, what you changed, what the output did, and whether it was better.",
             "builder": true,
             "versions": [
               ["v1", "V1 – baseline (the weak prompt)"],
@@ -777,7 +777,13 @@
                 "file": "prompt-experiment-sheet-A4.csv",
                 "note": "Version, prompt change, what changed in the output, was it better and why: rows for V1, V2 and V3. Fill it in as you go, then copy across."
               }
-            ]
+            ],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."]
           },
           "reflection": "What changed because of your prompt, and what changed just randomly between runs?"
         },
@@ -797,7 +803,7 @@
           "activity": {
             "kind": "prompt",
             "title": "Prompt Lab 2: iterate",
-            "instructions": "Starting from your v2, add one thing at a time and run each version. When you know which additions helped, record your v3 below, then note the additions you tried and which ones earned their place. Same safety rules as the first session: no personal details, made-up names if a prompt needs one, no sign-in, and paste back only short extracts.",
+            "instructions": "Starting from your v2, add one thing at a time and run each version. When you know which additions helped, record your v3 below, then note the additions you tried and which ones earned their place.",
             "builder": false,
             "versions": [
               ["v3", "V3 – tested and revised"]
@@ -808,7 +814,13 @@
               ["output", "What the output did (short extract or summary)"],
               ["better", "Was it better? Why?"]
             ],
-            "extras": ["Additions I tried, one at a time (example, audience, success criteria, ask-me-questions-first)…", "Which additions actually helped, and which just made the prompt longer…"]
+            "extras": ["Additions I tried, one at a time (example, audience, success criteria, ask-me-questions-first)…", "Which additions actually helped, and which just made the prompt longer…"],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."]
           },
           "reflection": "Which single addition changed the output most, and how do you know the change came from the addition rather than from the model varying between runs?"
         },
@@ -828,7 +840,7 @@
           "activity": {
             "kind": "chain",
             "title": "Four useful roles",
-            "instructions": "One row per role. Tutor: “Explain X to me, then quiz me.” Risk: it explains something wrong, fluently. Brainstorm partner: “Give me 10 unusual angles on X.” Risk: you stop generating your own. Critic: “Here's my draft. What's weak?” Risk: it's too polite, or invents problems. Transformer: “Turn this into a table / a summary / simpler language.” Risk: it drops or changes meaning. Record the prompt you sent, what it did well, and the risk you saw. Same safety rules as the first session: no personal details, made-up names if a prompt needs one, no sign-in, and paste back only short extracts.",
+            "instructions": "One row per role. Tutor: “Explain X to me, then quiz me.” Risk: it explains something wrong, fluently. Brainstorm partner: “Give me 10 unusual angles on X.” Risk: you stop generating your own. Critic: “Here's my draft. What's weak?” Risk: it's too polite, or invents problems. Transformer: “Turn this into a table / a summary / simpler language.” Risk: it drops or changes meaning. Record the prompt you sent, what it did well, and the risk you saw.",
             "columns": [
               ["role", "Role (tutor, brainstorm partner, critic, transformer)"],
               ["prompt", "My prompt"],
@@ -837,7 +849,13 @@
             ],
             "rows": 4,
             "minRows": 4,
-            "head": "TUTOR · BRAINSTORM PARTNER · CRITIC · TRANSFORMER"
+            "head": "TUTOR · BRAINSTORM PARTNER · CRITIC · TRANSFORMER",
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."]
           },
           "reflection": "Which parts of the answer need evidence from outside the AI?"
         },
@@ -851,13 +869,13 @@
           "study": {
             "title": "Supported, uncertain or wrong",
             "body": ["Verification is checking a claim against independent, reliable evidence. Independent means not the chatbot, and not a page that copied the chatbot. Reliable is about source quality: how trustworthy a source is: who made it, why, and how it can be checked. An official record, a national body, a museum, a peer-reviewed paper or a primary document beats a blog, a forum answer or a page with no author.", "Pick a topic from the download, ask the AI about it, and choose three claims that would matter if wrong: figures, dates, names, causes. For each one find a source, note its name and where you found it, and give a verdict. Supported: a reliable source says the same. Uncertain: sources disagree, or you found nothing either way. Wrong: a reliable source contradicts it.", "The last column is the one people skip: what you changed because of the check. A wrong claim comes out of your talk. An uncertain one gets a hedge or a question mark. A supported one gets its source written next to it. If the AI gave you a citation, check that too. LLMs generate citations the same way they generate everything else: by pattern."],
-            "example": "Claim: “Ardnacrusha opened in 1937.” Source: ESB Archives history pages, esbarchives.ie. Verdict: wrong, it opened in 1929. What I changed: fixed the year and wrote the source next to it. That row is Sheet A2 done properly.",
+            "example": "Claim: “Lough Derg is the largest lake in Ireland.” Source: Tailte Éireann lake data and Waterways Ireland. Verdict: wrong. It is the largest lake on the Shannon, but Lough Neagh is far larger. What I changed: reworded the sentence to what the source supports and wrote the source next to it. That row is Sheet A2 done properly.",
             "keywords": ["verification", "source quality", "hallucination"]
           },
           "activity": {
             "kind": "chain",
             "title": "Verification log (Sheet A2)",
-            "instructions": "Choose a topic from the verification topic cards, ask the AI about it in DuckDuckGo AI Chat, then pick three claims it made. For each, name the source you checked and where you found it, give the verdict, and say what you changed because of it. If the tool is blocked, verify three claims from the sample outputs instead. Same safety rules as the first session: no personal details, made-up names if a prompt needs one, no sign-in, and paste back only short extracts.",
+            "instructions": "Choose a topic from the verification topic cards, ask the AI about it in DuckDuckGo AI Chat, then pick three claims it made. For each, name the source you checked and where you found it, give the verdict, and say what you changed because of it. If the tool is blocked, verify three claims from the sample outputs instead.",
             "columns": [
               ["claim", "Claim the AI made"],
               ["source", "Source I checked (name and where)"],
@@ -883,7 +901,13 @@
                 "file": "verification-log-A2.csv",
                 "note": "Claim, source checked, supported / uncertain / wrong, what I changed. Three empty rows."
               }
-            ]
+            ],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."]
           },
           "reflection": "Are you asking the model to think for you, or to help you think?"
         },
@@ -903,8 +927,14 @@
           "activity": {
             "kind": "textfields",
             "title": "Injecting doubt",
-            "instructions": "Pick a topic with two sides. Ask the leading version and the neutral version in the same tool, one after the other, and record what happened. Same safety rules as the first session: no personal details, made-up names if a prompt needs one, no sign-in, and paste back only short extracts.",
-            "fields": ["The leading question I asked (for example ‘Why is X better than Y?’)…", "The neutral version (‘Compare X and Y’)…", "How the two answers differed…", "What this shows about confirmation bias and my own responsibility…"]
+            "instructions": "Pick a topic with two sides. Ask the leading version and the neutral version in the same tool, one after the other, and record what happened.",
+            "fields": ["The leading question I asked (for example ‘Why is X better than Y?’)…", "The neutral version (‘Compare X and Y’)…", "How the two answers differed…", "What this shows about confirmation bias and my own responsibility…"],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."]
           },
           "reflection": "What would make this prompt safer or fairer for other people?"
         },
@@ -924,7 +954,7 @@
           "activity": {
             "kind": "textfields",
             "title": "Reusable prompt template",
-            "instructions": "Use the template download as a skeleton if you like. Write your template with [placeholders] for the parts that change, then explain it. Test it once in the tool before you call it finished. Same safety rules as the first session: no personal details, made-up names if a prompt needs one, no sign-in, and paste back only short extracts.",
+            "instructions": "Use the template download as a skeleton if you like. Write your template with [placeholders] for the parts that change, then explain it. Test it once in the tool before you call it finished.",
             "fields": ["The real task my template is for (work experience, learning a topic, planning an event, survey feedback)…", "My reusable prompt template, with [placeholders] for the parts that change…", "Why each part of the template is there…", "When I would use it again, and what I would still check by hand…"],
             "downloads": [
               {
@@ -932,7 +962,13 @@
                 "file": "reusable-prompt-template.md",
                 "note": "Context, Task, Constraints, Format with [placeholders], plus a built-in verification line. Fill it in, then paste your version above."
               }
-            ]
+            ],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked in the verification log.", "Nothing typed into this portal is sent to the AI tool; copy your prompt across yourself and paste short extracts of the output back here."]
           },
           "reflection": "Which line of your template would you refuse to remove, and what goes wrong without it?"
         },
@@ -945,7 +981,7 @@
           "intro": "Red-team a prompt: use a partner's if you have one, otherwise one of the three prompts in the download. Find what it leaves open.",
           "study": {
             "title": "One ambiguity, one missing constraint, one claim to check",
-            "body": ["Red-teaming means attacking your own work before someone else does. For a prompt, three things go wrong most often. An ambiguity: a word or phrase the model could read two ways, so the answer might be about the wrong thing. A missing constraint: no length, level, date range or “say if unsure”, so the model fills the gap with its most average guess.", "The third is a claim that would need checking: something the prompt invites the model to state as fact, such as a year, a statistic or a quotation, with no instruction to source it. Those are the sentences most likely to be hallucinated, and they are also the ones most likely to be copied straight into someone's work without anyone judging the source quality.", "Run the prompt if you can, but you can red-team it on paper too. Read it the way the model would: what is the most likely continuation, and where would a fluent wrong answer slip in? Write one of each, give the notes back if it was a partner's, and then apply the same three checks to your own template from the last session."],
+            "body": ["Red-teaming means attacking your own work before someone else does. For a prompt, three things go wrong most often. An ambiguity: a word or phrase the model could read two ways, so the answer might be about the wrong thing. A missing constraint: no length, level, date range or “say if unsure”, so the model fills the gap with its most average guess.", "The third is a claim that would need checking: something the prompt invites the model to state as fact, such as a year, a statistic or a quotation, with no instruction to source it. Those are the sentences most likely to be hallucinated, and they are also the ones most likely to be copied straight into someone's work without anyone judging the source quality.", "Run the prompt if you can, but you can red-team it on paper too. Read it the way the model would: what is the most likely continuation, and where would a fluent wrong answer slip in? Write one of each, give the notes back if it was a partner's, and keep a copy: you will want the same three checks for your own template."],
             "example": "“Write about the history of our town and include the year it was founded.” Ambiguity: which town? Missing constraint: how long, and for whom? Claim to check: the founding year, which the model will supply confidently whether or not any record exists.",
             "keywords": ["constraint", "verification", "source quality"]
           },
@@ -953,7 +989,7 @@
             "kind": "textfields",
             "title": "Red-team a prompt",
             "instructions": "Red-team a prompt: use a partner's if you have one, otherwise one of the three prompts in the download. Find one ambiguity, one missing constraint and one claim in its likely answer that would need checking.",
-            "fields": ["One ambiguity in the prompt…", "One missing constraint…", "One claim in its likely answer that would need checking…"],
+            "fields": ["The prompt I red-teamed (paste it, or say which card)…", "One ambiguity in the prompt…", "One missing constraint…", "One claim in its likely answer that would need checking…"],
             "downloads": [
               {
                 "label": "Red-team prompt cards (text)",
@@ -983,7 +1019,7 @@
             "instructions": "Write one sentence completing the exit rule. Make it specific to something you saw in this chapter.",
             "fields": ["I should never trust an AI answer just because…"]
           },
-          "reflection": "Finish this sentence: 'I should never trust an AI answer just because…'"
+          "reflection": "Which moment in this chapter gave you that rule, and what exactly did you see?"
         }
       ],
       "lab": {
