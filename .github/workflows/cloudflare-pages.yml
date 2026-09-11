@@ -23,7 +23,7 @@ jobs:
           node-version: 24
       - run: npm ci
       - run: npm run check
-      # Branch names are untrusted input; validate before they reach a shell command.
+      # Branch names are untrusted input; validate them here so the value interpolated below is safe.
       - name: Derive preview branch name
         env:
           REF_NAME: ${{ github.ref_name }}
@@ -36,5 +36,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch="$PREVIEW_BRANCH" --commit-hash=${{ github.sha }}
+          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=${{ env.PREVIEW_BRANCH }} --commit-hash=${{ github.sha }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
