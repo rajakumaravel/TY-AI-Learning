@@ -23,11 +23,18 @@ jobs:
           node-version: 24
       - run: npm ci
       - run: npm run check
+      # Branch names are untrusted input; validate them here so the value interpolated below is safe.
+      - name: Derive preview branch name
+        env:
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          [[ "$REF_NAME" =~ ^[A-Za-z0-9._/-]+$ ]] || { echo "Refusing to deploy unsafe ref name"; exit 1; }
+          echo "PREVIEW_BRANCH=preview-${REF_NAME//\//-}" >> "$GITHUB_ENV"
       # --branch is always prefixed so a push to main lands in the Preview environment, never Production.
       - name: Deploy to Cloudflare Pages Preview
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=preview-${{ github.ref_name }} --commit-hash=${{ github.sha }}
+          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=${{ env.PREVIEW_BRANCH }} --commit-hash=${{ github.sha }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
