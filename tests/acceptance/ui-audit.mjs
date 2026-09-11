@@ -18,7 +18,7 @@ try{
     const shot=async(name,full=true)=>p.screenshot({path:`${OUT}/${tag}-${name}.png`,fullPage:full});
     await shot('home');
     await p.click('[data-block="2"]'); await p.waitForSelector('#labBanner .lab-stage'); await shot('chapter3');
-    await p.click('[data-lab-session="b3s3"]'); await p.waitForSelector('.dataset-table tbody tr',{timeout:15000}); await shot('dataset-session');
+    await p.click('[data-lab-session="b3s4"]'); await p.waitForSelector('.dataset-table tbody tr',{timeout:15000}); await shot('dataset-session');
     await p.click('[data-block-home], #homeBtn'); await p.click('[data-block="0"]'); await p.waitForSelector('#labBanner'); await p.click('[data-lab-session="b1lab"]'); await p.waitForSelector('#labToolLink'); await shot('lab-session');
     await p.waitForSelector('#projectWorkspaceBtn',{timeout:15000}); await p.click('#projectWorkspaceBtn'); await p.waitForSelector('#projectWorkspaceModal.open'); await shot('workspace',false);
     await p.click('.pw-close'); await p.click('#portfolioBtn'); await shot('portfolio');

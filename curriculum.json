@@ -480,17 +480,17 @@
             "title": "Data category audit",
             "instructions": "Read the notice, tick it, then follow the five steps with a real privacy policy or app-store listing. If you have no policy to hand, use the fallback. Record your audit in the fields below.",
             "tool": {
-              "name": "your chosen service's privacy policy or app-store listing",
-              "url": "https://www.google.com/search?q=privacy+policy",
+              "name": "a guide to finding an app's data safety page",
+              "url": "https://support.google.com/googleplay/answer/11416267",
               "free": true
             },
-            "privacy": ["Investigate at category level only. You'll look at what kinds of data a service collects (“location”, “contacts”, “viewing history”). Never open, screenshot or share your own account data, and never anyone else's. The point is the pattern, not your private life.", "Never open, screenshot or share your own or anyone else's account data. Read the policy, not the account.", "No accounts. A privacy policy and an app-store listing are public pages; you do not need to sign in to anything to read them.", "Nothing typed here is sent anywhere but this portal. Even so, keep your notes to categories, never personal details about yourself or anyone else."],
-            "steps": ["Choose one familiar music, video or maps service.", "Open its privacy policy or its app-store data listing.", "List the categories of data it says it collects.", "Note anything surprising: a category you would not expect this service to need.", "Note anything vague, such as “to improve our services”, and what it might cover."],
+            "privacy": ["Investigate at category level only. You'll look at what kinds of data a service collects (“location”, “contacts”, “viewing history”). Never open, screenshot or share your own account data, and never anyone else's. The point is the pattern, not your private life.", "Read the policy, not the account.", "No accounts. A privacy policy and an app-store listing are public pages; you do not need to sign in to anything to read them.", "Nothing typed here is sent anywhere but this portal. Even so, keep your notes to categories, never personal details about yourself or anyone else."],
+            "steps": ["Choose one familiar music, video or maps service.", "Search for \"<app name> privacy policy\", or open the app's page in the App Store or Play Store and scroll to App Privacy or Data safety.", "List the categories of data it says it collects.", "Note anything surprising: a category you would not expect this service to need.", "Note anything vague, such as “to improve our services”, and what it might cover."],
             "fallback": {
               "title": "No policy to hand?",
               "steps": ["Use the three sample policy extracts below: download the file and pick the music app, the maps app or the photo-sharing app.", "List the categories it says it collects, exactly as the extract names them.", "Mark the surprising categories and quote the vague purposes.", "Record the same four things in the fields below."]
             },
-            "fields": ["The service I audited…", "Data categories it says it collects…", "Something surprising…", "Something vague, and what it might cover…"],
+            "fields": ["The service I audited, and why I picked it…", "Data categories it says it collects…", "Something surprising…", "Something vague, and what it might cover…"],
             "downloads": [
               {
                 "label": "Sample privacy policy extracts (text)",
@@ -517,7 +517,7 @@
           "activity": {
             "kind": "chain",
             "title": "Why collect it?",
-            "instructions": "For five data categories you found, complete the chain. Be fair: some collection is genuinely useful. Some isn't.",
+            "instructions": "For five data categories you found, complete the chain. Be fair: some collection is genuinely useful. Some isn't. If a category has no real benefit to you, write \"none\": every cell needs an answer.",
             "columns": [
               ["category", "Data category"],
               ["purpose", "Purpose"],
@@ -540,7 +540,7 @@
           "study": {
             "title": "Public is not the same as free to use",
             "body": ["Cookies are small files a website stores on your device to remember or track you. Remembering is useful: you stay logged in, your basket survives. Tracking is following what you do across pages, apps or time, and the same cookie can do both. Web scraping is automatically copying data from public web pages, and it is how many datasets are built.", "Public / private data is about whether data is openly available or restricted, and “public” doesn't mean “free to use for anything”. If something is publicly visible, is every reuse of it reasonable? A photo posted for friends is public. Is training a face-recognition model on it fair? The person made it visible for one purpose; scraping gives it another.", "Now the dataset fairness challenge. Your scenario is an AI system for school club recommendations, built on the sign-up data below. Representativeness is whether a dataset actually reflects all the people it will affect. Decide what data you'd collect, then ask: who is missing? Students who joined mid-year? People without smartphones? Those who work nights? A dataset can be full of errors, but the quietest flaw is the people who are not in it at all."],
-            "example": "Finding: column year_group, Who is missing (representation), “almost every Coding row is Transition Year, so the system will never recommend Coding to a first year”. That is a target, an issue type and a note someone else could check.",
+            "example": "Finding: column signup_date, Inconsistent format, \"three date styles in one column (2026-09-07, 03/09/2026, 4 Sept 2026), so sorting by date would be wrong\". That is a target, an issue type and a note someone else could check. Now ask the harder one yourself: which club has almost no rows from a whole year group or gender, and who does that leave out?",
             "keywords": ["cookies", "tracking", "web scraping", "public / private data", "representativeness"]
           },
           "activity": {
@@ -597,13 +597,13 @@
           "study": {
             "title": "A better data plan, then the card",
             "body": ["A better data plan starts by removing fields you don't need. If the purpose is recommending clubs, an inferred income band, a home Eircode and free-text opinions about students do not serve it; take them out before anyone trains anything. Then add a check for who's represented: compare the rows you have with the students the system will affect, and name the groups that are thin or absent.", "Decide how long data is kept. Sign-up data for this year's clubs has no reason to exist in five years. Retention is part of minimisation: data you no longer hold cannot leak, be reused or be inferred from. Then mark the decisions that must have a human reviewing them before anything happens to a person: a recommendation can be automatic, a refusal or a ranking should not be.", "The Responsible Data Card (Sheet A5) is where the whole investigation lands: what is collected, what is observed rather than typed, what might be inferred, why it is needed, what could go wrong, who might be missing or misrepresented, what should be removed or minimised, and what needs human review. Write it so that someone who never saw the data would still understand its limits."],
-            "example": "Before: 14 columns including inferred_income_band and notes, no representation check, kept forever, recommendations sent automatically. After: 9 columns, a term-by-term check of which year groups and genders are in each club, deleted at the end of the school year, any “do not recommend” decision reviewed by a teacher.",
+            "example": "Job shortlisting, before: the app collects home address, date of birth, a photo, school name, a \"likely reliability\" score inferred from social media, and keeps everything for ten years. After: name, contact email and the answers to three job-relevant questions only; a check each round that shortlisted candidates are not all from two schools; deleted three months after the role is filled; every rejection reviewed by a person before it is sent.",
             "keywords": ["representativeness", "data minimisation", "retention", "human review", "consent"]
           },
           "activity": {
             "kind": "textfields",
             "title": "Responsible Data Card (Sheet A5) and better data plan",
-            "instructions": "Answer the eight Sheet A5 questions for the club-recommendation system, then write your better data plan as a before → after comparison. Be specific: name columns, numbers and people affected.",
+            "instructions": "Answer the eight Sheet A5 questions for the service you audited (or for the club-recommendation system if you prefer), then write your better data plan for the club dataset as a before → after comparison. Be specific: name columns, numbers and people affected.",
             "fields": ["What data is collected?", "What is observed rather than typed?", "What might be inferred?", "Why is it needed?", "What could go wrong?", "Who might be missing or misrepresented?", "What should be removed or minimised?", "What needs human review?", "My better data plan, before → after: fields removed, representation check added, how long data is kept, decisions that need a human…"],
             "downloads": [
               {

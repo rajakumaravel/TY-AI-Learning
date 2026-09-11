@@ -69,7 +69,7 @@ test('block3 sessions carry the contracted activities',()=>{
   assert.deepEqual(quiz.options,['Volunteered','Observed','Inferred']);
   assert.deepEqual([...new Set(quiz.items.map(i=>i[1]))].sort(),['Inferred','Observed','Volunteered'],'all three piles are used');
   const lab=session('b3s2').activity;
-  assert.deepEqual(lab.tool,{name:"your chosen service's privacy policy or app-store listing",url:'https://www.google.com/search?q=privacy+policy',free:true});
+  assert.deepEqual(lab.tool,{name:"a guide to finding an app's data safety page",url:'https://support.google.com/googleplay/answer/11416267',free:true});
   assert.equal(lab.privacy.length,4);
   assert.match(norm(lab.privacy[0]),/^Investigate at category level only/);
   assert.match(norm(lab.privacy[0]),/Never open, screenshot or share your own account data, and never anyone else's\. The point is the pattern, not your private life\./);

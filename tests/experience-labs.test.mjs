@@ -51,7 +51,7 @@ test('chapter 3 lab is the Data Tracking Sherlock audit with the book\'s categor
   const b=course.blocks[2];
   const lab=b.sessions.find(s=>s.id==='b3s2');
   assert.equal(lab.activity.kind,'lab');
-  assert.match(lab.activity.tool.name,/privacy policy or app-store listing/);
+  assert.match(lab.activity.tool.name,/data safety page/);
   assert.match(lab.activity.privacy[0],/^Investigate at category level only\./);
   assert.equal(lab.activity.fallback.title,'No policy to hand?');
   assert.ok(lab.activity.downloads.some(d=>d.file==='privacy-policy-extracts.txt'));
