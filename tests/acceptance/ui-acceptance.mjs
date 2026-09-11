@@ -7,7 +7,7 @@
 // the Chapter 1→2 gate as rendered, and admin-page rejection for a non-admin account.
 
 import { chromium } from 'playwright';
-import { BASE, REF, api, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS } from './lib.mjs';
+import { BASE, REF, api, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS } from './lib.mjs';
 
 const STORAGE_KEY = `sb-${REF}-auth-token`;
 
@@ -76,7 +76,37 @@ try {
   await d3.page.waitForFunction(() => { const el = document.querySelector('[data-block="1"]'); return el && !el.classList.contains('locked'); }, null, { timeout: 15000 }).catch(() => {});
   check('device 3 Chapter 2 unlocked after capstone', await d3.page.$eval('[data-block="1"]', el => !el.classList.contains('locked') && !el.disabled));
   check('device 3 Chapter 1 marked done', await d3.page.$eval('[data-block="0"]', el => el.classList.contains('done')));
+  check('device 3 Chapter 3 locked until Chapter 2 qualified', await d3.page.$eval('[data-block="2"]', el => el.classList.contains('locked') && el.disabled));
+  const lock3 = await d3.page.$eval('[data-block="2"]', el => el.textContent);
+  check('device 3 Chapter 3 card explains the gate', /Complete Chapter 0?2 assessment/i.test(lock3), lock3.slice(-80));
   await d3.context.close();
+
+  // Chapter 2 completed and qualified server-side, then Chapter 3 opens with the dataset audit table
+  const done2 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS], reflections: {}, activity: {}, badges: [], chapterAssessments: {} } }) });
+  check('server accepts Chapter 2 completion', done2.status === 200);
+  const cap2 = await api('chapter-assessment/block2', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE2_ANSWERS }) });
+  check('Chapter 2 capstone accepted', cap2.status === 200 && Boolean(cap2.body?.assessment?.submittedAt), JSON.stringify(cap2.body));
+
+  let d4 = await device(browser, a.session);
+  await d4.page.waitForFunction(() => { const el = document.querySelector('[data-block="2"]'); return el && !el.classList.contains('locked'); }, null, { timeout: 15000 }).catch(() => {});
+  check('device 4 Chapter 3 unlocked after Chapter 2 capstone', await d4.page.$eval('[data-block="2"]', el => !el.classList.contains('locked') && !el.disabled));
+  await d4.page.click('[data-block="2"]');
+  await d4.page.waitForSelector('#labBanner .lab-stage', { timeout: 10000 });
+  check('chapter 3 shows six Experience Lab stages', (await d4.page.$$('#labBanner .lab-stage')).length === 6);
+  await d4.page.click('[data-session="b3s3"]');
+  await d4.page.waitForSelector('.dataset-table tbody tr', { timeout: 15000 });
+  const rows = (await d4.page.$$('.dataset-table tbody tr')).length;
+  check('b3s3 dataset table renders 60 rows from the served CSV', rows === 60, `rows=${rows}`);
+  const csv = await fetch(`${BASE}/datasets/club-signups-flawed.csv`);
+  check('flawed CSV is served with HTTP 200', csv.status === 200, `status ${csv.status}`);
+  const note = 'Nine sign-ups have no club_choice recorded.';
+  await d4.page.selectOption('#datasetTarget', { index: 1 });
+  await d4.page.selectOption('#datasetIssue', { index: 1 });
+  await d4.page.fill('#datasetNote', note);
+  await d4.page.click('#datasetAdd');
+  await d4.page.waitForFunction((n) => (document.querySelector('.dataset-findings')?.textContent || '').includes(n), note, { timeout: 10000 }).catch(() => {});
+  check('adding a finding via the form appears in the findings list', (await d4.page.textContent('.dataset-findings')).includes(note));
+  await d4.context.close();
 
   // Admin page: student rejected, admin admitted
   const ds = await device(browser, a.session, '/admin');

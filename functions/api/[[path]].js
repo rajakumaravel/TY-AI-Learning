@@ -5,7 +5,7 @@ import { PROJECT_BRIEFS, emptyProjectWorkspace, projectReadyForSubmission, safeE
 
 const json=(data,status=200)=>Response.json(data,{status,headers:{'cache-control':'no-store'}});
 const allowedLevels=new Set(['Getting started','Getting there','Going further']);
-const requiredSessions={block1:['b1s1','b1lab','b1s2','b1s3','b1s4'],block2:['b2s1','b2s2','b2s3','b2s4','b2s5','b2s6']};
+const requiredSessions={block1:['b1s1','b1lab','b1s2','b1s3','b1s4'],block2:['b2s1','b2s2','b2s3','b2s4','b2s5','b2s6'],block3:['b3s1','b3s2','b3s3','b3s4','b3s5']};
 
 function client(env,key){
   return createClient(env.SUPABASE_URL,key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
