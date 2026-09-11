@@ -50,11 +50,9 @@ try {
   check('device 2 Chapter 2 card explains the gate', /Complete Chapter 0?1 assessment/i.test(lockText), lockText.slice(-80));
   await d2.context.close();
 
-  // Capstone submitted server-side, then mirrored into progress state the way the app does after submission
+  // Capstone submitted server-side; qualification is derived by the server, no client mirroring needed
   const cap = await api('chapter-assessment/block1', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE1_ANSWERS }) });
   check('capstone accepted', cap.status === 200 && Boolean(cap.body?.assessment?.submittedAt), JSON.stringify(cap.body));
-  const withCap = { completed: CHAPTER1_SESSIONS, reflections: {}, activity: {}, badges: [], chapterAssessments: { block1: { submittedAt: cap.body?.assessment?.submittedAt, level: cap.body?.assessment?.suggestedLevel, score: cap.body?.assessment?.suggestedScore } } };
-  check('server accepts capstone-qualified state', (await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: withCap }) })).status === 200);
 
   // Device 3: Chapter 2 unlocked
   let d3 = await device(browser, a.session);

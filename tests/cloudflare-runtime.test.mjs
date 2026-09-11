@@ -45,3 +45,11 @@ test('migration ADR prevents guessed identity reconciliation and premature cutov
   assert.match(adr,/must not be merged into `main`/i);
   assert.match(adr,/RLS/i);
 });
+
+test('server derives chapter qualification from chapter_assessments and gates the next chapter',()=>{
+  assert.match(fn,/from\('chapter_assessments'\)\.select\('block_id,suggested_level,suggested_score,teacher_level,submitted_at'\)/);
+  assert.match(fn,/chapterAssessments:await chapterQualifications\(db,userId\)/);
+  assert.match(fn,/state:await withServerQualifications\(db,auth\.user\.id,data\?\.state\)/);
+  assert.match(fn,/const trusted=await withServerQualifications\(db,auth\.user\.id,state\)/);
+  assert.equal((fn.match(/previousBlockQualified\(db,auth\.user\.id,(blockId|projectId)\)\)\)return json\(\{error:PREVIOUS_CHAPTER_REQUIRED\},409\)/g)||[]).length,3);
+});

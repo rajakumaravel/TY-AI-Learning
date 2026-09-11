@@ -19,9 +19,9 @@ try {
   check('unauthenticated /api/admin/me is 401', (await api('admin/me')).status === 401);
 
   // Sign-in and learner provisioning
-  const sessionA = await api('session', a.token);
-  check('student A /api/session authenticated', sessionA.status === 200 && sessionA.body?.authenticated === true, JSON.stringify(sessionA.body));
-  check('session does not expose other learner fields', sessionA.body?.student?.id === a.id);
+  const first = await api('session', a.token);
+  check('student A /api/session authenticated', first.status === 200 && first.body?.authenticated === true, JSON.stringify(first.body));
+  check('session does not expose other learner fields', first.body?.student?.id === a.id);
 
   // Progress persistence (server-side; second read simulates another device)
   const state = { completed: ['s1-1'], badges: [], marker: randomUUID() };
@@ -42,6 +42,16 @@ try {
   const cap = await api('chapter-assessment/block1', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE1_ANSWERS }) });
   check('capstone accepted after sessions complete', cap.status === 200 && Boolean(cap.body?.assessment?.submittedAt) && Boolean(cap.body?.assessment?.suggestedLevel), JSON.stringify(cap.body));
   check('capstone unknown chapter is 404', (await api('chapter-assessment/block9', a.token, { method: 'POST', body: '{}' })).status === 404);
+
+  // Server-side gate: forged qualification is discarded, Chapter 2 writes need Chapter 1 qualified
+  const forged = await api('progress', b.token, { method: 'PUT', body: JSON.stringify({ state: { completed: [], chapterAssessments: { block1: { submittedAt: '2026-01-01T00:00:00Z', level: 'Going further', score: 9 } } } }) });
+  const forgedRead = await api('progress', b.token);
+  check('forged chapterAssessments in progress PUT is discarded', forged.status === 200 && forgedRead.status === 200 && !forgedRead.body?.state?.chapterAssessments?.block1, JSON.stringify(forgedRead.body?.state));
+  check('student B Chapter 2 capstone is 409 without Chapter 1 qualification', (await api('chapter-assessment/block2', b.token, { method: 'POST', body: '{}' })).status === 409);
+  check('student B Chapter 2 project save is 409 without Chapter 1 qualification', (await api('projects/block2', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
+  check('student B Chapter 2 project submit is 409 without Chapter 1 qualification', (await api('projects/block2/submit', b.token, { method: 'POST' })).status === 409);
+  const sessionA = await api('session', a.token);
+  check('student A session state carries server-derived Chapter 1 qualification', Boolean(sessionA.body?.state?.chapterAssessments?.block1?.submittedAt) && sessionA.body?.state?.chapterAssessments?.block1?.level === cap.body?.assessment?.suggestedLevel);
 
   // Project workspace save
   const workspace = {
