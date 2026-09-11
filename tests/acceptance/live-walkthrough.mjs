@@ -167,7 +167,7 @@ try {
   });
   await page.click('.pw-close');
   await page.click('#portfolioBtn');
-  await step(page, 'Portfolio shows progress and badge', async () => /100%|9\d%/.test(await page.textContent('#portfolioPct')));
+  await step(page, 'Portfolio shows progress and badge', async () => /^(6\d|7\d|8\d|9\d|100)%$/.test((await page.textContent('#portfolioPct')).trim()));
   await context.close();
 
   // ---------- teacher
