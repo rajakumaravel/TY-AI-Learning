@@ -1,0 +1,5 @@
+,predicted_cup,predicted_bottle
+actual_cup,,
+actual_bottle,,
+
+accuracy = (actual_cup->predicted_cup + actual_bottle->predicted_bottle) / all tests

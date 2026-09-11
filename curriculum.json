@@ -82,7 +82,19 @@
               "title": "Tool blocked or offline?",
               "steps": ["Pair up. One person is the AI: they may only guess from the lines drawn so far, no questions allowed.", "The other draws six objects from the Student Book list, 20 seconds each.", "Record which were guessed, which failed, and what the 'AI' said instead.", "Redraw one failed object differently and see whether the guess changes."]
             },
-            "fields": ["My prediction before I started…", "What the AI actually did…", "One unexpected result or failure…", "What changed when I changed my drawing…", "My evidence (which objects, how many guessed, how quickly)…"]
+            "fields": ["My prediction before I started…", "What the AI actually did…", "One unexpected result or failure…", "What changed when I changed my drawing…", "My evidence (which objects, how many guessed, how quickly)…"],
+            "downloads": [
+              {
+                "label": "Fallback draw cards (text)",
+                "file": "chapter1-draw-cards.txt",
+                "note": "Two rounds of six objects for the pair activity when Quick, Draw! is blocked."
+              },
+              {
+                "label": "Fallback draw cards (CSV)",
+                "file": "chapter1-draw-cards.csv",
+                "note": "Same list as a spreadsheet for recording results."
+              }
+            ]
           },
           "reflection": "What does the AI's mistake tell you about the examples it learned from, and why is that different from how a person recognises things?"
         },
@@ -233,9 +245,16 @@
             "steps": ["Create two safe object classes.", "Collect a balanced set of examples.", "Vary angle, distance, lighting and background.", "Train model v1.", "Record the case you expect to be weakest."],
             "fallback": {
               "title": "Tool blocked or no camera?",
-              "steps": ["Use the printed CUP / BOTTLE photo cards from your teacher, or 20 quick sketches: 10 per class.", "Sort them into two piles by one visible rule you choose, such as 'has a handle'. That rule is your model v1.", "Record the rule, how many cards each pile has, and which card you expect the rule to get wrong.", "Keep the cards: you will test them in the next session."]
+              "steps": ["Download the training set v1 below and upload its cup and bottle folders to the tool instead of using a camera. If the tool itself is blocked: print or sketch 20 cards, 10 per class.", "Sort them into two piles by one visible rule you choose, such as 'has a handle'. That rule is your model v1.", "Record the rule, how many cards each pile has, and which card you expect the rule to get wrong.", "Keep the cards: you will test them in the next session."]
             },
-            "fields": ["My two classes and how many examples each…", "Conditions I varied (angle, distance, light, background)…", "The case I predict will be weakest, and why…", "What happened when I trained v1…"]
+            "fields": ["My two classes and how many examples each…", "Conditions I varied (angle, distance, light, background)…", "The case I predict will be weakest, and why…", "What happened when I trained v1…"],
+            "downloads": [
+              {
+                "label": "Cup vs Bottle training set v1 (zip, 40 images)",
+                "file": "cup-bottle-training-v1.zip",
+                "note": "Drawn shapes, 20 per class, varied colour, size, position and background. Upload the cup and bottle folders as your two classes if you have no camera."
+              }
+            ]
           },
           "reflection": "What did you vary in the training examples, and why should that matter?"
         },
@@ -257,7 +276,19 @@
             "title": "Model test log",
             "instructions": "Record at least 10 tests: actual class, prediction and an observation about angle, light, background or another condition.",
             "rows": 10,
-            "classes": ["Cup", "Bottle"]
+            "classes": ["Cup", "Bottle"],
+            "downloads": [
+              {
+                "label": "Unseen test set (zip, 10 images + labels)",
+                "file": "cup-bottle-unseen-test.zip",
+                "note": "Test each image, record the prediction, then check labels.csv."
+              },
+              {
+                "label": "Test log template (CSV)",
+                "file": "test-log-template.csv",
+                "note": "Same columns as the on-screen log."
+              }
+            ]
           },
           "reflection": "Which test condition produced the most interesting failure, and what was different from your training data?"
         },
@@ -277,7 +308,14 @@
           "activity": {
             "kind": "matrix",
             "title": "Build your 2×2 matrix",
-            "instructions": "Enter the counts from the same test log and calculate accuracy."
+            "instructions": "Enter the counts from the same test log and calculate accuracy.",
+            "downloads": [
+              {
+                "label": "Confusion matrix template (CSV)",
+                "file": "confusion-matrix-template.csv",
+                "note": "Four cells plus the accuracy formula."
+              }
+            ]
           },
           "reflection": "Why might high accuracy on its own still hide an important weakness?"
         },
@@ -298,7 +336,14 @@
             "kind": "textfields",
             "title": "Background trap",
             "instructions": "Create the flawed background correlation, test with backgrounds swapped, and record what happened.",
-            "fields": ["How I created the shortcut", "What happened when I swapped backgrounds", "What pattern the model may have learned"]
+            "fields": ["How I created the shortcut", "What happened when I swapped backgrounds", "What pattern the model may have learned"],
+            "downloads": [
+              {
+                "label": "Shortcut trap set (zip)",
+                "file": "cup-bottle-shortcut-trap.zip",
+                "note": "Every training cup is on a dark background, every bottle on a light one. The test folder swaps them. Train on train/, test on test/, and watch what the model actually learned."
+              }
+            ]
           },
           "reflection": "Give another accidental shortcut an image model could learn from a badly designed dataset."
         },
@@ -319,7 +364,14 @@
             "kind": "textfields",
             "title": "Model v2 improvement note",
             "instructions": "Record at least two changes and what happened when you retested.",
-            "fields": ["Change 1 and why", "Change 2 and why", "What improved", "What is still uncertain"]
+            "fields": ["Change 1 and why", "Change 2 and why", "What improved", "What is still uncertain"],
+            "downloads": [
+              {
+                "label": "Training set v2 (zip, 40 images)",
+                "file": "cup-bottle-training-v2.zip",
+                "note": "Both classes on both background types. Train v2 here, then re-run the shortcut trap test folder."
+              }
+            ]
           },
           "reflection": "Which change had the strongest evidence of improvement, or what would you test next?"
         },

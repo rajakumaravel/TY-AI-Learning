@@ -10,7 +10,8 @@
     "build": "vite build",
     "test": "node --test tests/*.test.mjs",
     "check": "npm test && npm run build",
-    "acceptance": "node tests/acceptance/cutover-acceptance.mjs && node tests/acceptance/ui-acceptance.mjs"
+    "acceptance": "node tests/acceptance/cutover-acceptance.mjs && node tests/acceptance/ui-acceptance.mjs",
+    "datasets": "node scripts/generate-datasets.mjs"
   },
   "dependencies": {
     "@netlify/database": "latest",
