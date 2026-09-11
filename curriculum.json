@@ -14,29 +14,25 @@
       "mission": "Create a one-page AI in My Day map showing at least five systems that use AI. For two of them, show INPUT → AI ACTION → OUTPUT → BENEFIT → RISK.",
       "route": [
         ["0–10 min", "Hook: AI or not?"],
-        ["10–25 min", "Discover: three questions that help"],
-        ["25–50 min", "AI in My Day map"],
-        ["50–70 min", "The influence lens"],
-        ["70–95 min", "Human vs AI"],
-        ["95–115 min", "Micro-debate"],
-        ["115–120 min", "Exit reflection"]
+        ["10–30 min", "Experience Lab: draw for the AI"],
+        ["30–50 min", "Discover: three questions that help"],
+        ["50–70 min", "AI in My Day map"],
+        ["70–90 min", "The influence lens"],
+        ["90–110 min", "Human vs AI and micro-debate"],
+        ["110–120 min", "Exit reflection"]
       ],
-      "final": "AI in My Day map, human-vs-AI comparison, and exit reflection.",
+      "final": "Draw-for-the-AI lab evidence, AI in My Day map, human-vs-AI comparison, and exit reflection.",
       "sessions": [
         {
           "id": "b1s1",
           "title": "AI or not?",
-          "minutes": 25,
+          "minutes": 15,
           "type": "PREDICT + DISCOVER",
           "pageRef": "Student Book pp. 5–6",
           "intro": "Vote before you get a definition, then use three questions to revisit your first instinct.",
           "study": {
             "title": "Three questions that help",
-            "body": [
-              "There is no perfect one-line test for AI. A useful starting point is to ask whether a system uses data, finds or generates patterns, and adapts or predicts rather than only following one fixed rule.",
-              "Automation is not automatically AI. A timer and a calculator can be useful software while still following explicit rules written by people.",
-              "Modern products can mix ordinary software and AI, so some examples are genuinely borderline. Your job is to explain the evidence for your choice, not to force everything into one box."
-            ],
+            "body": ["There is no perfect one-line test for AI. A useful starting point is to ask whether a system uses data, finds or generates patterns, and adapts or predicts rather than only following one fixed rule.", "Automation is not automatically AI. A timer and a calculator can be useful software while still following explicit rules written by people.", "Modern products can mix ordinary software and AI, so some examples are genuinely borderline. Your job is to explain the evidence for your choice, not to force everything into one box."],
             "example": "A timer follows a fixed setting. A spam filter can use patterns from earlier examples to estimate whether a new message is spam.",
             "keywords": ["algorithm", "pattern", "prediction", "automation", "AI system"]
           },
@@ -45,27 +41,61 @@
             "title": "Hook: AI or not?",
             "instructions": "Choose AI, not AI, or unsure for each. You can change your answers after reading the study material.",
             "items": [
-              ["Calculator", "Not AI"], ["Spam filter", "AI"], ["Playlist recommendation", "AI"], ["Traffic lights", "Unsure"],
-              ["Face unlock", "AI"], ["Autocorrect", "Unsure"], ["Chatbot", "AI"], ["Timer", "Not AI"]
+              ["Calculator", "Not AI"],
+              ["Spam filter", "AI"],
+              ["Playlist recommendation", "AI"],
+              ["Traffic lights", "Unsure"],
+              ["Face unlock", "AI"],
+              ["Autocorrect", "Unsure"],
+              ["Chatbot", "AI"],
+              ["Timer", "Not AI"]
             ],
             "options": ["AI", "Not AI", "Unsure"]
           },
           "reflection": "Choose one example and explain what evidence makes you think it contains AI, rather than only a fixed rule."
         },
         {
+          "id": "b1lab",
+          "title": "Can AI recognise what I draw?",
+          "minutes": 20,
+          "type": "TRY + TEST",
+          "pageRef": "Student Book pp. 5–6 · Experience Lab",
+          "intro": "Predict what an AI will do, watch what it actually does, then change your input and see what changes.",
+          "study": {
+            "title": "Recognition is pattern-matching, not understanding",
+            "body": ["A recognition system compares your input with patterns learned from millions of earlier examples. It does not know what a cat is; it knows what most people's cat drawings looked like.", "That is why it can guess a rough sketch in seconds and still fail on an unusual, tilted or partial drawing. The failure tells you what the training data looked like.", "A good experiment records the prediction before the result, the result itself, one failure, and what changed when the input changed."],
+            "example": "Draw a bicycle with two circles and a bar and the AI may guess it instantly. Draw the same bicycle from the front and it may say 'glasses'.",
+            "keywords": ["recognition", "training data", "pattern", "prediction", "failure case"]
+          },
+          "activity": {
+            "kind": "lab",
+            "title": "Experience Lab: draw for the AI",
+            "instructions": "Read the safety notice, open the tool, play one round of six drawings, then record what actually happened. If the tool is blocked or offline, use the fallback.",
+            "tool": {
+              "name": "Quick, Draw!",
+              "url": "https://quickdraw.withgoogle.com/",
+              "free": true
+            },
+            "privacy": ["Quick, Draw! keeps drawings for public research. Draw only the simple object it asks for; never write words, names, faces or personal details.", "Use objects and drawings, never faces, names or anything that identifies you or another person.", "Do not sign in or create an account. These tools work without one.", "Nothing you type into this portal is sent to the external tool; record your evidence here, not there."],
+            "steps": ["Before you start, predict which of the six words the AI will get right and which it will miss.", "Play one round. Watch which guesses appear while you are still drawing.", "Note one drawing it got wrong or took longest on, and what it guessed instead.", "Redraw that object a different way (angle, size, detail). Did the guess change?", "Record your evidence below in your own words."],
+            "fallback": {
+              "title": "Tool blocked or offline?",
+              "steps": ["Pair up. One person is the AI: they may only guess from the lines drawn so far, no questions allowed.", "The other draws six objects from the Student Book list, 20 seconds each.", "Record which were guessed, which failed, and what the 'AI' said instead.", "Redraw one failed object differently and see whether the guess changes."]
+            },
+            "fields": ["My prediction before I started…", "What the AI actually did…", "One unexpected result or failure…", "What changed when I changed my drawing…", "My evidence (which objects, how many guessed, how quickly)…"]
+          },
+          "reflection": "What does the AI's mistake tell you about the examples it learned from, and why is that different from how a person recognises things?"
+        },
+        {
           "id": "b1s2",
           "title": "AI in My Day",
-          "minutes": 45,
+          "minutes": 40,
           "type": "TRY + TEST",
           "pageRef": "Student Book p. 6",
           "intro": "Map a normal day and make the hidden input-to-output chain visible.",
           "study": {
             "title": "The influence lens",
-            "body": [
-              "To understand an AI system, follow the chain: INPUT is the data that goes in; AI ACTION is the pattern-finding, ranking, prediction or generation; OUTPUT is what comes out.",
-              "Then ask about consequence. BENEFIT asks who gains. RISK asks what could go wrong. A final stakeholder question is: who might be affected besides you?",
-              "Recommendation systems can create feedback loops: what you click today can influence what you see tomorrow, which can influence what you click next."
-            ],
+            "body": ["To understand an AI system, follow the chain: INPUT is the data that goes in; AI ACTION is the pattern-finding, ranking, prediction or generation; OUTPUT is what comes out.", "Then ask about consequence. BENEFIT asks who gains. RISK asks what could go wrong. A final stakeholder question is: who might be affected besides you?", "Recommendation systems can create feedback loops: what you click today can influence what you see tomorrow, which can influence what you click next."],
             "example": "Listening history → finds patterns in what similar people play → playlist → new music discovery → risk of repeatedly hearing more of the same.",
             "keywords": ["input", "AI action", "output", "benefit", "risk", "feedback loop"]
           },
@@ -80,17 +110,13 @@
         {
           "id": "b1s3",
           "title": "Human vs AI",
-          "minutes": 45,
+          "minutes": 40,
           "type": "QUESTION + DISCUSS",
           "pageRef": "Student Book p. 7",
           "intro": "Compare strengths without assuming either humans or AI are automatically better.",
           "study": {
             "title": "Ability is not the same as responsibility",
-            "body": [
-              "Current AI systems can be fast at pattern-heavy tasks, generating alternatives, sorting large amounts of information and producing fluent output.",
-              "Humans bring lived context, values, responsibility, judgement about consequences and the ability to decide when a task should not be automated.",
-              "A useful comparison asks not only who can do a task, but who should make the final decision and who is accountable when something goes wrong."
-            ],
+            "body": ["Current AI systems can be fast at pattern-heavy tasks, generating alternatives, sorting large amounts of information and producing fluent output.", "Humans bring lived context, values, responsibility, judgement about consequences and the ability to decide when a task should not be automated.", "A useful comparison asks not only who can do a task, but who should make the final decision and who is accountable when something goes wrong."],
             "example": "A recommendation model can rank thousands of songs quickly. A person can decide whether the recommendation is appropriate for a particular situation and can reject it.",
             "keywords": ["human oversight", "judgement", "accountability", "stakeholder"]
           },
@@ -111,11 +137,7 @@
           "intro": "Finish Chapter 1 by putting the idea into your own words.",
           "study": {
             "title": "Myth-busters to remember",
-            "body": [
-              "AI does not simply mean robots; most AI you meet is software such as ranking, filtering, prediction or generation.",
-              "Not every computer program is AI. Fixed-rule software and learned systems can exist side by side.",
-              "Using AI does not make a system objective. Data and design choices come from people and can still produce unfair outcomes."
-            ],
+            "body": ["AI does not simply mean robots; most AI you meet is software such as ranking, filtering, prediction or generation.", "Not every computer program is AI. Fixed-rule software and learned systems can exist side by side.", "Using AI does not make a system objective. Data and design choices come from people and can still produce unfair outcomes."],
             "example": "A system can be consistent every time and still be consistently unfair.",
             "keywords": ["evidence", "limitation", "influence", "oversight"]
           },
@@ -127,7 +149,19 @@
           },
           "reflection": "In two or three sentences, explain the biggest idea you are taking from AI & Me."
         }
-      ]
+      ],
+      "lab": {
+        "title": "Can AI recognise what I do?",
+        "summary": "You predict, test, break and re-test a real recognition system, then audit the AI already in your day.",
+        "stages": [
+          ["DO", "b1lab", "Draw for the AI"],
+          ["TEST", "b1lab", "Watch what it guesses"],
+          ["MAKE", "b1s2", "Build your AI in My Day map"],
+          ["BREAK", "b1lab", "Find a drawing it gets wrong"],
+          ["IMPROVE", "b1lab", "Change your input and compare"],
+          ["PROVE", "b1s4", "Record evidence and reflection"]
+        ]
+      }
     },
     {
       "id": "block2",
@@ -139,62 +173,190 @@
       "description": "Teach a computer to tell two objects apart, then deliberately find where it fails and improve it with evidence.",
       "mission": "Train a two-class model, produce a 10-row test log and confusion matrix, find one failure pattern, improve the model, and show before-and-after evidence.",
       "route": [
-        ["0–20 min", "Be the classifier"], ["20–40 min", "Discover: from rules to learning"], ["40–75 min", "Build model v1"],
-        ["75–100 min", "Break your model"], ["100–120 min", "Evidence checkpoint"], ["120–145 min", "Confusion matrix"],
-        ["145–175 min", "Shortcut experiment"], ["175–210 min", "Improve model v2"], ["210–230 min", "Compare v1 and v2"], ["230–240 min", "Reflection"]
+        ["0–20 min", "Be the classifier"],
+        ["20–40 min", "Discover: from rules to learning"],
+        ["40–75 min", "Build model v1"],
+        ["75–100 min", "Break your model"],
+        ["100–120 min", "Evidence checkpoint"],
+        ["120–145 min", "Confusion matrix"],
+        ["145–175 min", "Shortcut experiment"],
+        ["175–210 min", "Improve model v2"],
+        ["210–230 min", "Compare v1 and v2"],
+        ["230–240 min", "Reflection"]
       ],
       "final": "Dataset plan, v1 test log and accuracy, confusion matrix, shortcut-learning observation, v2 improvement note, and reflection.",
       "sessions": [
         {
-          "id": "b2s1", "title": "Be the classifier", "minutes": 40, "type": "PREDICT + DISCOVER", "pageRef": "Student Book pp. 9–10",
+          "id": "b2s1",
+          "title": "Be the classifier",
+          "minutes": 40,
+          "type": "PREDICT + DISCOVER",
+          "pageRef": "Student Book pp. 9–10",
           "intro": "Try written rules first so you can see why machine learning uses labelled examples.",
-          "study": {"title":"From rules to learning","body":["Supervised learning teaches a model with examples that already have the right class label attached.","A feature is something measurable about an example, such as shape, edges, brightness or proportions. The model learns statistical patterns in those features; nobody types every rule into it.","Training data are the labelled examples used for learning. Test data must be genuinely different, otherwise you are mostly testing memory rather than generalisation."],"example":"Instead of writing ‘cups have handles’, show the model many labelled cup and bottle examples and let it learn separating patterns.","keywords":["supervised learning","class label","feature","training data","test data","generalisation"]},
-          "activity": {"kind":"textfields","title":"Human classifier","instructions":"Write rules another group could use to tell two objects apart, then note an unusual example that breaks one rule.","fields":["My two classes","Rule 1","Rule 2","An unusual example that breaks a rule"]},
+          "study": {
+            "title": "From rules to learning",
+            "body": ["Supervised learning teaches a model with examples that already have the right class label attached.", "A feature is something measurable about an example, such as shape, edges, brightness or proportions. The model learns statistical patterns in those features; nobody types every rule into it.", "Training data are the labelled examples used for learning. Test data must be genuinely different, otherwise you are mostly testing memory rather than generalisation."],
+            "example": "Instead of writing ‘cups have handles’, show the model many labelled cup and bottle examples and let it learn separating patterns.",
+            "keywords": ["supervised learning", "class label", "feature", "training data", "test data", "generalisation"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Human classifier",
+            "instructions": "Write rules another group could use to tell two objects apart, then note an unusual example that breaks one rule.",
+            "fields": ["My two classes", "Rule 1", "Rule 2", "An unusual example that breaks a rule"]
+          },
           "reflection": "Why do fixed written rules run out quickly when examples become unusual?"
         },
         {
-          "id": "b2s2", "title": "Build model v1", "minutes": 35, "type": "TRY", "pageRef": "Student Book p. 10",
+          "id": "b2s2",
+          "title": "Build model v1",
+          "minutes": 35,
+          "type": "TRY",
+          "pageRef": "Student Book p. 10",
           "intro": "Collect balanced, varied examples and record the conditions before you train.",
-          "study": {"title":"Training data shapes the model","body":["A balanced dataset contains roughly similar numbers of examples for each class.","A varied dataset includes realistic differences in lighting, angle, distance and background.","More examples are not automatically better if they all repeat the same accidental pattern."],"example":"Twenty cup photos from one angle on one desk can teach less than twenty varied cup photos across different angles and backgrounds.","keywords":["balance","variety","representation","training conditions"]},
-          "activity": {"kind":"external","title":"Train CUP vs BOTTLE","instructions":"Use a school-approved visual classifier. Record your classes, example counts, conditions and one predicted weak case.","url":"https://teachablemachine.withgoogle.com/","steps":["Create two safe object classes.","Collect a balanced set of examples.","Vary angle, distance, lighting and background.","Train model v1.","Record the case you expect to be weakest."]},
+          "study": {
+            "title": "Training data shapes the model",
+            "body": ["A balanced dataset contains roughly similar numbers of examples for each class.", "A varied dataset includes realistic differences in lighting, angle, distance and background.", "More examples are not automatically better if they all repeat the same accidental pattern."],
+            "example": "Twenty cup photos from one angle on one desk can teach less than twenty varied cup photos across different angles and backgrounds.",
+            "keywords": ["balance", "variety", "representation", "training conditions"]
+          },
+          "activity": {
+            "kind": "lab",
+            "title": "Experience Lab: train CUP vs BOTTLE",
+            "instructions": "Read the safety notice, open the tool, train model v1, then record your classes, example counts, conditions and one predicted weak case. If the tool is blocked, use the fallback.",
+            "tool": {
+              "name": "Teachable Machine",
+              "url": "https://teachablemachine.withgoogle.com/",
+              "free": true
+            },
+            "privacy": ["Point the camera only at safe objects on a desk. Keep faces, other people and anything with a name or address out of every image.", "Use objects and drawings, never faces, names or anything that identifies you or another person.", "Do not sign in or create an account. These tools work without one.", "Nothing you type into this portal is sent to the external tool; record your evidence here, not there."],
+            "steps": ["Create two safe object classes.", "Collect a balanced set of examples.", "Vary angle, distance, lighting and background.", "Train model v1.", "Record the case you expect to be weakest."],
+            "fallback": {
+              "title": "Tool blocked or no camera?",
+              "steps": ["Use the printed CUP / BOTTLE photo cards from your teacher, or 20 quick sketches: 10 per class.", "Sort them into two piles by one visible rule you choose, such as 'has a handle'. That rule is your model v1.", "Record the rule, how many cards each pile has, and which card you expect the rule to get wrong.", "Keep the cards: you will test them in the next session."]
+            },
+            "fields": ["My two classes and how many examples each…", "Conditions I varied (angle, distance, light, background)…", "The case I predict will be weakest, and why…", "What happened when I trained v1…"]
+          },
           "reflection": "What did you vary in the training examples, and why should that matter?"
         },
         {
-          "id": "b2s3", "title": "Break it and log the evidence", "minutes": 45, "type": "TEST", "pageRef": "Student Book p. 11 + Sheet A3",
+          "id": "b2s3",
+          "title": "Break it and log the evidence",
+          "minutes": 45,
+          "type": "TEST",
+          "pageRef": "Student Book p. 11 + Sheet A3",
           "intro": "Your goal is to find failures, not to make the model look good.",
-          "study": {"title":"Testing and accuracy","body":["Useful testing uses unseen examples: different objects, new angles, unusual lighting, cluttered backgrounds or partial views.","Accuracy is correct predictions divided by total predictions. It is useful, but it does not explain which kinds of errors occurred.","A model that never fails in your tests may simply mean the tests are too easy."],"example":"8 correct predictions out of 10 tests gives 80% accuracy. The two failures are evidence worth investigating.","keywords":["unseen example","accuracy","error","test log"]},
-          "activity": {"kind":"testlog","title":"Model test log","instructions":"Record at least 10 tests: actual class, prediction and an observation about angle, light, background or another condition.","rows":10,"classes":["Cup","Bottle"]},
+          "study": {
+            "title": "Testing and accuracy",
+            "body": ["Useful testing uses unseen examples: different objects, new angles, unusual lighting, cluttered backgrounds or partial views.", "Accuracy is correct predictions divided by total predictions. It is useful, but it does not explain which kinds of errors occurred.", "A model that never fails in your tests may simply mean the tests are too easy."],
+            "example": "8 correct predictions out of 10 tests gives 80% accuracy. The two failures are evidence worth investigating.",
+            "keywords": ["unseen example", "accuracy", "error", "test log"]
+          },
+          "activity": {
+            "kind": "testlog",
+            "title": "Model test log",
+            "instructions": "Record at least 10 tests: actual class, prediction and an observation about angle, light, background or another condition.",
+            "rows": 10,
+            "classes": ["Cup", "Bottle"]
+          },
           "reflection": "Which test condition produced the most interesting failure, and what was different from your training data?"
         },
         {
-          "id": "b2s4", "title": "Read the confusion matrix", "minutes": 25, "type": "EVALUATE", "pageRef": "Student Book p. 11",
+          "id": "b2s4",
+          "title": "Read the confusion matrix",
+          "minutes": 25,
+          "type": "EVALUATE",
+          "pageRef": "Student Book p. 11",
           "intro": "Accuracy hides which mistakes happened. The confusion matrix separates them.",
-          "study": {"title":"Which error matters?","body":["A confusion matrix compares what was actually true with what the model predicted.","Correct predictions sit where actual and predicted classes match; the other cells show the two directions of error.","Which error matters more depends on the job. The consequences of a spam-filter mistake and a medical-screening mistake are not the same."],"example":"Two models can have the same overall accuracy but make different kinds of mistakes, so the matrix can reveal a weakness that accuracy hides.","keywords":["confusion matrix","actual class","predicted class","false alarm","missed case"]},
-          "activity": {"kind":"matrix","title":"Build your 2×2 matrix","instructions":"Enter the counts from the same test log and calculate accuracy."},
+          "study": {
+            "title": "Which error matters?",
+            "body": ["A confusion matrix compares what was actually true with what the model predicted.", "Correct predictions sit where actual and predicted classes match; the other cells show the two directions of error.", "Which error matters more depends on the job. The consequences of a spam-filter mistake and a medical-screening mistake are not the same."],
+            "example": "Two models can have the same overall accuracy but make different kinds of mistakes, so the matrix can reveal a weakness that accuracy hides.",
+            "keywords": ["confusion matrix", "actual class", "predicted class", "false alarm", "missed case"]
+          },
+          "activity": {
+            "kind": "matrix",
+            "title": "Build your 2×2 matrix",
+            "instructions": "Enter the counts from the same test log and calculate accuracy."
+          },
           "reflection": "Why might high accuracy on its own still hide an important weakness?"
         },
         {
-          "id": "b2s5", "title": "The shortcut experiment", "minutes": 30, "type": "INVESTIGATE", "pageRef": "Student Book pp. 11–12",
+          "id": "b2s5",
+          "title": "The shortcut experiment",
+          "minutes": 30,
+          "type": "INVESTIGATE",
+          "pageRef": "Student Book pp. 11–12",
           "intro": "Deliberately build a flawed dataset so you can see shortcut learning happen.",
-          "study": {"title":"Shortcut learning and bias","body":["A model searches for statistical patterns that reduce error. It does not automatically know which pattern humans intended it to learn.","Shortcut learning happens when the model relies on an easy accidental clue, such as background colour, instead of the object itself.","Bias can enter through data even when nobody deliberately writes an unfair rule."],"example":"If cups are almost always photographed on a light background and bottles on a dark one, the model may learn background colour. Swap backgrounds and the prediction can collapse.","keywords":["shortcut learning","bias","correlation","representation"]},
-          "activity": {"kind":"textfields","title":"Background trap","instructions":"Create the flawed background correlation, test with backgrounds swapped, and record what happened.","fields":["How I created the shortcut","What happened when I swapped backgrounds","What pattern the model may have learned"]},
+          "study": {
+            "title": "Shortcut learning and bias",
+            "body": ["A model searches for statistical patterns that reduce error. It does not automatically know which pattern humans intended it to learn.", "Shortcut learning happens when the model relies on an easy accidental clue, such as background colour, instead of the object itself.", "Bias can enter through data even when nobody deliberately writes an unfair rule."],
+            "example": "If cups are almost always photographed on a light background and bottles on a dark one, the model may learn background colour. Swap backgrounds and the prediction can collapse.",
+            "keywords": ["shortcut learning", "bias", "correlation", "representation"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Background trap",
+            "instructions": "Create the flawed background correlation, test with backgrounds swapped, and record what happened.",
+            "fields": ["How I created the shortcut", "What happened when I swapped backgrounds", "What pattern the model may have learned"]
+          },
           "reflection": "Give another accidental shortcut an image model could learn from a badly designed dataset."
         },
         {
-          "id": "b2s6", "title": "Improve model v2", "minutes": 35, "type": "IMPROVE", "pageRef": "Student Book p. 11",
+          "id": "b2s6",
+          "title": "Improve model v2",
+          "minutes": 35,
+          "type": "IMPROVE",
+          "pageRef": "Student Book p. 11",
           "intro": "Use the failure evidence to make targeted changes, then test again fairly.",
-          "study": {"title":"Improve with evidence","body":["Propose changes that address the failure you actually observed: more variety, better balance, mixed backgrounds, clearer labels or additional representative examples.","Where possible, retest v2 using the same test set as v1 so the comparison is fair.","A better model is supported by before-and-after evidence, not by confidence or a single successful example."],"example":"If dark backgrounds caused cup errors, add both classes on light and dark backgrounds, retrain, then repeat the same background challenge.","keywords":["iteration","baseline","retest","evidence","improvement"]},
-          "activity": {"kind":"textfields","title":"Model v2 improvement note","instructions":"Record at least two changes and what happened when you retested.","fields":["Change 1 and why","Change 2 and why","What improved","What is still uncertain"]},
+          "study": {
+            "title": "Improve with evidence",
+            "body": ["Propose changes that address the failure you actually observed: more variety, better balance, mixed backgrounds, clearer labels or additional representative examples.", "Where possible, retest v2 using the same test set as v1 so the comparison is fair.", "A better model is supported by before-and-after evidence, not by confidence or a single successful example."],
+            "example": "If dark backgrounds caused cup errors, add both classes on light and dark backgrounds, retrain, then repeat the same background challenge.",
+            "keywords": ["iteration", "baseline", "retest", "evidence", "improvement"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Model v2 improvement note",
+            "instructions": "Record at least two changes and what happened when you retested.",
+            "fields": ["Change 1 and why", "Change 2 and why", "What improved", "What is still uncertain"]
+          },
           "reflection": "Which change had the strongest evidence of improvement, or what would you test next?"
         },
         {
-          "id": "b2s7", "title": "Compare and reflect", "minutes": 30, "type": "REFLECT + EVIDENCE", "pageRef": "Student Book pp. 11–13",
+          "id": "b2s7",
+          "title": "Compare and reflect",
+          "minutes": 30,
+          "type": "REFLECT + EVIDENCE",
+          "pageRef": "Student Book pp. 11–13",
           "intro": "Finish with numbers plus examples, and be explicit about what is still uncertain.",
-          "study": {"title":"A trustworthy evaluation is more than one score","body":["Present what changed from v1 to v2, what improved, and what remains uncertain.","A confusion matrix shows error types that overall accuracy can hide.","Variety and balance can matter more than simply collecting a larger volume of near-identical examples."],"example":"If v2 scores better on your tests but you cannot explain why, say so. Uncertainty is part of honest evaluation.","keywords":["evaluation","evidence","uncertainty","generalisation"]},
-          "activity": {"kind":"textfields","title":"Before-and-after evidence","instructions":"Summarise your model experiment for the portfolio.","fields":["v1 accuracy / main weakness","v2 accuracy / main improvement","One limitation that remains"]},
+          "study": {
+            "title": "A trustworthy evaluation is more than one score",
+            "body": ["Present what changed from v1 to v2, what improved, and what remains uncertain.", "A confusion matrix shows error types that overall accuracy can hide.", "Variety and balance can matter more than simply collecting a larger volume of near-identical examples."],
+            "example": "If v2 scores better on your tests but you cannot explain why, say so. Uncertainty is part of honest evaluation.",
+            "keywords": ["evaluation", "evidence", "uncertainty", "generalisation"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Before-and-after evidence",
+            "instructions": "Summarise your model experiment for the portfolio.",
+            "fields": ["v1 accuracy / main weakness", "v2 accuracy / main improvement", "One limitation that remains"]
+          },
           "reflection": "Why might ‘high accuracy’ on its own not mean a model can be trusted? Use your own shortcut result or test evidence."
         }
-      ]
+      ],
+      "lab": {
+        "title": "Train and break a model",
+        "summary": "You train a real classifier, test it on unseen examples, break it on purpose, diagnose the shortcut it learned, and prove your v2 is better.",
+        "stages": [
+          ["DO", "b2s2", "Train model v1"],
+          ["TEST", "b2s3", "Log 10 unseen tests"],
+          ["MAKE", "b2s4", "Build the confusion matrix"],
+          ["BREAK", "b2s5", "Run the shortcut experiment"],
+          ["IMPROVE", "b2s6", "Train model v2"],
+          ["PROVE", "b2s7", "Compare and submit evidence"]
+        ]
+      }
     }
   ]
 }

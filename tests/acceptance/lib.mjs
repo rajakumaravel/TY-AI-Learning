@@ -50,7 +50,7 @@ export async function cleanup(users) {
   for (const u of users) check(`cleanup: deleted test user ${u.id.slice(0, 8)}`, await deleteUser(u.id));
 }
 
-export const CHAPTER1_SESSIONS = ['b1s1', 'b1s2', 'b1s3', 'b1s4'];
+export const CHAPTER1_SESSIONS = ['b1s1', 'b1lab', 'b1s2', 'b1s3', 'b1s4'];
 export const CAPSTONE1_ANSWERS = {
   q1: 'INPUT: student interests survey plus click and attendance data. AI ACTION: rank clubs by predicted enjoyment. OUTPUT: top three after-school activity recommendations for each student.',
   q2: 'Benefit: students discover clubs they would not have searched for. Risk: it recommends only popular clubs and hides minority interests. Other stakeholder: club coordinators whose numbers change.',

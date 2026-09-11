@@ -41,6 +41,7 @@ function activityLabel(activity, key) {
   if (activity.kind === "testlog") return `Test ${Number(key)+1}`;
   if (activity.kind === "matrix") return "Confusion matrix";
   if (activity.kind === "external") return "Experiment record";
+  if (activity.kind === "lab") { if (key === "ack") return "Safety notice acknowledged"; if (key === "mode") return "Lab mode"; return activity.fields?.[Number(key)] || `Response ${Number(key)+1}`; }
   if (activity.kind === "quiz") return activity.items?.[Number(key)]?.[0] || `Answer ${Number(key)+1}`;
   return `Response ${Number(key)+1}`;
 }
