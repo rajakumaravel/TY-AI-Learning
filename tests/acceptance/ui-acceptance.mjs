@@ -33,6 +33,19 @@ try {
   check('device 1 sync status is not Local mode', !(await d1.page.textContent('#syncStatus')).includes('Local mode'), await d1.page.textContent('#syncStatus'));
   check('device 1 course progress starts at 0%', (await d1.page.textContent('#coursePct')).trim() === '0%');
   check('device 1 Chapter 2 locked before Chapter 1', await d1.page.$eval('[data-block="1"]', el => el.classList.contains('locked') && el.disabled));
+  // Experience Lab: banner, safety gate, fallback
+  await d1.page.click('[data-block="0"]');
+  await d1.page.waitForSelector('#labBanner .lab-stage', { timeout: 10000 });
+  check('chapter 1 shows six Experience Lab stages', (await d1.page.$$('#labBanner .lab-stage')).length === 6);
+  await d1.page.click('[data-lab-session="b1lab"]');
+  await d1.page.waitForSelector('#labToolLink', { timeout: 10000 });
+  check('lab tool link disabled until safety notice acknowledged', await d1.page.$eval('#labToolLink', el => el.classList.contains('disabled') && el.getAttribute('aria-disabled') === 'true'));
+  check('lab safety notice mentions no account and no personal details', /account/i.test(await d1.page.textContent('.lab-privacy')) && /face|name|personal/i.test(await d1.page.textContent('.lab-privacy')));
+  await d1.page.check('[data-ack]');
+  check('lab tool link enabled after acknowledgement', await d1.page.$eval('#labToolLink', el => !el.classList.contains('disabled') && el.getAttribute('aria-disabled') === 'false'));
+  check('lab fallback hidden by default', await d1.page.$eval('#labFallback', el => el.hidden));
+  await d1.page.click('[data-fallback]');
+  check('lab fallback shown on request', await d1.page.$eval('#labFallback', el => !el.hidden));
   await d1.context.close();
 
   // Work recorded server-side (as the app would after saving sessions), then a capstone
@@ -50,11 +63,9 @@ try {
   check('device 2 Chapter 2 card explains the gate', /Complete Chapter 0?1 assessment/i.test(lockText), lockText.slice(-80));
   await d2.context.close();
 
-  // Capstone submitted server-side, then mirrored into progress state the way the app does after submission
+  // Capstone submitted server-side; qualification is derived by the server, no client mirroring needed
   const cap = await api('chapter-assessment/block1', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE1_ANSWERS }) });
   check('capstone accepted', cap.status === 200 && Boolean(cap.body?.assessment?.submittedAt), JSON.stringify(cap.body));
-  const withCap = { completed: CHAPTER1_SESSIONS, reflections: {}, activity: {}, badges: [], chapterAssessments: { block1: { submittedAt: cap.body?.assessment?.submittedAt, level: cap.body?.assessment?.suggestedLevel, score: cap.body?.assessment?.suggestedScore } } };
-  check('server accepts capstone-qualified state', (await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: withCap }) })).status === 200);
 
   // Device 3: Chapter 2 unlocked
   let d3 = await device(browser, a.session);

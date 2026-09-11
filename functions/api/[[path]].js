@@ -5,7 +5,7 @@ import { PROJECT_BRIEFS, emptyProjectWorkspace, projectReadyForSubmission, safeE
 
 const json=(data,status=200)=>Response.json(data,{status,headers:{'cache-control':'no-store'}});
 const allowedLevels=new Set(['Getting started','Getting there','Going further']);
-const requiredSessions={block1:['b1s1','b1s2','b1s3','b1s4'],block2:['b2s1','b2s2','b2s3','b2s4','b2s5','b2s6']};
+const requiredSessions={block1:['b1s1','b1lab','b1s2','b1s3','b1s4'],block2:['b2s1','b2s2','b2s3','b2s4','b2s5','b2s6']};
 
 function client(env,key){
   return createClient(env.SUPABASE_URL,key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
@@ -46,6 +46,20 @@ async function currentLearner(context){
   if(error)throw error;
   return {user:auth.user,learner:{id:auth.user.id,email:auth.user.email||'',displayName},db};
 }
+const blockOrder=Object.keys(requiredSessions);
+async function chapterQualifications(db,userId){
+  const {data,error}=await db.from('chapter_assessments').select('block_id,suggested_level,suggested_score,teacher_level,submitted_at').eq('user_id',userId); if(error)throw error;
+  const map={}; for(const row of data||[])map[row.block_id]={submittedAt:row.submitted_at,level:row.teacher_level||row.suggested_level,score:row.suggested_score}; return map;
+}
+async function withServerQualifications(db,userId,state){
+  const clean=state&&typeof state==='object'&&!Array.isArray(state)?state:{};
+  return {...clean,chapterAssessments:await chapterQualifications(db,userId)};
+}
+async function previousBlockQualified(db,userId,blockId){
+  const index=blockOrder.indexOf(blockId); if(index<=0)return true;
+  const qualified=await chapterQualifications(db,userId); return Boolean(qualified[blockOrder[index-1]]?.submittedAt);
+}
+const PREVIOUS_CHAPTER_REQUIRED='Complete the previous chapter assessment before starting this chapter.';
 function assessmentRecord(row){return {sessionId:row.session_id,suggestedLevel:row.suggested_level,suggestedScore:row.suggested_score,criteria:row.criteria||{},strengths:row.strengths||[],nextSteps:row.next_steps||[],teacherLevel:row.teacher_level||null,teacherComment:row.teacher_comment||null,reviewedBy:row.reviewed_by||null,assessedAt:row.assessed_at,reviewedAt:row.reviewed_at||null,effectiveLevel:row.teacher_level||row.suggested_level,formative:true}}
 function chapterRecord(row){return {blockId:row.block_id,answers:row.answers||{},suggestedLevel:row.suggested_level,suggestedScore:row.suggested_score,criteria:row.criteria||{},strengths:row.strengths||[],nextSteps:row.next_steps||[],teacherLevel:row.teacher_level||null,teacherComment:row.teacher_comment||null,reviewedBy:row.reviewed_by||null,submittedAt:row.submitted_at,reviewedAt:row.reviewed_at||null,effectiveLevel:row.teacher_level||row.suggested_level,formative:true}}
 function cleanWorkspace(value){const raw=value&&typeof value==='object'&&!Array.isArray(value)?value:{};return {workLog:Array.isArray(raw.workLog)?raw.workLog.slice(0,50).map(e=>({planned:String(e?.planned||'').slice(0,2000),did:String(e?.did||'').slice(0,4000),result:String(e?.result||'').slice(0,4000),blocker:String(e?.blocker||'').slice(0,2000),decision:String(e?.decision||'').slice(0,3000),next:String(e?.next||'').slice(0,2000),minutes:Math.max(0,Math.min(600,Number(e?.minutes)||0)),date:String(e?.date||'').slice(0,32)})):[],evidence:Array.isArray(raw.evidence)?raw.evidence.slice(0,50).map(e=>({label:String(e?.label||'').slice(0,240),url:safeEvidenceUrl(e?.url),note:String(e?.note||'').slice(0,4000)})):[],finalRecommendation:String(raw.finalRecommendation||'').slice(0,8000)}}
@@ -58,19 +72,20 @@ async function handleCore(context,path){
   if(path==='session'&&method==='GET'){
     const auth=await currentLearner(context); if(auth.error)return auth.error;
     const {data,error}=await db.from('learner_progress').select('state').eq('user_id',auth.user.id).maybeSingle(); if(error)throw error;
-    return json({authenticated:true,student:auth.learner,state:data?.state||{}});
+    return json({authenticated:true,student:auth.learner,state:await withServerQualifications(db,auth.user.id,data?.state)});
   }
   if(path==='progress'&&method==='GET'){
     const auth=await currentLearner(context); if(auth.error)return auth.error;
     const {data,error}=await db.from('learner_progress').select('state,updated_at').eq('user_id',auth.user.id).maybeSingle(); if(error)throw error;
-    return json({state:data?.state||{},updatedAt:data?.updated_at||null});
+    return json({state:await withServerQualifications(db,auth.user.id,data?.state),updatedAt:data?.updated_at||null});
   }
   if(path==='progress'&&method==='PUT'){
     const auth=await currentLearner(context); if(auth.error)return auth.error;
     const body=await context.request.json().catch(()=>({})); const state=body.state;
     if(!state||typeof state!=='object'||Array.isArray(state))return json({error:'Invalid progress state.'},400);
     if(JSON.stringify(state).length>250000)return json({error:'Progress payload is too large.'},413);
-    const {error}=await db.from('learner_progress').upsert({user_id:auth.user.id,state,updated_at:new Date().toISOString()},{onConflict:'user_id'}); if(error)throw error;
+    const trusted=await withServerQualifications(db,auth.user.id,state);
+    const {error}=await db.from('learner_progress').upsert({user_id:auth.user.id,state:trusted,updated_at:new Date().toISOString()},{onConflict:'user_id'}); if(error)throw error;
     return json({ok:true});
   }
   const assessMatch=path.match(/^assessment\/([^/]+)$/);
@@ -89,6 +104,7 @@ async function handleCore(context,path){
   if(chapterMatch&&method==='POST'){
     const auth=await currentLearner(context); if(auth.error)return auth.error;
     const blockId=decodeURIComponent(chapterMatch[1]).slice(0,80); if(!(blockId in CAPSTONES))return json({error:'Unknown chapter assessment.'},404);
+    if(!(await previousBlockQualified(db,auth.user.id,blockId)))return json({error:PREVIOUS_CHAPTER_REQUIRED},409);
     const {data:progress,error:progressError}=await db.from('learner_progress').select('state').eq('user_id',auth.user.id).maybeSingle(); if(progressError)throw progressError;
     const completed=new Set(Array.isArray(progress?.state?.completed)?progress.state.completed:[]);
     if(!(requiredSessions[blockId]||[]).every(id=>completed.has(id)))return json({error:'Complete all chapter practical sessions before submitting the chapter assessment.'},409);
@@ -140,6 +156,7 @@ async function handleProjects(context,path){
   if(student&&['GET','PUT'].includes(method)){
     const auth=await authUser(context); if(auth.error)return auth.error; const projectId=decodeURIComponent(student[1]); if(!validProjectId(projectId))return json({error:'Unknown project.'},404);
     if(method==='GET'){const {data,error}=await db.from('student_projects').select('*').eq('user_id',auth.user.id).eq('project_id',projectId).maybeSingle(); if(error)throw error; return json({project:projectRecord(data,projectId)});}
+    if(!(await previousBlockQualified(db,auth.user.id,projectId)))return json({error:PREVIOUS_CHAPTER_REQUIRED},409);
     const body=await context.request.json().catch(()=>({})),workspace=cleanWorkspace(body.workspace); if(JSON.stringify(workspace).length>150000)return json({error:'Project workspace is too large.'},413);
     const {data:existing,error:eerr}=await db.from('student_projects').select('status').eq('user_id',auth.user.id).eq('project_id',projectId).maybeSingle(); if(eerr)throw eerr;
     const {data,error}=await db.from('student_projects').upsert({user_id:auth.user.id,project_id:projectId,status:existing?.status==='reviewed'?'reviewed':'in_progress',workspace,updated_at:new Date().toISOString()},{onConflict:'user_id,project_id'}).select().single(); if(error)throw error; return json({project:projectRecord(data,projectId)});
@@ -147,6 +164,7 @@ async function handleProjects(context,path){
   const submit=path.match(/^projects\/([^/]+)\/submit$/);
   if(submit&&method==='POST'){
     const auth=await authUser(context); if(auth.error)return auth.error; const projectId=decodeURIComponent(submit[1]); if(!validProjectId(projectId))return json({error:'Unknown project.'},404);
+    if(!(await previousBlockQualified(db,auth.user.id,projectId)))return json({error:PREVIOUS_CHAPTER_REQUIRED},409);
     const {data:existing,error:eerr}=await db.from('student_projects').select('*').eq('user_id',auth.user.id).eq('project_id',projectId).maybeSingle(); if(eerr)throw eerr; if(!existing)return json({error:'Save some project work before submitting.'},400); if(!projectReadyForSubmission(existing.workspace||{}))return json({error:'Add at least one meaningful work-log entry, three pieces of evidence, and a clear final recommendation before submitting.'},400);
     const now=new Date().toISOString(); const {data,error}=await db.from('student_projects').update({status:'submitted',submitted_snapshot:existing.workspace,submitted_at:now,updated_at:now,reviewed_by:null,review_comment:null,reviewed_at:null}).eq('user_id',auth.user.id).eq('project_id',projectId).select().single(); if(error)throw error; return json({project:projectRecord(data,projectId)});
   }
