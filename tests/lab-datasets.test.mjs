@@ -22,6 +22,15 @@ test('chapter 2 lab sessions each offer a dataset or template',()=>{
   assert.ok(downloads.some(d=>/shortcut-trap/.test(d.file)&&d.session==='b2s5'));
 });
 
+test('chapter 3 dataset, teacher key and templates are generated and in the manifest',()=>{
+  for(const file of ['club-signups-flawed.csv','club-signups-flawed.README.txt','club-signups-cleaned-template.csv','responsible-data-card-template.md']){
+    assert.ok(fs.existsSync(`public/datasets/${file}`),`${file} missing`);
+    assert.ok(manifest[file]>0,`${file} not in manifest`);
+  }
+  for(const id of ['b3s2','b3s3'])assert.ok(downloads.some(d=>d.session===id&&d.file==='club-signups-flawed.csv'),id);
+  assert.ok(!downloads.some(d=>/README/.test(d.file)),'the teacher key is not offered to students');
+});
+
 test('dataset archives stay small enough for school connections',()=>{
   for(const [file,size] of Object.entries(manifest))assert.ok(size<1_000_000,`${file} is ${size} bytes`);
 });

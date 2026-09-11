@@ -134,6 +134,123 @@ Round 1: bicycle, cat, house, umbrella, clock, banana
 Round 2: bridge, fish, tree, glasses, camera, spoon
 `);
 
+
+// ---------- Chapter 3: club sign-ups, flawed on purpose (every flaw is documented in the README, which is the teacher key)
+const FIRST = { Female: ['Aoife', 'Saoirse', 'Niamh', 'Roisin', 'Clodagh', 'Eimear', 'Grainne', 'Sinead', 'Orla', 'Maeve', 'Ciara', 'Aisling', 'Blathnaid', 'Meabh', 'Laoise', 'Fiadh', 'Caoimhe', 'Ailbhe', 'Sadhbh', 'Una'], Male: ['Cian', 'Oisin', 'Tadhg', 'Fionn', 'Darragh', 'Cathal', 'Ruairi', 'Eoghan', 'Padraig', 'Lorcan', 'Senan', 'Donal', 'Killian', 'Cormac', 'Diarmuid', 'Odhran', 'Naoise', 'Rian', 'Tiernan', 'Conall'] };
+const SURNAME = ['Sampleton', 'Testerson', 'Mockwell', 'Fakeham', 'Dummyford', 'Exampleby', 'Stubbington', 'Placeholder', 'Specimen', 'Fixture', 'Draftly', 'Proofer'];
+const CLUBS = ['Football', 'Drama', 'Art', 'Chess', 'Debating', 'Music', 'Basketball'];
+const TY_SPELLINGS = ['TY', 'Transition Year', '4', 'ty'];
+const OTHER_YEARS = [['1st Year', 6], ['2nd Year', 8], ['3rd Year', 8], ['5th Year', 5], ['6th Year', 3]];
+const BIRTH_YEAR = { '1st Year': 2013, '2nd Year': 2012, '3rd Year': 2011, TY: 2010, '5th Year': 2009, '6th Year': 2008 };
+const INTERESTS = ['football', 'gaming', 'art', 'music', 'reading', 'coding', 'drama', 'hurling', 'camogie', 'swimming', 'baking', 'photography', 'chess', 'running', 'animation'];
+const NOTES = ['bit lazy needs pushing', 'very bright', 'parents difficult to deal with', 'always late', 'not club material', 'troublemaker in first year', 'quiet and odd', 'teacher favourite', 'sibling was a problem', 'too many activities already', 'likely to drop out', 'attention seeking', 'promising if pushed', 'do not put with Cian S'];
+const INCOME = ['Low', 'Medium', 'Medium', 'High'];
+const COLUMNS = ['student_id', 'first_name', 'surname', 'date_of_birth', 'year_group', 'gender', 'home_eircode', 'interests', 'club_choice', 'signup_date', 'attendance_pct', 'parent_phone', 'inferred_income_band', 'notes'];
+const SENSITIVE = ['home_eircode', 'parent_phone', 'date_of_birth', 'inferred_income_band'];
+const BASE_ROWS = 120 - 6; // plus 4 exact and 2 near duplicates
+const CODING_ROWS = 25, CODING_MALE = 22; // 88% one value
+
+function shuffle(r, arr) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const pad2 = n => String(n).padStart(2, '0');
+const letter = r => String.fromCharCode(65 + Math.floor(r() * 26));
+const dateFormats = [(d) => `2026-09-${pad2(d)}`, (d) => `${pad2(d)}/09/2026`, (d) => `${d} Sept 2026`];
+const csvField = v => /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
+const csv = rows => [COLUMNS.join(','), ...rows.map(row => COLUMNS.map(c => csvField(String(row[c]))).join(','))].join('\n') + '\n';
+
+function clubSignups() {
+  const r = rng(5000);
+  // club and gender: Coding is skewed, everything else alternates
+  const plan = [];
+  for (let i = 0; i < CODING_ROWS; i++) plan.push({ club: 'Coding', gender: i < CODING_MALE ? 'Male' : 'Female', ty: true });
+  for (let i = 0; plan.length < BASE_ROWS; i++) plan.push({ club: CLUBS[i % CLUBS.length], gender: i % 9 === 8 ? 'Prefer not to say' : i % 2 ? 'Female' : 'Male', ty: false });
+  // year groups: every Coding row is TY; the rest share the remaining TY spellings and the other years
+  const tyCount = BASE_ROWS - OTHER_YEARS.reduce((n, [, c]) => n + c, 0);
+  const tyPool = shuffle(r, Array.from({ length: tyCount }, (_, i) => TY_SPELLINGS[i < 50 ? 0 : i < 64 ? 1 : i < 76 ? 2 : 3]));
+  const otherPool = shuffle(r, [...OTHER_YEARS.flatMap(([y, c]) => Array(c).fill(y)), ...tyPool.slice(CODING_ROWS)]);
+  let ty = 0, other = 0;
+  const rows = shuffle(r, plan).map((p, i) => {
+    const year = p.ty ? tyPool[ty++] : otherPool[other++];
+    const by = BIRTH_YEAR[TY_SPELLINGS.includes(year) ? 'TY' : year];
+    const nInterests = 1 + Math.floor(r() * 3);
+    return {
+      student_id: `S${1001 + i}`, first_name: pick(r, FIRST[p.gender] || (r() < 0.5 ? FIRST.Female : FIRST.Male)), surname: pick(r, SURNAME),
+      date_of_birth: `${by}-${pad2(1 + Math.floor(r() * 12))}-${pad2(1 + Math.floor(r() * 28))}`,
+      year_group: year, gender: p.gender,
+      home_eircode: `Z${Math.floor(r() * 90) + 10} ${letter(r)}${letter(r)}${Math.floor(r() * 90) + 10}`,
+      interests: shuffle(r, INTERESTS).slice(0, nInterests).join('; '),
+      club_choice: p.club, signup_date: dateFormats[i % 3](1 + Math.floor(r() * 12)),
+      attendance_pct: String(55 + Math.floor(r() * 46)),
+      parent_phone: `080 ${Math.floor(r() * 900) + 100} ${Math.floor(r() * 9000) + 1000}`,
+      inferred_income_band: pick(r, INCOME), notes: r() < 0.24 ? pick(r, NOTES) : '',
+    };
+  });
+  // blanks and impossible values, on non-Coding rows so the Coding skew stays exact
+  const nonCoding = shuffle(r, rows.filter(x => x.club_choice !== 'Coding'));
+  let k = 0;
+  for (let i = 0; i < 9; i++) nonCoding[k++].club_choice = '';
+  for (let i = 0; i < 6; i++) nonCoding[k++].year_group = '';
+  for (let i = 0; i < 3; i++) nonCoding[k++].interests = '';
+  for (const v of ['104', '-5', 'n/a']) nonCoding[k++].attendance_pct = v;
+  // duplicates: copies of otherwise clean rows, inserted a few rows after the original
+  const clean = nonCoding.slice(k).filter(x => x.notes === '');
+  const exact = clean.slice(0, 4), near = clean.slice(4, 6);
+  const out = rows.slice();
+  const insert = (row, copy) => out.splice(out.indexOf(row) + 3 + Math.floor(r() * 10), 0, copy);
+  for (const row of exact) insert(row, { ...row });
+  for (const row of near) insert(row, { ...row, first_name: row.first_name.toUpperCase(), surname: row.surname.toLowerCase() });
+  return { rows: out, exact, near };
+}
+
+const { rows: signups, exact: exactDups, near: nearDups } = clubSignups();
+const count = (col, test) => signups.filter(x => test(x[col])).length;
+const coding = signups.filter(x => x.club_choice === 'Coding');
+const codingMale = coding.filter(x => x.gender === 'Male').length;
+const tyRows = count('year_group', v => TY_SPELLINGS.includes(v));
+writeFileSync(join(OUT, 'club-signups-flawed.csv'), csv(signups));
+writeFileSync(join(OUT, 'club-signups-flawed.README.txt'), `Club sign-ups, flawed on purpose (Chapter 3, Data Detective). TEACHER KEY: this file lists every planted flaw.
+${signups.length} rows, ${COLUMNS.length} columns: ${COLUMNS.join(', ')}.
+Purpose the school states for the data: assign students to after-school clubs.
+
+Everything here is synthetic. First names are common Irish names; surnames come from a fixed list of obviously
+fictional ones (${SURNAME.join(', ')}). Eircodes use the routing key Z + two digits, which is not a real routing
+key. Phone numbers use the prefix 080, which is not allocated to any Irish operator. Notes are invented.
+
+Planted flaws and where to find them:
+- Missing values: ${count('club_choice', v => v === '')} rows with no club_choice, ${count('year_group', v => v === '')} rows with no year_group, ${count('interests', v => v === '')} rows with blank interests.
+- Inconsistent formats: signup_date in three styles (${dateFormats.map((f, i) => `${f(3)}: ${count('signup_date', v => [/^\d{4}-/, /^\d{2}\//, / Sept /][i].test(v))} rows`).join('; ')}).
+  year_group spelt four ways for the same year: ${TY_SPELLINGS.map(s => `${s} (${count('year_group', v => v === s)})`).join(', ')}.
+- Duplicates: ${exactDups.length} exact duplicate rows (${exactDups.map(x => x.student_id).join(', ')}) and ${nearDups.length} near-duplicates that differ only in letter case (${nearDups.map(x => x.student_id).join(', ')}).
+- Suspicious values: attendance_pct contains 104, -5 and n/a (one row each); every other value is 55-100.
+- Imbalance: club_choice = Coding has ${coding.length} rows and ${Math.round(100 * codingMale / coding.length)}% of them are Male (${codingMale} of ${coding.length}). Every Coding row is Transition Year.
+  Overall ${tyRows} of ${signups.length} rows (${Math.round(100 * tyRows / signups.length)}%) are Transition Year; the other year groups have between 3 and 8 rows each.
+- Sensitive or unnecessary for the stated purpose: ${SENSITIVE.join(', ')} (inferred_income_band was never collected from anyone; it is a guess), and notes, which holds free-text judgements about students (${count('notes', v => v !== '')} rows).
+
+club-signups-cleaned-template.csv has the same header minus ${SENSITIVE.join(', ')}, with empty rows, for students who prefer a spreadsheet.
+Students should not need this README; it is served alongside the data for teachers checking findings.
+`);
+writeFileSync(join(OUT, 'club-signups-cleaned-template.csv'), `${COLUMNS.filter(c => !SENSITIVE.includes(c)).join(',')}\n${Array.from({ length: signups.length }, () => ','.repeat(COLUMNS.length - SENSITIVE.length - 1)).join('\n')}\n`);
+writeFileSync(join(OUT, 'responsible-data-card-template.md'), `# Responsible Data Card
+
+Dataset: club-signups (cleaned by: ________  date: ________)
+
+## 1. Purpose
+What this dataset is for. One or two sentences.
+
+## 2. What is collected
+The columns kept, each in plain words.
+
+## 3. Volunteered, observed or inferred
+For each kept column: did the person give it, was it observed, or was it guessed?
+
+## 4. Who could be harmed
+Who is affected if the data is wrong, leaked, or used for something else, and how.
+
+## 5. What was removed or fixed
+Columns removed, values fixed and the exact rule used, rows flagged and left alone.
+
+## 6. What the data must not be used for
+Purposes this data would be unfair or unreliable for.
+`);
 rmSync(WORK, { recursive: true, force: true });
 const manifest = Object.fromEntries(readdirSync(OUT).filter(f => !f.startsWith('.')).sort().map(f => [f, statSync(join(OUT, f)).size]));
 writeFileSync(join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');

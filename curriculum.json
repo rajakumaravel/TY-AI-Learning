@@ -409,6 +409,202 @@
           ["PROVE", "b2s7", "Compare and submit evidence"]
         ]
       }
+    },
+    {
+      "id": "block3",
+      "number": "03",
+      "title": "Data Detective",
+      "duration": "3 hours",
+      "badge": "Data Detective",
+      "outcomes": ["LO2", "LO5"],
+      "description": "Investigate the data behind a school app: where each field came from, what is wrong with it, who it could harm, and what a model trained on it would learn.",
+      "mission": "Investigate a flawed dataset for a school app, fix or flag every problem you find, and publish a Responsible Data Card that says what the data can and cannot be trusted for.",
+      "route": [
+        ["0–10 min", "Hook: where did this data come from?"],
+        ["10–25 min", "Discover: volunteered, observed, inferred"],
+        ["25–60 min", "Experience Lab: meet the dataset"],
+        ["60–85 min", "Audit: missing, inconsistent, duplicate"],
+        ["85–105 min", "Audit: imbalance and sensitive fields"],
+        ["105–140 min", "Propose the fix"],
+        ["140–170 min", "Responsible Data Card"],
+        ["170–180 min", "Evidence check and reflection"]
+      ],
+      "final": "Data-source sort, first look at the dataset, audit findings table, cleaning and collection plan, and a Responsible Data Card.",
+      "sessions": [
+        {
+          "id": "b3s1",
+          "title": "Volunteered, observed, inferred",
+          "minutes": 25,
+          "type": "PREDICT + DISCOVER",
+          "pageRef": "Draft · pending Student Book alignment",
+          "intro": "Sort eight pieces of data by how they were obtained, before you learn why the difference matters.",
+          "study": {
+            "title": "Three ways data gets into a system",
+            "body": ["Volunteered data is what a person knowingly gives: the club they tick on a form, the phone number they type in, the interests they list. They know it exists, and they usually expect it to be used for the reason they gave it.", "Observed data is collected by watching behaviour: which pages someone opens, at what time, for how long, on which device. Nobody typed it in, so most people never see it and cannot easily check whether it is accurate.", "Inferred data is a guess the system makes from the other two, such as 'probably interested in sport' or 'likely low income'. It was never given and never directly observed; it is a prediction about a person, and predictions can be wrong, unfair, or both. The more sensitive the guess, the more careful you have to be about whether it should exist at all."],
+            "example": "A school app asks you to tick Coding as your club (volunteered), notices you open the timetable every morning at 8:05 (observed), and guesses that your family probably cannot afford the trip (inferred). Only the first one is something you actually said.",
+            "keywords": ["volunteered data", "observed data", "inferred data", "consent", "personal data", "accuracy"]
+          },
+          "activity": {
+            "kind": "quiz",
+            "title": "Hook: where did this data come from?",
+            "instructions": "For each item, choose whether a school app would have it because the student volunteered it, because the app observed it, or because the app inferred it. Change your answers after reading the study material if you want to.",
+            "items": [
+              ["Club choice ticked on a form", "Volunteered"],
+              ["Pages visited in the school app", "Observed"],
+              ["Likely family income", "Inferred"],
+              ["Parent phone number typed at sign-up", "Volunteered"],
+              ["Time of day the app is usually opened", "Observed"],
+              ["Probably interested in sport", "Inferred"],
+              ["Interests typed into the sign-up form", "Volunteered"],
+              ["How many times the timetable was checked this week", "Observed"]
+            ],
+            "options": ["Volunteered", "Observed", "Inferred"]
+          },
+          "reflection": "Pick one inferred item and explain who could be harmed if the guess is wrong, and who could be harmed even if it is right."
+        },
+        {
+          "id": "b3s2",
+          "title": "Meet the dataset",
+          "minutes": 35,
+          "type": "TRY",
+          "pageRef": "Draft · pending Student Book alignment",
+          "intro": "You are the junior analyst. Open the club sign-up dataset the school wants to feed into a new app and take a first, careful look.",
+          "study": {
+            "title": "Read a dataset before you trust it",
+            "body": ["A dataset is a table: each row is one record, usually one person or one event, and each column is one field. Before doing anything clever with it, an analyst asks four plain questions: what is this for, who is in it, what does each column mean, and how did each value get here?", "Two habits make the difference between a quick glance and a real inspection. First, read the column names and ask which ones the stated purpose actually needs. Second, scroll the values, not just the first few rows: strange formats, blanks and repeats hide in the middle.", "Keep an audit log as you go. Write down what you noticed and where, even if you are not yet sure it is a problem. In the next session you will turn those notes into findings, and in the project you will need the evidence."],
+            "example": "The stated purpose is 'assign students to after-school clubs'. A column called inferred_income_band has nothing to do with that purpose, so it should already be on your list before you look at a single value.",
+            "keywords": ["row", "column", "field", "record", "purpose", "audit log"]
+          },
+          "activity": {
+            "kind": "lab",
+            "title": "Experience Lab: meet the dataset",
+            "instructions": "Read the notice, open the dataset in the built-in viewer, follow the five steps, and record your first look below. If the viewer does not load, use the fallback.",
+            "tool": {
+              "name": "Dataset viewer (built in)",
+              "url": "/datasets/club-signups-flawed.csv",
+              "free": true
+            },
+            "privacy": ["The club sign-up data is synthetic: every name, phone number, Eircode and note was generated by a script. No real student is in it.", "Treat it as if it were real. Practise the care you would owe to actual classmates: do not joke about the people in the rows.", "Never add real classmates, faces, names, addresses or phone numbers to any dataset in this course, including your cleaned copy.", "No account or sign-in is needed. The viewer is built into the portal and the CSV opens in any spreadsheet."],
+            "steps": ["Read the column names first. Decide what you think the dataset is for before you read any values.", "Count the rows and columns and note them down.", "Scroll through every column, not just the top of the table. Look for blanks, odd formats and values that cannot be right.", "Find a column that should not be there for the stated purpose, and one that might be needed but is risky.", "Record your first look in the fields below. You will need these notes in the audit."],
+            "fallback": {
+              "title": "Viewer not loading?",
+              "steps": ["Download the flawed CSV below and open it in any spreadsheet program (LibreOffice, Excel, Numbers, Google Sheets all work).", "Freeze the header row so the column names stay visible while you scroll.", "Use the spreadsheet's filter or sort on each column to spot blanks, odd formats and repeats.", "Record the same four things below."]
+            },
+            "fields": ["What I think this dataset is for…", "How many rows and columns it has…", "Three things that look odd…", "One field that should not be there, and why…"],
+            "downloads": [
+              {
+                "label": "Club sign-ups, flawed (CSV, 120 rows)",
+                "file": "club-signups-flawed.csv",
+                "note": "The synthetic dataset for the whole chapter. Open it in a spreadsheet if you prefer that to the built-in viewer."
+              },
+              {
+                "label": "Responsible Data Card template (Markdown)",
+                "file": "responsible-data-card-template.md",
+                "note": "The six card headings. Fill it in as you go, then copy your answers into the final session."
+              }
+            ]
+          },
+          "reflection": "Which column surprised you most, and what would you want to ask the person who collected it?"
+        },
+        {
+          "id": "b3s3",
+          "title": "Find what is wrong",
+          "minutes": 45,
+          "type": "TEST + INVESTIGATE",
+          "pageRef": "Draft · pending Student Book alignment",
+          "intro": "Turn your first look into a findings table. Every finding names a place in the data, a type of problem, and what you saw.",
+          "study": {
+            "title": "Six kinds of data problem",
+            "body": ["Missing values are blanks where a value should be. Inconsistent formats are the same fact written different ways, such as 2026-09-03 and 03/09/2026, or TY and Transition Year. A computer treats these as different values, so counts and groupings go wrong. Duplicates are the same record more than once, sometimes with small differences in capitalisation that hide them from a simple check.", "Sensitive or unnecessary fields are columns the purpose does not need, or that could cause harm if leaked or misused: home addresses, phone numbers, dates of birth, and above all guesses about people. Suspicious values are ones that cannot be true, like an attendance of 104 percent, and they usually point to a bug in how the data was collected.", "Imbalance or bias is the quiet one. If almost everyone in the Coding club is one gender, or nearly every row is from one year group, a model trained on this data will learn that pattern and repeat it in its recommendations. The data is not wrong, exactly; it just does not represent everyone fairly, and the model cannot tell the difference."],
+            "example": "Finding: column signup_date, Inconsistent format, 'three different date styles in the same column, so sorting by date would be wrong'. That is a target, an issue type and a note: enough for someone else to check it.",
+            "keywords": ["missing value", "inconsistent format", "duplicate", "sensitive field", "suspicious value", "imbalance", "bias"]
+          },
+          "activity": {
+            "kind": "dataset",
+            "title": "Data audit table",
+            "instructions": "Work through the table and the column summary. Add at least five findings covering at least three different issue types. Click a column header or a row number to fill in the target, choose the issue type, and write a note someone else could check.",
+            "file": "club-signups-flawed.csv",
+            "issueTypes": ["Missing value", "Inconsistent format", "Duplicate", "Sensitive or unnecessary field", "Imbalance or bias", "Suspicious value"],
+            "minFindings": 5,
+            "downloads": [
+              {
+                "label": "Club sign-ups, flawed (CSV, 120 rows)",
+                "file": "club-signups-flawed.csv",
+                "note": "The synthetic dataset for the whole chapter. Open it in a spreadsheet if you prefer that to the built-in viewer."
+              }
+            ]
+          },
+          "reflection": "Which of your findings would do the most damage if nobody caught it before the app was built, and why?"
+        },
+        {
+          "id": "b3s4",
+          "title": "Propose the fix",
+          "minutes": 35,
+          "type": "IMPROVE",
+          "pageRef": "Draft · pending Student Book alignment",
+          "intro": "For every finding there is a choice: fix it, flag it, remove it, or collect it differently next time.",
+          "study": {
+            "title": "Fix, flag, remove, or collect differently",
+            "body": ["Some problems can be fixed in the data itself: pick one date format and convert the others, choose one spelling of the year group, remove exact duplicates. Write down every rule you apply so someone can repeat it and so nobody thinks the cleaned file is the original.", "Some problems cannot be fixed by an analyst. A blank club choice cannot be invented; the honest options are to flag the row, go back and ask, or leave it out and say so. A value like -5 percent attendance should be flagged, not quietly changed to 5, because you do not know what really happened.", "Some columns should simply be removed for this purpose: an inferred income band was never collected from anyone and cannot be checked, and a free-text notes column full of opinions about students is both unfair and unnecessary. Finally, some problems are about collection, not cleaning. An imbalance in who signed up for Coding is not solved by editing rows; it is solved by asking why, and by changing how the club is promoted or how sign-ups are gathered."],
+            "example": "Cleaning rule: 'year_group: map TY, ty, 4 and Transition Year to TY'. Collection change: 'ask for club choice with a required drop-down instead of a free text box, so it cannot be left blank or misspelt'.",
+            "keywords": ["cleaning rule", "flag", "remove", "collection change", "reproducible", "documentation"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Cleaning and collection plan",
+            "instructions": "Write your plan so that another analyst could carry it out without asking you questions.",
+            "fields": ["Problems I would fix in the data, and the exact rule for each…", "Problems I would flag or leave out rather than fix, and why…", "Columns I would remove for this purpose, and why…", "One change to how the data is collected next time…"],
+            "downloads": [
+              {
+                "label": "Cleaned dataset template (CSV)",
+                "file": "club-signups-cleaned-template.csv",
+                "note": "The same columns minus the four sensitive ones, with empty rows. Use it if you would rather clean the data in a spreadsheet."
+              }
+            ]
+          },
+          "reflection": "Which of your fixes could itself introduce a new error or unfairness if done carelessly?"
+        },
+        {
+          "id": "b3s5",
+          "title": "Responsible Data Card",
+          "minutes": 40,
+          "type": "REFLECT + EVIDENCE",
+          "pageRef": "Draft · pending Student Book alignment",
+          "intro": "Publish a short, honest card that travels with the dataset and tells the next person what it can and cannot be trusted for.",
+          "study": {
+            "title": "A data card is a warning label and a promise",
+            "body": ["A Responsible Data Card is a one-page description that travels with a dataset. It states the purpose, lists what is collected, says how each field was obtained (volunteered, observed or inferred), and names who could be harmed if the data is wrong, leaked, or used for something else.", "It also records what you did: what was removed, what was fixed and how, what was flagged and left alone. Anyone who trains a model on the data later can read the card and know its limits instead of discovering them in the model's mistakes.", "The most important line on the card is what the data must not be used for. Club sign-up data collected to run clubs must not be used to rank students, to guess family income, or to contact parents about anything else. Writing that down is how a purpose stays a purpose."],
+            "example": "'Must not be used for: predicting which students are likely to drop out. The data contains attendance and free-text notes that were never checked and would make that prediction unfair.'",
+            "keywords": ["data card", "purpose limitation", "harm", "transparency", "documentation", "trust"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Responsible Data Card",
+            "instructions": "Complete the six sections. Be specific: name columns, numbers and people affected, not general statements.",
+            "fields": ["Purpose: what this dataset is for…", "What is collected: the columns kept, in plain words…", "Volunteered, observed or inferred: how each kept field was obtained…", "Who could be harmed, and how…", "What was removed or fixed, and the rules used…", "What the data must not be used for…"],
+            "downloads": [
+              {
+                "label": "Responsible Data Card template (Markdown)",
+                "file": "responsible-data-card-template.md",
+                "note": "The six card headings. Fill it in as you go, then copy your answers into the final session."
+              }
+            ]
+          },
+          "reflection": "In two or three sentences, explain what a model trained on the original, uncleaned dataset would have learned that it should not have."
+        }
+      ],
+      "lab": {
+        "title": "Fix a bad dataset",
+        "summary": "You inspect a real-looking club sign-up dataset, find what is missing, inconsistent, duplicated, sensitive or skewed, plan the fixes, and publish a Responsible Data Card that says what it can be trusted for.",
+        "stages": [
+          ["DO", "b3s2", "Open and inspect the dataset"],
+          ["TEST", "b3s3", "Log at least five findings"],
+          ["MAKE", "b3s4", "Write the cleaning plan"],
+          ["BREAK", "b3s3", "Find the imbalance and the sensitive fields"],
+          ["IMPROVE", "b3s4", "Propose collection changes"],
+          ["PROVE", "b3s5", "Publish the Responsible Data Card"]
+        ]
+      }
     }
   ]
 }

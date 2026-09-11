@@ -21,10 +21,10 @@ test('every chapter declares an Experience Lab covering all six ADR-005 tests',(
   }
 });
 
-test('lab sessions use free browser tools, show safety guidance, and keep a fallback',()=>{
+test('lab sessions use free browser tools or built-in same-origin datasets, show safety guidance, and keep a fallback',()=>{
   for(const b of course.blocks)for(const s of b.sessions.filter(s=>s.activity.kind==='lab')){
     const a=s.activity;
-    assert.match(a.tool.url,/^https:\/\//);
+    assert.match(a.tool.url,/^(https:\/\/|\/datasets\/)/);
     assert.equal(a.tool.free,true);
     assert.ok(a.privacy.length>=3&&a.privacy.some(p=>/account/i.test(p))&&a.privacy.some(p=>/face|name|personal/i.test(p)),`${s.id} privacy guidance`);
     assert.ok(a.fallback?.title&&a.fallback.steps.length>=3,`${s.id} fallback`);
