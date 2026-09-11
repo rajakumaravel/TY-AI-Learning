@@ -347,7 +347,7 @@ Every development phase must satisfy all of the following before production acce
 
 Do not start multiple major phases in parallel. Complete the current phase, verify it with real/pilot usage where appropriate, record findings, then proceed to the next phase.
 
-**Current work: Phase 3a — lab datasets and templates; then Phase 4 — Chapter 3: Data Detective.**
+**Current work: Phase 4 — Chapter 3: Data Detective (in progress, see `docs/product/phase-4-contract.md` and `docs/releases/phase-4-chapter-3.md`); then Phase 5 — Chapter 4: Generative AI & Prompting.**
 
 Phase 2 merged 2026-09-11 (PR #6).
 

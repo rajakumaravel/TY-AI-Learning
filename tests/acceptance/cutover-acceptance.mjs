@@ -6,7 +6,7 @@
 // Creates three throwaway auth users (two students, one app-metadata admin), exercises the API and RLS, then deletes them.
 
 import { randomUUID } from 'node:crypto';
-import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS } from './lib.mjs';
+import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS } from './lib.mjs';
 
 const users = [];
 try {
@@ -101,6 +101,34 @@ try {
   check('student A sees reviewed status and comment', after.body?.project?.status === 'reviewed' && after.body?.project?.reviewComment === 'Acceptance review.');
   const reviewByStudent = await api(`projects/admin/student/${a.id}/block2/review`, b.token, { method: 'PUT', body: JSON.stringify({ comment: 'x' }) });
   check('student B cannot review A\'s project', reviewByStudent.status === 403);
+
+  // Chapter 2 → 3 gate: Chapter 3 writes need Chapter 2 qualified, then the five Chapter 3 sessions
+  check('student A Chapter 3 capstone is 409 without Chapter 2 qualification', (await api('chapter-assessment/block3', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE3_ANSWERS }) })).status === 409);
+  check('student A Chapter 3 project save is 409 without Chapter 2 qualification', (await api('projects/block3', a.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
+  const done2 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { ...state, completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS] } }) });
+  check('student A marks all Chapter 2 sessions complete', done2.status === 200);
+  const cap2 = await api('chapter-assessment/block2', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE2_ANSWERS }) });
+  check('Chapter 2 capstone accepted after sessions complete', cap2.status === 200 && Boolean(cap2.body?.assessment?.submittedAt), JSON.stringify(cap2.body));
+  const cap3early = await api('chapter-assessment/block3', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE3_ANSWERS }) });
+  check('Chapter 3 capstone is 409 before Chapter 3 sessions complete', cap3early.status === 409, `status ${cap3early.status}`);
+  const done3 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { ...state, completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS, ...CHAPTER3_SESSIONS] } }) });
+  check('student A marks all Chapter 3 sessions complete', done3.status === 200);
+  const cap3 = await api('chapter-assessment/block3', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE3_ANSWERS }) });
+  check('Chapter 3 capstone accepted after sessions complete', cap3.status === 200 && Boolean(cap3.body?.assessment?.submittedAt) && Boolean(cap3.body?.assessment?.suggestedLevel), JSON.stringify(cap3.body));
+  const workspace3 = {
+    workLog: [{ planned: 'Audit the club sign-up dataset', did: 'Checked every column for missing values, mixed formats and duplicates.', result: 'Found nine missing club choices, three date formats and four duplicate rows.', blocker: '', decision: 'Flag the sensitive columns for removal', next: 'Write the data card', minutes: 40, date: '2026-09-11' }],
+    evidence: [
+      { label: 'Audit findings', url: '', note: 'Missing value at column:club_choice; Inconsistent format at column:signup_date; Duplicate at row:17.' },
+      { label: 'Cleaning plan', url: '', note: 'Standardise signup_date to ISO, merge year_group spellings, drop exact duplicates.' },
+      { label: 'Responsible Data Card', url: '', note: 'Purpose, collected fields, volunteered/observed/inferred split and prohibited uses recorded.' }
+    ],
+    finalRecommendation: 'Use the cleaned dataset only for club planning after removing home_eircode, parent_phone, date_of_birth and inferred_income_band; it must not be used to judge individual students.'
+  };
+  const save3 = await api('projects/block3', a.token, { method: 'PUT', body: JSON.stringify({ workspace: workspace3 }) });
+  check('student A PUT /api/projects/block3 ok after Chapter 2 qualified', save3.status === 200 && save3.body?.project?.status === 'in_progress' && save3.body?.project?.brief?.chapter === 'Data Detective', JSON.stringify(save3.body));
+  const submit3 = await api('projects/block3/submit', a.token, { method: 'POST' });
+  check('student A submits Chapter 3 project', submit3.status === 200 && submit3.body?.project?.status === 'submitted' && submit3.body?.project?.submittedSnapshot?.finalRecommendation === workspace3.finalRecommendation, JSON.stringify(submit3.body));
+  check('student B Chapter 3 project save is still 409 without Chapter 2 qualification', (await api('projects/block3', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
 } catch (error) {
   check('run completed without exception', false, error.message);
 } finally {

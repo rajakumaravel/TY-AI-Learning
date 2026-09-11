@@ -6,7 +6,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { BASE, REF, check, results, createUser, cleanup, CAPSTONE1_ANSWERS } from './lib.mjs';
+import { BASE, REF, check, results, createUser, cleanup, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS } from './lib.mjs';
 
 const SHOTS = process.env.SHOTS || 'live-shots';
 mkdirSync(SHOTS, { recursive: true });
@@ -39,8 +39,18 @@ async function saveSession(page, expectNext) {
   await page.waitForFunction(() => /complete/i.test(document.getElementById('lessonFeedback')?.textContent || ''), null, { timeout: 10000 });
   const fb = await page.textContent('#lessonFeedback');
   if (/Finish the required|Add a little more/i.test(fb)) throw new Error(fb);
-  if (expectNext) await page.waitForFunction((id) => document.querySelector('.session-link.active')?.dataset.session === id, expectNext, { timeout: 10000 });
+  if (expectNext) { await page.waitForSelector('#nextSession', { timeout: 10000 }); await page.waitForSelector('#lessonFeedback .assessment-card', { timeout: 15000 }).catch(() => {}); await page.click('#nextSession'); await page.waitForFunction((id) => document.querySelector('.session-link.active')?.dataset.session === id, expectNext, { timeout: 10000 }); }
   return fb;
+}
+
+async function submitCapstone(page, answers) {
+  const values = Object.values(answers);
+  const areas = await page.$$('textarea[data-capstone]');
+  for (let i = 0; i < areas.length; i++) await areas[i].fill(values[i]);
+  await page.click('#submitCapstone');
+  await page.waitForFunction(() => /COMPLETE/.test(document.getElementById('chapterCapstoneHost')?.textContent || ''), null, { timeout: 20000 });
+  const m = (await page.textContent('#chapterCapstoneHost')).match(/Getting started|Getting there|Going further/);
+  return m ? `level: ${m[0]}` : false;
 }
 
 const users = [];
@@ -85,16 +95,7 @@ try {
     const hasLab = await page.$('#chapterCapstoneHost .lab-evidence');
     return Boolean(hasLab) && (await page.$$('textarea[data-capstone]')).length === 3;
   });
-  await step(page, 'Submit chapter 1 capstone, formative level returned', async () => {
-    const answers = Object.values(CAPSTONE1_ANSWERS);
-    const areas = await page.$$('textarea[data-capstone]');
-    for (let i = 0; i < areas.length; i++) await areas[i].fill(answers[i]);
-    await page.click('#submitCapstone');
-    await page.waitForFunction(() => /COMPLETE/.test(document.getElementById('chapterCapstoneHost')?.textContent || ''), null, { timeout: 20000 });
-    const txt = await page.textContent('#chapterCapstoneHost');
-    const m = txt.match(/Getting started|Getting there|Going further/);
-    return m ? `level: ${m[0]}` : false;
-  });
+  await step(page, 'Submit chapter 1 capstone, formative level returned', async () => submitCapstone(page, CAPSTONE1_ANSWERS));
   await page.click('#homeBtn');
   await step(page, 'Home: Chapter 1 done, Chapter 2 unlocked, badge awarded', async () => {
     const done = await page.$eval('[data-block="0"]', el => el.classList.contains('done'));
@@ -166,7 +167,7 @@ try {
   });
   await page.click('.pw-close');
   await page.click('#portfolioBtn');
-  await step(page, 'Portfolio shows progress and badge', async () => /100%|9\d%/.test(await page.textContent('#portfolioPct')));
+  await step(page, 'Portfolio shows progress and badge', async () => /^(6\d|7\d|8\d|9\d|100)%$/.test((await page.textContent('#portfolioPct')).trim()));
   await context.close();
 
   // ---------- teacher
@@ -199,6 +200,89 @@ try {
     const txt = await page.textContent('#projectWorkspaceModal');
     return /reviewed/i.test(txt) && /Well done/.test(txt);
   });
+  await page.click('.pw-close');
+
+  // ---------- student, chapter 2 capstone unlocks chapter 3
+  await step(page, 'Chapter 3 locked until the chapter 2 assessment', async () => page.$eval('[data-block="2"]', el => el.classList.contains('locked') && el.disabled));
+  await page.click('[data-block="1"]');
+  await page.waitForSelector('#chapterCapstoneHost textarea[data-capstone]', { timeout: 15000 });
+  await step(page, 'Submit chapter 2 capstone, formative level returned', async () => submitCapstone(page, CAPSTONE2_ANSWERS));
+  await page.click('#homeBtn');
+  await step(page, 'Home: Chapter 2 done, Chapter 3 unlocked', async () => {
+    const done = await page.$eval('[data-block="1"]', el => el.classList.contains('done'));
+    const unlocked = await page.$eval('[data-block="2"]', el => !el.classList.contains('locked') && !el.disabled);
+    return done && unlocked;
+  });
+
+  // ---------- student, chapter 3 (reload so the second workspace launcher initialises with the new unlock)
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForFunction(() => /Welcome/.test(document.getElementById('welcomeName')?.textContent || ''), null, { timeout: 15000 });
+  await page.click('[data-block="2"]');
+  await page.waitForSelector('#labBanner .lab-stage');
+  await step(page, 'Chapter 3 opens with six lab stages; Chapter 3 project launcher present', async () => {
+    await page.waitForSelector('#projectWorkspaceBtn-block3', { timeout: 15000 });
+    const label = await page.textContent('#projectWorkspaceBtn-block3');
+    return (await page.$$('#labBanner .lab-stage')).length === 6 && /Project: Data Detective/.test(label) ? label : false;
+  });
+  await step(page, 'Volunteered, observed, inferred quiz: choose every answer, save', async () => {
+    for (const sel of await page.$$('select[data-i]')) await sel.selectOption({ index: 1 });
+    return await saveSession(page, 'b3s2');
+  });
+  await step(page, 'Meet the dataset lab: safety gate, CSV download listed, evidence, save', async () => {
+    await page.check('[data-ack]');
+    const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
+    await fillTextfields(page, 4);
+    const fb = await saveSession(page, 'b3s3');
+    return dl.some(h => /club-signups-flawed/.test(h)) ? `${fb} downloads=${dl.length}` : false;
+  });
+  await step(page, 'Data audit table: all 120 rows rendered, five findings added, save', async () => {
+    await page.waitForSelector('.dataset-table tbody tr', { timeout: 15000 });
+    const rows = (await page.$$('.dataset-table tbody tr')).length;
+    const notes = ['Nine sign-ups have no club_choice recorded.', 'signup_date mixes ISO, slash and written formats.', 'Rows 17 and 18 are the same student twice.', 'parent_phone is not needed to run a club.', 'Coding club is 88% one gender, so the data is imbalanced.'];
+    for (let i = 0; i < notes.length; i++) {
+      await page.selectOption('#datasetTarget', { index: 1 + i });
+      await page.selectOption('#datasetIssue', { index: 1 + i });
+      await page.fill('#datasetNote', notes[i]);
+      await page.click('#datasetAdd');
+    }
+    await page.waitForFunction((n) => (document.querySelector('.dataset-findings')?.textContent || '').includes(n), notes[4], { timeout: 10000 });
+    const fb = await saveSession(page, 'b3s4');
+    return rows === 120 ? `rows=${rows} · ${fb}` : `rows=${rows}`;
+  });
+  await step(page, 'Propose the fix: save', async () => { await fillTextfields(page, 4); return await saveSession(page, 'b3s5'); });
+  await step(page, 'Responsible Data Card: save, chapter 3 practical complete', async () => { await fillTextfields(page, 6); const fb = await saveSession(page, null); return /chapter assessment/i.test(fb) ? fb : false; });
+  await page.waitForSelector('#chapterCapstoneHost textarea[data-capstone]', { timeout: 10000 });
+  await step(page, 'Submit chapter 3 capstone, formative level returned', async () => submitCapstone(page, CAPSTONE3_ANSWERS));
+
+  // ---------- chapter 3 project workspace
+  await page.click('#projectWorkspaceBtn-block3');
+  await page.waitForSelector('#projectWorkspaceModal.open', { timeout: 15000 });
+  await step(page, 'Chapter 3 Project Workspace opens with brief and acceptance criteria', async () => {
+    const eyebrow = await page.textContent('#projectWorkspaceModal .eyebrow');
+    return /CHAPTER 3 PROJECT/.test(eyebrow) && (await page.$$('#projectWorkspaceModal li')).length >= 6 ? eyebrow : false;
+  });
+  await step(page, 'Import chapter 3 lab evidence adds audit findings as evidence', async () => {
+    await page.click('#pwImportLab');
+    await page.waitForFunction(() => /Imported/.test(document.getElementById('pwMessage')?.textContent || ''), null, { timeout: 15000 });
+    const n = (await page.$$('#pwEvidence .pw-evidence')).length;
+    const txt = await page.textContent('#pwEvidence');
+    return n >= 3 && / at (column:|row:|table)/.test(txt) ? `${await page.textContent('#pwMessage')} (${n} items)` : `only ${n} items`;
+  });
+  await step(page, 'Chapter 3 work log entry and recommendation, save', async () => {
+    await page.click('#pwAddLog');
+    await page.fill('#pwLog .pw-entry textarea[data-f="did"]', 'Audited every column, logged five findings and drafted the Responsible Data Card.');
+    await page.fill('#pwLog .pw-entry textarea[data-f="result"]', 'Four sensitive columns flagged for removal; dates standardised.');
+    await page.fill('#pwRecommendation', long('Use the cleaned dataset for club planning only after removing eircode, phone, date of birth and the inferred income band.'));
+    await page.click('#pwSave');
+    await page.waitForFunction(() => /Saved/.test(document.getElementById('pwMessage')?.textContent || ''), null, { timeout: 15000 });
+    return await page.textContent('#pwMessage');
+  });
+  await step(page, 'Submit chapter 3 project', async () => {
+    await page.click('#pwSubmit');
+    await page.waitForFunction(() => /submitted/i.test(document.querySelector('.pw-status')?.textContent || ''), null, { timeout: 15000 });
+    return await page.textContent('.pw-status');
+  });
+  await page.click('.pw-close');
   await context.close();
 
   // ---------- non-admin blocked

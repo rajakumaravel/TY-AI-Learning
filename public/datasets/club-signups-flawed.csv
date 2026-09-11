@@ -1,0 +1,121 @@
+student_id,first_name,surname,date_of_birth,year_group,gender,home_eircode,interests,club_choice,signup_date,attendance_pct,parent_phone,inferred_income_band,notes
+S1001,Sinead,Exampleby,2010-11-25,TY,Female,Z38 AX96,,Chess,2026-09-07,70,080 815 3210,Medium,not club material
+S1002,Roisin,Proofer,2010-12-23,TY,Female,Z95 MI35,running; photography; animation,Debating,03/09/2026,55,080 714 6792,Medium,
+S1003,Padraig,Placeholder,2010-08-15,Transition Year,Male,Z22 DH23,swimming,Coding,4 Sept 2026,66,080 865 4317,Low,
+S1004,Eimear,Mockwell,2010-03-03,TY,Female,Z82 IZ75,music; swimming,,2026-09-02,96,080 736 1795,Medium,
+S1005,Clodagh,Dummyford,2010-01-05,TY,Female,Z64 UO17,art,,02/09/2026,80,080 733 4291,High,bit lazy needs pushing
+S1006,Maeve,Placeholder,2009-03-26,5th Year,Female,Z86 GR88,animation; drama,Music,6 Sept 2026,71,080 953 5372,High,
+S1007,Conall,Dummyford,2010-01-08,TY,Prefer not to say,Z30 RZ32,photography; swimming,Football,2026-09-10,86,080 644 8649,Low,
+S1008,Darragh,Stubbington,2010-11-11,4,Male,Z56 GA41,baking,Chess,05/09/2026,73,080 470 4726,Low,
+S1009,Eimear,Sampleton,2010-02-06,TY,Female,Z75 LR85,baking; running; music,Football,6 Sept 2026,69,080 962 8295,High,quiet and odd
+S1010,Ciara,Exampleby,2011-09-27,3rd Year,Female,Z91 AE33,gaming,Basketball,2026-09-04,55,080 814 7411,Low,
+S1011,Donal,Exampleby,2010-06-21,TY,Male,Z88 DO85,gaming; coding,Coding,03/09/2026,95,080 276 2138,Medium,
+S1012,Senan,Dummyford,2010-04-10,TY,Male,Z75 JE87,baking,Drama,1 Sept 2026,n/a,080 790 9542,High,
+S1013,Senan,Exampleby,2012-05-09,2nd Year,Male,Z87 CO81,swimming; hurling; art,Basketball,2026-09-06,69,080 678 7446,Low,
+S1014,Roisin,Fakeham,2012-09-06,2nd Year,Female,Z79 AH33,hurling; baking; reading,Art,10/09/2026,73,080 207 8091,Medium,
+S1015,Meabh,Dummyford,2012-02-13,2nd Year,Female,Z31 IC37,camogie; baking; photography,Chess,5 Sept 2026,86,080 414 8450,High,do not put with Cian S
+S1016,Tiernan,Draftly,2010-02-12,Transition Year,Male,Z24 BC55,camogie; reading,Drama,2026-09-01,60,080 290 1483,Low,
+S1017,Cathal,Fakeham,2010-10-18,,Male,Z15 IT40,camogie,Music,11/09/2026,99,080 533 7298,High,
+S1018,Meabh,Testerson,2011-07-06,3rd Year,Female,Z40 BY59,chess; camogie; swimming,Art,12 Sept 2026,91,080 438 5153,Medium,
+S1019,Oisin,Proofer,2009-09-22,5th Year,Male,Z60 YS61,reading; animation,Art,2026-09-03,80,080 670 6773,High,troublemaker in first year
+S1020,Sinead,Fixture,2010-08-01,Transition Year,Female,Z72 RB64,photography,Football,02/09/2026,92,080 123 8743,Medium,
+S1021,Rian,Exampleby,2010-07-14,TY,Male,Z82 AM13,coding; gaming; drama,Coding,12 Sept 2026,57,080 306 8104,Medium,
+S1022,Cathal,Sampleton,2008-09-14,6th Year,Male,Z38 PO98,camogie; hurling,Chess,2026-09-09,89,080 675 4898,High,
+S1023,Darragh,Specimen,2010-09-17,TY,Male,Z21 GD50,swimming; football; photography,Football,04/09/2026,83,080 303 7953,Medium,
+S1024,Tadhg,Fakeham,2011-05-14,3rd Year,Prefer not to say,Z76 YD41,football,Drama,5 Sept 2026,61,080 392 4780,Medium,
+S1025,Padraig,Sampleton,2010-03-03,Transition Year,Male,Z49 RV28,coding,Music,2026-09-04,59,080 221 4731,Medium,
+S1026,Saoirse,Dummyford,2010-12-12,ty,Female,Z84 PU93,running; chess,Coding,07/09/2026,93,080 274 9072,High,
+S1027,Maeve,Specimen,2013-05-03,1st Year,Female,Z53 CL58,running; photography,Football,1 Sept 2026,65,080 733 1646,Low,
+S1028,Naoise,Proofer,2010-09-17,4,Male,Z21 PK65,photography,Coding,2026-09-06,60,080 571 2919,High,
+S1029,Senan,Proofer,2010-09-21,TY,Prefer not to say,Z34 EC18,reading,Chess,04/09/2026,68,080 855 2684,Medium,parents difficult to deal with
+S1030,Sadhbh,Sampleton,2010-11-03,TY,Female,Z64 DP30,gaming,,8 Sept 2026,97,080 673 6265,Medium,
+S1031,Tiernan,Placeholder,2010-06-12,TY,Male,Z43 KW33,gaming; baking,Art,2026-09-08,79,080 381 1618,Low,
+S1032,Oisin,Fakeham,2010-09-20,Transition Year,Male,Z35 ZE13,hurling; animation; art,Coding,07/09/2026,70,080 727 1570,Medium,
+S1033,Tadhg,Mockwell,2011-03-14,3rd Year,Male,Z74 MX39,chess,Basketball,8 Sept 2026,-5,080 358 7196,Low,sibling was a problem
+S1034,Ciara,Stubbington,2010-11-26,4,Female,Z12 TA63,chess; running,Drama,2026-09-02,56,080 346 3261,Low,
+S1035,Orla,Mockwell,2010-06-24,Transition Year,Female,Z87 SY41,hurling,Coding,03/09/2026,85,080 354 8878,High,
+S1036,Odhran,Mockwell,2008-05-23,6th Year,Male,Z41 BW87,baking; gaming; reading,Debating,5 Sept 2026,68,080 739 4632,Medium,promising if pushed
+S1037,Orla,Testerson,2010-11-02,TY,Female,Z96 OJ83,chess; football,Coding,2026-09-08,85,080 509 3540,Medium,
+S1038,Sinead,Proofer,2009-10-15,5th Year,Female,Z67 BO73,football,Debating,04/09/2026,83,080 709 7082,Medium,
+S1039,Odhran,Draftly,2011-05-23,3rd Year,Male,Z75 NI95,gaming; photography; running,Basketball,6 Sept 2026,61,080 227 6422,Medium,
+S1040,Caoimhe,Testerson,2010-09-26,TY,Prefer not to say,Z75 HS82,camogie; music; chess,Chess,2026-09-03,86,080 958 1558,Medium,
+S1041,Una,Fixture,2009-09-27,5th Year,Female,Z45 BP49,running; photography; drama,Debating,10/09/2026,58,080 401 3398,Medium,not club material
+S1042,Donal,Sampleton,2010-09-06,TY,Male,Z59 RD17,camogie; art,Coding,5 Sept 2026,57,080 108 9758,Low,teacher favourite
+S1043,Darragh,Testerson,2010-11-04,TY,Male,Z14 RM62,drama; reading,Chess,2026-09-01,55,080 404 8856,High,
+S1044,Fionn,Draftly,2010-04-14,Transition Year,Male,Z71 AU59,art; coding,Coding,01/09/2026,61,080 105 4151,Low,
+S1045,Odhran,Draftly,2010-05-24,,Male,Z56 GK24,reading; drama,Music,2 Sept 2026,99,080 625 4807,Low,
+S1046,Niamh,Specimen,2010-12-20,Transition Year,Female,Z88 YO36,animation,Drama,2026-09-11,92,080 163 8471,Low,
+S1047,Sadhbh,Dummyford,2012-02-24,2nd Year,Female,Z55 AW85,chess; music; animation,,04/09/2026,95,080 431 5426,Medium,do not put with Cian S
+S1048,Grainne,Proofer,2010-09-19,,Female,Z60 MG50,animation,Art,3 Sept 2026,80,080 984 3539,Medium,
+S1049,Rian,Testerson,2010-03-19,4,Male,Z13 WO98,running; photography,Coding,2026-09-06,72,080 340 8668,Medium,promising if pushed
+S1050,Sadhbh,Draftly,2013-08-22,1st Year,Female,Z32 TH44,,Art,12/09/2026,88,080 728 1222,Medium,
+S1051,Cian,Fixture,2012-02-02,2nd Year,Male,Z84 LS71,baking; chess,Music,5 Sept 2026,86,080 809 1144,Low,
+S1116,DARRAGH,testerson,2010-11-04,TY,Male,Z14 RM62,drama; reading,Chess,2026-09-01,55,080 404 8856,High,
+S1052,Senan,Placeholder,2010-03-09,TY,Prefer not to say,Z62 DW35,,Basketball,2026-09-10,70,080 550 4267,Medium,
+S1053,Rian,Testerson,2010-04-12,ty,Male,Z65 KO96,football; hurling; animation,Debating,04/09/2026,81,080 968 7818,High,very bright
+S1054,Oisin,Draftly,2010-06-28,TY,Male,Z38 OK16,football,Basketball,2 Sept 2026,71,080 218 7849,Low,
+S1055,Grainne,Fakeham,2008-08-17,6th Year,Female,Z73 MS73,chess; swimming,Basketball,2026-09-12,82,080 257 3570,Low,always late
+S1056,Sadhbh,Draftly,2013-01-07,1st Year,Female,Z84 PD35,baking; music; chess,Debating,09/09/2026,78,080 625 3530,Medium,
+S1057,Clodagh,Draftly,2012-08-02,2nd Year,Female,Z69 HE14,running; football,Basketball,7 Sept 2026,83,080 405 1343,High,
+S1046,Niamh,Specimen,2010-12-20,Transition Year,Female,Z88 YO36,animation,Drama,2026-09-11,92,080 163 8471,Low,
+S1058,Una,Sampleton,2010-07-01,TY,Female,Z91 CQ79,swimming; photography,,2026-09-08,58,080 171 6602,Medium,attention seeking
+S1059,Diarmuid,Fakeham,2010-01-03,TY,Male,Z42 ML67,baking; reading; football,Art,10/09/2026,82,080 382 8122,Medium,parents difficult to deal with
+S1060,Fionn,Sampleton,2010-03-06,TY,Prefer not to say,Z70 PN75,running; chess; baking,Art,9 Sept 2026,83,080 688 5525,Medium,sibling was a problem
+S1061,Tiernan,Fakeham,2012-09-15,2nd Year,Prefer not to say,Z66 FG85,football; camogie,Debating,2026-09-03,65,080 740 6246,High,
+S1051,Cian,Fixture,2012-02-02,2nd Year,Male,Z84 LS71,baking; chess,Music,5 Sept 2026,86,080 809 1144,Low,
+S1062,Diarmuid,Stubbington,2010-06-26,TY,Male,Z28 TU63,music,Chess,04/09/2026,79,080 799 8815,Medium,promising if pushed
+S1063,Tiernan,Exampleby,2013-02-08,1st Year,Male,Z25 ZQ23,coding,,9 Sept 2026,80,080 499 8599,High,
+S1064,Killian,Sampleton,2010-03-23,TY,Male,Z29 FL86,hurling; camogie,Coding,2026-09-12,100,080 470 1335,Medium,
+S1065,Rian,Stubbington,2010-12-10,TY,Male,Z13 RZ30,drama,Coding,04/09/2026,69,080 240 1861,Low,
+S1066,Rian,Fakeham,2010-06-17,Transition Year,Male,Z95 RX14,coding; reading; swimming,Coding,12 Sept 2026,100,080 762 4123,Medium,promising if pushed
+S1067,Odhran,Specimen,2010-01-16,,Male,Z22 WC49,chess,Debating,2026-09-10,99,080 945 4491,High,
+S1068,Saoirse,Specimen,2010-02-02,TY,Female,Z93 RO98,art; reading,Chess,10/09/2026,69,080 780 5987,Low,likely to drop out
+S1069,Tiernan,Draftly,2010-05-28,ty,Male,Z65 AU44,music; coding,Debating,12 Sept 2026,90,080 145 1724,Medium,
+S1070,Grainne,Testerson,2010-02-15,TY,Female,Z48 QD76,football; camogie,Football,2026-09-08,61,080 427 8258,Low,too many activities already
+S1071,Laoise,Draftly,2012-11-25,2nd Year,Female,Z84 IS71,art; chess,Art,06/09/2026,92,080 631 5828,Low,
+S1072,Tiernan,Specimen,2010-03-17,Transition Year,Male,Z26 XL45,swimming; reading; hurling,Art,12 Sept 2026,89,080 342 6938,Medium,
+S1069,Tiernan,Draftly,2010-05-28,ty,Male,Z65 AU44,music; coding,Debating,12 Sept 2026,90,080 145 1724,Medium,
+S1073,Darragh,Draftly,2010-05-20,Transition Year,Prefer not to say,Z39 NY37,gaming,Music,2026-09-07,104,080 127 5919,Medium,
+S1074,Aisling,Specimen,2010-10-02,TY,Female,Z12 MH24,swimming; hurling; camogie,,01/09/2026,84,080 137 2011,Medium,quiet and odd
+S1075,Naoise,Mockwell,2010-11-24,TY,Male,Z29 PJ53,swimming,Coding,9 Sept 2026,87,080 306 3235,High,
+S1076,Caoimhe,Placeholder,2010-04-22,TY,Female,Z18 KD15,animation,Music,2026-09-07,60,080 758 3112,Low,troublemaker in first year
+S1077,Cormac,Fakeham,2010-11-26,TY,Male,Z20 NB51,swimming,Coding,12/09/2026,77,080 675 7236,Low,
+S1078,Darragh,Draftly,2010-01-25,TY,Male,Z74 QM62,animation; hurling; camogie,Basketball,2 Sept 2026,90,080 699 6788,Medium,
+S1079,Oisin,Exampleby,2010-02-14,TY,Male,Z21 RF86,music; hurling,Drama,2026-09-02,88,080 393 6496,Medium,parents difficult to deal with
+S1080,Padraig,Mockwell,2010-04-09,ty,Male,Z23 QN99,swimming; coding,Chess,11/09/2026,91,080 822 4340,Medium,
+S1081,Saoirse,Fakeham,2009-12-09,5th Year,Female,Z32 AH45,coding,Basketball,4 Sept 2026,72,080 670 2186,Medium,
+S1082,Senan,Proofer,2010-06-28,TY,Male,Z50 EP23,photography; running,Coding,2026-09-09,95,080 942 5865,Medium,
+S1078,Darragh,Draftly,2010-01-25,TY,Male,Z74 QM62,animation; hurling; camogie,Basketball,2 Sept 2026,90,080 699 6788,Medium,
+S1115,PADRAIG,mockwell,2010-04-09,ty,Male,Z23 QN99,swimming; coding,Chess,11/09/2026,91,080 822 4340,Medium,
+S1083,Cathal,Specimen,2013-01-16,,Male,Z74 NK40,gaming; photography,Music,07/09/2026,89,080 127 4905,High,
+S1084,Ailbhe,Fakeham,2010-12-28,ty,Prefer not to say,Z66 TI45,animation,Drama,2 Sept 2026,70,080 980 1174,Medium,
+S1085,Grainne,Fixture,2010-02-13,4,Female,Z71 LH11,running; animation,Music,2026-09-01,73,080 899 2908,Medium,bit lazy needs pushing
+S1086,Ruairi,Exampleby,2010-09-11,TY,Male,Z51 FY46,music; art,Coding,10/09/2026,93,080 812 5851,Medium,
+S1087,Odhran,Testerson,2010-04-03,TY,Male,Z50 LL46,camogie; reading,,1 Sept 2026,63,080 320 6782,Medium,do not put with Cian S
+S1088,Odhran,Testerson,2010-09-26,ty,Male,Z49 HT18,camogie; reading,Coding,2026-09-03,87,080 410 2595,High,
+S1089,Maeve,Proofer,2011-07-16,3rd Year,Female,Z52 OM14,art; camogie,Art,03/09/2026,94,080 473 5061,Low,troublemaker in first year
+S1090,Eoghan,Exampleby,2013-05-28,1st Year,Male,Z68 VW75,animation; chess,Debating,2 Sept 2026,100,080 464 7683,High,
+S1091,Naoise,Placeholder,2010-10-16,4,Male,Z18 FX19,photography; gaming; swimming,Football,2026-09-03,74,080 898 7055,High,quiet and odd
+S1092,Maeve,Mockwell,2010-11-01,TY,Female,Z91 HG27,drama; camogie; hurling,Debating,10/09/2026,74,080 315 5109,High,
+S1093,Cathal,Stubbington,2010-12-24,TY,Male,Z62 LC53,camogie,Football,4 Sept 2026,59,080 376 3960,Low,
+S1094,Lorcan,Dummyford,2011-01-22,3rd Year,Male,Z74 TE51,reading,Debating,2026-09-02,72,080 132 8777,Low,
+S1095,Caoimhe,Testerson,2010-04-19,4,Female,Z69 FA88,art; baking; football,Drama,01/09/2026,57,080 359 1848,Medium,always late
+S1096,Donal,Fakeham,2010-10-21,TY,Male,Z65 EB19,music,Coding,5 Sept 2026,92,080 303 6596,Medium,bit lazy needs pushing
+S1097,Padraig,Placeholder,2011-10-09,3rd Year,Male,Z89 XK45,animation; running; coding,Debating,2026-09-12,66,080 748 6026,High,
+S1098,Ciara,Draftly,2010-09-02,TY,Female,Z90 WO81,animation; hurling,Basketball,10/09/2026,64,080 213 8790,Medium,not club material
+S1099,Senan,Sampleton,2010-07-25,TY,Male,Z42 CD56,camogie; music,Football,3 Sept 2026,68,080 253 3458,High,bit lazy needs pushing
+S1100,Una,Placeholder,2010-05-28,TY,Female,Z34 FN77,running; gaming,Chess,2026-09-03,95,080 265 9902,Medium,do not put with Cian S
+S1101,Donal,Specimen,2010-05-13,4,Male,Z76 NR91,gaming,Coding,09/09/2026,64,080 675 8662,Medium,
+S1102,Donal,Draftly,2010-05-17,TY,Male,Z25 TQ20,drama; football,Coding,1 Sept 2026,85,080 763 7203,Medium,
+S1103,Diarmuid,Fakeham,2010-05-12,4,Male,Z52 ML81,camogie,,2026-09-03,76,080 562 9735,High,
+S1104,Oisin,Testerson,2010-03-07,4,Male,Z89 PS27,football,Art,05/09/2026,71,080 913 4098,Medium,
+S1105,Tadhg,Testerson,2010-01-12,ty,Male,Z95 TA70,animation; baking,Drama,6 Sept 2026,85,080 414 7601,Medium,
+S1106,Niamh,Placeholder,2010-10-25,TY,Female,Z42 FI80,running; music; art,Chess,2026-09-01,67,080 130 8617,Medium,
+S1107,Donal,Proofer,2010-02-22,TY,Male,Z13 VE56,art; music; animation,Football,11/09/2026,79,080 756 3622,Medium,not club material
+S1108,Niamh,Specimen,2010-07-06,Transition Year,Female,Z56 RQ46,running,Chess,9 Sept 2026,74,080 403 4003,Low,
+S1109,Cian,Sampleton,2010-12-09,4,Male,Z55 WK92,baking; camogie,Coding,2026-09-10,80,080 634 7008,Low,
+S1110,Lorcan,Stubbington,2010-01-03,Transition Year,Male,Z71 MT38,coding; chess,Coding,05/09/2026,57,080 668 6902,Medium,attention seeking
+S1111,Rian,Specimen,2010-09-23,ty,Male,Z67 PN68,camogie,Coding,12 Sept 2026,64,080 863 7147,Medium,
+S1112,Aisling,Fakeham,2010-02-08,TY,Female,Z85 ZW72,chess,Music,2026-09-01,82,080 382 2861,Medium,
+S1113,Una,Fakeham,2010-04-26,,Female,Z18 QF50,baking; chess,Drama,11/09/2026,59,080 837 8858,Low,
+S1114,Cian,Testerson,2010-01-25,4,Male,Z64 BQ93,coding; running; photography,Football,4 Sept 2026,73,080 583 9810,Low,

@@ -9,8 +9,8 @@ const api=fs.readFileSync('netlify/functions/api.mts','utf8');
 const migration=fs.readFileSync('netlify/database/migrations/002_google-identity/migration.sql','utf8');
 const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
 
-test('pilot contains the two textbook chapters in order',()=>{assert.deepEqual(course.blocks.map(b=>b.title),['AI & Me','Teaching a Machine'])});
-test('chapter durations match the student book',()=>{assert.equal(course.blocks[0].sessions.reduce((n,s)=>n+s.minutes,0),120);assert.equal(course.blocks[1].sessions.reduce((n,s)=>n+s.minutes,0),240)});
+test('pilot contains the three chapters in order',()=>{assert.deepEqual(course.blocks.map(b=>b.title),['AI & Me','Teaching a Machine','Data Detective'])});
+test('chapter durations match the student book and the Phase 4 contract',()=>{assert.equal(course.blocks[0].sessions.reduce((n,s)=>n+s.minutes,0),120);assert.equal(course.blocks[1].sessions.reduce((n,s)=>n+s.minutes,0),240);assert.equal(course.blocks[2].sessions.reduce((n,s)=>n+s.minutes,0),180)});
 test('student book learning outcomes and badges are preserved',()=>{assert.deepEqual(course.blocks[0].outcomes,['LO1','LO4']);assert.equal(course.blocks[0].badge,'AI Explorer');assert.deepEqual(course.blocks[1].outcomes,['LO1','LO2','LO3','LO9']);assert.equal(course.blocks[1].badge,'Machine Trainer')});
 test('every session includes study material before student response',()=>{for(const b of course.blocks)for(const s of b.sessions){assert.ok(s.pageRef.includes('Student Book'));assert.ok(s.study.body.length>=2);assert.ok(s.study.keywords.length>=3);assert.ok(s.reflection.length>20)}});
 test('chapter 1 mission requires five systems and full chains',()=>{assert.match(course.blocks[0].mission,/five systems/i);assert.match(course.blocks[0].mission,/INPUT.*AI ACTION.*OUTPUT.*BENEFIT.*RISK/i)});
