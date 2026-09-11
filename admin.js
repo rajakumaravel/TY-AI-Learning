@@ -43,12 +43,13 @@ function activityLabel(activity, key) {
   if (activity.kind === "external") return "Experiment record";
   if (activity.kind === "lab") { if (key === "ack") return "Safety notice acknowledged"; if (key === "mode") return "Lab mode"; return activity.fields?.[Number(key)] || `Response ${Number(key)+1}`; }
   if (activity.kind === "quiz") return activity.items?.[Number(key)]?.[0] || `Answer ${Number(key)+1}`;
+  if (activity.kind === "dataset") { if (key === "findings") return "Audit findings"; return `Finding ${Number(key)+1}`; }
   return `Response ${Number(key)+1}`;
 }
 function renderValue(value) {
   if (value == null || value === "") return '<span class="muted">No response</span>';
   if (typeof value !== "object") return esc(value);
-  if (Array.isArray(value)) return value.map(renderValue).join(", ");
+  if (Array.isArray(value)) return value.some((v) => v && typeof v === "object") ? `<ol class="evidence-list">${value.map((v)=>`<li>${renderValue(v)}</li>`).join("")}</ol>` : value.map(renderValue).join(", ");
   const entries = Object.entries(value);
   if (!entries.length) return '<span class="muted">No response</span>';
   return `<dl class="evidence-dl">${entries.map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${renderValue(v)}</dd></div>`).join("")}</dl>`;
