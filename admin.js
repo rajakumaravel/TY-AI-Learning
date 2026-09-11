@@ -37,6 +37,7 @@ function currentChapterFromCount(completedCount) {
 function activityLabel(activity, key) {
   if (!activity) return key;
   if (activity.kind === "daymap") return `AI Day Map row ${Number(key)+1}`;
+  if (activity.kind === "chain") return `Chain row ${Number(key)+1}`;
   if (activity.kind === "textfields") return activity.fields?.[Number(key)] || `Response ${Number(key)+1}`;
   if (activity.kind === "testlog") return `Test ${Number(key)+1}`;
   if (activity.kind === "matrix") return "Confusion matrix";

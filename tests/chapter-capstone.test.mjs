@@ -11,15 +11,15 @@ test('pilot chapters each have applied capstones',()=>{
   assert.equal(Object.keys(CAPSTONES).length,3);
   assert.match(CAPSTONES.block1.brief,/school|adviser/i);
   assert.match(CAPSTONES.block2.brief,/model|failure/i);
-  assert.match(CAPSTONES.block3.brief,/library.*search.*inferred/is);
+  assert.match(CAPSTONES.block3.brief,/homework.*question.*infer.*ability band/is);
   assert.equal(CAPSTONES.block3.id,'block3-capstone');
-  assert.equal(CAPSTONES.block3.title,'Data Card review');
+  assert.equal(CAPSTONES.block3.title,'Responsible Data Card review');
   assert.equal(CAPSTONES.block3.prompts.length,3);
 });
 
 test('block3 capstone scoring counts data-detective vocabulary as concept and action',()=>{
   const weak=assessChapterCapstone({blockId:'block3',answers:{0:'Some fields are fine.',1:'It could be wrong.',2:'Use it carefully.'}});
-  const strong=assessChapterCapstone({blockId:'block3',answers:{0:'Search terms and borrow history are observed, the name is volunteered, and reading_level is inferred, so the inferred column and the full search log are sensitive and should be removed or anonymised before recommending books.',1:'A student could be labelled with a low reading level because they borrow picture books for a younger sibling, therefore I would want evidence such as a teacher check on a sample of rows before trusting it.',2:'The data can be used to suggest books a student might like. It must not be used to judge ability or rank students, and a librarian should review the card each term because the inferred field can drift.'}});
+  const strong=assessChapterCapstone({blockId:'block3',answers:{0:'The question text is volunteered, the time spent is observed, and the ability band is inferred, so the band goes beyond the purpose of helping with homework and should be minimised or removed because the app does not need it.',1:'A student who shares a device or asks questions for a younger sibling could be misrepresented, therefore a low band could mean they are wrongly given extra practice or judged by a teacher.',2:'The app should not keep a full log with retention beyond the term, any decision about extra practice needs human review, and consent buried in the terms does not make the inferred band fair.'}});
   assert.ok(strong.score>weak.score);
   assert.equal(strong.criteria.understanding,2);
   assert.equal(strong.criteria.reasoning,2);
