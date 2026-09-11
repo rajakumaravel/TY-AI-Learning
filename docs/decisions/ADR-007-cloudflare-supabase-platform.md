@@ -54,9 +54,9 @@ No guessed or name-based identity matching is permitted.
 
 Normal CI runs on all branches and pull requests to `main`, executes the regression suite and verifies the Vite production artifact.
 
-The migration-branch Pages workflow runs on pushes to `infra-cloudflare-supabase` and supports manual dispatch. Its GitHub job uses the `production` environment for build/deployment credentials; this does not select the Cloudflare Pages runtime environment. Branch previews need runtime bindings configured under Cloudflare **Preview**.
+The Pages preview workflow runs on every branch push (including `main`) and supports manual dispatch; it always deploys with `--branch=preview-<branch>` so nothing it does reaches the Production environment. Its GitHub job uses the `production` environment for build/deployment credentials; this does not select the Cloudflare Pages runtime environment. Branch previews need runtime bindings configured under Cloudflare **Preview**.
 
-The standalone Supabase migration workflow remains manual. The separate Production release workflow is configured to run after successful CI on `main`, or by manual dispatch; it applies migrations before deploying with `--branch=main`. Do not merge or manually release until the cutover exit criteria below are evidenced.
+The standalone Supabase migration workflow remains manual. The separate Production release workflow is manual dispatch only; it applies migrations before deploying with `--branch=main`. Do not dispatch it until the cutover exit criteria below are evidenced and the operator authorises Production.
 
 The dependency lockfile required by `npm ci` is committed (`0310901`); CI and the release workflow both install with `npm ci`. Disable the obsolete standalone Worker Git build after confirming the Pages workflow is the intended deployment path; keep the rollback source intact.
 
@@ -78,7 +78,7 @@ Required Cloudflare Pages runtime bindings in **both Preview and Production** (s
 
 ## Cutover exit criteria
 
-Do not merge the migration into `main` until all are true:
+Do not release to Production until all are true (merge to `main` is permitted once every item except the Production deployment itself is evidenced on Preview):
 
 - Supabase project created and Google OAuth configured;
 - baseline migration applied successfully;
@@ -103,5 +103,5 @@ Do not merge the migration into `main` until all are true:
 - Automated acceptance (2026-09-11) against Preview deployment `2836a238` (commit `1563d39`), using throwaway password-auth users created and deleted through the Supabase admin API: `tests/acceptance/cutover-acceptance.mjs` 32/32 and `tests/acceptance/ui-acceptance.mjs` (Playwright) 19/19. Evidenced: unauthenticated 401s; server-side progress persistence read back in a fresh browser context (cross-device); capstone submission rejected with 409 until all Chapter 1 sessions complete and 400 for thin answers, accepted afterwards; Chapter 2 card rendered locked until the capstone exists and unlocked after; project save/submit/review round-trip with the exact submitted snapshot visible to admin; RLS denies cross-learner reads of `student_projects`, `learner_progress` and `learners` and denies direct browser writes; non-admin callers receive 403 on every admin route and the `/admin` page shows the rejection message; app-metadata `role=admin` is honoured and the dashboard lists the student.
 - Manual validation by the operator (2026-09-11): Google OAuth sign-in works on the Preview deployment, and the real teacher account listed in `ADMIN_EMAILS` can open `/admin`.
 - Known gap, not blocking cutover: chapter unlock is evaluated client-side from `state.chapterAssessments`, which the learner's own progress `PUT` can set. The server enforces the session prerequisite for capstone submission but does not derive qualification from `chapter_assessments`. Track as a Phase 2 hardening item.
-- Still pending: the exact Production deployment (none exists yet); rerun `npm run acceptance` against it after release.
-- Update this record with exact commit/deployment IDs and test evidence before marking cutover complete. Phase 2 remains blocked until then.
+- Operator decision (2026-09-11): defer the Production deployment until every roadmap phase has been accepted on Preview. The migration branch merges to `main`; `main` deploys to the Preview environment as `preview-main`; the Production release workflow is manual only. All ADR-007 exit criteria except the Production deployment itself are evidenced above, so Phase 2 may begin.
+- Before the eventual Production release: rerun `npm run acceptance` against `preview-main`, dispatch the release workflow, verify the deployed commit with `wrangler pages deployment list`, then rerun `npm run acceptance` against `https://ty-ai-learning.pages.dev`.

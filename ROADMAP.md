@@ -355,6 +355,6 @@ Every development phase must satisfy all of the following before production acce
 
 Do not start multiple major phases in parallel. Complete the current phase, verify it with real/pilot usage where appropriate, record findings, then proceed to the next phase.
 
-**Current work: ADR-007 platform migration and Phase 1 production acceptance.**
+**Current work: Phase 2 — Experience Labs for Chapters 1–2.**
 
-Phase 1 implementation is merged into `main`; its end-to-end deployment acceptance remains pending. Complete the ADR-007 cutover checklist and record evidence before starting **Phase 2 — Experience Labs for Chapters 1–2**. Do not treat green source-regression tests as proof of live cross-device persistence or student isolation.
+The ADR-007 platform migration and Phase 1 acceptance are evidenced on the Cloudflare Preview environment (2026-09-11) with `npm run acceptance`. By operator decision, Production deployment is deferred until every phase has been accepted on Preview; `main` deploys to `preview-main` and the Production release workflow is manual only. Each phase's "deploy" exit criterion therefore means: Preview deployment verified and `npm run acceptance` green against it, until the final Production release.

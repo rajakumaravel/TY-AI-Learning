@@ -4,7 +4,7 @@ The portal follows **AI in Practice · Student Book v1.0 · September 2026** as 
 
 ## Platform status
 
-This branch (`infra-cloudflare-supabase`) targets Cloudflare Pages, Pages Functions, Supabase Auth with Google OAuth, and Supabase Postgres. Production cutover and Phase 1 live acceptance remain pending; see [ADR-007](docs/decisions/ADR-007-cloudflare-supabase-platform.md). Netlify code is retained as rollback/reference, not as the runtime for the Cloudflare deployment.
+This branch (`infra-cloudflare-supabase`) targets Cloudflare Pages, Pages Functions, Supabase Auth with Google OAuth, and Supabase Postgres. Phase 1 live acceptance is evidenced on Preview; Production cutover is deferred until all phases are accepted; see [ADR-007](docs/decisions/ADR-007-cloudflare-supabase-platform.md). Netlify code is retained as rollback/reference, not as the runtime for the Cloudflare deployment.
 
 ## Pilot features
 
@@ -46,6 +46,6 @@ Live cutover acceptance against a deployment (needs `supabase login` and `npx pl
 ACCEPTANCE_BASE_URL=https://<deployment>.ty-ai-learning.pages.dev npm run acceptance
 ```
 
-Branch pushes trigger the Pages preview workflow. The Production release workflow is configured for successful CI on `main` and manual dispatch; it applies database migrations before deployment. The dependency lockfile required by `npm ci` is committed.
+Every branch push, including `main`, deploys to the Cloudflare Pages Preview environment as `preview-<branch>` (so `main` is served at `https://preview-main.ty-ai-learning.pages.dev`). The Production release workflow is manual dispatch only; it applies database migrations before deploying. Production is deferred until all roadmap phases are accepted on Preview.
 
-Complete the [ADR-007 acceptance checklist](docs/decisions/ADR-007-cloudflare-supabase-platform.md), including cross-device persistence, project submission/review, student isolation and the legacy-data decision, before merging. Phase 2 follows successful cutover and Phase 1 acceptance; see [ROADMAP](ROADMAP.md).
+The [ADR-007 acceptance checklist](docs/decisions/ADR-007-cloudflare-supabase-platform.md) is evidenced on Preview; only the Production release itself is outstanding. Phase 2 follows; see [ROADMAP](ROADMAP.md).
