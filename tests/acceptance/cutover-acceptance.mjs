@@ -102,7 +102,7 @@ try {
   const reviewByStudent = await api(`projects/admin/student/${a.id}/block2/review`, b.token, { method: 'PUT', body: JSON.stringify({ comment: 'x' }) });
   check('student B cannot review A\'s project', reviewByStudent.status === 403);
 
-  // Chapter 2 → 3 gate: Chapter 3 writes need Chapter 2 qualified, then the five Chapter 3 sessions
+  // Chapter 2 → 3 gate: Chapter 3 writes need Chapter 2 qualified, then the six Chapter 3 sessions
   check('student A Chapter 3 capstone is 409 without Chapter 2 qualification', (await api('chapter-assessment/block3', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE3_ANSWERS }) })).status === 409);
   check('student A Chapter 3 project save is 409 without Chapter 2 qualification', (await api('projects/block3', a.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
   const done2 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { ...state, completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS] } }) });
@@ -116,13 +116,13 @@ try {
   const cap3 = await api('chapter-assessment/block3', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE3_ANSWERS }) });
   check('Chapter 3 capstone accepted after sessions complete', cap3.status === 200 && Boolean(cap3.body?.assessment?.submittedAt) && Boolean(cap3.body?.assessment?.suggestedLevel), JSON.stringify(cap3.body));
   const workspace3 = {
-    workLog: [{ planned: 'Audit the club sign-up dataset', did: 'Checked every column for missing values, mixed formats and duplicates.', result: 'Found nine missing club choices, three date formats and four duplicate rows.', blocker: '', decision: 'Flag the sensitive columns for removal', next: 'Write the data card', minutes: 40, date: '2026-09-11' }],
+    workLog: [{ planned: 'Audit a music service at category level, then the club sign-up dataset', did: 'Listed the data categories the privacy policy names, traced five collection → purpose → benefit → risk chains, then checked every column for missing values, duplicates and who is missing.', result: 'Three vague purposes found; nine missing club choices, four duplicate rows and no mid-year joiners in the dataset.', blocker: '', decision: 'Flag the sensitive and inferred columns for removal', next: 'Write the Responsible Data Card', minutes: 40, date: '2026-09-11' }],
     evidence: [
-      { label: 'Audit findings', url: '', note: 'Missing value at column:club_choice; Inconsistent format at column:signup_date; Duplicate at row:17.' },
-      { label: 'Cleaning plan', url: '', note: 'Standardise signup_date to ISO, merge year_group spellings, drop exact duplicates.' },
-      { label: 'Responsible Data Card', url: '', note: 'Purpose, collected fields, volunteered/observed/inferred split and prohibited uses recorded.' }
+      { label: 'Data category audit', url: '', note: 'Location, listening history, contacts and an inferred mood category; "to improve our services" covers a lot.' },
+      { label: 'Dataset fairness findings', url: '', note: 'Missing value at column:club_choice; Duplicate at row:17; Who is missing (representation) at column:year_group: no mid-year joiners.' },
+      { label: 'Responsible Data Card (Sheet A5)', url: '', note: 'What is collected, observed and inferred, why it is needed, who might be missing, what to minimise and what needs human review.' }
     ],
-    finalRecommendation: 'Use the cleaned dataset only for club planning after removing home_eircode, parent_phone, date_of_birth and inferred_income_band; it must not be used to judge individual students.'
+    finalRecommendation: 'Use the redesigned data plan only for club planning after removing home_eircode, parent_phone, date_of_birth and inferred_income_band, adding a representation check for mid-year joiners and keeping data for one term; it must not be used to judge individual students.'
   };
   const save3 = await api('projects/block3', a.token, { method: 'PUT', body: JSON.stringify({ workspace: workspace3 }) });
   check('student A PUT /api/projects/block3 ok after Chapter 2 qualified', save3.status === 200 && save3.body?.project?.status === 'in_progress' && save3.body?.project?.brief?.chapter === 'Data Detective', JSON.stringify(save3.body));

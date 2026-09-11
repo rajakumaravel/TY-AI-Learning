@@ -52,4 +52,5 @@ test('server derives chapter qualification from chapter_assessments and gates th
   assert.match(fn,/state:await withServerQualifications\(db,auth\.user\.id,data\?\.state\)/);
   assert.match(fn,/const trusted=await withServerQualifications\(db,auth\.user\.id,state\)/);
   assert.equal((fn.match(/previousBlockQualified\(db,auth\.user\.id,(blockId|projectId)\)\)\)return json\(\{error:PREVIOUS_CHAPTER_REQUIRED\},409\)/g)||[]).length,3);
+  assert.match(fn,/block3:\['b3s1','b3s2','b3s3','b3s4','b3s5','b3s6'\]/);
 });

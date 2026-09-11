@@ -21,6 +21,8 @@ test('project workspace requests and lab evidence are parameterised by project, 
   assert.match(student,/function labEvidenceItems\(state=\{\},blockId\)/);
   assert.match(student,/a\.kind==='dataset'/);
   assert.match(student,/\$\{f\.issue\} at \$\{f\.target\}: /);
+  assert.match(student,/a\.kind==='chain'/);
+  assert.match(student,/\.join\(' → '\)/);
   assert.match(student,/`Project: \$\{PROJECT_BRIEFS\[projectId\]\.chapter\}`/);
   assert.match(student,/CHAPTER \$\{chapterNumber\(activeProjectId\)\} PROJECT/);
   assert.match(student,/'projectWorkspaceBtn':`projectWorkspaceBtn-\$\{projectId\}`/);

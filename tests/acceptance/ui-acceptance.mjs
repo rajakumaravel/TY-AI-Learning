@@ -93,10 +93,11 @@ try {
   await d4.page.click('[data-block="2"]');
   await d4.page.waitForSelector('#labBanner .lab-stage', { timeout: 10000 });
   check('chapter 3 shows six Experience Lab stages', (await d4.page.$$('#labBanner .lab-stage')).length === 6);
-  await d4.page.click('[data-session="b3s3"]');
+  check('chapter 3 renders the Myth-busters section', Boolean(await d4.page.$('#mythBusters')) && /Public means visible/.test(await d4.page.textContent('#mythBusters')));
+  await d4.page.click('[data-session="b3s4"]');
   await d4.page.waitForSelector('.dataset-table tbody tr', { timeout: 15000 });
   const rows = (await d4.page.$$('.dataset-table tbody tr')).length;
-  check('b3s3 dataset table renders all 120 rows from the served CSV', rows === 120, `rows=${rows}`);
+  check('b3s4 dataset table renders all 120 rows from the served CSV', rows === 120, `rows=${rows}`);
   const csv = await fetch(`${BASE}/datasets/club-signups-flawed.csv`);
   check('flawed CSV is served with HTTP 200', csv.status === 200, `status ${csv.status}`);
   const note = 'Nine sign-ups have no club_choice recorded.';
@@ -106,6 +107,13 @@ try {
   await d4.page.click('#datasetAdd');
   await d4.page.waitForFunction((n) => (document.querySelector('.dataset-findings')?.textContent || '').includes(n), note, { timeout: 10000 }).catch(() => {});
   check('adding a finding via the form appears in the findings list', (await d4.page.textContent('.dataset-findings')).includes(note));
+  const missing = 'No student who joined mid-year appears in the sign-ups.';
+  await d4.page.selectOption('#datasetTarget', 'column:year_group');
+  await d4.page.selectOption('#datasetIssue', { label: 'Who is missing (representation)' });
+  await d4.page.fill('#datasetNote', missing);
+  await d4.page.click('#datasetAdd');
+  await d4.page.waitForFunction((n) => (document.querySelector('.dataset-findings')?.textContent || '').includes(n), missing, { timeout: 10000 }).catch(() => {});
+  check('a "Who is missing (representation)" finding appears in the findings list', /Who is missing \(representation\)/.test(await d4.page.textContent('.dataset-findings')) && (await d4.page.textContent('.dataset-findings')).includes(missing));
   await d4.context.close();
 
   // Admin page: student rejected, admin admitted
