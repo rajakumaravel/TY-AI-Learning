@@ -54,7 +54,11 @@ No guessed or name-based identity matching is permitted.
 
 Normal CI runs on all branches and pull requests to `main`, executes the regression suite and verifies the Vite production artifact.
 
-Cloudflare Pages deployment and Supabase migration workflows are intentionally **manual (`workflow_dispatch`)** until the new accounts/projects/secrets are configured and the migration branch has passed acceptance testing. This prevents accidental production cutover.
+The migration-branch Pages workflow runs on pushes to `infra-cloudflare-supabase` and supports manual dispatch. Its GitHub job uses the `production` environment for build/deployment credentials; this does not select the Cloudflare Pages runtime environment. Branch previews need runtime bindings configured under Cloudflare **Preview**.
+
+The standalone Supabase migration workflow remains manual. The separate Production release workflow is configured to run after successful CI on `main`, or by manual dispatch; it applies migrations before deploying with `--branch=main`. Do not merge or manually release until the cutover exit criteria below are evidenced.
+
+Before release, commit and verify a dependency lockfile: the Production workflow currently uses `npm ci` and npm caching, which require a lockfile. Disable the obsolete standalone Worker Git build after confirming the Pages workflow is the intended deployment path; keep the rollback source intact.
 
 Required GitHub configuration at cutover:
 
@@ -62,11 +66,11 @@ Required GitHub configuration at cutover:
 - secret `CLOUDFLARE_ACCOUNT_ID`
 - variable `CLOUDFLARE_PAGES_PROJECT`
 - secret `SUPABASE_DB_URL`
+- variable `VITE_SUPABASE_URL` (GitHub Actions build)
+- secret `VITE_SUPABASE_ANON_KEY` (GitHub Actions build; publishable key only)
 
-Required Cloudflare Pages variables/secrets:
+Required Cloudflare Pages runtime bindings in **both Preview and Production** (save changes, then redeploy the affected environment):
 
-- `VITE_SUPABASE_URL` (build)
-- `VITE_SUPABASE_ANON_KEY` (build)
 - `SUPABASE_URL` (runtime)
 - `SUPABASE_ANON_KEY` (runtime)
 - `SUPABASE_SERVICE_ROLE_KEY` (runtime secret)
@@ -88,3 +92,13 @@ Do not merge the migration into `main` until all are true:
 - CI is green;
 - pilot data migration is either successfully reconciled or explicitly waived for the pilot;
 - rollback path remains available until post-cutover verification is complete.
+
+## Validation record — 2026-09-11
+
+- Phase 1 code exists; production acceptance is not yet signed off.
+- Commit `1bc730572812747ba121195ce8641de60b1bed2d` passed 54 tests and Pages deployment; this does not establish authenticated end-to-end acceptance.
+- The operator reports runtime bindings configured in both Preview and Production. Their values have not been read or verified here.
+- Database migration history currently records only `20260910115137_initial_platform_schema`. Reconcile the existing `20260910120000_lock_down_auth_trigger.sql` through the repository migration workflow; do not invent a replacement timestamp. Confirm dry-run output before applying.
+- Cross-device persistence, capstone gating, project save/submit/review, student isolation, non-admin rejection, and exact Production deployment remain pending validation.
+- Legacy learner-data migration versus explicit pilot waiver remains an operator decision. Preserve legacy data until decided.
+- Update this record with exact commit/deployment IDs and test evidence before marking cutover complete. Phase 2 remains blocked until then.
