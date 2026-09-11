@@ -6,7 +6,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { BASE, REF, check, results, createUser, cleanup, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS } from './lib.mjs';
+import { BASE, REF, check, results, createUser, cleanup, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS, CAPSTONE4_ANSWERS } from './lib.mjs';
 
 const SHOTS = process.env.SHOTS || 'live-shots';
 mkdirSync(SHOTS, { recursive: true });
@@ -296,6 +296,114 @@ try {
     return await page.textContent('#pwMessage');
   });
   await step(page, 'Submit chapter 3 project', async () => {
+    await page.click('#pwSubmit');
+    await page.waitForFunction(() => /submitted/i.test(document.querySelector('.pw-status')?.textContent || ''), null, { timeout: 15000 });
+    return await page.textContent('.pw-status');
+  });
+  await page.click('.pw-close');
+
+  // ---------- student, chapter 3 capstone (submitted above) unlocks chapter 4
+  await page.click('#homeBtn');
+  await step(page, 'Home: Chapter 3 done, Chapter 4 unlocked', async () => {
+    const done = await page.$eval('[data-block="2"]', el => el.classList.contains('done'));
+    const unlocked = await page.$eval('[data-block="3"]', el => !el.classList.contains('locked') && !el.disabled);
+    return done && unlocked;
+  });
+
+  // ---------- student, chapter 4 (reload so the third workspace launcher initialises with the new unlock)
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForFunction(() => /Welcome/.test(document.getElementById('welcomeName')?.textContent || ''), null, { timeout: 15000 });
+  await page.click('[data-block="3"]');
+  await page.waitForSelector('#labBanner .lab-stage');
+  await step(page, 'Chapter 4 opens with six lab stages; Chapter 4 project launcher present', async () => {
+    await page.waitForSelector('#projectWorkspaceBtn-block4', { timeout: 15000 });
+    const label = await page.textContent('#projectWorkspaceBtn-block4');
+    return (await page.$$('#labBanner .lab-stage')).length === 6 && /^Project: .+/.test(label) ? label : false;
+  });
+  await step(page, 'Chapter 4 page shows the Myth-busters section', async () => /Clear beats long/.test(await page.textContent('#mythBusters')));
+  await step(page, 'Same task, different prompts lab: safety notice, DuckDuckGo AI Chat link, downloads, four fields, save', async () => {
+    await page.check('[data-ack]');
+    const enabled = await page.$eval('#labToolLink', el => !el.classList.contains('disabled') && /duck\.ai/.test(el.getAttribute('href') || ''));
+    const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
+    const n = await fillTextfields(page, 4);
+    const fb = await saveSession(page, 'b4s2');
+    return enabled && n === 4 && dl.some(h => /genai-weak-question-card/.test(h)) ? `${fb} downloads=${dl.length}` : `enabled=${enabled} fields=${n} downloads=${dl.length}`;
+  });
+  await step(page, 'What an LLM actually does quiz: choose every answer, save', async () => {
+    for (const sel of await page.$$('select[data-i]')) await sel.selectOption({ index: 1 });
+    return await saveSession(page, 'b4s3');
+  });
+  await step(page, 'Prompt Lab 1: C-T-C-F builder composes v2, v1 and v2 recorded on Sheet A4, save', async () => {
+    await page.waitForSelector('.prompt-lab', { timeout: 10000 });
+    const parts = { context: 'I am a TY student preparing a two-minute talk on the River Shannon for classmates.', task: 'Outline the talk.', constraints: '150 words, plain language, no figures without a named source.', format: 'Five bullet points, and ask me two questions first.' };
+    for (const [k, v] of Object.entries(parts)) await page.fill(`input[data-builder="${k}"]`, v);
+    await page.click('#composeV2');
+    const composed = await page.$eval('textarea[data-version="v2"][data-field="prompt"]', el => el.value);
+    if (!Object.values(parts).every(v => composed.includes(v))) throw new Error(`compose v2 missing parts: ${composed}`);
+    await page.fill('textarea[data-version="v1"][data-field="prompt"]', 'Tell me about the River Shannon.');
+    await page.fill('textarea[data-version="v1"][data-field="output"]', 'A fluent general paragraph with a length, some counties and a confident date, no sources.');
+    await page.fill('textarea[data-version="v1"][data-field="better"]', 'No, it answered a question I did not really ask.');
+    await page.fill('textarea[data-version="v2"][data-field="change"]', 'Added context, one task verb, constraints and a format.');
+    await page.fill('textarea[data-version="v2"][data-field="output"]', 'Five bullets for the talk and two questions back to me about the audience and length.');
+    await page.fill('textarea[data-version="v2"][data-field="better"]', 'Yes, it fitted the actual task and asked before assuming.');
+    return await saveSession(page, 'b4s4');
+  });
+  await step(page, 'Prompt Lab 2: v3 tested and revised plus the two iteration notes, save', async () => {
+    await page.fill('textarea[data-version="v3"][data-field="prompt"]', 'Same prompt as v2 plus: ask me two questions before you answer, then give one example bullet of what good looks like.');
+    await page.fill('textarea[data-version="v3"][data-field="change"]', 'Added ask-me-questions-first, then one example, one at a time.');
+    await page.fill('textarea[data-version="v3"][data-field="output"]', 'It asked about the audience first; the example bullet made the rest more concrete.');
+    await page.fill('textarea[data-version="v3"][data-field="better"]', 'Yes for the questions; the example helped a little.');
+    await page.fill('textarea[data-extra="0"]', long('Tried an example, the audience, success criteria and ask-me-questions-first, one at a time.'));
+    await page.fill('textarea[data-extra="1"]', long('The questions-first addition helped most; the audience line just made the prompt longer.'));
+    return await saveSession(page, 'b4s5');
+  });
+  await step(page, 'Four useful roles chain: tutor, brainstorm partner, critic, transformer, save', async () => {
+    const roles = ['Tutor', 'Brainstorm partner', 'Critic', 'Transformer'];
+    for (let i = 0; i < 4; i++) for (const f of ['role', 'prompt', 'did', 'risk']) await page.fill(`input[data-i="${i}"][data-f="${f}"]`, f === 'role' ? roles[i] : `${f} for ${roles[i].toLowerCase()}`);
+    return await saveSession(page, 'b4s6');
+  });
+  await step(page, 'Verification challenge chain (Sheet A2): three claims checked, save', async () => {
+    const claims = [['The Shannon is about 360 km long', 'OSI river data', 'supported', 'kept it'], ['The Shannon Bridge Act was passed in 1931', 'Irish Statute Book search', 'wrong', 'removed it'], ['Ardnacrusha opened in 1929', 'ESB heritage page', 'supported', 'added the source']];
+    for (let i = 0; i < 3; i++) for (const [j, f] of ['claim', 'source', 'verdict', 'changed'].entries()) await page.fill(`input[data-i="${i}"][data-f="${f}"]`, claims[i][j]);
+    return await saveSession(page, 'b4s7');
+  });
+  await step(page, 'Injecting doubt: four responses, save', async () => { const n = await fillTextfields(page, 4); const fb = await saveSession(page, 'b4s8'); return n === 4 ? fb : `fields=${n}`; });
+  await step(page, 'Build a reusable prompt: four fields, template download listed, save', async () => {
+    const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
+    const n = await fillTextfields(page, 4);
+    const fb = await saveSession(page, 'b4s9');
+    return n === 4 && dl.some(h => /reusable-prompt-template/.test(h)) ? `${fb} downloads=${dl.length}` : `fields=${n} downloads=${dl.length}`;
+  });
+  await step(page, 'Red-team a prompt: three fields, save', async () => { const n = await fillTextfields(page, 3); const fb = await saveSession(page, 'b4s10'); return n === 3 ? fb : `fields=${n}`; });
+  await step(page, 'Exit rule: one field, save, chapter 4 practical complete', async () => { const n = await fillTextfields(page, 1); const fb = await saveSession(page, null); return n === 1 && /chapter assessment/i.test(fb) ? fb : `fields=${n} · ${fb}`; });
+  await page.waitForSelector('#chapterCapstoneHost textarea[data-capstone]', { timeout: 10000 });
+  await step(page, 'Submit chapter 4 capstone, formative level returned', async () => submitCapstone(page, CAPSTONE4_ANSWERS));
+
+  // ---------- chapter 4 project workspace
+  await page.click('#projectWorkspaceBtn-block4');
+  await page.waitForSelector('#projectWorkspaceModal.open', { timeout: 15000 });
+  await step(page, 'Chapter 4 Project Workspace opens with brief and acceptance criteria', async () => {
+    const eyebrow = await page.textContent('#projectWorkspaceModal .eyebrow');
+    return /CHAPTER 4 PROJECT/.test(eyebrow) && (await page.$$('#projectWorkspaceModal li')).length >= 3 ? eyebrow : false;
+  });
+  await step(page, 'Import chapter 4 lab evidence adds the prompt versions, verification log and lab notes as evidence', async () => {
+    await page.click('#pwImportLab');
+    await page.waitForFunction(() => /Imported/.test(document.getElementById('pwMessage')?.textContent || ''), null, { timeout: 15000 });
+    const n = (await page.$$('#pwEvidence .pw-evidence')).length;
+    const txt = await page.textContent('#pwEvidence');
+    const values = await page.$$eval('#pwEvidence textarea', els => els.map(e => e.value).join('\n'));
+    return n >= 3 && /v1: Tell me about the River Shannon\. → /.test(values) && /supported → /.test(values) ? `${await page.textContent('#pwMessage')} (${n} items)` : `only ${n} items: ${txt.slice(0, 80)}`;
+  });
+  await step(page, 'Chapter 4 work log entry and recommendation, save', async () => {
+    await page.click('#pwAddLog');
+    await page.fill('#pwLog .pw-entry textarea[data-f="did"]', 'Ran the three-version prompt experiment, tried the four roles, verified three claims and built a reusable template.');
+    await page.fill('#pwLog .pw-entry textarea[data-f="result"]', 'v2 fitted the task; one claim was wrong and one citation did not exist.');
+    await page.fill('#pwRecommendation', long('Use the C-T-C-F template and verify every figure and citation against an independent source; confident wording is not confident truth.'));
+    await page.click('#pwSave');
+    await page.waitForFunction(() => /Saved/.test(document.getElementById('pwMessage')?.textContent || ''), null, { timeout: 15000 });
+    return await page.textContent('#pwMessage');
+  });
+  await step(page, 'Submit chapter 4 project', async () => {
     await page.click('#pwSubmit');
     await page.waitForFunction(() => /submitted/i.test(document.querySelector('.pw-status')?.textContent || ''), null, { timeout: 15000 });
     return await page.textContent('.pw-status');
