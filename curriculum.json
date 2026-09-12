@@ -1562,23 +1562,23 @@
               "steps": [
                 "Try Microsoft Copilot at https://copilot.microsoft.com without signing in. If either tool asks for an account, payment or an unavailable feature, move to the next fallback.",
                 "Otherwise open the b6s1 sample in ai-work-sample-outputs.txt. No uploads or account-dependent features are required.",
-                "Record the same evidence and identify the sample route. Attempt the tutor questions yourself; do your own spreadsheet calculations and final work product."
+                "Record the same evidence and identify the sample route. Write your own answer to the learning question before you read the sample's tutoring turns, so the comparison is still about your thinking."
               ]
             },
             "downloads": [
               {
                 "file": "ai-work-tutor-cards.txt",
-                "label": "Tutor cards",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Tutor cards (text)",
+                "note": "The two comparison prompts, a tutoring scaffold that goes prior knowledge, example, question, your attempt, feedback, and a safe sample concept to practise on. Record where you started before you ask anything."
               },
               {
                 "file": "ai-work-sample-outputs.txt",
-                "label": "Sample outputs",
-                "note": "Use this session’s synthetic sample; keep your own attempts and checks."
+                "label": "Sample outputs, synthetic (text)",
+                "note": "Labelled synthetic samples for this chapter's four tool sessions, to use when the tool is blocked. The budget interpretation mixes a supported claim, a wrong total and an unsupported prediction, and the suggested edit quietly drops a caveat. Nothing is marked; you find them."
               }
             ]
           },
-          "reflection": "Which conversation leaves evidence of your own thinking, and what is that evidence?"
+          "reflection": "Was your prediction right? When would you still choose the answer-giving route, and when would that be the wrong call?"
         },
         {
           "id": "b6s2",
@@ -1634,19 +1634,19 @@
               "steps": [
                 "Try Microsoft Copilot at https://copilot.microsoft.com without signing in. If either tool asks for an account, payment or an unavailable feature, move to the next fallback.",
                 "Otherwise open the b6s2 sample in ai-work-sample-outputs.txt. No uploads or account-dependent features are required.",
-                "Record the same evidence and identify the sample route. Attempt the tutor questions yourself; do your own spreadsheet calculations and final work product."
+                "Record the same evidence and identify the sample route. Attempt each tutor question yourself before reading the next sample turn; the sample replaces the chat tool, not your attempts."
               ]
             },
             "downloads": [
               {
                 "file": "ai-work-tutor-cards.txt",
-                "label": "Tutor cards",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Tutor cards (text)",
+                "note": "The two comparison prompts, a tutoring scaffold that goes prior knowledge, example, question, your attempt, feedback, and a safe sample concept to practise on. Record where you started before you ask anything."
               },
               {
                 "file": "ai-work-sample-outputs.txt",
-                "label": "Sample outputs",
-                "note": "Use this session’s synthetic sample; keep your own attempts and checks."
+                "label": "Sample outputs, synthetic (text)",
+                "note": "Labelled synthetic samples for this chapter's four tool sessions, to use when the tool is blocked. The budget interpretation mixes a supported claim, a wrong total and an unsupported prediction, and the suggested edit quietly drops a caveat. Nothing is marked; you find them."
               }
             ]
           },
@@ -1746,40 +1746,40 @@
               "steps": [
                 "Try Microsoft Copilot at https://copilot.microsoft.com without signing in. If either tool asks for an account, payment or an unavailable feature, move to the next fallback.",
                 "Otherwise open the b6s4 sample in ai-work-sample-outputs.txt. No uploads or account-dependent features are required.",
-                "Record the same evidence and identify the sample route. Attempt the tutor questions yourself; do your own spreadsheet calculations and final work product."
+                "Record the same evidence and identify the sample route. The sample replaces the chat tool only: your cleaning, your formulas and your results stay your own work."
               ]
             },
             "file": "ai-work-event-budget-raw.csv",
             "downloads": [
               {
                 "file": "ai-work-event-budget-raw.csv",
-                "label": "Event budget raw",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Event budget, raw (CSV, 12 rows)",
+                "note": "The open-day cost export exactly as it arrived: inconsistent categories, a price written as text, a blank quantity, a negative quantity, one exact duplicate row and one conflicting repeat of an item ID. Save this untouched as your raw version."
               },
               {
                 "file": "ai-work-workplace-brief.txt",
-                "label": "Workplace brief",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Workplace brief (text)",
+                "note": "The events team's request, their meeting notes and the data rules: valid categories, units, ranges, what counts as a duplicate, and what this export does not contain. Your data dictionary comes from here."
               },
               {
                 "file": "ai-work-data-dictionary.csv",
-                "label": "Data dictionary",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Data dictionary (CSV)",
+                "note": "Field, meaning, type, unit, allowed values or range, missing or conflict rule, source. One row per field, to complete from the brief before you change anything."
               },
               {
                 "file": "ai-work-cleaning-log.csv",
-                "label": "Cleaning log",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Data cleaning log (CSV)",
+                "note": "Row or field, original, issue, action, reason, verified by. One line for every change, removal or flag, so someone else can retrace what you did and why."
               },
               {
                 "file": "ai-work-validation-checklist.csv",
-                "label": "Validation checklist",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Validation checklist (CSV)",
+                "note": "Check, before, after, evidence or formula, unresolved action. Re-run your profile after cleaning and reconcile every row you removed or held."
               },
               {
                 "file": "ai-work-sample-outputs.txt",
-                "label": "Sample outputs",
-                "note": "Use this session’s synthetic sample; keep your own attempts and checks."
+                "label": "Sample outputs, synthetic (text)",
+                "note": "Labelled synthetic samples for this chapter's four tool sessions, to use when the tool is blocked. The budget interpretation mixes a supported claim, a wrong total and an unsupported prediction, and the suggested edit quietly drops a caveat. Nothing is marked; you find them."
               }
             ]
           },
@@ -1819,23 +1819,23 @@
             "downloads": [
               {
                 "file": "ai-work-human-review-checklist.csv",
-                "label": "Human review checklist",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Human review checklist (CSV)",
+                "note": "Claim, spreadsheet cell or source, formula or independent check, verdict, change or removal, human sign-off. One row per claim, including the ones the AI got right."
               },
               {
                 "file": "verification-log-A2.csv",
-                "label": "Verification log a2",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Verification log, Sheet A2 (CSV)",
+                "note": "Claim, source checked, supported / uncertain / wrong, what I changed. Three empty rows."
               },
               {
                 "file": "ai-work-briefing-template.md",
-                "label": "Briefing template",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Briefing template (Markdown)",
+                "note": "Audience, your draft, verified figures with their formulas, unresolved items, suggested edits, what you accepted or rejected and why, final summary, disclosure and the human approval point."
               },
               {
                 "file": "ai-work-sample-outputs.txt",
-                "label": "Sample outputs",
-                "note": "Use this session’s synthetic sample; keep your own attempts and checks."
+                "label": "Sample outputs, synthetic (text)",
+                "note": "Labelled synthetic samples for this chapter's four tool sessions, to use when the tool is blocked. The budget interpretation mixes a supported claim, a wrong total and an unsupported prediction, and the suggested edit quietly drops a caveat. Nothing is marked; you find them."
               }
             ]
           },
@@ -1896,24 +1896,24 @@
               "steps": [
                 "Try Microsoft Copilot at https://copilot.microsoft.com without signing in. If either tool asks for an account, payment or an unavailable feature, move to the next fallback.",
                 "Otherwise open the b6s6 sample in ai-work-sample-outputs.txt. No uploads or account-dependent features are required.",
-                "Record the same evidence and identify the sample route. Attempt the tutor questions yourself; do your own spreadsheet calculations and final work product."
+                "Record the same evidence and identify the sample route. Write your own draft first, then give your own accept or reject reason for every suggested edit."
               ]
             },
             "downloads": [
               {
                 "file": "ai-work-workplace-brief.txt",
-                "label": "Workplace brief",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Workplace brief (text)",
+                "note": "The events team's request, their meeting notes and the data rules: valid categories, units, ranges, what counts as a duplicate, and what this export does not contain. Your data dictionary comes from here."
               },
               {
                 "file": "ai-work-briefing-template.md",
-                "label": "Briefing template",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Briefing template (Markdown)",
+                "note": "Audience, your draft, verified figures with their formulas, unresolved items, suggested edits, what you accepted or rejected and why, final summary, disclosure and the human approval point."
               },
               {
                 "file": "ai-work-sample-outputs.txt",
-                "label": "Sample outputs",
-                "note": "Use this session’s synthetic sample; keep your own attempts and checks."
+                "label": "Sample outputs, synthetic (text)",
+                "note": "Labelled synthetic samples for this chapter's four tool sessions, to use when the tool is blocked. The budget interpretation mixes a supported claim, a wrong total and an unsupported prediction, and the suggested edit quietly drops a caveat. Nothing is marked; you find them."
               }
             ]
           },
@@ -1968,8 +1968,8 @@
             "downloads": [
               {
                 "file": "ai-work-disclosure-cards.txt",
-                "label": "Disclosure cards",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Disclosure cards (text)",
+                "note": "The five cases with the audience and the expectation to weigh in each. There is no universal yes or no, so expect to disagree with someone and work out what the disagreement is really about."
               }
             ]
           },
@@ -2008,8 +2008,8 @@
             "downloads": [
               {
                 "file": "ai-work-learning-contract.md",
-                "label": "Learning contract",
-                "note": "Keep this reference or complete the template with your own evidence."
+                "label": "Learning contract (Markdown)",
+                "note": "AI helps me with, AI does not replace, I disclose AI use when, followed by the human checkpoints in your own repeatable workflow. Specific enough to catch yourself breaking it."
               }
             ]
           },

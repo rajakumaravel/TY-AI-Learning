@@ -198,11 +198,11 @@ export async function completeChapter6UI(page, afterSession = async () => {}) {
   await page.waitForFunction(()=>/Imported/.test(document.getElementById('pwMessage')?.textContent||''),null,{timeout:15000});
   const imported=await page.$$eval('#pwEvidence textarea',els=>els.map(e=>e.value).join('\n'));
   check('Chapter 6 import retains six stages, cleaning log, validation and human-review decisions',(await page.$$('#pwEvidence .pw-evidence')).length===6&&/Row \/ field/.test(imported)&&/11 retained/.test(imported)&&/Removed attendance/.test(imported));
+  await page.click('#pwAddLog');
   await page.click('#pwAddEvidence');
   const extra=page.locator('#pwEvidence .pw-evidence').last();
   await extra.locator('[data-f="label"]').fill('Disclosure choices');
   await extra.locator('[data-f="note"]').fill(CHAPTER6_DISCLOSURE.map(r=>r.join(' → ')).join('; '));
-  await page.click('#pwAddLog');
   await page.fill('#pwLog textarea[data-f="did"]','Preserved the raw budget, profiled and cleaned a working copy, calculated eligible figures, checked every claim and rejected unsupported edits.');
   await page.fill('#pwLog textarea[data-f="result"]','Seven eligible lines total €249.00; four records remain held; removed the attendance claim and retained human approval.');
   await page.fill('#pwRecommendation',CHAPTER6_RECOMMENDATION);
@@ -210,6 +210,7 @@ export async function completeChapter6UI(page, afterSession = async () => {}) {
   await page.waitForFunction(()=>/Saved/.test(document.getElementById('pwMessage')?.textContent||''),null,{timeout:15000});
   await page.click('#pwSubmit');
   await page.waitForFunction(()=>/submitted/i.test(document.querySelector('.pw-status')?.textContent||''),null,{timeout:15000});
-  check('Chapter 6 project submitted with disclosure and final recommendation',/submitted/i.test(await page.textContent('.pw-status')));
+  const kept=await page.$$eval('#pwEvidence .pw-evidence',rows=>rows.map(r=>({label:r.querySelector('[data-f="label"]')?.value||'',note:r.querySelector('[data-f="note"]')?.value||''})));
+  check('Chapter 6 project submitted with disclosure and final recommendation',/submitted/i.test(await page.textContent('.pw-status'))&&kept.some(r=>r.label==='Disclosure choices'&&r.note.includes('Private brainstorming')));
   await page.click('.pw-close');
 }
