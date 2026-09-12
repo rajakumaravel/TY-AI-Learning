@@ -175,6 +175,9 @@ async function submitChapterAssessment(){
     reconcileBadges();
     await api('progress',{method:'PUT',body:JSON.stringify({state})});
     saveLocal();renderHome();renderChapterCapstone();
+    // Cloud state can land while the learner is already on the Portfolio, which otherwise keeps showing zeros
+    // and exports an empty file.
+    if(!document.getElementById('portfolioView')?.classList.contains('hidden'))renderPortfolio();
   }catch(err){feedback('capstoneFeedback',err.message,'warn');btn.disabled=false}
 }
 

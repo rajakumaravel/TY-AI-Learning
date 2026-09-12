@@ -246,6 +246,8 @@ try {
   const dExport = await device(browser, p10.session);
   await dExport.page.click('#portfolioBtn');
   await dExport.page.waitForSelector('#exportPortfolio', { timeout: 15000 });
+  // Wait for cloud progress to land, or the export is built from empty state.
+  await dExport.page.waitForFunction(() => Number(document.getElementById('portfolioSessions')?.textContent || 0) > 0, null, { timeout: 15000 });
   const [portfolioDownload] = await Promise.all([dExport.page.waitForEvent('download'), dExport.page.click('#exportPortfolio')]);
   const portfolioHtml = readFileSync(await portfolioDownload.path(), 'utf8');
   check('student portfolio export is a self-contained HTML document', /class="portfolio-export"/.test(portfolioHtml));
@@ -275,9 +277,10 @@ try {
   await da.page.waitForSelector('#adminAnalytics [data-measure]', { timeout: 15000 }).catch(() => {});
   const measures = new Set(await da.page.$$eval('#adminAnalytics [data-measure]', els => els.map(e => e.dataset.measure)).catch(() => []));
   check('admin analytics view renders all six measures', ['completion', 'improvement', 'dropoff', 'agreement', 'labs', 'feedback'].every(m => measures.has(m)), JSON.stringify([...measures]));
+  await da.page.waitForSelector('#adminAnalytics [data-suppressed]', { timeout: 15000 }).catch(() => {});
   check('admin analytics view suppresses a cell in this small pilot', (await da.page.$$('#adminAnalytics [data-suppressed]')).length > 0);
   const analyticsText = await da.page.textContent('#adminAnalytics').catch(() => '');
-  check('admin analytics view names no learner id, display name or reviewed_by', noIdentifiers(analyticsText, [a.id, b?.id, p10.id, a.displayName, p10.displayName].filter(Boolean)));
+  check('admin analytics view names no learner id, display name or reviewed_by', noIdentifiers(analyticsText, [a.id, admin.id, p10.id, a.displayName, p10.displayName].filter(Boolean)));
   await da.context.close();
 
   // Signed-out visitor
