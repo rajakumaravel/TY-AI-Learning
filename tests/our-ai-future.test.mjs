@@ -456,7 +456,7 @@ test('the chapter assessment evidence area shows the saved decision summary',()=
   assert.match(items[0][1],/EN: /);
   assert.match(items[1][0],/Optimistic future · run 1/);
   assert.equal(items[2][0],'Comparison and uncertainty');
-  assert.match(app,/function labEvidenceHTML\(b\)\{const items=\[\.\.\.b\.sessions\.filter\(s=>s\.activity\.kind==='lab'\)/,'the existing lab evidence rendering is preserved');
+  assert.match(app,/function stageEvidenceItems\(b\)\{[\s\S]{0,400}?s\.activity\.kind==='lab'/,'lab sessions still contribute their field evidence');
 });
 
 test('Chapter 7 downloads exist on disk and the teacher key never reaches the students',()=>{
