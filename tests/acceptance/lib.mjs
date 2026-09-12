@@ -50,6 +50,9 @@ export async function cleanup(users) {
   for (const u of users) check(`cleanup: deleted test user ${u.id.slice(0, 8)}`, await deleteUser(u.id));
 }
 
+// Phase 10 (ADR-008 §1-4): true if text carries none of the given identifiers, `reviewed_by`, or a test-user email.
+export const noIdentifiers = (text, ids = []) => ![...ids, 'reviewed_by', '@ty-ai-learning.test'].some(v => v && text.toLowerCase().includes(String(v).toLowerCase()));
+
 export const CHAPTER1_SESSIONS = ['b1s1', 'b1lab', 'b1s2', 'b1s3', 'b1s4'];
 export const CAPSTONE1_ANSWERS = {
   q1: 'INPUT: student interests survey plus click and attendance data. AI ACTION: rank clubs by predicted enjoyment. OUTPUT: top three after-school activity recommendations for each student.',

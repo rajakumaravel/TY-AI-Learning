@@ -7,7 +7,9 @@
 // the chapter gates as rendered (1→2 through 7→8), the Chapter 5 annotate and simulator kinds, the Chapter 7 decision kind, and admin-page rejection for a non-admin account.
 
 import { chromium } from 'playwright';
-import { BASE, REF, api, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS, completeChapter6UI, completeChapter7UI, completeChapter8UI } from './lib.mjs';
+import { readFileSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
+import { BASE, REF, api, check, finish, createUser, cleanup, noIdentifiers, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS, completeChapter6UI, completeChapter7UI, completeChapter8UI } from './lib.mjs';
 
 // The annotate/simulator controls re-render on input, so ranges are set with a real input event rather than page.fill.
 async function setRange(page, key, value) { await page.$eval(`input[type=range][data-sim="${key}"]`, (el, v) => { el.value = v; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, String(value)); }
@@ -234,18 +236,48 @@ try {
   await completeChapter8UI(d9.page);
   await d9.context.close();
 
+  // Phase 10 (ADR-008 §1-2): the learner's own portfolio export and the narrower coordinator summary, driven from
+  // the Portfolio view through the selector contract. A marker reflection proves the student export carries the
+  // learner's work and the coordinator summary does not; neither carries an email, auth id or reviewed_by.
+  const p10 = await createUser('phase10-student'); users.push(p10);
+  const reflectionMarker = `Phase10 reflection marker ${randomUUID()}`;
+  const seeded = await api('progress', p10.token, { method: 'PUT', body: JSON.stringify({ state: { completed: CHAPTER1_SESSIONS, reflections: { b1s1: reflectionMarker }, activity: {}, badges: [], chapterAssessments: {} } }) });
+  check('server accepts the phase 10 export fixture\'s Chapter 1 completion', seeded.status === 200);
+  const dExport = await device(browser, p10.session);
+  await dExport.page.click('#portfolioBtn');
+  await dExport.page.waitForSelector('#exportPortfolio', { timeout: 15000 });
+  const [portfolioDownload] = await Promise.all([dExport.page.waitForEvent('download'), dExport.page.click('#exportPortfolio')]);
+  const portfolioHtml = readFileSync(await portfolioDownload.path(), 'utf8');
+  check('student portfolio export is a self-contained HTML document', /class="portfolio-export"/.test(portfolioHtml));
+  check('student portfolio export contains the learner\'s own reflection', portfolioHtml.includes(reflectionMarker));
+  check('student portfolio export carries the formative-evidence note', /class="export-note"/.test(portfolioHtml) && /not a certified qualification/i.test(portfolioHtml));
+  check('student portfolio export names no email, auth id or reviewed_by', noIdentifiers(portfolioHtml, [p10.id]));
+  const [summaryDownload] = await Promise.all([dExport.page.waitForEvent('download'), dExport.page.click('#exportCoordinatorSummary')]);
+  const summaryHtml = readFileSync(await summaryDownload.path(), 'utf8');
+  check('coordinator summary contains no reflection text', !summaryHtml.includes(reflectionMarker));
+  check('coordinator summary names no email, auth id or reviewed_by', noIdentifiers(summaryHtml, [p10.id]));
+  await dExport.context.close();
+
   // Admin page: student rejected, admin admitted
   const ds = await device(browser, a.session, '/admin');
   await ds.page.waitForFunction(() => (document.getElementById('gateMessage')?.textContent || '').length > 0, null, { timeout: 15000 }).catch(() => {});
   const gate = await ds.page.textContent('#gateMessage');
   check('student sees admin rejection message', /not authorised as an administrator/i.test(gate), gate);
   check('student sees no student metrics', !(await ds.page.$eval('#metricStudents', el => el.offsetParent !== null).catch(() => false)));
+  check('student sees no pilot analytics view', !(await ds.page.$('#adminAnalytics')));
   await ds.context.close();
 
   const da = await device(browser, admin.session, '/admin');
   await da.page.waitForFunction(() => Number(document.getElementById('metricStudents')?.textContent) > 0, null, { timeout: 15000 }).catch(() => {});
   const bodyText = await da.page.textContent('body');
   check('admin dashboard lists test student', bodyText.includes(a.displayName), (await da.page.textContent('#gateMessage').catch(() => '')) || '');
+  // Phase 10 (ADR-008 §3-4): the six aggregate measures with suppression applied and no learner named.
+  await da.page.waitForSelector('#adminAnalytics [data-measure]', { timeout: 15000 }).catch(() => {});
+  const measures = new Set(await da.page.$$eval('#adminAnalytics [data-measure]', els => els.map(e => e.dataset.measure)).catch(() => []));
+  check('admin analytics view renders all six measures', ['completion', 'improvement', 'dropoff', 'agreement', 'labs', 'feedback'].every(m => measures.has(m)), JSON.stringify([...measures]));
+  check('admin analytics view suppresses a cell in this small pilot', (await da.page.$$('#adminAnalytics [data-suppressed]')).length > 0);
+  const analyticsText = await da.page.textContent('#adminAnalytics').catch(() => '');
+  check('admin analytics view names no learner id, display name or reviewed_by', noIdentifiers(analyticsText, [a.id, b?.id, p10.id, a.displayName, p10.displayName].filter(Boolean)));
   await da.context.close();
 
   // Signed-out visitor
