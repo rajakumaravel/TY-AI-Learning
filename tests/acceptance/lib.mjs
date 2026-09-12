@@ -496,7 +496,10 @@ export async function completeChapter8UI(page, afterSession = async () => {}) {
       await page.waitForSelector('#labFallback',{timeout:10000});
       check('b8s5 fallback offers the non-AI build rather than a sample download',/non-AI|without AI|spreadsheet|paper/i.test(await page.textContent('#labFallback')));
       for (let i=0;i<CHAPTER8_FIELDS.b8s5.length;i++) await page.fill(`textarea[data-i="${i}"]`,CHAPTER8_FIELDS.b8s5[i]);
-      check('b8s5 tool acknowledgement is never given on the fallback route',!(await page.$eval('input[data-ack]',el=>el.checked)));
+      // The non-AI route needs no tool visit, but the safety notice is acknowledged here as on every other lab.
+      check('b8s5 tool link stays disabled until the safety notice is acknowledged',(await page.getAttribute('#labToolLink','aria-disabled'))==='true');
+      await page.check('input[data-ack]');
+      check('b8s5 completes on the non-AI route with the tool never opened',(await page.getAttribute('#labFallback','hidden'))===null);
     } else if (sid==='b8s6') {
       await page.waitForSelector('input[data-i="0"][data-f]',{timeout:15000});
       const keys=await page.$$eval('input[data-i="0"][data-f]',els=>els.map(e=>e.dataset.f));
