@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { computePilotAnalytics, computeCompletion, computeImprovement, computeDropoff, computeAgreement, computeLabCompletion, computeFeedback, SUPPRESSED_LABEL } from '../lib/pilot-analytics.mjs';
 
 function learner(completed=[],activity={}){ return {completed,activity}; }
@@ -113,4 +114,17 @@ test('deleting a learner changes the aggregate and leaves nothing behind',()=>{
 test('computePilotAnalytics carries the suppression note once, at the top',()=>{
   const analytics=computePilotAnalytics({});
   assert.match(analytics.note,/fewer than five/i);
+});
+
+// course-shape.mjs is hand-maintained because neither JSON import form works in both Node and the Workers bundler.
+// This test is what keeps it honest.
+test('the server course shape matches curriculum.json',async()=>{
+  const { COURSE_SHAPE }=await import('../lib/course-shape.mjs');
+  const course=JSON.parse(readFileSync(new URL('../curriculum.json',import.meta.url),'utf8'));
+  assert.deepEqual(COURSE_SHAPE.blocks.map(b=>b.id),course.blocks.map(b=>b.id));
+  for(const block of course.blocks){
+    const shape=COURSE_SHAPE.blocks.find(b=>b.id===block.id);
+    assert.deepEqual(shape.sessionIds,block.sessions.map(s=>s.id),`${block.id} sessions`);
+    assert.deepEqual(shape.labSessionIds,block.sessions.filter(s=>s.activity?.kind==='lab').map(s=>s.id),`${block.id} lab sessions`);
+  }
 });
