@@ -919,6 +919,7 @@ function futureResult(node) {
     rateA, rateB, gap: Math.abs(rateB - rateA)
   };
 }
+const futureBase = futureResult({ metrics: FUTURE.scenario.baseline });
 const futureEUR = n => `${n < 0 ? '−' : ''}€${Math.abs(n).toFixed(2)}`;
 const futureLine = node => { const r = futureResult(node);
   return `hours ${r.humanHours.toFixed(1)} (released ${r.hoursReleased.toFixed(1)}); cost ${futureEUR(r.costEUR)}; capacity value ${futureEUR(r.capacityValueEUR)}; automatic ${r.automated} / assisted ${r.assisted} / manual ${r.manual} of 100; wrong ${r.wrongTotal}/100 (A ${r.wrongA}/80 = ${r.rateA.toFixed(2)}%, B ${r.wrongB}/20 = ${r.rateB.toFixed(2)}%, gap ${r.gap.toFixed(2)} points); AI transcript retention ${r.retentionDays} days; energy index ${r.energyUnits}`; };
@@ -979,7 +980,7 @@ How to use it: read the root card and its four evidence cards. Pick one starting
 There is no correct route, no winner and no score. Every terminal below is a modelled possibility, not a measured follow-up result.
 
 Units: hours, euro and counts all describe one modelled week of 100 routine requests (80 group A, 20 group B). Vector order: ${FUTURE.metricKeys.join(', ')}.
-Arithmetic: hoursReleased = 10 − humanHours; capacityValueEUR = hoursReleased × ${FUTURE.scenario.hourValueEUR} − costEUR; manual = 100 − automated − assisted; wrongTotal = wrongA + wrongB; rateA = wrongA / 80 × 100; rateB = wrongB / 20 × 100; gap = |rateB − rateA| in percentage points. Capacity value is released task capacity less extra cost, not cash profit or wages saved. A negative value is a valid result.
+Arithmetic: hoursReleased = ${FUTURE.scenario.baseline[0]} − humanHours; capacityValueEUR = hoursReleased × ${FUTURE.scenario.hourValueEUR} − costEUR; manual = 100 − automated − assisted; wrongTotal = wrongA + wrongB; rateA = wrongA / 80 × 100; rateB = wrongB / 20 × 100; gap = |rateB − rateA| in percentage points. Capacity value is released task capacity less extra cost, not cash profit or wages saved. A negative value is a valid result.
 
 === ROOT: ${FUTURE_NODE('start').id} — ${FUTURE_NODE('start').title} ===
 Evidence: ${FUTURE_NODE('start').evidenceIds.join(', ')}. Metrics: none yet; the baseline is ${FUTURE.scenario.baseline.join(', ')}.
@@ -1131,10 +1132,10 @@ Suggested capabilities: critical judgement, communication, empathy, domain knowl
 writeFileSync(join('docs/teacher', 'ai-future-adoption.KEY.txt'), `TEACHER KEY — Chapter 7 Our AI Future, AI Adoption Decision Simulator. Never deploy under public/ and never link it as a student download.
 Every path, vector and result below is computed from the same block7 decision fixture in curriculum.json that the portal and the student downloads use.
 
-THE GRAPH: 1 root, ${FUTURE_MIDS.length} intermediate nodes, ${FUTURE_TERMINALS.length} terminals, ${FUTURE.nodes.length} nodes and 12 edges. Every complete path has exactly two choices. No hidden threshold, probability, random event or extra ending exists, and metrics are replaced at each node rather than accumulated.
-UNITS: one modelled week of 100 routine requests, 80 group A (standard digital) and 20 group B (language or access support). Vector order ${FUTURE.metricKeys.join(', ')}. hoursReleased = 10 − humanHours; capacityValueEUR = hoursReleased × ${FUTURE.scenario.hourValueEUR} − costEUR; manual = 100 − automated − assisted; rateA = wrongA/80 × 100; rateB = wrongB/20 × 100; gap = |rateB − rateA| in percentage points. Capacity value is released task capacity less extra cost: not profit, not wages saved, not a redundancy forecast. Negative values are valid results.
+THE GRAPH: 1 root, ${FUTURE_MIDS.length} intermediate nodes, ${FUTURE_TERMINALS.length} terminals, ${FUTURE.nodes.length} nodes and ${FUTURE.nodes.reduce((n,x)=>n+((x.choices||[]).length),0)} edges. Every complete path has exactly two choices. No hidden threshold, probability, random event or extra ending exists, and metrics are replaced at each node rather than accumulated.
+UNITS: one modelled week of 100 routine requests, 80 group A (standard digital) and 20 group B (language or access support). Vector order ${FUTURE.metricKeys.join(', ')}. hoursReleased = ${FUTURE.scenario.baseline[0]} − humanHours; capacityValueEUR = hoursReleased × ${FUTURE.scenario.hourValueEUR} − costEUR; manual = 100 − automated − assisted; rateA = wrongA/${FUTURE.scenario.groups[0][2]} × 100; rateB = wrongB/${FUTURE.scenario.groups[1][2]} × 100; gap = |rateB − rateA| in percentage points. Capacity value is released task capacity less extra cost: not profit, not wages saved, not a redundancy forecast. Negative values are valid results.
 
-BASELINE / NO-DEPLOYMENT OBSERVATION: ${FUTURE.scenario.baseline.join(', ')} → 8/100 wrong, A 4/80 = 5.00%, B 4/20 = 20.00%, gap 15.00 points, capacity value ${futureEUR(0)}.
+BASELINE / NO-DEPLOYMENT OBSERVATION: ${FUTURE.scenario.baseline.join(', ')} → ${futureBase.wrongTotal}/100 wrong, A ${futureBase.wrongA}/${FUTURE.scenario.groups[0][2]} = ${futureBase.rateA.toFixed(2)}%, B ${futureBase.wrongB}/${FUTURE.scenario.groups[1][2]} = ${futureBase.rateB.toFixed(2)}%, gap ${futureBase.gap.toFixed(2)} points, capacity value ${futureEUR(futureBase.capacityValueEUR)}.
 
 ALL EIGHT PATH IDENTITIES AND RESULTS:
 ${FUTURE_MIDS.map(mid => { const start = FUTURE_STARTS.find(c => c.next === mid.id); return mid.choices.map(c => { const t = FUTURE_NODE(c.next); return `${start.id} → ${c.id} (${start.label} → ${c.label}); terminal ${t.id}; cards ${t.evidenceIds.join(' + ')}; vector ${t.metrics.join(', ')}\n  ${futureLine(t)}\n  Accountability: ${t.accountability}\n  Next evidence: ${t.uncertainty}`; }).join('\n'); }).join('\n')}
@@ -1147,8 +1148,8 @@ ${BLOCK7.sessions.find(s => s.id === 'b7s2').activity.items.map(([q, a], i) => `
 The three sortable kinds are a narrow system trained for specific tasks, the hypothesis of broad human-like capability, and an uncertain forecast about the future. A convincing performance on one task settles nothing about general capability, and a stated arrival year is a forecast however confidently it is written.
 
 OBSERVATION VERSUS ASSUMPTION:
-Observations inside this fiction: E1 (the audit week), E2 (the sandbox replay), E3 (what people said), and the four branch observations EP/EH/EF/EN. Assumptions: everything in E4 — the €20 hour value, the unknown purchase cost, the retention definition and the invented energy index — plus every terminal vector, which is a modelled possibility and not a measured follow-up.
-Limitations of the reused small sample: E2 replays the same 100 cases used while developing the prototype, so it cannot evidence future performance; E1 is one week of one part of one job; no customer consultation or workforce agreement exists (E3). Counts this small move by whole requests, so a one-request difference in group B shifts rateB by 5.00 points.
+Observations inside this fiction: E1 (the audit week), E2 (the sandbox replay), E3 (what people said), and the four branch observations EP/EH/EF/EN. Assumptions: everything in E4 — the €${FUTURE.scenario.hourValueEUR} hour value, the unknown purchase cost, the retention definition and the invented energy index — plus every terminal vector, which is a modelled possibility and not a measured follow-up.
+Limitations of the reused small sample: E2 replays the same 100 cases used while developing the prototype, so it cannot evidence future performance; E1 is one week of one part of one job; no customer consultation or workforce agreement exists (E3). Counts this small move by whole requests, so a one-request difference in group B shifts rateB by ${(100/FUTURE.scenario.groups[1][2]).toFixed(2)} points.
 
 DISCUSSION POINTS:
 - Task versus job. The measured ten hours cover routine request handling only. Released capacity is time someone must decide how to use; it is not evidence about jobs. Expect students to name the tasks the audit never measured.
@@ -1166,7 +1167,7 @@ A fully developed no-deployment recommendation earns the same formative level as
 
 UNSUPPORTED CLAIMS TO CHALLENGE:
 - "Eight released hours means jobs will go." The model values capacity, not employment, and E3 records the opposite request from workers.
-- "No AI means no risk." ${FUTURE_NODE('none-wait').id} keeps 8/100 wrong and a 15.00-point gap, and the queue and access difficulties remain.
+- "No AI means no risk." ${FUTURE_NODE('none-wait').id} keeps ${futureResult(FUTURE_NODE('none-wait')).wrongTotal}/100 wrong and a ${futureResult(FUTURE_NODE('none-wait')).gap.toFixed(2)}-point gap, and the queue and access difficulties remain.
 - "An audit removes the harm." ${FUTURE_NODE('full-audit').id} still leaves ${futureResult(FUTURE_NODE('full-audit')).wrongTotal}/100 wrong and a customer may suffer an error before any appeal.
 - "Human review guarantees oversight." ${FUTURE_NODE('human-targets').id} shows approvals rising and errors with them.
 - "The sandbox shows it works." E2 reuses the development cases and is not independent evidence.

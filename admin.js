@@ -56,6 +56,13 @@ function activityLabel(activity, key) {
 // choice and evidence labels with the contract's units before the generic evidence renderer sees it.
 const DECISION_KEYS = { path:"Current decision path", draft:"Unfinished choice", runs:"Recorded adoption paths", futures:"Three possible futures", fields:"Comparison and uncertainty", scenarioId:"Scenario", modelVersion:"Model version" };
 const DECISION_UNITS = { humanHours:"staff hours", costEUR:"euro extra cost", automated:"automatic requests", assisted:"assisted requests", wrongA:"wrong group A outcomes", wrongB:"wrong group B outcomes", retentionDays:"days of added AI transcript storage", energyUnits:"energy index units" };
+// Results come from the fixed graph, not from the stored numbers: a tampered or stale run must not be shown as fact.
+function decisionResults(activity, run) {
+  const terminal = (activity.nodes || []).find((n) => n.id === run?.terminalId);
+  const keys = activity.metricKeys || [];
+  if (!terminal || !Array.isArray(terminal.metrics) || terminal.metrics.length !== keys.length) return "Invalid saved run — not recomputable";
+  return keys.map((k, i) => `${terminal.metrics[i]} ${DECISION_UNITS[k] || k}`).join(", ");
+}
 function decisionDisplay(activity, key, value) {
   if (!activity || activity.kind !== "decision") return value;
   const node = (id) => (activity.nodes || []).find((n) => n.id === id);
@@ -63,7 +70,7 @@ function decisionDisplay(activity, key, value) {
   const step = (s) => `${node(s?.nodeId)?.title || s?.nodeId || "unknown node"} → ${(node(s?.nodeId)?.choices || []).find((c) => c.id === s?.choiceId)?.label || s?.choiceId || "no choice"} · cited ${cardLabel(s?.evidenceId)} · ${String(s?.reason || "").trim() || "no reason given"}`;
   if (key === "path") return (Array.isArray(value) ? value : []).map(step);
   if (key === "draft") { const d = value && typeof value === "object" ? value : {}; return d.choiceId || d.evidenceId || d.reason ? { Choice: d.choiceId || "—", Evidence: d.evidenceId ? cardLabel(d.evidenceId) : "—", Reason: d.reason || "—" } : ""; }
-  if (key === "runs") return (Array.isArray(value) ? value : []).map((run) => ({ Path: (Array.isArray(run?.path) ? run.path : []).map(step).join(" | "), Outcome: `${node(run?.terminalId)?.title || run?.terminalId || "unknown outcome"} (modelled possibility)`, Results: Object.entries(run?.metrics || {}).map(([k, n]) => `${n} ${DECISION_UNITS[k] || k}`).join(", ") }));
+  if (key === "runs") return (Array.isArray(value) ? value : []).map((run) => ({ Path: (Array.isArray(run?.path) ? run.path : []).map(step).join(" | "), Outcome: `${node(run?.terminalId)?.title || run?.terminalId || "unknown outcome"} (modelled possibility)`, Results: decisionResults(activity, run) }));
   if (key === "futures") return Object.fromEntries((activity.futureLabels || []).map(([k, label]) => [label, `Run ${value?.[k]?.runId ?? "—"}: ${String(value?.[k]?.text || "").trim() || "no scenario written"}`]));
   if (key === "fields") return Object.fromEntries((activity.fields || []).map(([k]) => [DECISION_KEYS.fields, String(value?.[k] || "").trim()]));
   return value;

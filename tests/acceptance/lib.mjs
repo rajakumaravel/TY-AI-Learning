@@ -339,7 +339,7 @@ export async function completeChapter7UI(page, afterSession = async () => {}) {
       await decisionStep(page,...CHAPTER7_RUNS[0].follow);
       await page.waitForSelector('button#decisionRecord',{timeout:10000});
       const metrics=await page.textContent('#decisionMetrics');
-      check('b7s4 pilot then support shows the contract value, error and retention figures',/30\.00/.test(metrics)&&/3\.75|3\/80/.test(metrics)&&/10\.00|2\/20/.test(metrics)&&/\b7\b/.test(metrics));
+      check('b7s4 pilot then support shows the contract value, error and retention figures',/30\.00/.test(metrics)&&/3\.75|3\/80/.test(metrics)&&/10\.00|2\/20/.test(metrics)&&/7 days/.test(metrics));
       await page.click('button#decisionRecord');
       await page.waitForFunction(()=>(document.querySelector('.decision-runs')?.textContent||'').length>0,null,{timeout:10000});
       for (const run of CHAPTER7_RUNS.slice(1)) { await restartDecision(page); await recordDecisionRun(page,run); }
