@@ -6,3 +6,12 @@ supabase/.temp/
 live-shots/
 /undefined
 ui-audit-shots/
+
+# Installed by `npx impeccable install`: skills, agents, hooks and a compiled binary, ~28MB.
+# Tooling for whoever is working here, not part of the product. The tracked .claude/workflows
+# and .github/workflows are deliberately not covered by these.
+.claude/agents/
+.claude/skills/
+.github/agents/
+.github/hooks/
+.github/skills/
