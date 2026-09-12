@@ -6,7 +6,7 @@
 // Creates three throwaway auth users (two students, one app-metadata admin), exercises the API and RLS, then deletes them.
 
 import { randomUUID } from 'node:crypto';
-import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS } from './lib.mjs';
+import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS } from './lib.mjs';
 
 const users = [];
 try {
@@ -151,6 +151,28 @@ try {
   const submit4 = await api('projects/block4/submit', a.token, { method: 'POST' });
   check('student A submits Chapter 4 project', submit4.status === 200 && submit4.body?.project?.status === 'submitted' && submit4.body?.project?.submittedSnapshot?.finalRecommendation === workspace4.finalRecommendation, JSON.stringify(submit4.body));
   check('student B Chapter 4 project save is 409 without Chapter 3 qualification', (await api('projects/block4', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
+
+  // Chapter 4 → 5 gate: student A is Chapter 4 qualified (cap4 above), so Chapter 5 needs only its nine sessions
+  const cap5early = await api('chapter-assessment/block5', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE5_ANSWERS }) });
+  check('Chapter 5 capstone is 409 before Chapter 5 sessions complete', cap5early.status === 409, `status ${cap5early.status}`);
+  const done5 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { ...state, completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS, ...CHAPTER3_SESSIONS, ...CHAPTER4_SESSIONS, ...CHAPTER5_SESSIONS] } }) });
+  check('student A marks all Chapter 5 sessions complete', done5.status === 200);
+  const cap5 = await api('chapter-assessment/block5', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE5_ANSWERS }) });
+  check('Chapter 5 capstone accepted after sessions complete', cap5.status === 200 && Boolean(cap5.body?.assessment?.submittedAt) && Boolean(cap5.body?.assessment?.suggestedLevel), JSON.stringify(cap5.body));
+  const workspace5 = {
+    workLog: [{ planned: 'Mark up the AI article, verify claims laterally, run the bias simulator and publish a corrected version', did: 'Highlighted factual claims, emotional framing, missing sources and unsupported certainty, checked five claims in new tabs against independent sources, ran the shortlisting simulator three times and rewrote the article with only the verified claims.', result: 'Two claims wrong, one uncertain; Group B accuracy rose from 10% to 90% only once the proxy was weakened; corrected version is shorter and sourced.', blocker: '', decision: 'Label the survey percentage as uncertain rather than delete it', next: 'Write the three-step trust rule', minutes: 45, date: '2026-09-12' }],
+    evidence: [
+      { label: 'Lab: AI News Detective', url: '', note: '8 marks: Factual claim×3, Unsupported certainty×2, Emotional framing×2, Missing source×1.' },
+      { label: 'Lab: Lateral verification', url: '', note: 'Transition Year began in 1974 → Department of Education page → independent → supported; National AI Tutoring Act 2025 → Irish Statute Book search → independent → wrong.' },
+      { label: 'Lab: Bias simulator', url: '', note: '3 runs; Group B 10%–90%; overall 50%–90%.' }
+    ],
+    finalRecommendation: 'Publish only the corrected version: keep the verified claims about Transition Year and the Leaving Certificate, label the survey figure as uncertain, remove the invented Act and the fabricated report, and add the sources; less exciting, more trustworthy.'
+  };
+  const save5 = await api('projects/block5', a.token, { method: 'PUT', body: JSON.stringify({ workspace: workspace5 }) });
+  check('student A PUT /api/projects/block5 ok after Chapter 4 qualified, brief carries its chapter', save5.status === 200 && save5.body?.project?.status === 'in_progress' && typeof save5.body?.project?.brief?.chapter === 'string' && save5.body.project.brief.chapter.length > 0, JSON.stringify(save5.body));
+  const submit5 = await api('projects/block5/submit', a.token, { method: 'POST' });
+  check('student A submits Chapter 5 project', submit5.status === 200 && submit5.body?.project?.status === 'submitted' && submit5.body?.project?.submittedSnapshot?.finalRecommendation === workspace5.finalRecommendation, JSON.stringify(submit5.body));
+  check('student B Chapter 5 project save is 409 without Chapter 4 qualification', (await api('projects/block5', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
 } catch (error) {
   check('run completed without exception', false, error.message);
 } finally {

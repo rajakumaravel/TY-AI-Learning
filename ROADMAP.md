@@ -347,7 +347,7 @@ Every development phase must satisfy all of the following before production acce
 
 Do not start multiple major phases in parallel. Complete the current phase, verify it with real/pilot usage where appropriate, record findings, then proceed to the next phase.
 
-**Current work: Phase 5 — Chapter 4: Generative AI & Prompting is done (see `docs/product/phase-5-contract.md` and `docs/releases/phase-5-chapter-4.md`); next is Phase 6 — Chapter 5: Trust, Bias & Misinformation.** Phase 4 — Chapter 3: Data Detective is complete (`docs/releases/phase-4-chapter-3.md`).
+**Current work: Phase 6 — Chapter 5: Trust, Bias & Misinformation is done (see `docs/product/phase-6-contract.md` and `docs/releases/phase-6-chapter-5.md`); next is Phase 7 — Chapter 6: AI for Learning & Work.** Phase 5 — Chapter 4: Generative AI & Prompting is complete (`docs/releases/phase-5-chapter-4.md`).
 
 Phase 2 merged 2026-09-11 (PR #6).
 

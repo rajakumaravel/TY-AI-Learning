@@ -8,7 +8,7 @@ const api=fs.readFileSync('netlify/functions/api.mts','utf8');
 const adr=fs.readFileSync('docs/decisions/ADR-004-chapter-capstone-assessment.md','utf8');
 
 test('pilot chapters each have applied capstones',()=>{
-  assert.equal(Object.keys(CAPSTONES).length,4);
+  assert.equal(Object.keys(CAPSTONES).length,5);
   assert.match(CAPSTONES.block1.brief,/school|adviser/i);
   assert.match(CAPSTONES.block2.brief,/model|failure/i);
   assert.match(CAPSTONES.block3.brief,/homework.*question.*infer.*ability band/is);
@@ -19,6 +19,23 @@ test('pilot chapters each have applied capstones',()=>{
   assert.equal(CAPSTONES.block4.id,'block4-capstone');
   assert.equal(CAPSTONES.block4.title,'Prompt Lab review');
   assert.equal(CAPSTONES.block4.prompts.length,3);
+  assert.match(CAPSTONES.block5.brief,/group chat.*screenshot.*discipline prediction.*likely to cause trouble.*a study.*forty accounts.*two news sites/is);
+  assert.equal(CAPSTONES.block5.id,'block5-capstone');
+  assert.equal(CAPSTONES.block5.title,'AI Investigator review');
+  assert.equal(CAPSTONES.block5.prompts.length,3);
+});
+
+test('block5 capstone scoring counts trust-and-bias vocabulary as concept and action',()=>{
+  const weak=assessChapterCapstone({blockId:'block5',answers:{0:'It is probably fake.',1:'Look it up.',2:'Hard to say.'}});
+  const strong=assessChapterCapstone({blockId:'block5',answers:{0:'The post never names the study, the headline is only a screenshot, and forty reposts are still one source, so the claims are unsupported; a discipline prediction system carries a representation bias risk because past discipline records over-count some students.',1:'I would stop, investigate who made the post, then find better coverage in new tabs: the training centre chain itself, a regulator and an independent news site that did not use the post as its source, and label each claim supported, uncertain or wrong before rewriting it with only the supported claims.',2:'Tracing it, both news sites copied the group chat post, so the original is one anonymous screenshot; bias could enter before the data through unequal past decisions, at labelling of what counts as trouble, and through a proxy such as postcode, therefore even after checking it is uncertain whether any such system exists.'}});
+  assert.ok(strong.score>weak.score);
+  assert.equal(strong.criteria.understanding,2);
+  assert.equal(strong.criteria.evidence,2);
+  assert.equal(strong.criteria.reasoning,2);
+  assert.ok(['Getting there','Going further'].includes(strong.level));
+  const vocab='Provenance, lateral reading, proxy and lifecycle: stop, investigate, trace.';
+  assert.equal(assessChapterCapstone({blockId:'block5',answers:{0:vocab}}).criteria.understanding,1);
+  for(const id of ['block1','block2','block3','block4'])assert.equal(assessChapterCapstone({blockId:id,answers:{0:vocab}}).criteria.understanding,0,`${id} ignores block5 vocabulary`);
 });
 
 test('block4 capstone scoring counts prompting vocabulary as concept and action',()=>{
