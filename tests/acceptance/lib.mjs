@@ -326,7 +326,7 @@ export async function completeChapter7UI(page, afterSession = async () => {}) {
       check('b7s2 quiz has six concept items',(await page.$$('select[data-i]')).length===6);
     } else if (sid==='b7s4') {
       await page.waitForSelector('.decision-lab input[name="decisionChoice"][data-choice="none"]',{timeout:15000});
-      check('b7s4 shows four adoption options, the eight case evidence cards and no preselected choice',(await page.$$('input[name="decisionChoice"][data-choice]')).length===4&&(await page.$$('.decision-evidence [data-evidence]')).length===8&&!(await page.$('input[name="decisionChoice"]:checked')));
+      check('b7s4 shows four adoption options, the four root evidence cards and no preselected choice',(await page.$$('input[name="decisionChoice"][data-choice]')).length===4&&(await page.$$('.decision-evidence [data-evidence]')).length===4&&!(await page.$('input[name="decisionChoice"]:checked')));
       // Persistence: one revealed edge survives a reload before any run is recorded.
       await decisionStep(page,...CHAPTER7_RUNS[0].start);
       const revealed=(await page.textContent('#decisionNode')).trim();
@@ -337,9 +337,9 @@ export async function completeChapter7UI(page, afterSession = async () => {}) {
       await page.click('[data-session="b7s4"]'); await page.waitForSelector('.decision-lab',{timeout:15000});
       check('b7s4 restores the unfinished path and revealed node after a reload',(await page.textContent('.decision-path')).includes(CHAPTER7_RUNS[0].start[2].slice(0,24))&&(await page.textContent('#decisionNode')).trim()===revealed);
       await decisionStep(page,...CHAPTER7_RUNS[0].follow);
+      await page.waitForSelector('button#decisionRecord',{timeout:10000});
       const metrics=await page.textContent('#decisionMetrics');
       check('b7s4 pilot then support shows the contract value, error and retention figures',/30\.00/.test(metrics)&&/3\.75|3\/80/.test(metrics)&&/10\.00|2\/20/.test(metrics)&&/\b7\b/.test(metrics));
-      await page.waitForSelector('button#decisionRecord',{timeout:10000});
       await page.click('button#decisionRecord');
       await page.waitForFunction(()=>(document.querySelector('.decision-runs')?.textContent||'').length>0,null,{timeout:10000});
       for (const run of CHAPTER7_RUNS.slice(1)) { await restartDecision(page); await recordDecisionRun(page,run); }
@@ -361,7 +361,7 @@ export async function completeChapter7UI(page, afterSession = async () => {}) {
   }
   await page.waitForSelector('#chapterCapstoneHost textarea[data-capstone]');
   check('Chapter 7 shows self-check and level-up',Boolean(await page.$('.self-check'))&&Boolean(await page.$('.level-up')));
-  check('Chapter 7 capstone evidence area shows the saved decision summary',/3 paths/.test(await page.textContent('#chapterCapstoneHost')));
+  check('Chapter 7 capstone evidence area shows the saved decision summary',/Recorded adoption path 3/.test(await page.textContent('#chapterCapstoneHost')));
   for (const [i,answer] of Object.values(CAPSTONE7_ANSWERS).entries()) await page.fill(`textarea[data-capstone="${i}"]`,answer);
   await page.click('#submitCapstone');
   await page.waitForFunction(()=>/COMPLETE/.test(document.getElementById('chapterCapstoneHost')?.textContent||''),null,{timeout:20000});

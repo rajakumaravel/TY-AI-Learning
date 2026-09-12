@@ -8,6 +8,9 @@
 import { randomUUID } from 'node:crypto';
 import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS, CHAPTER6_SESSIONS, CAPSTONE6_ANSWERS, CHAPTER6_FIELDS, CHAPTER6_DISCLOSURE, CHAPTER6_RECOMMENDATION, CHAPTER7_SESSIONS, CAPSTONE7_ANSWERS, CHAPTER7_CHAINS, CHAPTER7_FIELDS, CHAPTER7_QUIZ, CHAPTER7_RUNS, CHAPTER7_FUTURES, CHAPTER7_COMPARISON, CHAPTER7_RECOMMENDATION } from './lib.mjs';
 
+// Postgres jsonb does not preserve key order, so compare structurally rather than by serialisation.
+const sameShape=(a,b)=>{if(Array.isArray(a)||Array.isArray(b))return Array.isArray(a)&&Array.isArray(b)&&a.length===b.length&&a.every((x,i)=>sameShape(x,b[i]));if(a&&b&&typeof a==='object'&&typeof b==='object'){const ka=Object.keys(a).sort(),kb=Object.keys(b).sort();return ka.length===kb.length&&ka.every((k,i)=>k===kb[i])&&ka.every(k=>sameShape(a[k],b[k]))}return a===b};
+
 const users = [];
 try {
   const a = await createUser('student-a'); users.push(a);
@@ -219,7 +222,7 @@ try {
   const done7=await api('progress',a.token,{method:'PUT',body:JSON.stringify({state:{...state,completed:[...CHAPTER1_SESSIONS,...CHAPTER2_SESSIONS,...CHAPTER3_SESSIONS,...CHAPTER4_SESSIONS,...CHAPTER5_SESSIONS,...CHAPTER6_SESSIONS,...CHAPTER7_SESSIONS],activity:activity7}})});
   check('Chapter 7 structured decision state saves through the existing progress store',done7.status===200);
   const read7=await api('progress',a.token);
-  check('Chapter 7 decision runs, futures and comparison round-trip unchanged',JSON.stringify(read7.body?.state?.activity?.b7s4)===JSON.stringify(activity7.b7s4),JSON.stringify(read7.body?.state?.activity?.b7s4||null).slice(0,200));
+  check('Chapter 7 decision runs, futures and comparison round-trip unchanged',sameShape(read7.body?.state?.activity?.b7s4,activity7.b7s4),JSON.stringify(read7.body?.state?.activity?.b7s4||null).slice(0,200));
   const cap7=await api('chapter-assessment/block7',a.token,{method:'POST',body:JSON.stringify({answers:CAPSTONE7_ANSWERS})});
   check('Chapter 7 capstone accepted after its eight sessions complete',cap7.status===200&&Boolean(cap7.body?.assessment?.submittedAt)&&Boolean(cap7.body?.assessment?.suggestedLevel),JSON.stringify(cap7.body));
   const workspace7={
