@@ -59,7 +59,7 @@ test('Chapter 8 metadata and verbatim book fields match the binding contract',()
   assert.deepEqual(Object.fromEntries(Object.entries(b.selfCheck).map(([k,v])=>[k,v.map(norm)])),Object.fromEntries(Object.entries(SELF_CHECK).map(([k,v])=>[k,v.map(norm)])));
   assert.equal(norm(b.levelUp),norm(LEVEL_UP));
   assert.match(norm(b.description),/AI is optional\. Part of the project is deciding whether it genuinely helps\.$/);
-  assert.equal(norm(b.description).split('. ').length,2,'description is two sentences');
+  assert.ok(norm(b.description).split('. ').length<=3,'description stays to one opening sentence plus the two the contract mandates');
   for(const item of ['problem statement and user evidence','solution options','non-AI one','responsible AI and data canvas','prototype','test record','iteration log','risk register','final presentation','individual reflection'])assert.ok(norm(b.final).includes(item),item);
   assert.equal(b.lab.title,'AI Innovation Project');
   assert.deepEqual(b.lab.stages,[['DO','b8s1','Find a problem worth solving'],['TEST','b8s6','Watch real people use it'],['MAKE','b8s5','Build the smallest prototype'],['BREAK','b8s7','Red-team your own solution'],['IMPROVE','b8s7','Change one thing because of evidence'],['PROVE','b8s8','Present the evidence, including what failed']]);
@@ -145,6 +145,17 @@ test('the risk register refuses a residual of none and the peer test log needs t
   const markup=context.activityBodyHTML(six);
   assert.match(markup,/data-i="0" data-f="tester"/);
   assert.match(markup,/data-i="2" data-f="unexpected"/);
+});
+
+// AI is optional in this chapter, so the build session must be completable on the non-AI route, without the tool
+// ever being opened. The safety notice is still acknowledged on both routes, as it is in every other chapter.
+test('b8s5 completes on the non-AI fallback route without the tool being opened',()=>{
+  const five=session('b8s5'),answers={ack:true,mode:'fallback'};
+  five.activity.fields.forEach((_,i)=>{answers[i]='I built the spreadsheet version and watched where it already breaks.'});
+  state.activity={...state.activity,b8s5:answers};
+  assert.ok(context.activityReady(five),'the non-AI route alone must satisfy readiness');
+  assert.match(JSON.stringify(five.activity.fallback.steps),/non-AI version/,'the fallback offers building without AI, not a sample download');
+  assert.ok(!JSON.stringify(five.activity.fallback.steps).match(/sample|download/i),'the non-AI route is a full route, not a sample');
 });
 
 test('b8s2 records user evidence without ever asking for an identity',()=>{

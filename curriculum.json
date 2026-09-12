@@ -2694,7 +2694,7 @@
           "activity": {
             "kind": "textfields",
             "title": "Understand the user",
-            "instructions": "Ask two or three people about the task, using approved questions only. Record nothing that identifies anyone: no names, no contact details, no class, no photos. Label the people you asked Person A, Person B, Person C. If someone volunteers personal information anyway, leave it out of these fields. Everything from Chapter 3 applies here, to your own project now. Write what they said, not what you hoped they would say. Evidence: User evidence.",
+            "instructions": "Ask two or three people about the task, using approved questions only. Collect no personal data you do not need, and record nothing that identifies anyone: no names, no contact details, no class, no photos. Label the people you asked Person A, Person B, Person C. If someone volunteers personal information anyway, leave it out of these fields. Everything from Chapter 3 applies here, to your own project now. Write what they said, not what you hoped they would say. Evidence: User evidence.",
             "fields": ["The user: who they are, in a sentence, with no name or identifying detail…", "How they do it now, step by step…", "The pain points, and which one hurts most…", "My evidence: what I asked, who I asked as Person A, Person B, and what they said…", "The constraints: time, money, permission, skills, what the training centre allows…"],
             "downloads": [
               {

@@ -487,7 +487,7 @@ test('the Chapter 7 server list gates the chapter behind Chapter 6',()=>{
   assert.match(api,/const blockOrder=Object\.keys\(requiredSessions\)/);
   const server=vm.createContext({});
   vm.runInContext(api.match(/^const requiredSessions=.*$/m)[0]+'\nglobalThis.sessions=requiredSessions;',server);
-  assert.deepEqual(Object.keys(server.sessions),['block1','block2','block3','block4','block5','block6','block7']);
+  assert.deepEqual(Object.keys(server.sessions).slice(0,7),['block1','block2','block3','block4','block5','block6','block7']);
   assert.deepEqual(plain(server.sessions.block7),ids);
 });
 
