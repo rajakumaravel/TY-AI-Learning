@@ -6,7 +6,7 @@
 // Creates three throwaway auth users (two students, one app-metadata admin), exercises the API and RLS, then deletes them.
 
 import { randomUUID } from 'node:crypto';
-import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS, CHAPTER6_SESSIONS, CAPSTONE6_ANSWERS, CHAPTER6_FIELDS, CHAPTER6_DISCLOSURE, CHAPTER6_RECOMMENDATION } from './lib.mjs';
+import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS, CHAPTER6_SESSIONS, CAPSTONE6_ANSWERS, CHAPTER6_FIELDS, CHAPTER6_DISCLOSURE, CHAPTER6_RECOMMENDATION, CHAPTER7_SESSIONS, CAPSTONE7_ANSWERS, CHAPTER7_CHAINS, CHAPTER7_FIELDS, CHAPTER7_QUIZ, CHAPTER7_RUNS, CHAPTER7_FUTURES, CHAPTER7_COMPARISON, CHAPTER7_RECOMMENDATION } from './lib.mjs';
 
 const users = [];
 try {
@@ -157,6 +157,11 @@ try {
     const res=await api(path,a.token,{method,body:JSON.stringify(body)});
     check(`${path} is 409 before Chapter 5 qualification`,res.status===409);
   }
+  // Chapter 7 writes are rejected before Chapter 6 qualification, including project submission.
+  for (const [path,method,body] of [['chapter-assessment/block7','POST',{answers:CAPSTONE7_ANSWERS}],['projects/block7','PUT',{workspace:{}}],['projects/block7/submit','POST',{}]]) {
+    const res=await api(path,a.token,{method,body:JSON.stringify(body)});
+    check(`${path} is 409 before Chapter 6 qualification`,res.status===409);
+  }
   // Chapter 4 → 5 gate: student A is Chapter 4 qualified (cap4 above), so Chapter 5 needs only its nine sessions
   const cap5early = await api('chapter-assessment/block5', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE5_ANSWERS }) });
   check('Chapter 5 capstone is 409 before Chapter 5 sessions complete', cap5early.status === 409, `status ${cap5early.status}`);
@@ -197,6 +202,40 @@ try {
   const submit6=await api('projects/block6/submit',a.token,{method:'POST'});
   check('Chapter 6 submitted snapshot retains cleaning, review and disclosure evidence',submit6.status===200&&submit6.body?.project?.status==='submitted'&&(submit6.body?.project?.submittedSnapshot?.evidence||[]).length===workspace6.evidence.length&&workspace6.evidence.every((e,i)=>{const got=(submit6.body?.project?.submittedSnapshot?.evidence||[])[i]||{};return got.label===e.label&&got.note===e.note&&got.url===e.url})&&submit6.body?.project?.submittedSnapshot?.finalRecommendation===CHAPTER6_RECOMMENDATION);
   check('student B Chapter 6 remains locked',(await api('projects/block6',b.token,{method:'PUT',body:JSON.stringify({workspace:workspace6})})).status===409);
+  // Chapter 6 → 7 gate: Chapter 6 is qualified above, so Chapter 7 needs only its own eight sessions.
+  const cap7early=await api('chapter-assessment/block7',a.token,{method:'POST',body:JSON.stringify({answers:CAPSTONE7_ANSWERS})});
+  check('Chapter 7 capstone is 409 before its eight sessions complete',cap7early.status===409,`status ${cap7early.status}`);
+  const decisionRuns=CHAPTER7_RUNS.map((run,i)=>({id:i+1,path:[{nodeId:'start',choiceId:run.start[0],evidenceId:run.start[1],reason:run.start[2]},{nodeId:`${run.start[0]}-review`,choiceId:run.follow[0],evidenceId:run.follow[1],reason:run.follow[2]}],terminalId:`${run.start[0]}-${run.follow[0]}`}));
+  const activity7={
+    b7s1:Object.fromEntries(CHAPTER7_CHAINS.b7s1.map((r,i)=>[i,Object.fromEntries(['claim','status','basis','check'].map((k,j)=>[k,r[j]]))])),
+    b7s2:Object.fromEntries(CHAPTER7_QUIZ.map((v,i)=>[i,v])),
+    b7s3:Object.fromEntries(CHAPTER7_CHAINS.b7s3.map((r,i)=>[i,Object.fromEntries(['task','change','basis','human'].map((k,j)=>[k,r[j]]))])),
+    b7s4:{scenarioId:'harbour-retail',modelVersion:1,path:[],draft:{choiceId:'',evidenceId:'',reason:''},runs:decisionRuns,futures:Object.fromEntries(Object.entries(CHAPTER7_FUTURES).map(([k,[runId,text]])=>[k,{runId,text}])),fields:{comparison:CHAPTER7_COMPARISON}},
+    b7s5:Object.fromEntries(CHAPTER7_CHAINS.b7s5.map((r,i)=>[i,Object.fromEntries(['stakeholder','impact','evidence','clash'].map((k,j)=>[k,r[j]]))])),
+    b7s6:Object.fromEntries(CHAPTER7_FIELDS.b7s6.map((v,i)=>[i,v])),
+    b7s7:Object.fromEntries(CHAPTER7_FIELDS.b7s7.map((v,i)=>[i,v])),
+    b7s8:Object.fromEntries(CHAPTER7_FIELDS.b7s8.map((v,i)=>[i,v]))
+  };
+  const done7=await api('progress',a.token,{method:'PUT',body:JSON.stringify({state:{...state,completed:[...CHAPTER1_SESSIONS,...CHAPTER2_SESSIONS,...CHAPTER3_SESSIONS,...CHAPTER4_SESSIONS,...CHAPTER5_SESSIONS,...CHAPTER6_SESSIONS,...CHAPTER7_SESSIONS],activity:activity7}})});
+  check('Chapter 7 structured decision state saves through the existing progress store',done7.status===200);
+  const read7=await api('progress',a.token);
+  check('Chapter 7 decision runs, futures and comparison round-trip unchanged',JSON.stringify(read7.body?.state?.activity?.b7s4)===JSON.stringify(activity7.b7s4),JSON.stringify(read7.body?.state?.activity?.b7s4||null).slice(0,200));
+  const cap7=await api('chapter-assessment/block7',a.token,{method:'POST',body:JSON.stringify({answers:CAPSTONE7_ANSWERS})});
+  check('Chapter 7 capstone accepted after its eight sessions complete',cap7.status===200&&Boolean(cap7.body?.assessment?.submittedAt)&&Boolean(cap7.body?.assessment?.suggestedLevel),JSON.stringify(cap7.body));
+  const workspace7={
+    workLog:[{did:'Mapped the retail tasks, followed three complete adoption routes including no deployment, challenged each future through five stakeholders and argued a governance choice.',result:'Three recorded paths with their modelled figures, three linked futures and a pilot recommendation with a stop trigger.'}],
+    evidence:[
+      {label:'2035 scenario canvas and adoption decision log',note:[...decisionRuns.map(r=>`Run ${r.id}: ${r.path.map(s=>`${s.choiceId} (${s.evidenceId}) \u2014 ${s.reason}`).join(' \u2192 ')}`),...Object.entries(CHAPTER7_FUTURES).map(([k,[runId,text]])=>`${k} = run ${runId}: ${text}`),`Comparison and uncertainty: ${CHAPTER7_COMPARISON}`].join(' | '),url:''},
+      {label:'Stakeholder analysis',note:CHAPTER7_CHAINS.b7s5.map(r=>r.join(' \u2192 ')).join('; '),url:''},
+      {label:'Future skills card',note:CHAPTER7_FIELDS.b7s7.join(' | '),url:''}
+    ],
+    finalRecommendation:CHAPTER7_RECOMMENDATION
+  };
+  const save7=await api('projects/block7',a.token,{method:'PUT',body:JSON.stringify({workspace:workspace7})});
+  check('Chapter 7 project write succeeds after Chapter 6 qualification',save7.status===200&&save7.body?.project?.status==='in_progress'&&save7.body?.project?.brief?.chapter==='Our AI Future',JSON.stringify(save7.body?.project?.brief||null));
+  const submit7=await api('projects/block7/submit',a.token,{method:'POST'});
+  check('Chapter 7 submitted snapshot retains all three paths, the three futures and the recommendation',submit7.status===200&&submit7.body?.project?.status==='submitted'&&(submit7.body?.project?.submittedSnapshot?.evidence||[]).length===workspace7.evidence.length&&workspace7.evidence.every((e,i)=>{const got=(submit7.body?.project?.submittedSnapshot?.evidence||[])[i]||{};return got.label===e.label&&got.note===e.note&&got.url===e.url})&&submit7.body?.project?.submittedSnapshot?.finalRecommendation===CHAPTER7_RECOMMENDATION);
+  check('student B Chapter 7 remains locked',(await api('projects/block7',b.token,{method:'PUT',body:JSON.stringify({workspace:workspace7})})).status===409);
 } catch (error) {
   check('run completed without exception', false, error.message);
 } finally {

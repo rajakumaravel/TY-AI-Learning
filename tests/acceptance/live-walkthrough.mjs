@@ -6,7 +6,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { BASE, REF, check, results, createUser, cleanup, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS, CAPSTONE4_ANSWERS, CAPSTONE5_ANSWERS, completeChapter6UI } from './lib.mjs';
+import { BASE, REF, check, results, createUser, cleanup, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS, CAPSTONE4_ANSWERS, CAPSTONE5_ANSWERS, completeChapter6UI, completeChapter7UI } from './lib.mjs';
 
 const SHOTS = process.env.SHOTS || 'live-shots';
 mkdirSync(SHOTS, { recursive: true });
@@ -562,6 +562,19 @@ try {
   await page.waitForFunction(()=>/Welcome/.test(document.getElementById('welcomeName')?.textContent||''),null,{timeout:15000});
   await completeChapter6UI(page, async sid => step(page, `Chapter 6 ${sid}: saved sample-route evidence`, async()=>true));
   await step(page, 'Chapter 6 capstone and project completed', async()=>true);
+  await context.close();
+
+  // ---------- Chapter 7: Chapter 6 is qualified through the UI above, then all eight sessions, the branching
+  // decision simulator with real clicks, the capstone and the project with imported decision evidence.
+  ({ context, page } = await device(browser, student.session));
+  await page.waitForFunction(()=>/Welcome/.test(document.getElementById('welcomeName')?.textContent||''),null,{timeout:15000});
+  await step(page, 'Home: Chapter 6 done, Chapter 7 unlocked', async () => {
+    const done = await page.$eval('[data-block="5"]', el => el.classList.contains('done'));
+    const unlocked = await page.$eval('[data-block="6"]', el => !el.classList.contains('locked') && !el.disabled);
+    return done && unlocked;
+  });
+  await completeChapter7UI(page, async sid => step(page, `Chapter 7 ${sid}: saved evidence`, async()=>true));
+  await step(page, 'Chapter 7 capstone and project completed', async()=>true);
   await context.close();
 
   // ---------- non-admin blocked
