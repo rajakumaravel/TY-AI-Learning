@@ -347,7 +347,7 @@ Every development phase must satisfy all of the following before production acce
 
 Do not start multiple major phases in parallel. Complete the current phase, verify it with real/pilot usage where appropriate, record findings, then proceed to the next phase.
 
-**Current work: Phase 9 — Chapter 8: AI Innovation Project implementation is done (see `docs/product/phase-9-contract.md` and `docs/releases/phase-9-chapter-8.md`); next is Phase 10 — Portfolio, School Reporting and Pilot Analytics.** All eight chapters of the Student Book are now in the portal. Live deployment acceptance remains pending. Phase 8 — Chapter 7 is complete (`docs/releases/phase-8-chapter-7.md`).
+**Current work: Phase 10 — Portfolio, School Reporting and Pilot Analytics is done (see `docs/product/phase-10-contract.md`, `docs/decisions/ADR-008-portfolio-export-and-pilot-analytics.md` and `docs/releases/phase-10-portfolio-reporting.md`); it is the last roadmap phase.** All eight chapters of the Student Book, the student portfolio export, the coordinator summary and the admin pilot analytics view are now in the portal. Live deployment acceptance remains pending. Production remains undeployed, and by operator decision stays deferred under ADR-007 until every phase is accepted on Preview and pilot review of this phase's own data determines what changes before any wider rollout. Phase 9 — Chapter 8 is complete (`docs/releases/phase-9-chapter-8.md`).
 
 Phase 2 merged 2026-09-11 (PR #6).
 

@@ -6,7 +6,7 @@
 // Creates three throwaway auth users (two students, one app-metadata admin), exercises the API and RLS, then deletes them.
 
 import { randomUUID } from 'node:crypto';
-import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS, CHAPTER6_SESSIONS, CAPSTONE6_ANSWERS, CHAPTER6_FIELDS, CHAPTER6_DISCLOSURE, CHAPTER6_RECOMMENDATION, CHAPTER7_SESSIONS, CAPSTONE7_ANSWERS, CHAPTER7_CHAINS, CHAPTER7_FIELDS, CHAPTER7_QUIZ, CHAPTER7_RUNS, CHAPTER7_FUTURES, CHAPTER7_COMPARISON, CHAPTER7_RECOMMENDATION, CHAPTER8_SESSIONS, CAPSTONE8_ANSWERS, CHAPTER8_CHAINS, CHAPTER8_FIELDS, CHAPTER8_TESTLOG, CHAPTER8_TESTLOG_FIELDS, CHAPTER8_RECOMMENDATION } from './lib.mjs';
+import { BASE, api, rest, check, finish, createUser, cleanup, noIdentifiers, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS, CHAPTER6_SESSIONS, CAPSTONE6_ANSWERS, CHAPTER6_FIELDS, CHAPTER6_DISCLOSURE, CHAPTER6_RECOMMENDATION, CHAPTER7_SESSIONS, CAPSTONE7_ANSWERS, CHAPTER7_CHAINS, CHAPTER7_FIELDS, CHAPTER7_QUIZ, CHAPTER7_RUNS, CHAPTER7_FUTURES, CHAPTER7_COMPARISON, CHAPTER7_RECOMMENDATION, CHAPTER8_SESSIONS, CAPSTONE8_ANSWERS, CHAPTER8_CHAINS, CHAPTER8_FIELDS, CHAPTER8_TESTLOG, CHAPTER8_TESTLOG_FIELDS, CHAPTER8_RECOMMENDATION } from './lib.mjs';
 
 // Postgres jsonb does not preserve key order, so compare structurally rather than by serialisation.
 const sameShape=(a,b)=>{if(Array.isArray(a)||Array.isArray(b))return Array.isArray(a)&&Array.isArray(b)&&a.length===b.length&&a.every((x,i)=>sameShape(x,b[i]));if(a&&b&&typeof a==='object'&&typeof b==='object'){const ka=Object.keys(a).sort(),kb=Object.keys(b).sort();return ka.length===kb.length&&ka.every((k,i)=>k===kb[i])&&ka.every(k=>sameShape(a[k],b[k]))}return a===b};
@@ -104,6 +104,13 @@ try {
   check('student A sees reviewed status and comment', after.body?.project?.status === 'reviewed' && after.body?.project?.reviewComment === 'Acceptance review.');
   const reviewByStudent = await api(`projects/admin/student/${a.id}/block2/review`, b.token, { method: 'PUT', body: JSON.stringify({ comment: 'x' }) });
   check('student B cannot review A\'s project', reviewByStudent.status === 403);
+
+  // Pilot analytics (ADR-008 §3-4): admin-only aggregates, refused to students like every other admin route, and
+  // carrying no learner id, display name or reviewed_by even once a review (which sets reviewed_by) exists.
+  check('student A /api/admin/analytics is 403', (await api('admin/analytics', a.token)).status === 403);
+  const analytics = await api('admin/analytics', admin.token);
+  check('admin /api/admin/analytics returns aggregates', analytics.status === 200, JSON.stringify(analytics.body));
+  check('pilot analytics body carries no learner id, display name or reviewed_by', noIdentifiers(JSON.stringify(analytics.body), [a.id, b.id, admin.id, a.displayName, b.displayName, admin.displayName]), JSON.stringify(analytics.body));
 
   // Chapter 2 → 3 gate: Chapter 3 writes need Chapter 2 qualified, then the six Chapter 3 sessions
   check('student A Chapter 3 capstone is 409 without Chapter 2 qualification', (await api('chapter-assessment/block3', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE3_ANSWERS }) })).status === 409);

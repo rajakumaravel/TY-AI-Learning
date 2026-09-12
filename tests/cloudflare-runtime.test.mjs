@@ -58,3 +58,16 @@ test('server derives chapter qualification from chapter_assessments and gates th
   assert.match(fn,/block7:\['b7s1','b7s2','b7s3','b7s4','b7s5','b7s6','b7s7','b7s8'\]/);
   assert.match(fn,/block8:\['b8s1','b8s2','b8s3','b8s4','b8s5','b8s6','b8s7','b8s8'\]/);
 });
+
+test('admin/analytics is gated by the same requireAdmin check as every other admin route, with no separate or weaker check',()=>{
+  const adminRouteGuards=fn.match(/path==='admin\/[a-z]+'&&method==='GET'\)\{\s*const admin=await requireAdmin\(context\); if\(admin\.error\)return admin\.error;/g)||[];
+  assert.ok(adminRouteGuards.some((g)=>g.includes("'admin/analytics'")));
+  assert.ok(adminRouteGuards.some((g)=>g.includes("'admin/students'")));
+  assert.ok(adminRouteGuards.some((g)=>g.includes("'admin/me'")));
+});
+
+test('admin/analytics computes aggregates per request with no new table, migration or cache',()=>{
+  assert.match(fn,/computePilotAnalytics\(/);
+  assert.doesNotMatch(fn,/pilot_analytics/);
+  assert.doesNotMatch(fn,/analytics_cache/);
+});

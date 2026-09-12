@@ -6,6 +6,7 @@ let identity = null;
 let students = [];
 
 const $ = (id) => document.getElementById(id);
+const $q = (sel) => document.querySelector(sel);
 const esc = (value="") => String(value).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt = (value) => value ? new Intl.DateTimeFormat("en-IE",{dateStyle:"medium",timeStyle:"short"}).format(new Date(value)) : "—";
 
@@ -102,6 +103,44 @@ async function loadStudents() {
   students = data.students || [];
   renderStudents();
 }
+
+// Pilot analytics: aggregates only, already suppressed by the server. This view never renders a display name, a
+// learner id or a reviewed_by, and never turns a suppressed figure back into a number — see ADR-008 §3.
+const blockLabel = (id) => id === "none" ? "Not started" : (() => { const b = COURSE.blocks.find((x) => x.id === id); return b ? `Chapter ${b.number} · ${b.title}` : id; })();
+function analyticsCell(cell) {
+  return cell && cell.suppressed ? `<td data-suppressed>${esc(cell.label)}</td>` : `<td data-count>${cell ? cell.count : 0}</td>`;
+}
+function ensureAnalyticsSection() {
+  if ($("adminAnalytics")) return;
+  $("studentDetail").insertAdjacentHTML("beforebegin", `<section id="adminAnalytics" class="admin-panel">
+    <div class="admin-toolbar"><div><h2>Pilot analytics</h2><p id="analyticsNote"></p></div></div>
+    <div class="analytics-grid">
+      <div><h3>Completion</h3><table class="admin-table" data-measure="completion"><thead><tr><th>Chapters completed</th><th>Learners</th></tr></thead><tbody></tbody></table></div>
+      <div><h3>Resubmission and improvement</h3><table class="admin-table" data-measure="improvement"><thead><tr><th>Change from suggested to teacher level</th><th>Learners</th></tr></thead><tbody></tbody></table></div>
+      <div><h3>Chapter drop-off</h3><table class="admin-table" data-measure="dropoff"><thead><tr><th>Last completed session in</th><th>Learners</th></tr></thead><tbody></tbody></table></div>
+      <div><h3>System-vs-teacher agreement</h3><table class="admin-table" data-measure="agreement"><thead><tr><th>Suggested level</th><th>Teacher level</th><th>Learners</th></tr></thead><tbody></tbody></table></div>
+      <div><h3>Experience Lab completion</h3><table class="admin-table" data-measure="labs"><thead><tr><th>Chapter</th><th>Learners completing every lab stage</th></tr></thead><tbody></tbody></table></div>
+      <div><h3>Qualitative feedback</h3><div data-measure="feedback"></div></div>
+    </div>
+  </section>`);
+}
+function renderAnalytics(analytics) {
+  ensureAnalyticsSection();
+  $("analyticsNote").textContent = analytics.note;
+  $q('[data-measure="completion"] tbody').innerHTML = analytics.completion.buckets.map((b) => `<tr><td>${b.chaptersCompleted}</td>${analyticsCell(b)}</tr>`).join("");
+  $q('[data-measure="improvement"] tbody').innerHTML = analytics.improvement.categories.map((c) => `<tr><td>${esc(c.change)}</td>${analyticsCell(c)}</tr>`).join("");
+  $q('[data-measure="dropoff"] tbody').innerHTML = analytics.dropoff.chapters.map((c) => `<tr><td>${esc(blockLabel(c.blockId))}</td>${analyticsCell(c)}</tr>`).join("");
+  $q('[data-measure="agreement"] tbody').innerHTML = analytics.agreement.matrix.map((m) => `<tr><td>${esc(m.suggestedLevel)}</td><td>${esc(m.teacherLevel)}</td>${analyticsCell(m)}</tr>`).join("");
+  $q('[data-measure="labs"] tbody').innerHTML = analytics.labs.chapters.map((c) => `<tr><td>${esc(blockLabel(c.blockId))}</td>${analyticsCell(c)}</tr>`).join("");
+  const feedback = $q('[data-measure="feedback"]');
+  feedback.innerHTML = analytics.feedback.suppressed
+    ? `<p data-suppressed>${esc(analytics.feedback.label)}</p>`
+    : (analytics.feedback.quotes.length ? `<ul class="feedback-quotes">${analytics.feedback.quotes.map((q) => `<li>“${esc(q)}”</li>`).join("")}</ul>` : `<p class="muted">No eligible quotations.</p>`);
+}
+async function loadAnalytics() {
+  try { const { analytics } = await api("admin/analytics"); renderAnalytics(analytics); }
+  catch (error) { console.warn("Analytics", error); ensureAnalyticsSection(); const note = $("analyticsNote"); if (note) note.textContent = "Pilot analytics could not be loaded. Press Refresh to try again."; }
+}
 function renderStudents() {
   const q = $("studentSearch").value.trim().toLowerCase();
   const visible = students.filter((s)=>!q || String(s.displayName||"").toLowerCase().includes(q));
@@ -170,7 +209,7 @@ async function init() {
   identity = await getUser();
   $("adminSignIn").onclick = signIn;
   $("adminAuthBtn").onclick = () => identity ? signOut() : signIn();
-  $("refreshBtn").onclick = loadStudents;
+  $("refreshBtn").onclick = () => { loadStudents(); loadAnalytics(); };
   $("studentSearch").oninput = renderStudents;
   $("closeDetail").onclick = () => $("studentDetail").classList.add("hidden");
   if (!identity) return showGate();
@@ -178,6 +217,7 @@ async function init() {
     const {admin} = await api("admin/me");
     showDashboard(admin);
     await loadStudents();
+    await loadAnalytics();
   } catch (error) {
     if (error.status === 403) {
       showGate("This Google account is signed in, but it is not authorised as an administrator.");
