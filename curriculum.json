@@ -1396,6 +1396,626 @@
         "Going further": ["I trace evidence back to its origin", "I can tell different kinds of bias apart", "I can explain what's still uncertain after checking"]
       },
       "levelUp": "Take one claim that's repeated widely online. Trace it back towards its earliest available source. Show where along the way context was lost or changed."
+    },
+    {
+      "id": "block6",
+      "number": "06",
+      "title": "AI for Learning & Work",
+      "duration": "3 hours",
+      "badge": "Digital Collaborator",
+      "outcomes": [
+        "LO7"
+      ],
+      "description": "Everything so far has been about understanding AI. This chapter is about using it well: as a tutor that makes you think, an editor that doesn't take over, a planner and an analyst.",
+      "mission": "Complete a mini workflow that combines an AI tutor task with one spreadsheet, document or presentation task, and show the human checks you performed along the way.",
+      "route": [
+        [
+          "0–20 min",
+          "“Do it for me” vs “teach me”"
+        ],
+        [
+          "20–50 min",
+          "AI Tutor challenge"
+        ],
+        [
+          "50–70 min",
+          "Explain it without AI"
+        ],
+        [
+          "70–100 min",
+          "Workplace workflow"
+        ],
+        [
+          "100–125 min",
+          "Human review"
+        ],
+        [
+          "125–150 min",
+          "Professional communication"
+        ],
+        [
+          "150–170 min",
+          "Disclosure scenarios"
+        ],
+        [
+          "170–180 min",
+          "Your learning contract"
+        ]
+      ],
+      "final": "Your AI tutor prompt and a note on what you learned, your spreadsheet, document or presentation, your human-review checklist, filled in, and your AI-use learning contract.",
+      "lab": {
+        "title": "AI-assisted Workplace Task",
+        "summary": "You learn with an AI tutor, clean a small event budget, check every claim against your spreadsheet and produce a briefing that shows where you kept responsibility.",
+        "stages": [
+          [
+            "DO",
+            "b6s2",
+            "Use a tutor that makes you think"
+          ],
+          [
+            "TEST",
+            "b6s3",
+            "Explain the concept without AI"
+          ],
+          [
+            "MAKE",
+            "b6s4",
+            "Preserve, clean and analyse the budget"
+          ],
+          [
+            "BREAK",
+            "b6s5",
+            "Check the numbers and remove unsupported claims"
+          ],
+          [
+            "IMPROVE",
+            "b6s6",
+            "Edit a professional briefing"
+          ],
+          [
+            "PROVE",
+            "b6s8",
+            "Set your human checks and disclosure rules"
+          ]
+        ]
+      },
+      "myths": [
+        [
+          "Using AI efficiently means automating as much as possible.",
+          "Automating the thinking removes the learning and the accountability. Efficient means automating the right parts."
+        ],
+        [
+          "If AI helped, the student didn't really learn.",
+          "A student who used AI as a tutor, then explained the idea without it, has learned. The evidence is the explanation."
+        ],
+        [
+          "Disclosure is either always required or never required.",
+          "It depends on the context and what people expect. Private brainstorming and an assessed essay are different situations."
+        ]
+      ],
+      "selfCheck": {
+        "Getting started": [
+          "I used AI for a learning or productivity task, with support"
+        ],
+        "Getting there": [
+          "I showed my human checks",
+          "I can explain what AI contributed and what I stayed responsible for"
+        ],
+        "Going further": [
+          "I designed a repeatable workflow with human checkpoints",
+          "I made disclosure choices and rejected some AI suggestions, with reasons"
+        ]
+      },
+      "levelUp": "Design a repeatable AI-assisted workflow for a real TY activity (work experience prep, an event, a fundraiser). Mark every point where a human must verify, decide or approve before the workflow continues.",
+      "sessions": [
+        {
+          "id": "b6s1",
+          "title": "“Do it for me” vs “teach me”",
+          "minutes": 20,
+          "type": "PREDICT + TEST",
+          "pageRef": "Student Book pp. 28–31",
+          "intro": "Compare getting an answer with doing the thinking yourself.",
+          "study": {
+            "title": "Answers and learning",
+            "body": [
+              "An AI tutor asks questions and helps you explain an idea. A quick answer can finish a task while leaving you unable to explain how it works.",
+              "Scaffolding is support that helps you attempt something you cannot yet do alone. The support should be removed so you can test what you learned.",
+              "Authorship means being responsible for the work you call yours. Keep evidence of your own thinking, including an attempt that needed correction."
+            ],
+            "example": "For a map-scale question, a tutor might ask what one centimetre stands for before asking you to calculate a distance.",
+            "keywords": [
+              "AI tutor",
+              "scaffolding",
+              "authorship"
+            ]
+          },
+          "activity": {
+            "kind": "lab",
+            "title": "“Do it for me” vs “teach me”",
+            "instructions": "Use one safe question for both conversations. Save short extracts and your own attempts, not personal details. If using the samples, identify that route and attempt the tutor question before revealing the feedback. Evidence: Answer-giving and tutoring comparison.",
+            "fields": [
+              "The learning question and my prediction…",
+              "The answer-giving prompt and a short extract of what came back…",
+              "The tutoring prompt, a question it asked, and my attempt…",
+              "Which conversation shows more learning, and what I could defend to the training centre…"
+            ],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": [
+              "Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.",
+              "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.",
+              "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked.",
+              "Nothing typed into this portal is sent to the tool; copy across yourself and paste short extracts back here."
+            ],
+            "steps": [
+              "Choose one safe learning question without personal details.",
+              "Predict which conversation will leave evidence that you learned something.",
+              "Ask \"Give me the answer\" about your question and save a short extract.",
+              "Start a fresh conversation in the same tool. Ask \"Teach me through questions\" and answer before requesting more help.",
+              "Compare the evidence of your own thinking in both conversations."
+            ],
+            "fallback": {
+              "title": "Tool blocked?",
+              "steps": [
+                "Try Microsoft Copilot at https://copilot.microsoft.com without signing in. If either tool asks for an account, payment or an unavailable feature, move to the next fallback.",
+                "Otherwise open the b6s1 sample in ai-work-sample-outputs.txt. No uploads or account-dependent features are required.",
+                "Record the same evidence and identify the sample route. Attempt the tutor questions yourself; do your own spreadsheet calculations and final work product."
+              ]
+            },
+            "downloads": [
+              {
+                "file": "ai-work-tutor-cards.txt",
+                "label": "Tutor cards",
+                "note": "Keep this reference or complete the template with your own evidence."
+              },
+              {
+                "file": "ai-work-sample-outputs.txt",
+                "label": "Sample outputs",
+                "note": "Use this session’s synthetic sample; keep your own attempts and checks."
+              }
+            ]
+          },
+          "reflection": "Which conversation leaves evidence of your own thinking, and what is that evidence?"
+        },
+        {
+          "id": "b6s2",
+          "title": "AI Tutor challenge",
+          "minutes": 30,
+          "type": "TRY + LEARN",
+          "pageRef": "Student Book pp. 28–31",
+          "intro": "Choose something you want to understand and make the tutor wait for your attempt.",
+          "study": {
+            "title": "Make the tutor wait",
+            "body": [
+              "Start with what you already understand. Metacognition means thinking about your own thinking: what can you explain, and how do you know?",
+              "Ask for an example, a question and time to attempt it. Feedback is useful when you can connect it with your own answer.",
+              "If the tutor gives away the answer, repair the prompt: ask it to give only one hint and wait. A saved conversation should show your attempts as well as its responses."
+            ],
+            "example": "When learning a new word, try using it in a sentence before asking the tutor to explain what needs changing.",
+            "keywords": [
+              "AI tutor",
+              "scaffolding",
+              "metacognition"
+            ]
+          },
+          "activity": {
+            "kind": "lab",
+            "title": "AI Tutor challenge",
+            "instructions": "Record your starting point first. Keep the prompt exactly as sent and enough of the exchange to show your attempts. On the sample route use the supplied recipe-fractions concept and staged questions in ai-work-sample-outputs.txt; attempt each before reading the next turn and label your evidence as a sample interaction. Evidence: AI tutor prompt and learning note.",
+            "fields": [
+              "The concept I chose and what I understood before…",
+              "My AI tutor prompt, exactly as sent…",
+              "The conversation: its example and questions, my attempts, and its feedback…",
+              "What I learned so far, what is still unclear, and how I repaired the tutor prompt if needed…"
+            ],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": [
+              "Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.",
+              "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.",
+              "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked.",
+              "Nothing typed into this portal is sent to the tool; copy across yourself and paste short extracts back here."
+            ],
+            "steps": [
+              "Choose a concept and write what you currently understand before asking for help.",
+              "Ask the AI to find out what you already know.",
+              "Ask for an example and questions; hold back the full explanation until you have tried.",
+              "Answer the questions yourself and request feedback.",
+              "Keep the exchange and record any prompt repair if the tutor gives the answer too soon."
+            ],
+            "fallback": {
+              "title": "Tool blocked?",
+              "steps": [
+                "Try Microsoft Copilot at https://copilot.microsoft.com without signing in. If either tool asks for an account, payment or an unavailable feature, move to the next fallback.",
+                "Otherwise open the b6s2 sample in ai-work-sample-outputs.txt. No uploads or account-dependent features are required.",
+                "Record the same evidence and identify the sample route. Attempt the tutor questions yourself; do your own spreadsheet calculations and final work product."
+              ]
+            },
+            "downloads": [
+              {
+                "file": "ai-work-tutor-cards.txt",
+                "label": "Tutor cards",
+                "note": "Keep this reference or complete the template with your own evidence."
+              },
+              {
+                "file": "ai-work-sample-outputs.txt",
+                "label": "Sample outputs",
+                "note": "Use this session’s synthetic sample; keep your own attempts and checks."
+              }
+            ]
+          },
+          "reflection": "When did you have to think for yourself, and how did the tutor help without taking over?"
+        },
+        {
+          "id": "b6s3",
+          "title": "Explain it without AI",
+          "minutes": 20,
+          "type": "TEST + REFLECT",
+          "pageRef": "Student Book pp. 28–31",
+          "intro": "Find out what you can now explain when the support is removed.",
+          "study": {
+            "title": "Remove the support",
+            "body": [
+              "A fluent conversation can feel like understanding. Explaining the idea without the conversation is stronger evidence of learning.",
+              "Compare your memory attempt with what you wrote before the tutor task. Name a specific idea you can now explain and a specific gap that remains.",
+              "Check a worked example or a non-AI source only after your memory attempt. An honest record of no progress tells you what to change in the next tutoring prompt."
+            ],
+            "example": "After learning a map symbol, hide the key and explain the symbol before looking again.",
+            "keywords": [
+              "metacognition",
+              "AI tutor",
+              "scaffolding"
+            ]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Explain it without AI",
+            "instructions": "Close the AI tool and hide the saved conversation first. Write your explanation from memory before reopening any notes. Compare with your starting point in b6s2, then check an example or non-AI source. If there is no improvement, record it honestly and say how your tutor prompt needs to change. This self-paced written explanation replaces the optional partner explanation. Evidence: Explanation without AI.",
+            "fields": [
+              "My explanation of the concept from memory, before reopening any notes…",
+              "Compared with my starting point in b6s2: what I can now explain and what I still cannot…",
+              "After my memory attempt: the example or non-AI source I checked, and what needs another attempt…"
+            ]
+          },
+          "reflection": "What did you understand today that you couldn't explain before?"
+        },
+        {
+          "id": "b6s4",
+          "title": "Workplace workflow",
+          "minutes": 30,
+          "type": "MAKE + INVESTIGATE",
+          "pageRef": "Student Book pp. 28–31",
+          "intro": "The fictional training-centre events team needs a defensible open-day cost briefing before it approves spending.",
+          "study": {
+            "title": "A workflow you can defend",
+            "body": [
+              "Digital productivity means getting useful things done with spreadsheets, documents and presentations. A workflow names the sequence and the human responsible at each checkpoint.",
+              "Never silently change the data. If a change cannot be justified, flag the value rather than inventing a correction.",
+              "Preserve and profile before cleaning. Rules justify each intervention; validation checks the result. Analyse with spreadsheet formulas before asking AI for critique, then use Human review in b6s5 to check its claims."
+            ],
+            "example": "In a fictional stationery list, two identical pencil records need a full-field comparison; two different prices under one ID need a source check, not a guess.",
+            "keywords": [
+              "workflow",
+              "digital productivity",
+              "critique",
+              "human-in-the-loop"
+            ]
+          },
+          "activity": {
+            "kind": "lab",
+            "title": "Workplace workflow: clean a messy event budget",
+            "instructions": "Use LibreOffice Calc, supplied and installed by the training centre (https://www.libreoffice.org/download/), to do your own spreadsheet cleaning and calculations. Read the workplace brief and keep the original untouched. The read-only CSV viewer below is your raw reference, not a spreadsheet editor. Keep a local workbook with raw, working, profile, rules, cleaning log, validation and analysis sheets. Use raw data row numbers (header excluded) so every intervention stays traceable. Log flag-only decisions too; Verified by names a source, rule or record comparison, not your personal name. Complete the first seven steps here and the eighth in b6s5. Paste compact evidence into all seven fields; a filename alone is not assessable evidence. The sample replaces the chatbot only, not your spreadsheet work. Evidence: Data-cleaning workflow and spreadsheet analysis.",
+            "fields": [
+              "Preserve: my raw_v1 and working-copy filenames, and how I kept the original untouched…",
+              "Profile: my before counts, with the suspicious rows or fields…",
+              "Define rules: my data dictionary, including categories, units, ranges and what counts as a duplicate…",
+              "Clean: my Data Cleaning Log (Row / field | Original | Issue | Action | Reason | Verified by)…",
+              "Validate: my after counts, changes reconciled, and unresolved flags…",
+              "Analyse: my formulas, results, included row count and exclusions…",
+              "AI assist: my prompt, the figures and limits I supplied, and its short suggested interpretation…"
+            ],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": [
+              "Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.",
+              "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.",
+              "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked.",
+              "Nothing typed into this portal is sent to the tool; copy across yourself and paste short extracts back here."
+            ],
+            "steps": [
+              "Preserve — Save the original as raw_v1 and make a separate working copy.",
+              "Profile — Count rows, fields, blanks, exact duplicate surplus rows, conflicting IDs and suspicious values.",
+              "Define rules — Record valid categories, units, ranges and duplicate rules from the brief in a data dictionary.",
+              "Clean — Make only justified changes in the working copy and log each changed, removed or flagged value.",
+              "Validate — Repeat the profile, reconcile every removed or held row, and distinguish resolved issues from those still flagged.",
+              "Analyse — Use spreadsheet formulas for line costs, an eligible subtotal, category totals and a mean eligible line cost; state the denominator and exclusions.",
+              "AI assist — Copy only the synthetic, validated figures and limitations into the tool, ask for critique or wording and keep the prompt and short output.",
+              "Human review — Continue in b6s5: check every numerical claim independently, remove unsupported wording and sign off a chart or concise summary."
+            ],
+            "fallback": {
+              "title": "Tool blocked?",
+              "steps": [
+                "Try Microsoft Copilot at https://copilot.microsoft.com without signing in. If either tool asks for an account, payment or an unavailable feature, move to the next fallback.",
+                "Otherwise open the b6s4 sample in ai-work-sample-outputs.txt. No uploads or account-dependent features are required.",
+                "Record the same evidence and identify the sample route. Attempt the tutor questions yourself; do your own spreadsheet calculations and final work product."
+              ]
+            },
+            "file": "ai-work-event-budget-raw.csv",
+            "downloads": [
+              {
+                "file": "ai-work-event-budget-raw.csv",
+                "label": "Event budget raw",
+                "note": "Keep this reference or complete the template with your own evidence."
+              },
+              {
+                "file": "ai-work-workplace-brief.txt",
+                "label": "Workplace brief",
+                "note": "Keep this reference or complete the template with your own evidence."
+              },
+              {
+                "file": "ai-work-data-dictionary.csv",
+                "label": "Data dictionary",
+                "note": "Keep this reference or complete the template with your own evidence."
+              },
+              {
+                "file": "ai-work-cleaning-log.csv",
+                "label": "Cleaning log",
+                "note": "Keep this reference or complete the template with your own evidence."
+              },
+              {
+                "file": "ai-work-validation-checklist.csv",
+                "label": "Validation checklist",
+                "note": "Keep this reference or complete the template with your own evidence."
+              },
+              {
+                "file": "ai-work-sample-outputs.txt",
+                "label": "Sample outputs",
+                "note": "Use this session’s synthetic sample; keep your own attempts and checks."
+              }
+            ]
+          },
+          "reflection": "Which value could you justify changing, and which needs a source check before you proceed?"
+        },
+        {
+          "id": "b6s5",
+          "title": "Human review",
+          "minutes": 25,
+          "type": "TEST + IMPROVE",
+          "pageRef": "Student Book pp. 28–31",
+          "intro": "Review the saved interpretation independently, using your spreadsheet and the source brief.",
+          "study": {
+            "title": "Every claim needs a check",
+            "body": [
+              "The AI is suggesting wording; the spreadsheet and source notes establish the numbers. Read each numerical and factual claim separately.",
+              "A correct formula can still cover the wrong range. Check a line by hand, the included records and what was excluded before relying on a subtotal or mean.",
+              "Human-in-the-loop means a person checks, decides or approves. A partial result needs its limitations beside it, and spending needs an authorised human decision."
+            ],
+            "example": "If a travel list covers only train tickets, a summary must not call their sum the entire trip cost.",
+            "keywords": [
+              "human-in-the-loop",
+              "critique",
+              "authorship"
+            ]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Human review",
+            "instructions": "Keep the AI tool closed and review its saved output independently. Fill the human-review checklist for every numerical and factual claim in both the saved interpretation and your final summary. Recalculate at least one line by hand, check formula ranges and excluded records, and verify wording against the source brief. If your live output has no error, say so and also check the deliberately questionable b6s4 sample. Produce a chart with data and caption or a concise summary and name the human approval needed before spending. Evidence: Filled human-review checklist and final work product.",
+            "fields": [
+              "My filled human-review checklist: each numerical or factual claim | spreadsheet cell/formula or brief source | supported / uncertain / wrong | what I changed…",
+              "AI claims I removed or qualified, and the evidence for those decisions…",
+              "My final concise cost summary, or chart with its data and caption: verified figures, included count and unresolved limitations…",
+              "My human sign-off: what I checked myself, what still needs a source, and who must approve before spending…"
+            ],
+            "downloads": [
+              {
+                "file": "ai-work-human-review-checklist.csv",
+                "label": "Human review checklist",
+                "note": "Keep this reference or complete the template with your own evidence."
+              },
+              {
+                "file": "verification-log-A2.csv",
+                "label": "Verification log a2",
+                "note": "Keep this reference or complete the template with your own evidence."
+              },
+              {
+                "file": "ai-work-briefing-template.md",
+                "label": "Briefing template",
+                "note": "Keep this reference or complete the template with your own evidence."
+              },
+              {
+                "file": "ai-work-sample-outputs.txt",
+                "label": "Sample outputs",
+                "note": "Use this session’s synthetic sample; keep your own attempts and checks."
+              }
+            ]
+          },
+          "reflection": "Which part of this work are you personally accountable for?"
+        },
+        {
+          "id": "b6s6",
+          "title": "Professional communication",
+          "minutes": 25,
+          "type": "MAKE + IMPROVE",
+          "pageRef": "Student Book pp. 28–31",
+          "intro": "Write a briefing you can stand behind, then use AI to help edit it.",
+          "study": {
+            "title": "Keep responsibility while editing",
+            "body": [
+              "Drafting produces a first version for improvement. Start with your own message so the AI edits your work instead of deciding what you mean.",
+              "Critique should explain what is weak and why. Check whether a smoother sentence has changed a number or removed a necessary uncertainty.",
+              "Keep the suggestions you accepted and rejected with reasons. Disclosure explains what AI contributed and which checks you performed yourself."
+            ],
+            "example": "An editor changing \"the room may be available\" to \"the room is booked\" has changed the evidence, even if the sentence sounds clearer.",
+            "keywords": [
+              "drafting",
+              "critique",
+              "disclosure",
+              "authorship"
+            ]
+          },
+          "activity": {
+            "kind": "lab",
+            "title": "Professional communication",
+            "instructions": "Draft only: the portal does not send an email. Start with your own checked summary, then ask for edits that preserve its figures, meaning and caveats. Check every suggestion against your evidence. If the live edit is sound, also use the b6s6 sample to practise rejecting removal of an uncertainty caveat. Save the final text here, or use LibreOffice Writer supplied by the training centre. Evidence: Professional briefing and editing decisions.",
+            "fields": [
+              "My own draft before AI editing…",
+              "My editing prompt and the suggestions it returned…",
+              "What I changed or rejected, and why, checked against my evidence…",
+              "My final email or briefing, including what AI contributed and what I checked…"
+            ],
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": [
+              "Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.",
+              "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.",
+              "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked.",
+              "Nothing typed into this portal is sent to the tool; copy across yourself and paste short extracts back here."
+            ],
+            "steps": [
+              "Read the events team's request in the workplace brief.",
+              "Write your own short professional email or briefing from the checked summary in b6s5.",
+              "Ask the AI to edit for clarity and tone while preserving meaning, figures and caveats.",
+              "Compare every suggestion with your draft and evidence; accept or reject it with a reason.",
+              "Save your final version with a short AI-use disclosure. This is a draft; the portal does not send an email."
+            ],
+            "fallback": {
+              "title": "Tool blocked?",
+              "steps": [
+                "Try Microsoft Copilot at https://copilot.microsoft.com without signing in. If either tool asks for an account, payment or an unavailable feature, move to the next fallback.",
+                "Otherwise open the b6s6 sample in ai-work-sample-outputs.txt. No uploads or account-dependent features are required.",
+                "Record the same evidence and identify the sample route. Attempt the tutor questions yourself; do your own spreadsheet calculations and final work product."
+              ]
+            },
+            "downloads": [
+              {
+                "file": "ai-work-workplace-brief.txt",
+                "label": "Workplace brief",
+                "note": "Keep this reference or complete the template with your own evidence."
+              },
+              {
+                "file": "ai-work-briefing-template.md",
+                "label": "Briefing template",
+                "note": "Keep this reference or complete the template with your own evidence."
+              },
+              {
+                "file": "ai-work-sample-outputs.txt",
+                "label": "Sample outputs",
+                "note": "Use this session’s synthetic sample; keep your own attempts and checks."
+              }
+            ]
+          },
+          "reflection": "Which AI suggestion did you reject, and why?"
+        },
+        {
+          "id": "b6s7",
+          "title": "Disclosure scenarios",
+          "minutes": 20,
+          "type": "QUESTION",
+          "pageRef": "Student Book pp. 28–31",
+          "intro": "Decide what an audience needs to know about your AI assistance.",
+          "study": {
+            "title": "Audience and expectations",
+            "body": [
+              "Disclosure says clearly when and how AI helped. What an audience needs depends on the purpose of the work and what they expect from its author.",
+              "Private brainstorming and assessed work have different expectations. When the expectations are unclear, check with the training centre or intended audience before relying on an assumption.",
+              "A useful disclosure names the assistance and your responsibility. People can disagree reasonably about how much detail an audience needs; explain the expectation behind your choice."
+            ],
+            "example": "For a club poster, a designer might explain that AI suggested headings while the club checked dates and wrote the final text.",
+            "keywords": [
+              "disclosure",
+              "authorship",
+              "human-in-the-loop"
+            ]
+          },
+          "activity": {
+            "kind": "chain",
+            "title": "Disclosure scenarios",
+            "instructions": "Decide individually for all five cases: private brainstorming; assessed work at the training centre; drafting a CV using made-up details; a workplace report; a creative project. Read the disclosure cards for each audience and expectation. Compare with a partner if available, then explain one reasonable disagreement in your reason field. There is no always/never answer key. Evidence: Disclosure choices.",
+            "columns": [
+              [
+                "scenario",
+                "Scenario"
+              ],
+              [
+                "decision",
+                "Disclose / no disclosure needed / check expectations first"
+              ],
+              [
+                "reason",
+                "Why: audience, expectations and authorship"
+              ],
+              [
+                "wording",
+                "What I would say, or why no disclosure is needed"
+              ]
+            ],
+            "rows": 5,
+            "minRows": 5,
+            "head": "SCENARIO → DISCLOSURE CHOICE → REASON → WORDING",
+            "downloads": [
+              {
+                "file": "ai-work-disclosure-cards.txt",
+                "label": "Disclosure cards",
+                "note": "Keep this reference or complete the template with your own evidence."
+              }
+            ]
+          },
+          "reflection": "Would you be comfortable explaining your AI use to the training centre or an employer?"
+        },
+        {
+          "id": "b6s8",
+          "title": "Your learning contract",
+          "minutes": 10,
+          "type": "REFLECT + EVIDENCE",
+          "pageRef": "Student Book pp. 28–31",
+          "intro": "Set rules for your learning and assessed work at the training centre.",
+          "study": {
+            "title": "Rules you can actually use",
+            "body": [
+              "A learning contract is your own set of rules for when AI helps and where you retain responsibility. Make each rule observable.",
+              "A repeatable workflow has checkpoints: someone verifies the evidence, someone decides what to keep, and someone approves before it is used.",
+              "Keep enough evidence to explain what you tried, what changed and what you can now explain. Disclosure should fit the audience and the expectations for your assessed work."
+            ],
+            "example": "For work-experience preparation: draft questions yourself, ask for critique, verify company details from its own material, then decide which questions to bring.",
+            "keywords": [
+              "workflow",
+              "disclosure",
+              "authorship"
+            ]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Your learning contract",
+            "instructions": "Write rules specific enough to catch yourself breaking them. Include one repeatable sequence showing who verifies, decides or approves before the next step. Keep your workbook locally. For your project, import the six lab stages and add b6s7 disclosure choices with Add evidence. Paste the cleaning log, formulas, results and final summary into concise evidence notes within the 4,000-character imported-note limit; use extra evidence notes for overflow. A filename alone is not assessable evidence. Evidence: AI-use learning contract.",
+            "fields": [
+              "AI helps me with… (specific learning or work tasks and the checks I keep)",
+              "AI does not replace… (my thinking, authorship and decisions; where I must stop and verify)",
+              "I disclose AI use when… (what I will say, and whose expectations I will check)"
+            ],
+            "downloads": [
+              {
+                "file": "ai-work-learning-contract.md",
+                "label": "Learning contract",
+                "note": "Keep this reference or complete the template with your own evidence."
+              }
+            ]
+          },
+          "reflection": "Where in your workflow must a person stop, check or approve before the next step, and why?"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,13 @@
+item_id,category,item,quantity,unit_cost_eur
+E01,Venue,Hall,1,80
+E02,materials ,Paper packs,4,5
+E03,Catering,Juice cartons,6,3
+E04,Materials,Poster sheets,10,€1.50
+E05,transport,Minibus,1,60
+E06,Catering,Sandwich trays,3,12
+E07,Materials,Marker packs,2,4
+E08,Vneue,Display stand,1,20
+E09,Catering,Fruit boxes,,10
+E10,Transport,Taxi,-1,15
+E03,Catering,Juice cartons,6,3
+E07,Materials,Marker packs,20,4

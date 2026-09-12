@@ -1,0 +1,6 @@
+field,meaning,type,unit,allowed_values_or_range,missing_or_conflict_rule,source
+item_id,,,,,,
+category,,,,,,
+item,,,,,,
+quantity,,,,,,
+unit_cost_eur,,,,,,

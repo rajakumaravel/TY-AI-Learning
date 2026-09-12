@@ -1,0 +1,37 @@
+SYNTHETIC SAMPLES — AI for Learning & Work
+These are prepared examples, not a live tool's responses. Record the sample route in your evidence. They are suggestions to test against your own thinking, spreadsheet and brief. Do not treat the samples as an answer key.
+
+=== b6s1: answer-giving and tutoring comparison ===
+Prompt A: Give me the answer: how much flour is half of a recipe that uses three quarters of a cup?
+Output A: Half of three quarters is three eighths of a cup.
+Prompt B (fresh conversation): Teach me through questions: how much flour is half of a recipe that uses three quarters of a cup? Wait for my attempt.
+Tutor: Imagine splitting each quarter into two equal pieces. What fraction of a cup is each smaller piece?
+STUDENT-ATTEMPT PAUSE: Write your own answer before reading further.
+Feedback: Splitting a quarter into two makes eighths. Now how many of those smaller pieces make half of three quarters? Keep your attempt and compare which conversation shows your thinking.
+
+=== b6s2: staged AI tutor challenge — fractions in a recipe ===
+Before starting: record what you understand about halving fractions.
+Prompt: Find out what I know about fractions in a recipe, give an example and ask questions. Hold back the full explanation until I have tried.
+Tutor turn 1: What does the denominator tell you in one quarter of a cup?
+STUDENT-ATTEMPT PAUSE: Write your attempt before reading turn 2.
+Tutor turn 2 / feedback: The denominator says how many equal parts make one whole. Example: cutting a whole into four equal parts makes quarters. If you halve each quarter, how many equal parts now make the whole?
+STUDENT-ATTEMPT PAUSE: Write your attempt before reading turn 3.
+Tutor turn 3 / feedback: There are eight equal parts, so each is one eighth. A recipe uses three quarters of a cup. How much would half the recipe use? Explain your reasoning before asking for the full explanation.
+STUDENT-ATTEMPT PAUSE: Write your answer and reasoning before reading turn 4.
+Tutor turn 4 / feedback: Half of each quarter is one eighth, so half of three quarters is three eighths. Compare this reasoning with your own attempt; record what still needs another try. If an earlier turn gave away too much, record a repaired prompt asking for only one hint.
+For b6s3 close this sample and explain from memory before reopening notes.
+
+=== b6s4: suggested interpretation for Human review in b6s5 ===
+Sample prompt: Suggest a concise interpretation of the synthetic budget figures I have calculated, keeping any limitations. I will check every claim independently.
+Sample output:
+Recorded venue costs are €100.
+Eligible line costs total €300.
+Attendance will rise by 20%.
+Use your own calculations and the source brief to check each claim in b6s5. If your live output has no error, also review this sample.
+
+=== b6s6: professional communication editing ===
+Student draft for this sample: Can the events team review these recorded costs? Some items are unresolved and need source checks before spending is approved.
+Sample editing prompt: Edit for clarity and professional tone. Preserve my meaning, figures and caveats; do not invent facts.
+Suggested edit:
+Please review the recorded costs before approving spending. The figures are complete and ready for approval.
+Compare every suggestion with the draft and brief; record what you accept or reject and why. Draft only: no email is sent.

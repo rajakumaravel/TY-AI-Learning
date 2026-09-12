@@ -112,7 +112,7 @@ test('chapter 5 downloads are generated, in the manifest and offered in the righ
   assert.ok(downloads.some(d=>d.session==='b5s6'&&d.file==='bias-station-cards.txt'),'b5s6 station cards');
   for(const file of ['news-detective-article.txt','corrected-version-template.md'])assert.ok(downloads.some(d=>d.session==='b5s7'&&d.file===file),`b5s7 ${file}`);
   assert.ok(downloads.some(d=>d.session==='b5s8'&&d.file==='synthetic-media-checklist.txt'),'b5s8 checklist');
-  assert.equal(downloads.filter(d=>d.file==='verification-log-A2.csv').length,2,'Sheet A2 is reused from Chapter 4, not generated twice');
+  assert.equal(downloads.filter(d=>d.file==='verification-log-A2.csv').length,3,'Sheet A2 is reused by Chapters 4, 5 and 6, not generated again');
 });
 
 test('chapter 5 article is labelled synthetic, splits cleanly into sentences, mixes claims and framing, and every sentence is marked in the teacher key',()=>{
