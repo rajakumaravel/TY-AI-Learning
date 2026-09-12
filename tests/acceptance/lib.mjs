@@ -214,3 +214,178 @@ export async function completeChapter6UI(page, afterSession = async () => {}) {
   check('Chapter 6 project submitted with disclosure and final recommendation',/submitted/i.test(await page.textContent('.pw-status'))&&kept.some(r=>r.label==='Disclosure choices'&&r.note.includes('Private brainstorming')));
   await page.click('.pw-close');
 }
+
+export const CHAPTER7_SESSIONS = ['b7s1', 'b7s2', 'b7s3', 'b7s4', 'b7s5', 'b7s6', 'b7s7', 'b7s8'];
+export const CAPSTONE7_ANSWERS = {
+  q1: 'A plausible task change for the community bus service is that allocating standard booking requests becomes automated while phone-assisted bookings stay augmented: narrow AI sorts a request against the timetable and a person still judges the unusual ones. Automation replaces the task; augmentation keeps a driver or booking clerk in the loop with the AI drafting a suggestion; AGI is a hypothetical general capability, not what a booking allocator is. The opportunity in the evidence is that the supplier sandbox served 48 of 50 standard bookings against the human baseline of 45 of 50, and the estimated four staff hours released weekly could go to passengers who need help. The risk is in the same evidence: on phone-assisted bookings the sandbox served 12 of 20 where people served 14 of 20, so the group that needs the staffed phone route does worse, and future skills such as checking an allocation matter more, not less.',
+  q2: 'Three possible futures for the same bus service. Optimistic: a pilot keeps the staffed phone route, drivers get training and authority to override, and AI drafts standard allocations only; the technology change is drafting, the human response is trained override, the unintended consequence is that review time consumes much of the four released hours. Concerning: full automation across all bookings; the technology change is automatic allocation, the human response is passengers chasing an appeal, the unintended consequence is that the 12 of 20 phone-assisted result becomes normal and 90-day booking transcripts sit in storage. Balanced no-deployment alternative: the service keeps human allocation and invests in clearer scripts; the technology change is none, the human response is training, the unintended consequence is that the existing queue and the 45 of 50 and 14 of 20 pattern remain with no new evidence. The stakeholder trade-off is that drivers want training, passengers want a staffed phone route, and the service manager carries the cost; the four staff hours are an uncosted supplier estimate that excludes human appeals, so it cannot be treated as a saving. Future skills: judging an unusual booking, explaining a refusal, and questioning a supplier claim.',
+  q3: 'My justified recommendation is a limited pilot with human review on phone-assisted bookings, not full automation and not no deployment. The evidence is the booking counts: 48 of 50 standard bookings beat the human 45 of 50, but 12 of 20 phone-assisted is worse than 14 of 20, so I would automate only where the evidence supports it. Speculation, which I separate from that evidence, is the four staff hours released weekly, because the supplier has not costed human appeals, and anything about winter demand, where there is no evidence at all. Governance: the service manager is the accountable role, drivers can override or stop an allocation, and every passenger keeps a staffed phone route to reach a person and appeal a booking decision; transcripts are retained only as long as an appeal needs rather than 90 days. The strongest objection is that a pilot costs money and delivers little capacity, and my answer is that the phone-assisted gap is a real harm to the passengers with least choice, so I would rather defer scale than monitor a known failure. I would change this recommendation if an independent winter sample showed phone-assisted bookings at or above the human baseline, or if appeals were not being answered, which would trigger a pause and a review with the drivers.'
+};
+// One deterministic, case-specific pass through the Chapter 7 activities; no live AI output and no preferred recommendation.
+export const CHAPTER7_QUIZ = ['Narrow AI', 'Narrow AI', 'Narrow AI', 'AGI (hypothetical)', 'Uncertain forecast', 'Uncertain forecast'];
+export const CHAPTER7_CHAINS = {
+  b7s1: [
+    ['Order status answered from the record', 'Observed now', 'E1 one-week audit: 100 routine requests in 10 staff hours', 'One small week does not prove a wider pattern; a longer audit would change my view'],
+    ['Support requests go wrong as often as standard ones', 'Observed now', 'E1: four A and four B outcomes wrong', 'It does not show why B requests fail; a bigger sample of B cases would change my view'],
+    ['Most routine replies drafted by AI and approved by a person', 'Possible in 2035', 'E2 sandbox replay of the same cases; I assume demand and staffing stay similar', 'A reused sample is not evidence of future performance'],
+    ['A staffed phone and counter route still exists', 'Possible in 2035', 'E3 access adviser; I assume Harbour Co-op keeps funding the route', 'No customer consultation yet; a funding cut would change my view']
+  ],
+  b7s3: [
+    ['Checking order status', 'Automated', 'E1: routine lookups dominate the 100 requests; I assume the record is correct', 'A person answers when the record is wrong'],
+    ['Drafting a routine reply', 'Augmented', 'E2: sandbox drafts still need review; I assume reviewers are given time', 'The worker approves the wording and owns the reply'],
+    ['Interpreting an unclear return request', 'Augmented', 'E1: 20 of 100 requests need language or access support', 'Judging what the customer actually means'],
+    ['Explaining a refusal', 'Strongly human', 'E3: workers want authority to override, not a promise about jobs', 'Accountability and care when the answer is no'],
+    ['Resolving an unusual complaint', 'Strongly human', 'E4: only routine handling was measured, not the whole job', 'Negotiating a fair outcome and repairing trust']
+  ],
+  b7s5: [
+    ['Service worker', 'Run 1 keeps most work manual, run 2 pushes me towards complaints, run 3 keeps the present queue', 'EP: 9 staff hours with 3 A and 4 B outcomes still wrong', 'Workers want override time, managers want capacity; funded review still costs money'],
+    ['Customer needing a staffed language or access route', 'Run 1 funds support, run 2 leaves 10 of 20 B wrong, run 3 keeps the old difficulties', 'EF: 8 B wrong of 20; EN: 4 B wrong of 20', 'Access needs staff while automation cuts cost; an appeal still arrives after the error'],
+    ['Customer using standard digital requests', 'Run 2 is fastest, run 1 changes little, run 3 is unchanged', 'EF: 100 automatic replies and 3 staff hours', 'Speed for A clashes with fairness for B; a human check protects B and slows A'],
+    ['Service manager', 'Run 2 shows the largest modelled value, run 1 costs capacity, run 3 stays at the baseline', 'E4: capacity valued at EUR 20 per hour, purchase costs unknown', 'Value clashes with accountability; a stop trigger costs the gain it protects'],
+    ['Public-interest regulator', 'Run 2 stores transcripts for 90 days, run 1 for seven, run 3 adds none', 'E4: retention counts added AI transcript storage, not the order records', 'Audit evidence clashes with privacy; shorter retention weakens the audit trail']
+  ]
+};
+export const CHAPTER7_FIELDS = {
+  b7s6: [
+    'For the proposal: a disputed refusal materially affects a customer, and EH shows people caught mistakes an unreviewed model left in, so high-stakes replies at Harbour Co-op should carry human review.',
+    'Against it: EH also shows reviewers rushing unfamiliar cases and the support-route error rate surviving review, and the faster-targets branch shows approval targets turning review into a click; review costs staff hours the co-op may not fund.',
+    'My response and revised governance choice: review only decisions that refuse, charge or affect access; the shift lead can override and correct, the service manager can pause the service, and a customer reaches them through the staffed phone or counter route named in E3.',
+    'My debate reflection: the rushed-reviewer evidence changed my view from all decisions must be reviewed to meaningful review of the decisions that matter, because an unfunded checkbox is not a safeguard.'
+  ],
+  b7s7: [
+    'Human capability 1, critical judgement: in my balanced future a worker decides when a drafted reply is wrong, which the model cannot check for itself.',
+    'Human capability 2, communication: explaining a refusal or a delay to a customer without digital access is the part of the retail task map I marked strongly human.',
+    'Human capability 3, negotiating priorities: deciding whether access support or capacity comes first is the trade-off the numbers in my three runs could not settle.',
+    'One concrete TY action: I will take two shifts on the training centre reception desk in November, handle the awkward requests myself and keep a short log of what I said as evidence that I tried.'
+  ],
+  b7s8: [
+    'My final recommendation is a pilot kept small with funded access support, not full automation and not simply waiting; the conditions I support are a staffed phone and counter route, seven-day transcript retention and no expansion without an independent sample.',
+    'My strongest evidence is run 1 against run 2: full automation gives the largest modelled capacity but ten of twenty support-route outcomes wrong and ninety-day retention, while the pilot leaves two of twenty wrong; customers needing support gain, the service manager carries the cost, and E4 leaves purchase costs and 2035 demand uncertain.',
+    'My governance commitment: the service manager is accountable, the access lead can request a halt, the review trigger is any week where support-route errors rise or an appeal goes unanswered, the next evidence to collect is an independent sample with more supported requests, and the human choice that matters most is keeping a person customers can reach.'
+  ]
+};
+// Contract routes: pilot then support, full then speed, none then train; the second citation is that branch's revealed card.
+export const CHAPTER7_RUNS = [
+  { start: ['pilot', 'E1', 'Start small because E1 is one small week and cannot support a wider rollout yet.'], follow: ['support', 'EP', 'EP shows language and access needs still falling through, so I fund support before scale.'] },
+  { start: ['full', 'E2', 'E2 replays every request, so I test what full automation would actually look like here.'], follow: ['speed', 'EF', 'EF shows the co-op still owns complaints, so I record what supplier-led handling costs customers.'] },
+  { start: ['none', 'E3', 'E3 says no consultation is finished, so keeping the present service is a real option.'], follow: ['train', 'EN', 'EN keeps the queue, so I test whether scripts and training improve it without AI.'] }
+];
+export const CHAPTER7_FUTURES = {
+  optimistic: [1, 'Technology change: AI drafts a tenth of routine replies. Human response: trained staff keep a funded access route and can halt the pilot. Unintended consequence: training and support use the time released, so capacity barely improves. The case supports the seven-day retention and the lower support-route error count; I am assuming the support team stays funded to 2035.'],
+  concerning: [2, 'Technology change: every routine reply is automatic. Human response: customers chase supplier-led complaints and staff move onto them. Unintended consequence: support-route errors double to ten of twenty and transcripts sit for ninety days. The case supports the error counts and retention; I am assuming demand and supplier behaviour do not improve by 2035.'],
+  balanced: [3, 'Technology change: none, clearer scripts and training instead. Human response: staff own the queue and correct known errors. Unintended consequence: the access difficulties and waiting remain and no new evidence about the alternatives is produced. The case supports the unchanged baseline; I am assuming training improves new cases, which is not guaranteed.']
+};
+export const CHAPTER7_COMPARISON = 'Funding the access route changed the outcome more than automation did: run 2 gained the most modelled capacity while doubling support-route errors, run 1 halved them at a capacity cost, and run 3 changed neither. Standard-request customers gained in run 2; customers needing the support route carried the risk. The assumption I would test next is that a trained support team can absorb the extra cases at any scale.';
+export const CHAPTER7_RECOMMENDATION = 'Advise Harbour Co-op to run the small pilot with funded access support and seven-day transcript retention, not full automation and not an open-ended wait. Alternatives considered: full automation gives the largest modelled capacity of EUR 100 but leaves ten of twenty support-route outcomes wrong, and no deployment keeps the existing errors without producing new evidence. The service manager is accountable and the access lead can request a halt; review or stop if support-route errors rise or an appeal goes unanswered. Remaining uncertainty: purchase costs, whether support scales, and every assumption about 2035 demand; these are modelled figures from a fictional case, not a forecast.';
+
+// The decision kind re-renders after each edge, so its controls are re-queried per step and the revealed path is awaited.
+export async function decisionStep(page, choiceId, evidenceId, reason) {
+  await page.check(`input[name="decisionChoice"][data-choice="${choiceId}"]`);
+  await page.selectOption('select#decisionEvidence', evidenceId);
+  await page.fill('textarea#decisionReason', reason);
+  await page.click('button#decisionChoose');
+  await page.waitForFunction(r => (document.querySelector('.decision-path')?.textContent || '').includes(r), reason.slice(0, 24), { timeout: 10000 });
+}
+export async function recordDecisionRun(page, run) {
+  await decisionStep(page, ...run.start);
+  await page.waitForSelector(`input[name="decisionChoice"][data-choice="${run.follow[0]}"]`, { timeout: 10000 });
+  await decisionStep(page, ...run.follow);
+  await page.waitForSelector('button#decisionRecord', { timeout: 10000 });
+  await page.click('button#decisionRecord');
+}
+export async function restartDecision(page) {
+  await page.click('button#decisionRestart');
+  await page.waitForSelector('input[name="decisionChoice"][data-choice="none"]', { timeout: 10000 });
+}
+export async function fillDecisionCanvas(page) {
+  for (const [key, [runId, text]] of Object.entries(CHAPTER7_FUTURES)) {
+    await page.selectOption(`select[data-future="${key}"]`, String(runId));
+    await page.fill(`textarea[data-scenario="${key}"]`, text);
+  }
+  await page.fill('textarea[data-decision-field="comparison"]', CHAPTER7_COMPARISON);
+}
+
+// Real clicks and typing for all eight sessions, the branching simulator, the capstone and the project.
+export async function completeChapter7UI(page, afterSession = async () => {}) {
+  await page.click('#homeBtn');
+  await page.waitForFunction(() => { const b=document.querySelector('[data-block="6"]');return b&&!b.disabled&&!b.classList.contains('locked'); }, null, { timeout: 15000 });
+  await page.click('[data-block="6"]');
+  await page.waitForSelector('#labBanner .lab-stage');
+  check('Chapter 7 has six stages and the book myth-busters', (await page.$$('#labBanner .lab-stage')).length===6 && /AGI is a hypothesis/i.test(await page.textContent('#mythBusters')));
+  for (const sid of CHAPTER7_SESSIONS) {
+    await page.click(`[data-session="${sid}"]`);
+    await page.waitForFunction(id=>document.querySelector('.session-link.active')?.dataset.session===id,sid);
+    check(`${sid} needs no AI tool link`,!(await page.$('#labToolLink')));
+    if (CHAPTER7_CHAINS[sid]) {
+      const keys=sid==='b7s1'?['claim','status','basis','check']:sid==='b7s3'?['task','change','basis','human']:['stakeholder','impact','evidence','clash'];
+      const rows=CHAPTER7_CHAINS[sid];
+      for (let i=0;i<rows.length;i++) for (const [j,f] of keys.entries()) await page.fill(`input[data-i="${i}"][data-f="${f}"]`,rows[i][j]);
+      check(`${sid} chain renders its ${rows.length} declared rows`,(await page.$$(`input[data-i][data-f="${keys[0]}"]`)).length===rows.length);
+    } else if (sid==='b7s2') {
+      for (const [i,label] of CHAPTER7_QUIZ.entries()) await page.selectOption(`select[data-i="${i}"]`,{label});
+      check('b7s2 quiz has six concept items',(await page.$$('select[data-i]')).length===6);
+    } else if (sid==='b7s4') {
+      await page.waitForSelector('.decision-lab input[name="decisionChoice"][data-choice="none"]',{timeout:15000});
+      check('b7s4 shows four adoption options, the four root evidence cards and no preselected choice',(await page.$$('input[name="decisionChoice"][data-choice]')).length===4&&(await page.$$('.decision-evidence [data-evidence]')).length===4&&!(await page.$('input[name="decisionChoice"]:checked')));
+      // Persistence: one revealed edge survives a reload before any run is recorded.
+      await decisionStep(page,...CHAPTER7_RUNS[0].start);
+      const revealed=(await page.textContent('#decisionNode')).trim();
+      await page.waitForTimeout(2500);
+      await page.reload({waitUntil:'load'});
+      await page.waitForFunction(()=>/Welcome/.test(document.getElementById('welcomeName')?.textContent||''),null,{timeout:15000});
+      await page.click('[data-block="6"]'); await page.waitForSelector('#labBanner .lab-stage');
+      await page.click('[data-session="b7s4"]'); await page.waitForSelector('.decision-lab',{timeout:15000});
+      check('b7s4 restores the unfinished path and revealed node after a reload',(await page.textContent('.decision-path')).includes(CHAPTER7_RUNS[0].start[2].slice(0,24))&&(await page.textContent('#decisionNode')).trim()===revealed);
+      await decisionStep(page,...CHAPTER7_RUNS[0].follow);
+      await page.waitForSelector('button#decisionRecord',{timeout:10000});
+      const metrics=await page.textContent('#decisionMetrics');
+      check('b7s4 pilot then support shows the contract value, error and retention figures',/30\.00/.test(metrics)&&/3\.75|3\/80/.test(metrics)&&/10\.00|2\/20/.test(metrics)&&/7 days/.test(metrics));
+      await page.click('button#decisionRecord');
+      await page.waitForFunction(()=>(document.querySelector('.decision-runs')?.textContent||'').length>0,null,{timeout:10000});
+      for (const run of CHAPTER7_RUNS.slice(1)) { await restartDecision(page); await recordDecisionRun(page,run); }
+      const saved=await page.textContent('.decision-runs');
+      check('b7s4 records three distinct starting routes including no deployment',CHAPTER7_RUNS.every(r=>saved.includes(r.follow[2].slice(0,24)))&&/No deployment/i.test(saved));
+      check('b7s4 keeps the full-automation capacity and its support-route error side by side',/100\.00/.test(saved)&&(/50\.00/.test(saved)||/10\/20/.test(saved)));
+      await fillDecisionCanvas(page);
+      check('b7s4 links the three futures to three different recorded runs',new Set(await page.$$eval('select[data-future]',els=>els.map(e=>e.value))).size===3);
+    } else {
+      for (let i=0;i<CHAPTER7_FIELDS[sid].length;i++) await page.fill(`textarea[data-i="${i}"]`,CHAPTER7_FIELDS[sid][i]);
+    }
+    const downloads=await page.$$eval('.downloads a[download]',els=>els.map(e=>e.href));
+    for (const href of downloads) check(`${sid} download served: ${href.split('/').pop()}`,(await fetch(href)).status===200);
+    await page.fill('#reflectionText',sid==='b7s4'?'The counts are evidence; every 2035 outcome in my canvas is speculation built on stated assumptions.':sid==='b7s5'?'Standard-request customers benefit most; customers needing the support route carry the risk.':'I separated what the case observed from what I assumed about 2035, and named who decides.');
+    await page.click('#saveSession');
+    await page.waitForFunction(()=>/complete/i.test(document.getElementById('lessonFeedback')?.textContent||''),null,{timeout:15000});
+    check(`${sid} saves complete evidence`,/complete/i.test(await page.textContent('#lessonFeedback')));
+    await afterSession(sid);
+  }
+  await page.waitForSelector('#chapterCapstoneHost textarea[data-capstone]');
+  check('Chapter 7 shows self-check and level-up',Boolean(await page.$('.self-check'))&&Boolean(await page.$('.level-up')));
+  check('Chapter 7 capstone evidence area shows the saved decision summary',/Recorded adoption path 3/.test(await page.textContent('#chapterCapstoneHost')));
+  for (const [i,answer] of Object.values(CAPSTONE7_ANSWERS).entries()) await page.fill(`textarea[data-capstone="${i}"]`,answer);
+  await page.click('#submitCapstone');
+  await page.waitForFunction(()=>/COMPLETE/.test(document.getElementById('chapterCapstoneHost')?.textContent||''),null,{timeout:20000});
+  check('Chapter 7 capstone qualified',/Going further/.test(await page.textContent('#chapterCapstoneHost')));
+  await page.waitForSelector('#projectWorkspaceBtn-block7',{timeout:15000});
+  await page.click('#projectWorkspaceBtn-block7');
+  await page.waitForSelector('#projectWorkspaceModal.open');
+  await page.click('#pwImportLab');
+  await page.waitForFunction(()=>/Imported/.test(document.getElementById('pwMessage')?.textContent||''),null,{timeout:15000});
+  const imported=await page.$$eval('#pwEvidence textarea',els=>els.map(e=>e.value).join('\n'));
+  check('Chapter 7 import retains six stages, all three paths with their reasons and the three futures',(await page.$$('#pwEvidence .pw-evidence')).length>=6&&/3 paths/.test(imported)&&/Optimistic = run/.test(imported)&&/Concerning future:/.test(imported)&&/Balanced future:/.test(imported)&&/Comparison and uncertainty:/.test(imported)&&CHAPTER7_RUNS.every(r=>imported.includes(r.follow[1])));
+  await page.click('#pwAddLog');
+  await page.click('#pwAddEvidence');
+  const extra=page.locator('#pwEvidence .pw-evidence').last();
+  await extra.locator('[data-f="label"]').fill('Future skills card');
+  await extra.locator('[data-f="note"]').fill(CHAPTER7_FIELDS.b7s7.join(' | '));
+  await page.fill('#pwLog textarea[data-f="did"]','Mapped the retail tasks, followed three complete adoption routes including no deployment, challenged each future through five stakeholders and argued a governance choice.');
+  await page.fill('#pwLog textarea[data-f="result"]','Three recorded paths with their modelled figures, three linked futures, a defended human-review choice and a pilot recommendation with a stop trigger.');
+  await page.fill('#pwRecommendation',CHAPTER7_RECOMMENDATION);
+  await page.click('#pwSave');
+  await page.waitForFunction(()=>/Saved/.test(document.getElementById('pwMessage')?.textContent||''),null,{timeout:15000});
+  await page.click('#pwSubmit');
+  await page.waitForFunction(()=>/submitted/i.test(document.querySelector('.pw-status')?.textContent||''),null,{timeout:15000});
+  const kept=await page.$$eval('#pwEvidence .pw-evidence',rows=>rows.map(r=>({label:r.querySelector('[data-f="label"]')?.value||'',note:r.querySelector('[data-f="note"]')?.value||''})));
+  check('Chapter 7 project submitted with the future skills card and final recommendation',/submitted/i.test(await page.textContent('.pw-status'))&&kept.some(r=>r.label==='Future skills card'&&r.note.includes('critical judgement')));
+  await page.click('.pw-close');
+}

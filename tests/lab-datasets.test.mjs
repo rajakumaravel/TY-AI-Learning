@@ -158,6 +158,80 @@ test('chapter 5 article is labelled synthetic, splits cleanly into sentences, mi
   for(const re of [/Provenance/,/Other coverage/,/Who gains/,/Look for the original/,/Wait/])assert.match(checklist,re);
 });
 
+test('chapter 7 downloads are generated, in the manifest and offered in the right sessions; the teacher key stays outside public/',()=>{
+  const files=['ai-future-evidence-cards.txt','ai-future-career-cards.txt','ai-future-career-map.csv','ai-future-branch-cards.txt','ai-future-decision-log.csv','ai-future-scenario-canvas.md','ai-future-stakeholder-analysis.csv','ai-future-policy-cards.txt','ai-future-skills-card.md'];
+  for(const file of files){
+    assert.ok(fs.existsSync(`public/datasets/${file}`),`${file} missing`);
+    assert.ok(manifest[file]>0,`${file} not in manifest`);
+  }
+  assert.ok(fs.existsSync('docs/teacher/ai-future-adoption.KEY.txt'),'teacher key generated outside public/');
+  assert.ok(!fs.readdirSync('public/datasets').some(f=>/KEY/i.test(f)),'teacher key is never served');
+  assert.ok(!downloads.some(d=>/KEY/i.test(d.file)),'the teacher key is not offered to students');
+  for(const file of ['ai-future-evidence-cards.txt','ai-future-career-cards.txt'])assert.ok(downloads.some(d=>d.session==='b7s1'&&d.file===file),`b7s1 ${file}`);
+  assert.ok(downloads.some(d=>d.session==='b7s2'&&d.file==='ai-future-career-cards.txt'),'b7s2 career cards');
+  for(const file of ['ai-future-career-cards.txt','ai-future-evidence-cards.txt','ai-future-career-map.csv'])assert.ok(downloads.some(d=>d.session==='b7s3'&&d.file===file),`b7s3 ${file}`);
+  assert.deepEqual(downloads.filter(d=>d.session==='b7s4').map(d=>d.file),['ai-future-evidence-cards.txt','ai-future-branch-cards.txt','ai-future-scenario-canvas.md','ai-future-decision-log.csv']);
+  for(const file of ['ai-future-evidence-cards.txt','ai-future-stakeholder-analysis.csv'])assert.ok(downloads.some(d=>d.session==='b7s5'&&d.file===file),`b7s5 ${file}`);
+  assert.ok(downloads.some(d=>d.session==='b7s6'&&d.file==='ai-future-policy-cards.txt'),'b7s6 policy cards');
+  assert.ok(downloads.some(d=>d.session==='b7s7'&&d.file==='ai-future-skills-card.md'),'b7s7 skills card');
+  assert.ok(downloads.some(d=>d.session==='b7s8'&&d.file==='ai-future-scenario-canvas.md'),'b7s8 scenario canvas');
+});
+
+test('chapter 7 branch and evidence downloads match the curriculum fixture, the worksheets stay blank and no public file names a recommended route',()=>{
+  const d=course.blocks[6].sessions.find(s=>s.id==='b7s4').activity;
+  const cards=fs.readFileSync('public/datasets/ai-future-evidence-cards.txt','utf8');
+  for(const e of d.evidence){assert.ok(cards.includes(e.text),`${e.id} text`);assert.ok(cards.includes(`${e.id} [${e.status}]`),`${e.id} status label`)}
+  assert.match(cards,/synthetic/i);
+  const branch=fs.readFileSync('public/datasets/ai-future-branch-cards.txt','utf8');
+  for(const n of d.nodes){
+    assert.ok(branch.includes(n.id)&&branch.includes(n.title),`${n.id} in the walkthrough`);
+    assert.ok(branch.includes(n.consequence)&&branch.includes(n.accountability)&&branch.includes(n.uncertainty),`${n.id} narrative`);
+    if(n.metrics)assert.ok(branch.includes(n.metrics.join(', ')),`${n.id} vector`);
+    for(const c of n.choices)assert.ok(branch.includes(`[${c.id}] ${c.label} → go to ${c.next}`),`${n.id}/${c.id} edge`);
+  }
+  for(const re of [/hoursReleased = 10 − humanHours/,/capacityValueEUR = hoursReleased × 20 − costEUR/,/percentage points/,/no correct route, no winner and no score/])assert.match(branch,re);
+  assert.match(branch,/with no recommended route/);
+  assert.doesNotMatch(branch,/best option|best route|highest score|ranked|we recommend/i,'no ranked outcome');
+  const canvas=fs.readFileSync('public/datasets/ai-future-scenario-canvas.md','utf8');
+  for(const h of ['## Optimistic','## Concerning','## Balanced','## Stakeholder impacts','## Future skills','## Governance choice','## Final recommendation'])assert.ok(canvas.includes(h),h);
+  assert.ok(canvas.includes('Each scenario needs a technology change, a human response, and an unintended consequence.'),'book requirement');
+  assert.ok(canvas.includes('No scenario is allowed to be “everything\'s fine” or “everything\'s ruined”.'),'book requirement, second half');
+  for(const re of [/- Prediction:/,/- Attempt:/,/- Result:/,/- Surprise:/,/- Change:/,/- Transfer:/])assert.match(canvas,re);
+  assert.doesNotMatch(canvas,/pilot-support|full-speed|none-train/,'no filled scenario pack');
+  const careers=fs.readFileSync('public/datasets/ai-future-career-cards.txt','utf8');
+  for(const t of ['checking order status','drafting a routine reply','interpreting an unclear return request','explaining a refusal','resolving an unusual complaint','correcting a wrong record','supporting a customer without digital access','deciding an exception'])assert.ok(careers.includes(t),t);
+  for(const c of ['teacher','doctor','farmer','architect','engineer','journalist','tradesperson','designer','accountant'])assert.ok(careers.includes(c),c);
+  assert.match(careers,/Do not transplant the Harbour Co-op counts/);
+  const policy=fs.readFileSync('public/datasets/ai-future-policy-cards.txt','utf8');
+  assert.match(policy,/"High-stakes AI decisions must always have human review\."/);
+  assert.match(policy,/not a description of current law/);
+  assert.ok(policy.includes(d.evidence.find(e=>e.id==='EH').text),'the EH counterpoint');
+  assert.match(fs.readFileSync('public/datasets/ai-future-career-map.csv','utf8'),/^task,possible_change,evidence_and_assumption,human_capability_and_responsibility\n(,,,\n){5}$/);
+  assert.match(fs.readFileSync('public/datasets/ai-future-decision-log.csv','utf8'),/^run,node,choice,evidence_available,alternatives_considered,reason_chosen,consequence,would_I_decide_differently_now\n(,,,,,,,\n)+$/);
+  const stake=fs.readFileSync('public/datasets/ai-future-stakeholder-analysis.csv','utf8').trim().split('\n');
+  assert.equal(stake[0],'stakeholder,three_future_impacts,evidence_and_limit,conflict_and_safeguard');
+  assert.equal(stake.length,6,'five stakeholder rows');
+  for(const row of stake.slice(1))assert.match(row,/,,,$/,`only the name is filled: ${row}`);
+  const skills=fs.readFileSync('public/datasets/ai-future-skills-card.md','utf8');
+  for(const c of ['critical judgement','communication','empathy','domain knowledge','negotiating priorities'])assert.ok(skills.includes(c),c);
+  assert.equal((skills.match(/^## Capability \d$/gm)||[]).length,3);
+  assert.match(skills,/^## One concrete action during TY$/m);
+});
+
+test('the chapter 7 teacher key computes all eight outcomes and the quiz key, and refuses a single correct future',()=>{
+  const d=course.blocks[6].sessions.find(s=>s.id==='b7s4').activity;
+  const key=fs.readFileSync('docs/teacher/ai-future-adoption.KEY.txt','utf8');
+  const terminals=d.nodes.filter(n=>n.choices.length===0);
+  assert.equal(terminals.length,8);
+  for(const t of terminals)assert.ok(key.includes(`terminal ${t.id}`),`${t.id} outcome`);
+  for(const re of [/capacity value −€30\.00/,/gap 6\.25 points/,/A 1\/80 = 1\.25%/,/B 10\/20 = 50\.00%/,/gap 45\.00 points/,/gap 11\.25 points/,/gap 15\.00 points, capacity value €0\.00/])assert.match(key,re);
+  for(const [q,a] of course.blocks[6].sessions.find(s=>s.id==='b7s2').activity.items)assert.ok(key.includes(`${q} → ${a}`),q);
+  assert.match(key,/NO TERMINAL IS CORRECT/);
+  assert.match(key,/no combined score/i);
+  assert.match(key,/same formative level as a supported pilot/);
+  for(const re of [/jobs will go/,/No AI means no risk/,/An audit removes the harm/])assert.match(key,re);
+});
+
 test('dataset archives stay small enough for school connections',()=>{
   for(const [file,size] of Object.entries(manifest))assert.ok(size<1_000_000,`${file} is ${size} bytes`);
 });

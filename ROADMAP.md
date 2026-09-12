@@ -347,7 +347,7 @@ Every development phase must satisfy all of the following before production acce
 
 Do not start multiple major phases in parallel. Complete the current phase, verify it with real/pilot usage where appropriate, record findings, then proceed to the next phase.
 
-**Current work: Phase 7 — Chapter 6: AI for Learning & Work implementation is done (see `docs/product/phase-7-contract.md` and `docs/releases/phase-7-chapter-6.md`); next is Phase 8 — Chapter 7: Our AI Future.** Live deployment acceptance remains pending. Phase 6 — Chapter 5 is complete (`docs/releases/phase-6-chapter-5.md`).
+**Current work: Phase 8 — Chapter 7: Our AI Future implementation is done (see `docs/product/phase-8-contract.md` and `docs/releases/phase-8-chapter-7.md`); next is Phase 9 — Chapter 8: AI Innovation Project.** Live deployment acceptance remains pending. Phase 7 — Chapter 6 is complete (`docs/releases/phase-7-chapter-6.md`).
 
 Phase 2 merged 2026-09-11 (PR #6).
 

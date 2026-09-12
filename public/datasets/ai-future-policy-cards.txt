@@ -1,0 +1,17 @@
+Policy choice cards (Chapter 7, Our AI Future)
+
+THE PROPOSAL
+"High-stakes AI decisions must always have human review."
+This is a proposal for debate. It is not a description of current law, and nothing here tells you what any legal duty is.
+
+1. Argue for it. Use your own retailer runs. Which decisions went wrong, for whom, and what would a human check have caught?
+2. Argue against it. What does human review cost in time, money and delay? What does it fail to fix? Which decisions would it slow down for no benefit?
+3. Distinguish routine from high-stakes. A routine order-status reply and a disputed refusal that materially affects a customer are not the same risk. Where would you draw the line, and what happens to the cases on each side of it?
+4. Answer the strongest objection. Not the weakest one. Write the objection you find hardest, then your response.
+5. Name who can correct, override or stop the service, and how a customer actually reaches that person.
+
+COUNTERPOINT FROM THE CASE
+EH [Fictional human+AI observation]: People approve all 100 AI-assisted replies. The week uses 7 staff hours and €40 extra cost; 2 A and 4 B outcomes remain wrong. Reviewers report rushing unfamiliar cases. A human approval step alone has not removed the unequal error rates.
+Compare the two review branches you can reach from Human+AI: Fund reviewer time and training and Set faster approval targets. An approval click is not the same thing as a person checking, and a review step alone did not remove the unequal error rates.
+
+There is no verdict card. Two students can argue opposite positions well, and the debate reflection is where you say what changed your view or why it survived.

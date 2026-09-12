@@ -1,0 +1,43 @@
+Case evidence cards (Chapter 7, Our AI Future) — Harbour Co-op: routine customer requests
+Every person, observation and count here is synthetic. It is a fictional exercise, not a study of a real retailer, and none of it predicts 2035.
+
+Role: AI Adoption Adviser. Harbour Co-op is considering AI for routine order and return requests. Advise its service manager using the evidence cards. Compare value, changes to tasks, safety, fairness, privacy, accountability and uncertainty. Customers must still have a way to ask a person for help.
+
+Groups in the one modelled week of 100 routine requests:
+- Group A: Standard digital requests — 80 requests. Group B names a support route, not a kind of person.
+- Group B: Requests needing language or access support — 20 requests. Group B names a support route, not a kind of person.
+Baseline vector (humanHours, costEUR, automated, assisted, wrongA, wrongB, retentionDays, energyUnits): 10, 0, 0, 0, 4, 4, 0, 0.
+Human task capacity is valued at €20 per hour. Hours, costs, retention days and energy units always describe that same week of 100 requests.
+
+=== Root cards: read all four before choosing ===
+E1 [Fictional baseline observation]
+A one-week audit covers 100 routine requests: 80 standard digital requests (A) and 20 needing language or access support (B). Staff use 10 hours. Four A requests and four B requests receive a wrong answer or missed resolution. This is one small week, not the whole job or a representative study.
+
+E2 [Fictional prototype observation]
+A sandbox replay of the same 100 requests, with no live customer decisions, leaves 4 wrong A outcomes and 8 wrong B outcomes when AI answers without review. The same cases were used while developing the prototype, so this is not independent evidence of future performance.
+
+E3 [Fictional stakeholder evidence]
+The service manager wants more time for complex cases. Workers want training and authority to override AI, not a promise that saved task time means jobs must disappear. The access adviser says a staffed phone or counter route must remain. No customer consultation or workforce agreement has yet been completed.
+
+E4 [Model assumption]
+Human task capacity is valued at €20 per hour. Costs below are weekly AI, training and support costs; initial purchase costs are unknown. Retention measures days of new AI transcript storage, not the existing order records. Energy units are an invented comparison index for added AI use, not measured kWh or carbon. All 2035 outcomes require assumptions about demand, reliability, staffing and governance.
+
+=== Branch cards: each is revealed by one starting choice ===
+EP [Fictional pilot observation]
+The limited pilot handles 10 requests automatically and assists a person on 10 more. The remaining 80 are handled without AI. The week uses 9 staff hours and €30 extra cost; 3 A and 4 B outcomes remain wrong. Some language and access needs still fall through the support route. Wider rollout has not been tested.
+
+EH [Fictional human+AI observation]
+People approve all 100 AI-assisted replies. The week uses 7 staff hours and €40 extra cost; 2 A and 4 B outcomes remain wrong. Reviewers report rushing unfamiliar cases. A human approval step alone has not removed the unequal error rates.
+
+EF [Fictional automation observation]
+All 100 routine replies are automatic. The week still uses 3 staff hours on exceptions and complaints and costs €60 extra; 4 A and 8 B outcomes remain wrong. The supplier points to its average performance, while customers ask who can correct an error and restore a human route.
+
+EN [Fictional no-deployment observation]
+The service keeps handling all 100 requests without AI: 10 staff hours and no extra AI cost, with 4 A and 4 B outcomes wrong. The queue and language/access difficulties remain. Staff propose clearer scripts and training; keeping the present system is also a choice with consequences.
+
+Scope and caveats:
+- One small week is not a representative study, and the sandbox replay reused the development cases, so it is not independent evidence.
+- Automatic, assisted and manual counts are disjoint and sum to 100. Wrong outcomes are service failures in this exercise; the model does not estimate how badly anyone was harmed.
+- Rates are wrong outcomes within each group's own total. The gap between them is in percentage points, and one number does not settle fairness.
+- Retention counts days of new AI transcript storage only, and the energy units are an invented comparison index. A zero does not mean the service uses no energy or holds no personal data.
+- Released hours are capacity, not jobs. Nothing here supports a claim about redundancies.

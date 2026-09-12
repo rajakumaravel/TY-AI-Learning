@@ -49,7 +49,31 @@ function activityLabel(activity, key) {
   if (activity.kind === "prompt") { if (key === "builder") return "C-T-C-F builder"; if (key === "versions") return "Prompt versions"; if (key === "extras") return "Extra notes"; if (/^v\d+$/.test(key)) return `Prompt ${key}`; return `Extra ${Number(key)+1}`; }
   if (activity.kind === "annotate") { if (key === "marks") return "Annotated article"; return `Mark ${Number(key)+1}`; }
   if (activity.kind === "simulator") { if (key === "runs") return "Bias simulator"; if (key === "fields") return "Simulator notes"; return `Run ${Number(key)+1}`; }
+  if (activity.kind === "decision") return DECISION_KEYS[key] || "AI adoption decision simulator";
   return `Response ${Number(key)+1}`;
+}
+// Chapter 7 decision simulator. The stored value is a structured path/runs/futures object, so it is turned into readable
+// choice and evidence labels with the contract's units before the generic evidence renderer sees it.
+const DECISION_KEYS = { path:"Current decision path", draft:"Unfinished choice", runs:"Recorded adoption paths", futures:"Three possible futures", fields:"Comparison and uncertainty", scenarioId:"Scenario", modelVersion:"Model version" };
+const DECISION_UNITS = { humanHours:"staff hours", costEUR:"euro extra cost", automated:"automatic requests", assisted:"assisted requests", wrongA:"wrong group A outcomes", wrongB:"wrong group B outcomes", retentionDays:"days of added AI transcript storage", energyUnits:"energy index units" };
+// Results come from the fixed graph, not from the stored numbers: a tampered or stale run must not be shown as fact.
+function decisionResults(activity, run) {
+  const terminal = (activity.nodes || []).find((n) => n.id === run?.terminalId);
+  const keys = activity.metricKeys || [];
+  if (!terminal || !Array.isArray(terminal.metrics) || terminal.metrics.length !== keys.length) return "Invalid saved run — not recomputable";
+  return keys.map((k, i) => `${terminal.metrics[i]} ${DECISION_UNITS[k] || k}`).join(", ");
+}
+function decisionDisplay(activity, key, value) {
+  if (!activity || activity.kind !== "decision") return value;
+  const node = (id) => (activity.nodes || []).find((n) => n.id === id);
+  const cardLabel = (id) => { const card = (activity.evidence || []).find((e) => e.id === id); return card ? `${card.id} — ${card.status}` : (id || "no evidence cited"); };
+  const step = (s) => `${node(s?.nodeId)?.title || s?.nodeId || "unknown node"} → ${(node(s?.nodeId)?.choices || []).find((c) => c.id === s?.choiceId)?.label || s?.choiceId || "no choice"} · cited ${cardLabel(s?.evidenceId)} · ${String(s?.reason || "").trim() || "no reason given"}`;
+  if (key === "path") return (Array.isArray(value) ? value : []).map(step);
+  if (key === "draft") { const d = value && typeof value === "object" ? value : {}; return d.choiceId || d.evidenceId || d.reason ? { Choice: d.choiceId || "—", Evidence: d.evidenceId ? cardLabel(d.evidenceId) : "—", Reason: d.reason || "—" } : ""; }
+  if (key === "runs") return (Array.isArray(value) ? value : []).map((run) => ({ Path: (Array.isArray(run?.path) ? run.path : []).map(step).join(" | "), Outcome: `${node(run?.terminalId)?.title || run?.terminalId || "unknown outcome"} (modelled possibility)`, Results: decisionResults(activity, run) }));
+  if (key === "futures") return Object.fromEntries((activity.futureLabels || []).map(([k, label]) => [label, `Run ${value?.[k]?.runId ?? "—"}: ${String(value?.[k]?.text || "").trim() || "no scenario written"}`]));
+  if (key === "fields") return Object.fromEntries((activity.fields || []).map(([k]) => [DECISION_KEYS.fields, String(value?.[k] || "").trim()]));
+  return value;
 }
 function renderValue(value) {
   if (value == null || value === "") return '<span class="muted">No response</span>';
@@ -126,7 +150,7 @@ async function openStudent(id) {
               <div class="student-answer">${reflection?esc(reflection):'<span class="muted">No reflection submitted.</span>'}</div>
               <h4>Activity evidence</h4>
               ${activity && typeof activity==="object" && Object.keys(activity).length
-                ? `<div class="activity-evidence">${Object.entries(activity).map(([key,value])=>`<div class="evidence-item"><strong>${esc(activityLabel(session.activity,key))}</strong><div>${renderValue(value)}</div></div>`).join("")}</div>`
+                ? `<div class="activity-evidence">${Object.entries(activity).map(([key,value])=>`<div class="evidence-item"><strong>${esc(activityLabel(session.activity,key))}</strong><div>${renderValue(decisionDisplay(session.activity,key,value))}</div></div>`).join("")}</div>`
                 : '<p class="muted">No activity evidence saved.</p>'}
             </div>
           </details>`;

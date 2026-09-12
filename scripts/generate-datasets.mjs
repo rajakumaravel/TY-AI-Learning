@@ -2,7 +2,7 @@
 // Pure Node (zlib for PNG), plus the system `zip` binary for archives. Run: node scripts/generate-datasets.mjs
 import { deflateSync } from 'node:zlib';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, writeFileSync, rmSync, readdirSync, statSync } from 'node:fs';
+import { mkdirSync, writeFileSync, rmSync, readdirSync, statSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const OUT = 'public/datasets';
@@ -900,6 +900,280 @@ Tutor b6s2: [SUPPORTED] a denominator counts equal parts of the whole; halving q
 The b6s6 draft's unresolved-items caveat is [SUPPORTED] by the four held records and brief. Restore it and preserve human approval. The polite request is [ACCEPTED]; completeness is [WRONG] as a factual claim and [REJECTED] as an edit.
 
 DISCLOSURE DISCUSSION: accept justified contextual choices, not a universal yes/no rule. Private brainstorming may need no disclosure; assessed work should follow training centre expectations; a CV must not imply invented experience; a workplace report should explain material AI assistance and human checks; creative authorship depends on audience and agreed expectations. Students may check expectations first and explain a reasonable disagreement. The learning contract should name who verifies, decides or approves before proceeding.
+`);
+
+// ---------- Chapter 7: Our AI Future. One fixed decision fixture, read from curriculum.json; answers only in docs/teacher.
+const BLOCK7 = JSON.parse(readFileSync(new URL('../curriculum.json', import.meta.url), 'utf8')).blocks.find(b => b.id === 'block7');
+const FUTURE = BLOCK7.sessions.find(s => s.id === 'b7s4').activity;
+const FUTURE_NODE = id => FUTURE.nodes.find(n => n.id === id);
+const FUTURE_CARD = id => FUTURE.evidence.find(e => e.id === id);
+const FUTURE_METRICS = node => Object.fromEntries(FUTURE.metricKeys.map((k, i) => [k, node.metrics[i]]));
+function futureResult(node) {
+  const m = FUTURE_METRICS(node);
+  const hoursReleased = FUTURE.scenario.baseline[0] - m.humanHours;
+  const rateA = m.wrongA / FUTURE.scenario.groups[0][2] * 100, rateB = m.wrongB / FUTURE.scenario.groups[1][2] * 100;
+  return {
+    ...m, hoursReleased,
+    capacityValueEUR: hoursReleased * FUTURE.scenario.hourValueEUR - m.costEUR,
+    manual: 100 - m.automated - m.assisted, wrongTotal: m.wrongA + m.wrongB,
+    rateA, rateB, gap: Math.abs(rateB - rateA)
+  };
+}
+const futureBase = futureResult({ metrics: FUTURE.scenario.baseline });
+const futureEUR = n => `${n < 0 ? '−' : ''}€${Math.abs(n).toFixed(2)}`;
+const futureLine = node => { const r = futureResult(node);
+  return `hours ${r.humanHours.toFixed(1)} (released ${r.hoursReleased.toFixed(1)}); cost ${futureEUR(r.costEUR)}; capacity value ${futureEUR(r.capacityValueEUR)}; automatic ${r.automated} / assisted ${r.assisted} / manual ${r.manual} of 100; wrong ${r.wrongTotal}/100 (A ${r.wrongA}/80 = ${r.rateA.toFixed(2)}%, B ${r.wrongB}/20 = ${r.rateB.toFixed(2)}%, gap ${r.gap.toFixed(2)} points); AI transcript retention ${r.retentionDays} days; energy index ${r.energyUnits}`; };
+const futureFile = (name, text) => writeFileSync(join(OUT, `ai-future-${name}`), text);
+const FUTURE_STARTS = FUTURE_NODE('start').choices;
+const FUTURE_MIDS = FUTURE_STARTS.map(c => FUTURE_NODE(c.next));
+const FUTURE_TERMINALS = FUTURE_MIDS.flatMap(n => n.choices.map(c => FUTURE_NODE(c.next)));
+const FUTURE_TASKS = ['checking order status', 'drafting a routine reply', 'interpreting an unclear return request', 'explaining a refusal', 'resolving an unusual complaint', 'correcting a wrong record', 'supporting a customer without digital access', 'deciding an exception'];
+const FUTURE_STAKEHOLDERS = ['Service worker', 'Customer', 'Service manager (employer)', 'Public-interest regulator', 'Customer needing a staffed language or access route'];
+const FUTURE_CAREERS = ['teacher', 'doctor', 'farmer', 'architect', 'engineer', 'journalist', 'tradesperson', 'designer', 'accountant', 'or one of your own'];
+
+futureFile('evidence-cards.txt', `Case evidence cards (Chapter 7, Our AI Future) — ${FUTURE.scenario.title}
+Every person, observation and count here is synthetic. It is a fictional exercise, not a study of a real retailer, and none of it predicts 2035.
+
+Role: ${FUTURE.scenario.role}. ${FUTURE.scenario.brief}
+
+Groups in the one modelled week of 100 routine requests:
+${FUTURE.scenario.groups.map(([id, label, n]) => `- Group ${id}: ${label} — ${n} requests. Group B names a support route, not a kind of person.`).join('\n')}
+Baseline vector (${FUTURE.metricKeys.join(', ')}): ${FUTURE.scenario.baseline.join(', ')}.
+Human task capacity is valued at €${FUTURE.scenario.hourValueEUR} per hour. Hours, costs, retention days and energy units always describe that same week of 100 requests.
+
+=== Root cards: read all four before choosing ===
+${['E1', 'E2', 'E3', 'E4'].map(id => { const c = FUTURE_CARD(id); return `${c.id} [${c.status}]\n${c.text}`; }).join('\n\n')}
+
+=== Branch cards: each is revealed by one starting choice ===
+${['EP', 'EH', 'EF', 'EN'].map(id => { const c = FUTURE_CARD(id); return `${c.id} [${c.status}]\n${c.text}`; }).join('\n\n')}
+
+Scope and caveats:
+- One small week is not a representative study, and the sandbox replay reused the development cases, so it is not independent evidence.
+- Automatic, assisted and manual counts are disjoint and sum to 100. Wrong outcomes are service failures in this exercise; the model does not estimate how badly anyone was harmed.
+- Rates are wrong outcomes within each group's own total. The gap between them is in percentage points, and one number does not settle fairness.
+- Retention counts days of new AI transcript storage only, and the energy units are an invented comparison index. A zero does not mean the service uses no energy or holds no personal data.
+- Released hours are capacity, not jobs. Nothing here supports a claim about redundancies.
+`);
+
+futureFile('career-cards.txt', `Career and domain cards (Chapter 7, Our AI Future)
+
+=== The assessed domain: ${FUTURE.scenario.title} ===
+The three-future pack is built on this one common retail domain, so every future rests on the same comparable evidence.
+Tasks within the retail customer-service job — choose five for your career transformation map, with at least one judged automated, one augmented and one strongly human:
+${FUTURE_TASKS.map((t, i) => `${i + 1}. ${t}`).join('\n')}
+The audit measured ten staff hours on routine request handling only. The whole job also contains stock work, relationships and unusual cases, and time released is not a count of jobs lost.
+
+Stakeholder roles for the stakeholder lens, matching the book's worker, customer or citizen, employer, regulator and someone at risk of being excluded:
+${FUTURE_STAKEHOLDERS.map(s => `- ${s}`).join('\n')}
+
+=== Optional transfer prompts: other careers and domains ===
+The book's list: ${FUTURE_CAREERS.join(', ')}.
+Use one of these to practise breaking a job into tasks and asking, for each task, whether it is likely to be automated, augmented or still strongly human.
+Changing the assessed pack to another domain requires new evidence for that domain. Do not transplant the Harbour Co-op counts, costs, error rates or retention days into a school, hospital, farm or newsroom: they were observed in a different fictional exercise and mean nothing outside it.
+`);
+
+futureFile('career-map.csv', 'task,possible_change,evidence_and_assumption,human_capability_and_responsibility\n' + ',,,\n'.repeat(5));
+
+futureFile('branch-cards.txt', `Branching paper walkthrough (Chapter 7, Our AI Future) — the same choices and consequences as the portal, with no recommended route.
+
+How to use it: read the root card and its four evidence cards. Pick one starting choice, write down why and which card you are citing, then follow its "next" id to that node. Read the new evidence card there, choose again for the same reasons, and read the terminal card. Record its results. Then restart from the root with a different starting choice, three times in all, including no deployment.
+There is no correct route, no winner and no score. Every terminal below is a modelled possibility, not a measured follow-up result.
+
+Units: hours, euro and counts all describe one modelled week of 100 routine requests (80 group A, 20 group B). Vector order: ${FUTURE.metricKeys.join(', ')}.
+Arithmetic: hoursReleased = ${FUTURE.scenario.baseline[0]} − humanHours; capacityValueEUR = hoursReleased × ${FUTURE.scenario.hourValueEUR} − costEUR; manual = 100 − automated − assisted; wrongTotal = wrongA + wrongB; rateA = wrongA / 80 × 100; rateB = wrongB / 20 × 100; gap = |rateB − rateA| in percentage points. Capacity value is released task capacity less extra cost, not cash profit or wages saved. A negative value is a valid result.
+
+=== ROOT: ${FUTURE_NODE('start').id} — ${FUTURE_NODE('start').title} ===
+Evidence: ${FUTURE_NODE('start').evidenceIds.join(', ')}. Metrics: none yet; the baseline is ${FUTURE.scenario.baseline.join(', ')}.
+Consequence: ${FUTURE_NODE('start').consequence}
+Accountability: ${FUTURE_NODE('start').accountability}
+Uncertainty: ${FUTURE_NODE('start').uncertainty}
+Choices:
+${FUTURE_STARTS.map(c => `- [${c.id}] ${c.label} → go to ${c.next}`).join('\n')}
+
+${FUTURE_MIDS.map(n => `=== NODE: ${n.id} — ${n.title} ===
+New evidence: ${n.evidenceIds.join(', ')}. Metrics: ${n.metrics.join(', ')}.
+Results: ${futureLine(n)}
+Consequence: ${n.consequence}
+Accountability: ${n.accountability}
+Uncertainty: ${n.uncertainty}
+Choices:
+${n.choices.map(c => `- [${c.id}] ${c.label} → go to ${c.next}`).join('\n')}`).join('\n\n')}
+
+${FUTURE_TERMINALS.map(n => `=== TERMINAL: ${n.id} — ${n.title} ===
+Evidence: ${n.evidenceIds.join(', ')}. Metrics: ${n.metrics.join(', ')}.
+Modelled results: ${futureLine(n)}
+Consequence: ${n.consequence}
+Accountability: ${n.accountability}
+Uncertainty: ${n.uncertainty}
+No further choices.`).join('\n\n')}
+
+Record for each run: both choices, the evidence you cited, your reason, and the terminal results. Then write your three futures on the scenario canvas and decide yourself which run is optimistic, which is concerning and which is balanced.
+`);
+
+futureFile('decision-log.csv', 'run,node,choice,evidence_available,alternatives_considered,reason_chosen,consequence,would_I_decide_differently_now\n' + ',,,,,,,\n'.repeat(6));
+
+futureFile('scenario-canvas.md', `# 2035 scenario canvas
+
+Career or public service: ________________  Name: ________________  Date: ________
+
+Each scenario needs a technology change, a human response, and an unintended consequence. No scenario is allowed to be “everything's fine” or “everything's ruined”.
+
+## Optimistic
+
+- Selected run (id and both choices):
+- Technology change:
+- Human response:
+- Unintended consequence:
+- What the case evidence supports (card id, count and its stated limit):
+- What I am assuming about 2035:
+
+## Concerning
+
+- Selected run (id and both choices):
+- Technology change:
+- Human response:
+- Unintended consequence:
+- What the case evidence supports (card id, count and its stated limit):
+- What I am assuming about 2035:
+
+## Balanced
+
+- Selected run (id and both choices):
+- Technology change:
+- Human response:
+- Unintended consequence:
+- What the case evidence supports (card id, count and its stated limit):
+- What I am assuming about 2035:
+
+## Stakeholder impacts
+
+${FUTURE_STAKEHOLDERS.map(s => `- ${s}: benefits and risks across the three futures | evidence and limit | whose interests clash and which safeguard still costs something`).join('\n')}
+
+## Future skills
+
+- Capability 1, and the task on my map where it matters:
+- Capability 2, and the task on my map where it matters:
+- Capability 3, and the task on my map where it matters:
+- One concrete action during TY: what, when, and evidence that I tried:
+
+## Governance choice
+
+- The proposal I argued for, and the strongest objection to it:
+- Who can override, correct or stop the service, and how a customer reaches them:
+
+## Final recommendation
+
+- Approach (pilot / human+AI / full automation / no deployment) and its conditions:
+- Alternative considered, who gains and who carries the risk:
+- Accountable role, review or stop trigger, and the next evidence to collect:
+
+## Evidence prompts (universal)
+
+- Prediction: what I expected before I started.
+- Attempt: what I actually did.
+- Result: what happened, with the count or card that shows it.
+- Surprise: what I did not expect.
+- Change: what I would do differently next time.
+- Transfer: where else this reasoning applies.
+`);
+
+futureFile('stakeholder-analysis.csv', 'stakeholder,three_future_impacts,evidence_and_limit,conflict_and_safeguard\n' + FUTURE_STAKEHOLDERS.map(s => `${csvField(s)},,,`).join('\n') + '\n');
+
+futureFile('policy-cards.txt', `Policy choice cards (Chapter 7, Our AI Future)
+
+THE PROPOSAL
+"High-stakes AI decisions must always have human review."
+This is a proposal for debate. It is not a description of current law, and nothing here tells you what any legal duty is.
+
+1. Argue for it. Use your own retailer runs. Which decisions went wrong, for whom, and what would a human check have caught?
+2. Argue against it. What does human review cost in time, money and delay? What does it fail to fix? Which decisions would it slow down for no benefit?
+3. Distinguish routine from high-stakes. A routine order-status reply and a disputed refusal that materially affects a customer are not the same risk. Where would you draw the line, and what happens to the cases on each side of it?
+4. Answer the strongest objection. Not the weakest one. Write the objection you find hardest, then your response.
+5. Name who can correct, override or stop the service, and how a customer actually reaches that person.
+
+COUNTERPOINT FROM THE CASE
+${FUTURE_CARD('EH').id} [${FUTURE_CARD('EH').status}]: ${FUTURE_CARD('EH').text}
+Compare the two review branches you can reach from Human+AI: ${FUTURE_NODE('human-resource').title} and ${FUTURE_NODE('human-targets').title}. An approval click is not the same thing as a person checking, and a review step alone did not remove the unequal error rates.
+
+There is no verdict card. Two students can argue opposite positions well, and the debate reflection is where you say what changed your view or why it survived.
+`);
+
+futureFile('skills-card.md', `# Future skills card
+
+Chosen future (which recorded run, and why it matters to me): ________________
+
+Suggested capabilities: critical judgement, communication, empathy, domain knowledge, negotiating priorities. Choose three, or name your own and justify it. Tie each one to a task on your career transformation map, not to a general claim about the future of work.
+
+## Capability 1
+
+- Capability:
+- Where it matters in my chosen future:
+- Why, using a task from my map and a case card:
+
+## Capability 2
+
+- Capability:
+- Where it matters in my chosen future:
+- Why, using a task from my map and a case card:
+
+## Capability 3
+
+- Capability:
+- Where it matters in my chosen future:
+- Why, using a task from my map and a case card:
+
+## One concrete action during TY
+
+- What I will do:
+- When:
+- Evidence that I tried:
+`);
+
+writeFileSync(join('docs/teacher', 'ai-future-adoption.KEY.txt'), `TEACHER KEY — Chapter 7 Our AI Future, AI Adoption Decision Simulator. Never deploy under public/ and never link it as a student download.
+Every path, vector and result below is computed from the same block7 decision fixture in curriculum.json that the portal and the student downloads use.
+
+THE GRAPH: 1 root, ${FUTURE_MIDS.length} intermediate nodes, ${FUTURE_TERMINALS.length} terminals, ${FUTURE.nodes.length} nodes and ${FUTURE.nodes.reduce((n,x)=>n+((x.choices||[]).length),0)} edges. Every complete path has exactly two choices. No hidden threshold, probability, random event or extra ending exists, and metrics are replaced at each node rather than accumulated.
+UNITS: one modelled week of 100 routine requests, 80 group A (standard digital) and 20 group B (language or access support). Vector order ${FUTURE.metricKeys.join(', ')}. hoursReleased = ${FUTURE.scenario.baseline[0]} − humanHours; capacityValueEUR = hoursReleased × ${FUTURE.scenario.hourValueEUR} − costEUR; manual = 100 − automated − assisted; rateA = wrongA/${FUTURE.scenario.groups[0][2]} × 100; rateB = wrongB/${FUTURE.scenario.groups[1][2]} × 100; gap = |rateB − rateA| in percentage points. Capacity value is released task capacity less extra cost: not profit, not wages saved, not a redundancy forecast. Negative values are valid results.
+
+BASELINE / NO-DEPLOYMENT OBSERVATION: ${FUTURE.scenario.baseline.join(', ')} → ${futureBase.wrongTotal}/100 wrong, A ${futureBase.wrongA}/${FUTURE.scenario.groups[0][2]} = ${futureBase.rateA.toFixed(2)}%, B ${futureBase.wrongB}/${FUTURE.scenario.groups[1][2]} = ${futureBase.rateB.toFixed(2)}%, gap ${futureBase.gap.toFixed(2)} points, capacity value ${futureEUR(futureBase.capacityValueEUR)}.
+
+ALL EIGHT PATH IDENTITIES AND RESULTS:
+${FUTURE_MIDS.map(mid => { const start = FUTURE_STARTS.find(c => c.next === mid.id); return mid.choices.map(c => { const t = FUTURE_NODE(c.next); return `${start.id} → ${c.id} (${start.label} → ${c.label}); terminal ${t.id}; cards ${t.evidenceIds.join(' + ')}; vector ${t.metrics.join(', ')}\n  ${futureLine(t)}\n  Accountability: ${t.accountability}\n  Next evidence: ${t.uncertainty}`; }).join('\n'); }).join('\n')}
+
+INTERMEDIATE OBSERVATIONS (shown before the second choice):
+${FUTURE_MIDS.map(n => `${n.id} (card ${n.evidenceIds.join(', ')}): ${futureLine(n)}`).join('\n')}
+
+CONCEPT QUIZ KEY (b7s2, "A task, a general capability, or a forecast?"):
+${BLOCK7.sessions.find(s => s.id === 'b7s2').activity.items.map(([q, a], i) => `${i + 1}. ${q} → ${a}`).join('\n')}
+The three sortable kinds are a narrow system trained for specific tasks, the hypothesis of broad human-like capability, and an uncertain forecast about the future. A convincing performance on one task settles nothing about general capability, and a stated arrival year is a forecast however confidently it is written.
+
+OBSERVATION VERSUS ASSUMPTION:
+Observations inside this fiction: E1 (the audit week), E2 (the sandbox replay), E3 (what people said), and the four branch observations EP/EH/EF/EN. Assumptions: everything in E4 — the €${FUTURE.scenario.hourValueEUR} hour value, the unknown purchase cost, the retention definition and the invented energy index — plus every terminal vector, which is a modelled possibility and not a measured follow-up.
+Limitations of the reused small sample: E2 replays the same 100 cases used while developing the prototype, so it cannot evidence future performance; E1 is one week of one part of one job; no customer consultation or workforce agreement exists (E3). Counts this small move by whole requests, so a one-request difference in group B shifts rateB by ${(100/FUTURE.scenario.groups[1][2]).toFixed(2)} points.
+
+DISCUSSION POINTS:
+- Task versus job. The measured ten hours cover routine request handling only. Released capacity is time someone must decide how to use; it is not evidence about jobs. Expect students to name the tasks the audit never measured.
+- Residual risk. No terminal reaches zero wrong outcomes. ${FUTURE_NODE('human-resource').id} is the lowest at ${futureResult(FUTURE_NODE('human-resource')).wrongTotal}/100 and still leaves B at ${futureResult(FUTURE_NODE('human-resource')).rateB.toFixed(2)}%; ${FUTURE_NODE('full-speed').id} reaches a gap of ${futureResult(FUTURE_NODE('full-speed')).gap.toFixed(2)} points.
+- Privacy. Retention counts new AI transcript days only. The no-deployment routes show 0 because no new AI transcripts exist, not because the service holds no personal data.
+- Exclusion. Group B is a support route. Every route that improves the headline figures should be checked against what happens to the customer who needs a staffed phone or counter.
+- Accountability. The retailer stays responsible when a supplier runs the model; forwarding complaints does not transfer the duty. A named role who can override, correct, pause or stop is the test of a governance answer.
+- Sustainability. The energy index is invented for comparison only. Do not let it be quoted as kWh or carbon.
+
+HOW OPPOSING RECOMMENDATIONS ARE BOTH JUSTIFIED:
+A student prioritising equal service quality can defend ${FUTURE_NODE('human-resource').id} or ${FUTURE_NODE('pilot-support').id}: the smallest gaps, at the cost of most of the capacity gain (capacity value ${futureEUR(futureResult(FUTURE_NODE('human-resource')).capacityValueEUR)} and ${futureEUR(futureResult(FUTURE_NODE('pilot-support')).capacityValueEUR)}).
+A student prioritising capacity under stated safeguards can defend ${FUTURE_NODE('full-audit').id}: appeals and short retention with automation retained.
+A student prioritising precaution can defend ${FUTURE_NODE('none-train').id} or ${FUTURE_NODE('none-wait').id}: no new AI exposure, modest or no improvement, existing errors unchanged.
+A fully developed no-deployment recommendation earns the same formative level as a supported pilot or human+AI recommendation. ${FUTURE_NODE('full-speed').id} has the highest capacity value, ${futureEUR(futureResult(FUTURE_NODE('full-speed')).capacityValueEUR)}, and the worst group B outcome; the highest number is not the answer.
+
+UNSUPPORTED CLAIMS TO CHALLENGE:
+- "Eight released hours means jobs will go." The model values capacity, not employment, and E3 records the opposite request from workers.
+- "No AI means no risk." ${FUTURE_NODE('none-wait').id} keeps ${futureResult(FUTURE_NODE('none-wait')).wrongTotal}/100 wrong and a ${futureResult(FUTURE_NODE('none-wait')).gap.toFixed(2)}-point gap, and the queue and access difficulties remain.
+- "An audit removes the harm." ${FUTURE_NODE('full-audit').id} still leaves ${futureResult(FUTURE_NODE('full-audit')).wrongTotal}/100 wrong and a customer may suffer an error before any appeal.
+- "Human review guarantees oversight." ${FUTURE_NODE('human-targets').id} shows approvals rising and errors with them.
+- "The sandbox shows it works." E2 reuses the development cases and is not independent evidence.
+- "The optimistic future is the one with the best numbers." Students assign the three labels themselves and must justify each from their own runs.
+
+NO TERMINAL IS CORRECT. There is no combined score and no ranked outcome anywhere in the fixture. Assess the reasoning, the cited evidence, the alternative considered, the named accountable role and the stated trigger — not which approach the student chose.
 `);
 
 rmSync(WORK, { recursive: true, force: true });
