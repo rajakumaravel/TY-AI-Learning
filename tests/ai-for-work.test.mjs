@@ -4,10 +4,12 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import vm from 'node:vm';
-import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { CAPSTONES, assessChapterCapstone } from '../lib/chapter-capstone.mjs';
 import { PROJECT_BRIEFS, projectReadyForSubmission } from '../lib/project-briefs.mjs';
 
+// Phase 7: Chapter 6 AI for Learning & Work, Student Book pp. 28–31.
+// Run the existing UI helpers as written; no browser cleaning model or live AI is needed.
 const read=p=>fs.readFileSync(p,'utf8');
 const course=JSON.parse(read('curriculum.json')),b=course.blocks.find(b=>b.id==='block6');
 const contract=read('docs/product/phase-7-contract.md'),app=read('app.js');
@@ -46,12 +48,27 @@ test('Chapter 6 metadata and verbatim book fields match the binding contract',()
   assert.deepEqual(b.sessions.map(s=>s.activity.kind),['lab','lab','textfields','lab','textfields','lab','chain','textfields']);
   assert.deepEqual(b.sessions.map(s=>s.activity.fields?.length||0),[4,4,3,7,4,4,0,3]);
   assert.equal(b.lab.title,'AI-assisted Workplace Task');
-  assert.deepEqual(b.lab.stages.map(r=>r.slice(0,2)),[['DO','b6s2'],['TEST','b6s3'],['MAKE','b6s4'],['BREAK','b6s5'],['IMPROVE','b6s6'],['PROVE','b6s8']]);
+  assert.equal(b.lab.summary,'You learn with an AI tutor, clean a small event budget, check every claim against your spreadsheet and produce a briefing that shows where you kept responsibility.');
+  assert.deepEqual(b.lab.stages,[['DO','b6s2','Use a tutor that makes you think'],['TEST','b6s3','Explain the concept without AI'],['MAKE','b6s4','Preserve, clean and analyse the budget'],['BREAK','b6s5','Check the numbers and remove unsupported claims'],['IMPROVE','b6s6','Edit a professional briefing'],['PROVE','b6s8','Set your human checks and disclosure rules']]);
   const words=b.sessions.flatMap(s=>s.study.keywords);
   for(const word of ['AI tutor','scaffolding','metacognition','drafting','critique','workflow','human-in-the-loop','disclosure','authorship','digital productivity'])assert.ok(words.includes(word),word);
   for(const s of b.sessions){assert.equal(s.pageRef,'Student Book pp. 28–31');assert.ok(s.intro&&s.activity.title&&s.activity.instructions&&s.reflection);assert.equal(s.study.body.length,3);assert.ok(s.study.title&&s.study.example&&s.study.keywords.length>=3);assert.doesNotMatch(s.study.example,/249|35\.57|€300/)}
   const reflections={b6s3:"What did you understand today that you couldn't explain before?",b6s5:'Which part of this work are you personally accountable for?',b6s6:'Which AI suggestion did you reject, and why?',b6s7:'Would you be comfortable explaining your AI use to the training centre or an employer?',b6s8:'Where in your workflow must a person stop, check or approve before the next step, and why?'};
   for(const [id,value] of Object.entries(reflections))assert.equal(session(id).reflection,value);
+});
+
+test('session evidence fields and labels follow the contract exactly',()=>{
+  for(const s of b.sessions){
+    const section=contract.split(`**${s.id} `)[1].split(/\n\n\*\*b6s|\n\nNo new activity kind/)[0];
+    if(s.activity.fields){
+      const fields=[...section.matchAll(/"([^"\n]*…[^"\n]*)"/g)].map(m=>m[1]);
+      assert.equal(fields.length,s.activity.fields.length,`${s.id} contract fields found`);
+      assert.deepEqual(s.activity.fields,fields,s.id);
+    }
+    const label=section.match(/Evidence label "([^"]+)"/)[1];
+    assert.ok(s.activity.instructions.includes(`Evidence: ${label}.`),s.id);
+  }
+  for(const id of ['b6s1','b6s2','b6s6'])assert.equal(session(id).activity.steps.length,5,id);
 });
 
 test('four AI sessions each repeat the exact notices, tool route and both fallbacks',()=>{
@@ -92,7 +109,10 @@ test('real reused renderers expose raw viewer, steps, fields, fallback and ackno
     const s=session(sid);state.activity[sid]={};let html=context.activityBodyHTML(s);
     assert.match(html,/class="lab"/);assert.match(html,/data-ack/);assert.match(html,/aria-disabled="true"/);assert.match(html,/id="labFallback"[^>]*hidden/);
     assert.equal((html.match(/<textarea data-i=/g)||[]).length,s.activity.fields.length);
-    assert.match(html,/class="steps"/);assert.ok(html.includes(vm.runInContext('esc',context)(s.activity.steps[0])));
+    assert.match(html,/class="steps"/);
+    const escape=vm.runInContext('esc',context);
+    for(const text of [...s.activity.steps,...s.activity.fields,...s.activity.privacy,...s.activity.fallback.steps])assert.ok(html.includes(escape(text)),`${sid}: ${text}`);
+    assert.match(html,/id="labToolLink"[^>]*href="https:\/\/duck.ai"/);assert.match(html,/data-fallback/);
     state.activity[sid]={mode:'fallback'};html=context.activityBodyHTML(s);assert.match(html,/id="labFallback" class="lab-fallback" >/);assert.match(html,/aria-disabled="true"/);
     state.activity[sid].ack=true;html=context.activityBodyHTML(s);assert.match(html,/data-ack checked/);assert.match(html,/aria-disabled="false"/);
   }
@@ -103,18 +123,49 @@ test('real reused renderers expose raw viewer, steps, fields, fallback and ackno
   assert.ok(read('styles.css').includes('.block-6{background:'));
 });
 
+test('lab controls preserve evidence when acknowledging and switching fallback routes',()=>{
+  for(const sid of toolIds){
+    const s=session(sid),localState={activity:{[sid]:{}}},attributes={},classes=new Set();let syncs=0;
+    const fields=s.activity.fields.map((_,i)=>({tagName:'TEXTAREA',dataset:{i:String(i)},value:answers[sid][i],closest:()=>null,addEventListener(type,handler){assert.equal(type,'input');this.input=handler}}));
+    const ack={checked:false},button={},fallback={hidden:true};
+    const link={classList:{toggle(name,on){if(on)classes.add(name);else classes.delete(name)}},setAttribute(name,value){attributes[name]=value}};
+    const panel={querySelectorAll:selector=>selector==='[data-i]'?fields:[],querySelector:selector=>({'[data-ack]':ack,'[data-fallback]':button}[selector]||null)};
+    const document={getElementById:id=>({lessonPanel:panel,labToolLink:link,labFallback:fallback}[id]||null)};
+    const ui=vm.createContext({state:localState,document,scheduleSync:()=>syncs++});
+    vm.runInContext(lineFunction(app,'wireActivity'),ui);
+    vm.runInContext(lineFunction(app,'activityReady'),ui);
+    ui.wireActivity(s);fields.forEach(f=>f.input());
+    const saved=Object.fromEntries(fields.map((f,i)=>[i,f.value]));
+    button.onclick();assert.equal(localState.activity[sid].mode,'fallback');assert.equal(fallback.hidden,false);assert.equal(ui.activityReady(s),false);
+    ack.checked=true;ack.onchange();assert.equal(attributes['aria-disabled'],'false');assert.equal(classes.has('disabled'),false);assert.equal(ui.activityReady(s),true);
+    button.onclick();assert.equal(localState.activity[sid].mode,'tool');assert.equal(fallback.hidden,true);assert.equal(button.textContent,'Tool blocked?');
+    for(const [i,value] of Object.entries(saved))assert.equal(localState.activity[sid][i],value);
+    ack.checked=false;ack.onchange();assert.equal(attributes['aria-disabled'],'true');assert.equal(classes.has('disabled'),true);assert.equal(ui.activityReady(s),false);
+    assert.equal(syncs,fields.length+4,'each evidence edit and control change is saved');
+  }
+});
+
 test('incomplete answers fail; samples require acknowledgement; short chain decisions pass',()=>{
   for(const s of b.sessions.filter(s=>s.activity.kind!=='chain')){
     state.activity[s.id]={};assert.equal(context.activityReady(s),false,s.id);
     state.activity[s.id]=Object.fromEntries(answers[s.id].map((v,i)=>[i,v]));
     if(s.activity.kind==='lab'){state.activity[s.id].mode='fallback';assert.equal(context.activityReady(s),false,`${s.id} sample still needs ack`);state.activity[s.id].ack=true}
     assert.equal(context.activityReady(s),true,s.id);
-    for(let i=0;i<s.activity.fields.length;i++){const previous=state.activity[s.id][i];state.activity[s.id][i]='too short';assert.equal(context.activityReady(s),false,`${s.id} field ${i}`);state.activity[s.id][i]=previous}
+    for(let i=0;i<s.activity.fields.length;i++){
+      const previous=state.activity[s.id][i];
+      for(const invalid of ['', '   ', 'I tried it.', ' I tried it. ']){state.activity[s.id][i]=invalid;assert.equal(context.activityReady(s),false,`${s.id} field ${i}: ${JSON.stringify(invalid)}`)}
+      state.activity[s.id][i]='I checked it';assert.equal(context.activityReady(s),true,`${s.id} field ${i}: exactly 12 characters`);
+      state.activity[s.id][i]=previous;
+    }
   }
   const chain=session('b6s7');const rows=Object.fromEntries(disclosures.map((r,i)=>[i,Object.fromEntries(chain.activity.columns.map(([k],j)=>[k,r[j]]))]));
   state.activity.b6s7=rows;assert.equal(rows[0].decision,'no');assert.equal(context.activityReady(chain),true);
-  delete rows[4];assert.equal(context.activityReady(chain),false);rows[4]={scenario:'creative',decision:'no',reason:' ',wording:'private'};assert.equal(context.activityReady(chain),false);
-  const admin=read('admin.js');assert.match(admin,/activity\.kind === "lab"/);assert.match(admin,/Chain row/);
+  for(let i=0;i<5;i++)for(const [field] of chain.activity.columns){const previous=rows[i][field];rows[i][field]=' ';assert.equal(context.activityReady(chain),false,`row ${i} ${field}`);rows[i][field]=previous}
+  delete rows[4];assert.equal(context.activityReady(chain),false);
+  const admin=read('admin.js');vm.runInContext(admin.slice(admin.indexOf('function activityLabel('),admin.indexOf('function renderValue(')),context);
+  for(const s of b.sessions)for(const [i,label] of (s.activity.fields||[]).entries())assert.equal(context.activityLabel(s.activity,String(i)),label);
+  assert.equal(context.activityLabel(session('b6s4').activity,'ack'),'Safety notice acknowledged');assert.equal(context.activityLabel(session('b6s4').activity,'mode'),'Lab mode');
+  for(let i=0;i<5;i++)assert.equal(context.activityLabel(chain.activity,String(i)),`Chain row ${i+1}`);
 });
 
 test('raw CSV exactly preserves the contract fixture and independent reference calculation',()=>{
@@ -122,6 +173,11 @@ test('raw CSV exactly preserves the contract fixture and independent reference c
   assert.equal(rawText,contract.split('```csv\n')[1].split('```')[0]);
   const raw=plain(context.parseCSV(rawText));assert.deepEqual(raw.columns,['item_id','category','item','quantity','unit_cost_eur']);assert.equal(raw.rows.length,12);assert.ok(raw.rows.every(r=>r.length===5));
   assert.equal(raw.rows[1][1],'materials ');assert.equal(raw.rows[8][3],'');assert.equal(raw.rows[9][3],'-1');assert.equal(raw.rows[3][4],'€1.50');assert.deepEqual(raw.rows[10],raw.rows[2]);assert.equal(raw.rows[11][3],'20');
+  assert.equal(raw.rows.flat().filter(v=>v==='').length,1);
+  const repeated=Object.values(Object.groupBy(raw.rows,r=>r[0])).filter(group=>group.length>1);
+  assert.equal(repeated.length,2);assert.equal(repeated.filter(group=>new Set(group.map(r=>JSON.stringify(r))).size>1).length,1);
+  assert.equal(raw.rows.filter(r=>r[3]!==''&&(!Number.isInteger(Number(r[3]))||Number(r[3])<1||Number(r[3])>100)).length,1);
+  for(const [i,row] of raw.rows.entries())assert.ok(key.includes(`${i+1}: ${row.join(',')}\n`),`key preserves source row ${i+1}`);
   const snapshot=JSON.stringify(raw.rows),seen=new Set(),removed=[];
   const retained=raw.rows.map((r,i)=>({r:[...r],source:i+1})).filter(x=>{const sig=JSON.stringify(x.r);if(seen.has(sig)){removed.push(x.source);return false}seen.add(sig);return true});
   const conflicts=retained.filter(x=>retained.some(y=>x.source!==y.source&&x.r[0]===y.r[0]));assert.deepEqual(conflicts.map(x=>x.source),[7,12]);assert.deepEqual(removed,[11]);
@@ -130,10 +186,25 @@ test('raw CSV exactly preserves the contract fixture and independent reference c
   const totals={Venue:0,Materials:0,Catering:0,Transport:0};let normalisations=0,currency=0;
   for(const x of retained){const before=x.r[1];x.r[1]=({materials:'Materials',transport:'Transport',Vneue:'Venue'})[before.trim()]||before.trim();if(x.r[1]!==before)normalisations++;if(x.r[4].startsWith('€')){currency++;x.r[4]=x.r[4].slice(1)}}
   assert.equal(normalisations,3);assert.equal(currency,1);
+  assert.deepEqual(retained.filter(x=>x.r[1]!==raw.rows[x.source-1][1]).map(x=>[x.source,raw.rows[x.source-1][1],x.r[1]]),[[2,'materials ','Materials'],[5,'transport','Transport'],[8,'Vneue','Venue']]);
+  assert.equal(Number(retained.find(x=>x.source===4).r[4]),1.50);
+  assert.ok(retained.every(x=>Number(x.r[4])>=0&&Number(x.r[4])<=500));
+  assert.equal(retained.length,11);assert.equal(eligible.length,7);assert.equal(held.length,4);assert.equal(raw.rows.length,removed.length+eligible.length+held.length);
+  for(const x of held)assert.deepEqual(x.r,raw.rows[x.source-1],`held source row ${x.source} stays unchanged`);
+  assert.deepEqual(eligible.map(x=>Number(x.r[3])*Number(x.r[4])),[80,20,18,15,60,36,20]);
   for(const x of eligible)totals[x.r[1]]+=Number(x.r[3])*Number(x.r[4]);
   assert.deepEqual(totals,{Venue:100,Materials:35,Catering:54,Transport:60});const subtotal=Object.values(totals).reduce((a,b)=>a+b,0);assert.equal(subtotal.toFixed(2),'249.00');assert.equal((subtotal/eligible.length).toFixed(2),'35.57');
   assert.equal(JSON.stringify(raw.rows),snapshot,'working-copy transformations preserve raw');assert.equal(held.find(x=>x.source===9).r[3],'');assert.equal(held.find(x=>x.source===10).r[3],'-1');
   for(const re of [/12 rows, 5 fields, 1 blank cell, 1 surplus exact-duplicate row, 2 repeated-ID groups of which 1 is conflicting, 1 invalid quantity, 3 category-normalisation cells and 1 currency-format cell/,/11 retained rows/,/7, 9, 10, 12/,/1, 2, 3, 4, 5, 6, 8/,/249\.00/,/35\.57/,/SUM\(/,/COUNTIF\(/,/SUMIF\(/,/Do not claim zero outstanding issues/])assert.match(key,re);
+  for(const [category,total] of Object.entries(totals))assert.ok(key.includes(`${category} ${total.toFixed(2)}`),category);
+  for(const pattern of [/2 \/ category.*Materials.*brief category rule/,/4 \/ unit_cost_eur.*numeric 1\.50.*euro per unit unchanged.*brief units rule/,/5 \/ category.*Transport.*brief category rule/,/8 \/ category.*Venue.*explicit mapping/,/11 \/ whole row.*all five fields match row 3/,/7 \/ item_id and quantity.*flag and hold.*cannot tell whether 2 or 20/,/12 \/ item_id and quantity.*flag and hold.*no source supports choosing either/,/9 \/ quantity.*leave blank.*no evidence/,/10 \/ quantity.*retain -1.*refunds not recorded/,/1 missing and 1 invalid quantity.*2 conflicting records remain held/])assert.match(key,pattern);
+});
+
+test('workplace source rules justify corrections and forbid guessing unresolved values',()=>{
+  const brief=read('public/datasets/ai-work-workplace-brief.txt');
+  for(const pattern of [/All prices are euro per unit\. Unit cost is from 0 to 500 inclusive/,/Quantity is an integer from 1 to 100\. Refunds are not recorded/,/Valid categories: Venue \/ Materials \/ Catering \/ Transport/,/Each item ID identifies one cost line/,/Trim category whitespace, standardise category case and map Vneue to Venue/,/Convert an explicit euro price to a number without changing its value/,/Compare every field before removing an exact duplicate/,/Hold both records of a conflicting ID until the source is checked/,/Missing and invalid quantities remain flagged, not guessed/,/no attendance, income, historical comparison or complete-event-cost evidence/,/partial subtotal, not a complete budget/])assert.match(brief,pattern);
+  assert.match(brief,/LibreOffice Calc, installed before the session, and Writer/);
+  assert.match(brief,/sample replaces chat, not your own cleaning, calculations or final work product/);
 });
 
 test('downloads and templates are complete, unfilled and never expose the teacher answer',()=>{
@@ -142,6 +213,10 @@ test('downloads and templates are complete, unfilled and never expose the teache
   for(const s of b.sessions)for(const d of s.activity.downloads||[]){assert.ok(d.label&&d.note);assert.ok(fs.existsSync(`public/datasets/${d.file}`));assert.doesNotMatch(d.file,/KEY/)}
   const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
   assert.deepEqual(walk('public').filter(f=>/KEY/i.test(f)),[]);
+  assert.equal(path.relative(path.resolve('public'),path.resolve(teacher)).startsWith('../'),true);
+  assert.doesNotMatch(JSON.stringify(manifest),/KEY|docs\/teacher/);
+  assert.doesNotMatch(JSON.stringify(b),/KEY|docs\/teacher|249\.00|35\.57/);
+  for(const f of walk('public/datasets').filter(f=>/\.(?:csv|txt|md|json)$/.test(f)))assert.doesNotMatch(read(f),/ai-work-event-budget\.KEY|TEACHER KEY — Chapter 6|Eligible subtotal 249\.00|Mean eligible line cost 249 \/ 7/ ,f);
   const csv=f=>plain(context.parseCSV(read(`public/datasets/ai-work-${f}.csv`)));
   assert.deepEqual(csv('data-dictionary').columns,['field','meaning','type','unit','allowed_values_or_range','missing_or_conflict_rule','source']);assert.equal(csv('data-dictionary').rows.length,5);assert.ok(csv('data-dictionary').rows.every(r=>r.slice(1).every(v=>v==='')));
   assert.deepEqual(csv('cleaning-log').columns,['Row / field','Original','Issue','Action','Reason','Verified by']);assert.ok(csv('cleaning-log').rows.every(r=>r.every(v=>v==='')));
@@ -155,14 +230,27 @@ test('downloads and templates are complete, unfilled and never expose the teache
 });
 
 test('Chapter 6 generation is repeatable and matches the checked-in downloads and teacher key',()=>{
-  const src=read('scripts/generate-datasets.mjs');const part=src.slice(src.indexOf('// ---------- Chapter 6:'),src.indexOf('rmSync(WORK, { recursive: true, force: true });\nconst manifest'));
-  assert.ok(part.length>10000);const temp=fs.mkdtempSync(path.join(os.tmpdir(),'ai-work-generation-'));
-  const run=()=>{const output=new Map();const sandbox={OUT:'public/datasets',join:path.join,writeFileSync:(name,value)=>{const target=path.join(temp,name);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,value);output.set(name,fs.readFileSync(target))}};vm.runInNewContext(part,sandbox);return output};
-  try{const first=run(),second=run();assert.equal(first.size,files.length+1);for(const [name,bytes] of first){assert.deepEqual(second.get(name),bytes,name);assert.deepEqual(fs.readFileSync(name),bytes,`${name} committed content`)}}finally{fs.rmSync(temp,{recursive:true,force:true})}
+  // Run the entire generator in two clean directories, including its manifest wiring.
+  // Its unrelated timestamped cup/bottle archives never touch the working tree.
+  const temp=fs.mkdtempSync(path.join(os.tmpdir(),'ai-work-generation-'));
+  const run=name=>{
+    const cwd=path.join(temp,name);fs.mkdirSync(cwd);
+    execFileSync(process.execPath,[path.resolve('scripts/generate-datasets.mjs')],{cwd,stdio:'pipe'});
+    const generated=JSON.parse(read(path.join(cwd,'public/datasets/manifest.json')));
+    assert.deepEqual(Object.keys(generated).filter(f=>f.startsWith('ai-work-')).sort(),[...files].sort());
+    assert.doesNotMatch(JSON.stringify(generated),/KEY|docs\/teacher/);
+    for(const f of files)assert.equal(generated[f],fs.statSync(path.join(cwd,'public/datasets',f)).size,f);
+    return new Map([...files.map(f=>`public/datasets/${f}`),teacher].map(f=>[f,fs.readFileSync(path.join(cwd,f))]));
+  };
+  try{const first=run('first'),second=run('second');assert.equal(first.size,files.length+1);for(const [name,bytes] of first){assert.deepEqual(second.get(name),bytes,name);assert.deepEqual(fs.readFileSync(name),bytes,`${name} committed content`)}}finally{fs.rmSync(temp,{recursive:true,force:true})}
 });
 
 test('Chapter 6 project and server gate use existing progression and imported evidence shapes',()=>{
   const api=read('functions/api/[[path]].js');assert.ok(api.includes("block6:['b6s1','b6s2','b6s3','b6s4','b6s5','b6s6','b6s7','b6s8']"));assert.match(api,/const blockOrder=Object\.keys\(requiredSessions\)/);
+  const server=vm.createContext({});vm.runInContext(api.match(/^const requiredSessions=.*$/m)[0]+'\nglobalThis.sessions=requiredSessions;',server);
+  assert.deepEqual(Object.keys(server.sessions),['block1','block2','block3','block4','block5','block6']);
+  assert.deepEqual(plain(server.sessions.block6),ids);
+  assert.deepEqual(plain(server.sessions.block5),['b5s1','b5s2','b5s3','b5s4','b5s5','b5s6','b5s7','b5s8','b5s9']);
   const brief=PROJECT_BRIEFS.block6;assert.equal(brief.title,'AI-assisted Workplace Briefing');assert.equal(brief.role,'Junior Operations Assistant');assert.equal(brief.client,'Training centre events team');assert.equal(brief.objective,b.mission);
   assert.deepEqual(brief.deliverables,['AI tutor prompt and learning note','Spreadsheet, document or presentation','Data Cleaning Log and validation evidence','Filled human-review checklist','Professional briefing and editing decisions','Disclosure choices','AI-use learning contract','Final recommendation']);
   for(const re of [/tutor prompt/,/claim checks/,/responsibility/,/repeatable workflow/,/human checkpoints/,/rejected AI suggestions/,/disclosure/i])assert.match(brief.acceptanceCriteria.join(' '),re);
@@ -170,6 +258,10 @@ test('Chapter 6 project and server gate use existing progression and imported ev
   const evidence=plain(context.labEvidenceItems({activity},'block6'));assert.equal(evidence.length,6);assert.ok(evidence.every(e=>e.note.length<=4000));
   assert.match(evidence.find(e=>/Workplace workflow/.test(e.label)).note,/Row \/ field.*11 retained.*249\.00/s);
   assert.match(evidence.find(e=>/Human review/.test(e.label)).note,/Removed attendance.*events lead/s);
+  for(const [,sid] of b.lab.stages){
+    const s=session(sid),note=evidence.find(e=>e.label===`Lab: ${s.title}`).note;
+    for(const [i,label] of s.activity.fields.entries())assert.ok(note.includes(`${label} ${answers[sid][i]}`),`${sid}: imported field ${i} is not truncated`);
+  }
   const values=Object.fromEntries(disclosures.map((row,i)=>[i,Object.fromEntries(session('b6s7').activity.columns.map(([k],j)=>[k,row[j]]))]));
   const disclosure=context.summariseActivity(session('b6s7'),values);assert.match(disclosure,/Private brainstorming → no →/);
   evidence.push({label:'Disclosure choices',url:'',note:disclosure});
@@ -186,4 +278,19 @@ test('Chapter 6 capstone rewards feedback-specific evidence and gates vocabulary
   for(const blockId of ['block1','block2','block3','block4','block5'])assert.equal(assessChapterCapstone({blockId,answers:{q1:unique}}).criteria.understanding,0,blockId);
   assert.deepEqual(assessChapterCapstone({blockId:'block2',answers:{0:'Accuracy is 80%.',1:'Background.',2:'Retest.'}}).criteria,{understanding:1,evidence:1,reasoning:1,ownWords:0});
   assert.equal(assessChapterCapstone({blockId:'block5',answers:{q1:'Provenance and lateral reading show the proxy entered at deployment; the automation bias is a lifecycle problem.'}}).criteria.understanding,1);
+});
+
+test('Chapter 6 concept, action and scenario vocabulary is recognised without changing earlier scoring',()=>{
+  const criteria=(blockId,text)=>assessChapterCapstone({blockId,answers:{0:text}}).criteria;
+  const concepts=['AI tutor','scaffolding','metacognition','drafting','critique','workflow','human-in-the-loop','disclosure','authorship','accountability','productivity','data cleaning','validation','formula','duplicate','missing'];
+  for(const word of concepts)assert.equal(criteria('block6',word).understanding,1,word);
+  for(const word of ['preserve','profile','define','clean','flag','validate','calculate','check','verify','compare','explain','reject','revise','disclose','approve'])assert.equal(criteria('block6',word).reasoning,1,word);
+  for(const word of ['placement','workshop','feedback','rating','ratings','attendee','attendees','satisfied','unanswered','returned form','returned forms'])assert.equal(criteria('block6',word).evidence,1,word);
+  for(const blockId of ['block1','block2','block3','block4','block5']){
+    // These concepts were absent from Chapters 1–5. Their existing action regex still matches "human".
+    for(const word of concepts.filter(w=>!['data cleaning','duplicate','missing'].includes(w)))assert.deepEqual(criteria(blockId,word),{understanding:0,evidence:0,reasoning:word==='human-in-the-loop'?1:0,ownWords:0},`${blockId}: ${word}`);
+    for(const word of ['preserve','profile','define','clean','validate','calculate','explain','reject','revise','disclose','approve'])assert.equal(criteria(blockId,word).reasoning,0,`${blockId}: ${word}`);
+    assert.deepEqual(criteria(blockId,'Duplicate data needs a human check because the result is inconsistent.'),{understanding:1,evidence:1,reasoning:2,ownWords:0},`${blockId}: existing shared vocabulary`);
+    assert.deepEqual(criteria(blockId,'Accuracy is 80%.'),{understanding:1,evidence:1,reasoning:0,ownWords:0},`${blockId}: original accuracy scoring`);
+  }
 });
