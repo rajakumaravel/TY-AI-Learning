@@ -62,6 +62,10 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus,h3[tabindex="-1"]:focus{outline:
 .text-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 12px;margin:0 0 18px -12px;border-radius:8px}
 .text-btn:hover{background:#e9edf3}
 .route-card summary{display:flex;align-items:center;gap:9px;min-height:44px;padding:6px 0}
+/* Dataset and fallback download links sit inside a list, where the anchor was only as tall as its text (18px). */
+.downloads li{margin:0}
+.downloads li a{display:inline-flex;align-items:center;min-height:28px;padding:5px 0}
+.lab-fallback a,.example a{display:inline-flex;align-items:center;min-height:28px}
 .lab-ack{align-items:center;gap:10px}
 .lab-ack input{width:24px;height:24px;flex:none;margin:0;accent-color:#0f7a70}
 
