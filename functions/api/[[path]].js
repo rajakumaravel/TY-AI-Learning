@@ -132,12 +132,14 @@ async function handleCore(context,path){
   if(path==='admin/analytics'&&method==='GET'){
     const admin=await requireAdmin(context); if(admin.error)return admin.error;
     const [{data:progress,error:perr},{data:formative,error:ferr},{data:chapters,error:cerr}]=await Promise.all([
-      db.from('learner_progress').select('state'),db.from('formative_assessments').select('suggested_level,teacher_level'),db.from('chapter_assessments').select('suggested_level,teacher_level')]);
+      db.from('learner_progress').select('user_id,state'),db.from('formative_assessments').select('user_id,suggested_level,teacher_level'),db.from('chapter_assessments').select('user_id,suggested_level,teacher_level')]);
+    const {data:roster,error:rerr}=await db.from('learners').select('user_id'); if(rerr)throw rerr;
+    const byUser=new Map((progress||[]).map(p=>[p.user_id,p.state||{}]));
     if(perr||ferr||cerr)throw perr||ferr||cerr;
     return json({analytics:computePilotAnalytics({
-      learnerStates:(progress||[]).map(p=>p.state||{}),
-      formativeAssessments:(formative||[]).map(a=>({suggestedLevel:a.suggested_level,teacherLevel:a.teacher_level})),
-      chapterAssessments:(chapters||[]).map(a=>({suggestedLevel:a.suggested_level,teacherLevel:a.teacher_level}))
+      learnerStates:(roster||[]).map(l=>byUser.get(l.user_id)||{}),
+      formativeAssessments:(formative||[]).map(a=>({learnerId:a.user_id,suggestedLevel:a.suggested_level,teacherLevel:a.teacher_level})),
+      chapterAssessments:(chapters||[]).map(a=>({learnerId:a.user_id,suggestedLevel:a.suggested_level,teacherLevel:a.teacher_level}))
     })});
   }
   const detail=path.match(/^admin\/student\/([^/]+)$/);

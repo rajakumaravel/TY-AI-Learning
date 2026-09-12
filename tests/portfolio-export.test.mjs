@@ -120,3 +120,9 @@ test('index.html carries the two labelled export controls',()=>{
   assert.match(index,/id="exportPortfolio"/);
   assert.match(index,/id="exportCoordinatorSummary"/);
 });
+
+test('both artefacts are readable on a phone: the exported document declares a viewport',()=>{
+  for(const html of [buildPortfolioExport(fixture()),buildCoordinatorSummary(fixture())]){
+    assert.match(html,/<meta name="viewport" content="width=device-width/,'a document read on a phone needs a viewport');
+  }
+});

@@ -284,6 +284,12 @@ try {
   const smallCounts = await da.page.$$eval('#adminAnalytics td:not([data-suppressed])', els =>
     els.map(e => e.textContent.trim()).filter(t => /^[1-4]$/.test(t)));
   check('admin analytics view never shows a count below the suppression threshold', smallCounts.length === 0, JSON.stringify(smallCounts));
+  // The tables must actually render. They were empty for a while because the renderer passed CSS selectors to a
+  // getElementById helper, and only this check would have caught it.
+  const analyticsRows = await da.page.$$('#adminAnalytics [data-measure] tbody tr');
+  check('admin analytics tables render their rows', analyticsRows.length > 0, String(analyticsRows.length));
+  check('admin analytics shows a suppressed cell or a real count, never an empty table',
+    (await da.page.$$('#adminAnalytics [data-suppressed]')).length > 0 || smallCounts.length === 0 && analyticsRows.length > 0);
   const analyticsText = await da.page.textContent('#adminAnalytics').catch(() => '');
   check('admin analytics view names no learner id, display name or reviewed_by', noIdentifiers(analyticsText, [a.id, admin.id, p10.id, a.displayName, p10.displayName].filter(Boolean)));
   await da.context.close();

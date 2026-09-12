@@ -6,6 +6,7 @@ let identity = null;
 let students = [];
 
 const $ = (id) => document.getElementById(id);
+const $q = (sel) => document.querySelector(sel);
 const esc = (value="") => String(value).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt = (value) => value ? new Intl.DateTimeFormat("en-IE",{dateStyle:"medium",timeStyle:"short"}).format(new Date(value)) : "—";
 
@@ -126,19 +127,19 @@ function ensureAnalyticsSection() {
 function renderAnalytics(analytics) {
   ensureAnalyticsSection();
   $("analyticsNote").textContent = analytics.note;
-  $('[data-measure="completion"] tbody').innerHTML = analytics.completion.buckets.map((b) => `<tr><td>${b.chaptersCompleted}</td>${analyticsCell(b)}</tr>`).join("");
-  $('[data-measure="improvement"] tbody').innerHTML = analytics.improvement.categories.map((c) => `<tr><td>${esc(c.change)}</td>${analyticsCell(c)}</tr>`).join("");
-  $('[data-measure="dropoff"] tbody').innerHTML = analytics.dropoff.chapters.map((c) => `<tr><td>${esc(blockLabel(c.blockId))}</td>${analyticsCell(c)}</tr>`).join("");
-  $('[data-measure="agreement"] tbody').innerHTML = analytics.agreement.matrix.map((m) => `<tr><td>${esc(m.suggestedLevel)}</td><td>${esc(m.teacherLevel)}</td>${analyticsCell(m)}</tr>`).join("");
-  $('[data-measure="labs"] tbody').innerHTML = analytics.labs.chapters.map((c) => `<tr><td>${esc(blockLabel(c.blockId))}</td>${analyticsCell(c)}</tr>`).join("");
-  const feedback = $('[data-measure="feedback"]');
+  $q('[data-measure="completion"] tbody').innerHTML = analytics.completion.buckets.map((b) => `<tr><td>${b.chaptersCompleted}</td>${analyticsCell(b)}</tr>`).join("");
+  $q('[data-measure="improvement"] tbody').innerHTML = analytics.improvement.categories.map((c) => `<tr><td>${esc(c.change)}</td>${analyticsCell(c)}</tr>`).join("");
+  $q('[data-measure="dropoff"] tbody').innerHTML = analytics.dropoff.chapters.map((c) => `<tr><td>${esc(blockLabel(c.blockId))}</td>${analyticsCell(c)}</tr>`).join("");
+  $q('[data-measure="agreement"] tbody').innerHTML = analytics.agreement.matrix.map((m) => `<tr><td>${esc(m.suggestedLevel)}</td><td>${esc(m.teacherLevel)}</td>${analyticsCell(m)}</tr>`).join("");
+  $q('[data-measure="labs"] tbody').innerHTML = analytics.labs.chapters.map((c) => `<tr><td>${esc(blockLabel(c.blockId))}</td>${analyticsCell(c)}</tr>`).join("");
+  const feedback = $q('[data-measure="feedback"]');
   feedback.innerHTML = analytics.feedback.suppressed
     ? `<p data-suppressed>${esc(analytics.feedback.label)}</p>`
     : (analytics.feedback.quotes.length ? `<ul class="feedback-quotes">${analytics.feedback.quotes.map((q) => `<li>“${esc(q)}”</li>`).join("")}</ul>` : `<p class="muted">No eligible quotations.</p>`);
 }
 async function loadAnalytics() {
   try { const { analytics } = await api("admin/analytics"); renderAnalytics(analytics); }
-  catch (error) { console.warn("Analytics", error); }
+  catch (error) { console.warn("Analytics", error); ensureAnalyticsSection(); const note = $("analyticsNote"); if (note) note.textContent = "Pilot analytics could not be loaded. Press Refresh to try again."; }
 }
 function renderStudents() {
   const q = $("studentSearch").value.trim().toLowerCase();

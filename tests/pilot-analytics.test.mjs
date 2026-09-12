@@ -24,9 +24,9 @@ test('a cohort of four suppresses and a cohort of five does not',()=>{
 });
 
 test('improvement classifies the change between suggested and teacher level',()=>{
-  const formative=[...Array(5)].map(()=>({suggestedLevel:'Getting started',teacherLevel:'Getting there'}))
-    .concat([...Array(6)].map(()=>({suggestedLevel:'Getting there',teacherLevel:'Getting there'})))
-    .concat([...Array(5)].map(()=>({suggestedLevel:'Going further',teacherLevel:'Getting there'})));
+  const formative=[...Array(5)].map((_,i)=>({learnerId:`L${i}-a`,suggestedLevel:'Getting started',teacherLevel:'Getting there'}))
+    .concat([...Array(6)].map((_,i)=>({learnerId:`L${i}-b`,suggestedLevel:'Getting there',teacherLevel:'Getting there'})))
+    .concat([...Array(5)].map((_,i)=>({learnerId:`L${i}-a`,suggestedLevel:'Going further',teacherLevel:'Getting there'})));
   const {categories}=computeImprovement(formative,[]);
   const byChange=Object.fromEntries(categories.map((c)=>[c.change,c]));
   assert.equal(byChange.improved.count,5);
@@ -35,9 +35,9 @@ test('improvement classifies the change between suggested and teacher level',()=
 });
 
 test('improvement ignores unreviewed assessments and pools formative and chapter assessments',()=>{
-  const formative=[...Array(5)].map(()=>({suggestedLevel:'Getting started',teacherLevel:'Getting there'}));
+  const formative=[...Array(5)].map((_,i)=>({learnerId:`L${i}-a`,suggestedLevel:'Getting started',teacherLevel:'Getting there'}));
   const unreviewed=[...Array(9)].map(()=>({suggestedLevel:'Getting started',teacherLevel:null}));
-  const chapters=[...Array(5)].map(()=>({suggestedLevel:'Getting started',teacherLevel:'Getting there'}));
+  const chapters=[...Array(5)].map((_,i)=>({learnerId:`L${i}-a`,suggestedLevel:'Getting started',teacherLevel:'Getting there'}));
   const {categories}=computeImprovement([...formative,...unreviewed],chapters);
   const improved=categories.find((c)=>c.change==='improved');
   assert.equal(improved.count,10);
@@ -54,7 +54,7 @@ test('drop-off maps each learner to the chapter of their last completed session'
 });
 
 test('agreement matrix has no reviewed_by and covers every level pair',()=>{
-  const chapters=[...Array(5)].map(()=>({suggestedLevel:'Getting there',teacherLevel:'Going further'}));
+  const chapters=[...Array(5)].map((_,i)=>({learnerId:`L${i}-a`,suggestedLevel:'Getting there',teacherLevel:'Going further'}));
   const {matrix}=computeAgreement([],chapters);
   assert.equal(matrix.length,9);
   const cell=matrix.find((m)=>m.suggestedLevel==='Getting there'&&m.teacherLevel==='Going further');
@@ -63,14 +63,17 @@ test('agreement matrix has no reviewed_by and covers every level pair',()=>{
   assert.equal(JSON.stringify(matrix).includes('reviewedBy'),false);
 });
 
-test('Experience Lab completion requires every lab-kind session in the chapter',()=>{
-  const done=[...Array(5)].map(()=>learner(['b1lab']));
-  const partial=[...Array(5)].map(()=>learner([]));
+// The measure is the chapter's Experience Lab stages, not its lab-kind sessions. Chapters 5 and 7 have six stages
+// and no lab-kind session at all, so measuring by kind dropped them and let a part-done Chapter 1 count as complete.
+test('Experience Lab completion requires every stage of the chapter lab, in all eight chapters',async()=>{
+  const { COURSE_SHAPE }=await import('../lib/course-shape.mjs');
+  const stages=(id)=>COURSE_SHAPE.blocks.find((b)=>b.id===id).labStageSessionIds;
+  const done=[...Array(5)].map(()=>learner(stages('block1')));
+  const partial=[...Array(5)].map(()=>learner(['b1lab']));
   const {chapters}=computeLabCompletion([...done,...partial]);
-  const block1=chapters.find((c)=>c.blockId==='block1');
-  assert.equal(block1.count,5);
-  assert.equal(chapters.some((c)=>c.blockId==='block5'),false);
-  assert.equal(chapters.length,6);
+  assert.equal(chapters.length,8,'every chapter has an Experience Lab');
+  assert.equal(chapters.find((c)=>c.blockId==='block1').count,5,'only the learners who finished every stage count');
+  for(const id of ['block5','block7'])assert.ok(chapters.some((c)=>c.blockId===id),`${id} has lab stages and must appear`);
 });
 
 test('qualitative feedback drops text with a likely name or number and is unattributed',()=>{
@@ -94,7 +97,7 @@ test('feedback suppresses below five contributing learners',()=>{
 test('no analytics output carries a learner id, display name or reviewed_by',()=>{
   const analytics=computePilotAnalytics({
     learnerStates:[...Array(5)].map((_,i)=>learner(['b1s1'],{b8s8:{'8':'I now double-check claims before I share them'}})),
-    formativeAssessments:[...Array(5)].map(()=>({suggestedLevel:'Getting started',teacherLevel:'Getting there'})),
+    formativeAssessments:[...Array(5)].map((_,i)=>({learnerId:`L${i}-a`,suggestedLevel:'Getting started',teacherLevel:'Getting there'})),
     chapterAssessments:[]
   });
   const serialised=JSON.stringify(analytics);
@@ -126,5 +129,6 @@ test('the server course shape matches curriculum.json',async()=>{
     const shape=COURSE_SHAPE.blocks.find(b=>b.id===block.id);
     assert.deepEqual(shape.sessionIds,block.sessions.map(s=>s.id),`${block.id} sessions`);
     assert.deepEqual(shape.labSessionIds,block.sessions.filter(s=>s.activity?.kind==='lab').map(s=>s.id),`${block.id} lab sessions`);
+    assert.deepEqual(shape.labStageSessionIds,[...new Set((block.lab?.stages||[]).map(x=>x[1]))],`${block.id} lab stage sessions`);
   }
 });
