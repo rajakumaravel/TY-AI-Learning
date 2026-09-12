@@ -523,8 +523,8 @@ export async function completeChapter8UI(page, afterSession = async () => {}) {
   await page.waitForFunction(()=>/COMPLETE/.test(document.getElementById('chapterCapstoneHost')?.textContent||''),null,{timeout:20000});
   check('Chapter 8 capstone qualified, so a review recommending the non-AI option reaches the highest level',/Going further/.test(await page.textContent('#chapterCapstoneHost')));
   await page.click('#homeBtn');
-  await page.waitForSelector('.programme-complete',{timeout:15000});
-  check('Home shows the programme-complete state and implies no ninth chapter',/Programme complete/i.test(await page.textContent('.programme-complete'))&&!(await page.$('[data-block="8"]')));
+  await page.waitForSelector('#homeView .programme-complete',{timeout:15000});
+  check('Home shows the programme-complete state and implies no ninth chapter',/Programme complete/i.test(await page.textContent('#homeView .programme-complete'))&&!(await page.$('[data-block="8"]')));
   await page.click('[data-block="7"]');
   await page.waitForSelector('#projectWorkspaceBtn-block8',{timeout:15000});
   await page.click('#projectWorkspaceBtn-block8');
@@ -550,6 +550,6 @@ export async function completeChapter8UI(page, afterSession = async () => {}) {
   check('Chapter 8 project submitted with the individual reflection and final recommendation',/submitted/i.test(await page.textContent('.pw-status'))&&kept.some(r=>r.label==='Individual reflection'&&r.note.includes('success criteria before building')));
   await page.click('.pw-close');
   await page.click('#portfolioBtn');
-  await page.waitForSelector('.programme-complete',{timeout:15000});
-  check('Portfolio shows the programme complete with the AI Innovator badge',/AI Innovator/i.test(await page.textContent('.programme-complete')));
+  await page.waitForSelector('#portfolioView .programme-complete',{timeout:15000});
+  check('Portfolio shows the programme complete with the AI Innovator badge',/AI Innovator/i.test(await page.textContent('#portfolioView .programme-complete')));
 }
