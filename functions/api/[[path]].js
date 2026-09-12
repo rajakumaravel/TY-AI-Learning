@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { assessReflection } from '../../lib/assessment.mjs';
 import { CAPSTONES, assessChapterCapstone } from '../../lib/chapter-capstone.mjs';
 import { PROJECT_BRIEFS, emptyProjectWorkspace, projectReadyForSubmission, safeEvidenceUrl, validProjectId } from '../../lib/project-briefs.mjs';
+import { computePilotAnalytics } from '../../lib/pilot-analytics.mjs';
 
 const json=(data,status=200)=>Response.json(data,{status,headers:{'cache-control':'no-store'}});
 const allowedLevels=new Set(['Getting started','Getting there','Going further']);
@@ -127,6 +128,17 @@ async function handleCore(context,path){
     if(lerr||perr||ferr||cerr)throw lerr||perr||ferr||cerr;
     const pmap=new Map((progress||[]).map(p=>[p.user_id,p]));
     return json({students:(learners||[]).map(l=>{const p=pmap.get(l.user_id),state=p?.state||{};const fa=(formative||[]).filter(a=>a.user_id===l.user_id);return {id:l.user_id,displayName:l.display_name,createdAt:l.created_at,lastLoginAt:l.last_login_at,updatedAt:p?.updated_at||null,completedCount:Array.isArray(state.completed)?new Set(state.completed).size:0,badgeCount:Array.isArray(state.badges)?new Set(state.badges).size:0,reflectionCount:state.reflections&&typeof state.reflections==='object'?Object.keys(state.reflections).length:0,assessmentCount:fa.length,reviewedCount:fa.filter(a=>a.teacher_level).length,chapterAssessmentCount:(chapters||[]).filter(a=>a.user_id===l.user_id).length}})});
+  }
+  if(path==='admin/analytics'&&method==='GET'){
+    const admin=await requireAdmin(context); if(admin.error)return admin.error;
+    const [{data:progress,error:perr},{data:formative,error:ferr},{data:chapters,error:cerr}]=await Promise.all([
+      db.from('learner_progress').select('state'),db.from('formative_assessments').select('suggested_level,teacher_level'),db.from('chapter_assessments').select('suggested_level,teacher_level')]);
+    if(perr||ferr||cerr)throw perr||ferr||cerr;
+    return json({analytics:computePilotAnalytics({
+      learnerStates:(progress||[]).map(p=>p.state||{}),
+      formativeAssessments:(formative||[]).map(a=>({suggestedLevel:a.suggested_level,teacherLevel:a.teacher_level})),
+      chapterAssessments:(chapters||[]).map(a=>({suggestedLevel:a.suggested_level,teacherLevel:a.teacher_level}))
+    })});
   }
   const detail=path.match(/^admin\/student\/([^/]+)$/);
   if(detail&&method==='GET'){
