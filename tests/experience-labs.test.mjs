@@ -17,7 +17,7 @@ test('every chapter declares an Experience Lab covering all six ADR-005 tests',(
     const ids=new Set(b.sessions.map(s=>s.id));
     assert.deepEqual(b.lab.stages.map(x=>x[0]),TAGS,`${b.id} stage tags`);
     for(const [,sid] of b.lab.stages)assert.ok(ids.has(sid),`${b.id} stage session ${sid} exists`);
-    if(b.id==='block5')assert.ok(!b.sessions.some(s=>s.activity.kind==='lab'||s.activity.tool),'chapter 5 opens no external tool, so it has no lab-kind session (Phase 6 contract)');
+    if(b.id==='block5'||b.id==='block7')assert.ok(!b.sessions.some(s=>s.activity.kind==='lab'||s.activity.tool),`${b.id} opens no external tool, so it has no lab-kind session (Phase 6 and Phase 8 contracts)`);
     else assert.ok(b.sessions.some(s=>s.activity.kind==='lab'),`${b.id} has a lab session`);
   }
 });
@@ -109,4 +109,72 @@ test('lab evidence flows into the project workspace and admin review',()=>{
 test('server requires every chapter 1 session, including the lab, before the capstone',()=>{
   const ids=course.blocks[0].sessions.map(s=>s.id);
   assert.ok(fn.includes(`block1:[${ids.map(id=>`'${id}'`).join(',')}]`));
+});
+
+test('chapter 7 lab is the in-product AI Adoption Decision Simulator with no AI tool and no safety notes',()=>{
+  const b=course.blocks[6];
+  assert.equal(b.lab.title,'AI Adoption Decision Simulator');
+  assert.match(b.lab.summary,/three possible futures/);
+  assert.deepEqual(b.lab.stages,[['DO','b7s3','Map the tasks before choosing AI'],['TEST','b7s1','Separate observation from prediction'],['MAKE','b7s4','Build three futures through branching choices'],['BREAK','b7s5','Challenge each future through five stakeholders'],['IMPROVE','b7s6','Defend and revise a governance choice'],['PROVE','b7s8','Justify the final recommendation']]);
+  assert.deepEqual(b.sessions.map(s=>s.activity.kind),['chain','quiz','chain','decision','chain','textfields','textfields','textfields']);
+  for(const s of b.sessions){assert.equal(s.activity.tool,undefined,`${s.id} has no tool`);assert.equal(s.activity.privacy,undefined,`${s.id} has no safety notes`);assert.equal(s.activity.fallback,undefined,`${s.id} needs no fallback`);assert.doesNotMatch(JSON.stringify(s),/duck\.ai|copilot|teachablemachine/i,`${s.id} links no AI product`)}
+  const d=b.sessions.find(s=>s.id==='b7s4').activity;
+  assert.equal(d.kind,'decision');
+  assert.equal(d.scenario.id,'harbour-retail');
+  assert.equal(d.scenario.role,'AI Adoption Adviser');
+  assert.equal(d.start,'start');
+  assert.equal(d.minRuns,3);
+  assert.deepEqual(d.requiredStarts,['none']);
+  assert.deepEqual(d.metricKeys,['humanHours','costEUR','automated','assisted','wrongA','wrongB','retentionDays','energyUnits']);
+  assert.deepEqual(d.futureLabels.map(f=>f[0]),['optimistic','concerning','balanced']);
+  assert.equal(d.evidence.length,8);
+  assert.equal(d.nodes.length,13);
+  const node=id=>d.nodes.find(n=>n.id===id);
+  const ids=new Set(d.nodes.map(n=>n.id));
+  assert.equal(ids.size,13,'node ids are unique');
+  assert.equal(node('start').metrics,null);
+  assert.equal(node('start').choices.length,4,'four starting options');
+  const terminals=d.nodes.filter(n=>n.choices.length===0);
+  assert.equal(terminals.length,8,'eight terminal outcomes');
+  const cards=new Set(d.evidence.map(e=>e.id));
+  let edges=0;
+  for(const n of d.nodes){
+    assert.ok(n.consequence&&n.accountability&&n.uncertainty,`${n.id} narrative`);
+    for(const e of n.evidenceIds)assert.ok(cards.has(e),`${n.id} cites ${e}`);
+    if(n.metrics!==null)assert.equal(n.metrics.length,8,`${n.id} vector length`);
+    for(const c of n.choices){edges++;assert.ok(ids.has(c.next),`${n.id}/${c.id} resolves`);assert.notEqual(c.next,n.id,'no self edge')}
+  }
+  assert.equal(edges,12,'twelve edges');
+  for(const start of node('start').choices){
+    const mid=node(start.next);
+    assert.equal(mid.choices.length,2,`${mid.id} offers two further choices`);
+    assert.equal(mid.evidenceIds.length,1,`${mid.id} reveals one new card`);
+    for(const c of mid.choices){const t=node(c.next);assert.equal(t.choices.length,0,`${t.id} is terminal`);assert.equal(t.title,c.label,`${t.id} titled by its incoming choice`);assert.deepEqual(t.evidenceIds,[mid.evidenceIds[0],'E4'],`${t.id} cards`)}
+  }
+  const follow=new Set(node('start').choices.flatMap(c=>node(c.next).choices.map(x=>x.id)));
+  assert.equal(follow.size,8,'the further choices differ by starting route');
+  const result=n=>{const m=Object.fromEntries(d.metricKeys.map((k,i)=>[k,n.metrics[i]]));const released=d.scenario.baseline[0]-m.humanHours;return{...m,released,value:released*d.scenario.hourValueEUR-m.costEUR,manual:100-m.automated-m.assisted,wrong:m.wrongA+m.wrongB,rateA:m.wrongA/80*100,rateB:m.wrongB/20*100,gap:Math.abs(m.wrongB/20*100-m.wrongA/80*100)}};
+  for(const t of terminals){
+    const r=result(t);
+    assert.equal(r.manual,100-r.automated-r.assisted);
+    assert.ok(r.manual>=0&&r.automated>=0&&r.assisted>=0,`${t.id} counts are disjoint and non-negative`);
+    assert.ok(r.wrongA<=80&&r.wrongB<=20,`${t.id} errors stay within their group denominators`);
+    assert.equal(t.metrics.length,8);
+  }
+  const worked={'pilot-support':[0.5,-30,5,3.75,10,6.25,7,2],'human-resource':[2,-10,3,1.25,10,8.75,7,6],'full-speed':[8,100,14,5,50,45,90,8],'none-train':[1,-10,6,3.75,15,11.25,0,0]};
+  for(const [id,[released,value,wrong,rateA,rateB,gap,retention,energy]] of Object.entries(worked)){
+    const r=result(node(id));
+    assert.equal(r.released,released,`${id} hours released`);
+    assert.equal(r.value,value,`${id} capacity value`);
+    assert.equal(r.wrong,wrong,`${id} wrong of 100`);
+    assert.equal(Number(r.rateA.toFixed(2)),rateA);
+    assert.equal(Number(r.rateB.toFixed(2)),rateB);
+    assert.equal(Number(r.gap.toFixed(2)),gap);
+    assert.equal(r.retentionDays,retention);
+    assert.equal(r.energyUnits,energy);
+  }
+  const base=result({metrics:d.scenario.baseline});
+  assert.equal(base.wrong,8);assert.equal(base.value,0);assert.equal(Number(base.gap.toFixed(2)),15);
+  assert.ok(Object.keys(d.nodes[0]).every(k=>k!=='score'),'no combined score');
+  assert.doesNotMatch(JSON.stringify(d.nodes),/"correct"|"best"|"winner"|"score"/i,'no correct terminal');
 });

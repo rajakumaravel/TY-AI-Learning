@@ -1,0 +1,26 @@
+Career and domain cards (Chapter 7, Our AI Future)
+
+=== The assessed domain: Harbour Co-op: routine customer requests ===
+The three-future pack is built on this one common retail domain, so every future rests on the same comparable evidence.
+Tasks within the retail customer-service job — choose five for your career transformation map, with at least one judged automated, one augmented and one strongly human:
+1. checking order status
+2. drafting a routine reply
+3. interpreting an unclear return request
+4. explaining a refusal
+5. resolving an unusual complaint
+6. correcting a wrong record
+7. supporting a customer without digital access
+8. deciding an exception
+The audit measured ten staff hours on routine request handling only. The whole job also contains stock work, relationships and unusual cases, and time released is not a count of jobs lost.
+
+Stakeholder roles for the stakeholder lens, matching the book's worker, customer or citizen, employer, regulator and someone at risk of being excluded:
+- Service worker
+- Customer
+- Service manager (employer)
+- Public-interest regulator
+- Customer needing a staffed language or access route
+
+=== Optional transfer prompts: other careers and domains ===
+The book's list: teacher, doctor, farmer, architect, engineer, journalist, tradesperson, designer, accountant, or one of your own.
+Use one of these to practise breaking a job into tasks and asking, for each task, whether it is likely to be automated, augmented or still strongly human.
+Changing the assessed pack to another domain requires new evidence for that domain. Do not transplant the Harbour Co-op counts, costs, error rates or retention days into a school, hospital, farm or newsroom: they were observed in a different fictional exercise and mean nothing outside it.

@@ -2016,6 +2016,605 @@
           "reflection": "Where in your workflow must a person stop, check or approve before the next step, and why?"
         }
       ]
+    },
+    {
+      "id": "block7",
+      "number": "07",
+      "title": "Our AI Future",
+      "duration": "3 hours",
+      "badge": "Future Thinker",
+      "outcomes": ["LO4", "LO8"],
+      "description": "Nobody knows what AI will look like in 2035, including the people building it. That's not a reason to stop thinking about it.",
+      "mission": "Create a 2035 scenario pack for one career or public service. It must show three possible futures, the impact on different stakeholders, the future skills that matter, and one governance choice you'd argue for.",
+      "route": [
+        ["0–20 min", "2026 vs 2035"],
+        ["20–40 min", "Discover: narrow AI and AGI"],
+        ["40–70 min", "Career transformation map"],
+        ["70–100 min", "Three futures"],
+        ["100–125 min", "The stakeholder lens"],
+        ["125–150 min", "Policy choice debate"],
+        ["150–170 min", "Future skills card"],
+        ["170–180 min", "Reflection"]
+      ],
+      "final": "Your 2035 scenario canvas, your career transformation map, your stakeholder analysis, your future skills card, and your debate reflection.",
+      "sessions": [
+        {
+          "id": "b7s1",
+          "title": "2026 vs 2035",
+          "minutes": 20,
+          "type": "PREDICT + TEST",
+          "pageRef": "Student Book pp. 32–35",
+          "intro": "List what AI can do now, then what you think might plausibly exist by 2035. Keep the two lists apart.",
+          "study": {
+            "title": "One list is observation, the other is prediction",
+            "body": ["Start with what you can actually see. A capability you have used, or one recorded in the case evidence cards, is an observation: someone watched it happen and wrote down what it did. A 2035 capability is a prediction: nobody has watched it, so it rests on assumptions about demand, money, reliability and what people will accept.", "Mixing the two lists is the most common mistake in this whole topic. It happens because a prediction written confidently reads exactly like an observation. The fix is mechanical: separate rows, and a basis column that says either what you saw or what you are assuming.", "A scenario is a plausible story about the future, built to think with rather than to predict. Uncertainty is the honest gap between what you know and what you are guessing. Naming that gap is not weakness; it is the thing that lets someone else check your reasoning instead of just believing it."],
+            "example": "At a library lending desk you can observe that the self-service machine reads a barcode and issues a due date. That a 2035 machine will judge whether a damaged book should be charged for is a prediction, and it assumes someone decides who answers when it charges the wrong reader.",
+            "keywords": ["Narrow AI", "Scenario", "Uncertainty"]
+          },
+          "activity": {
+            "kind": "chain",
+            "title": "2026 vs 2035",
+            "instructions": "Write four rows: two observations from a system you have actually used or from the Harbour Co-op evidence cards, then two changes you think could plausibly exist by 2035. Keep observation and prediction in separate rows; never put both in one. In the basis column name what you saw or which evidence card you used, and state the assumption behind any 2035 row. The case facts are observations inside a fictional exercise, not evidence that a real retailer runs this system. No arrival date for AGI counts as an answer here. Evidence: 2026 observations and 2035 assumptions.",
+            "columns": [
+              ["claim", "Capability or change"],
+              ["status", "Observed now / possible in 2035"],
+              ["basis", "What I observed or which evidence card I used; what I am assuming"],
+              ["check", "What this does not prove, and what would change my view"]
+            ],
+            "rows": 4,
+            "minRows": 4,
+            "head": "CAPABILITY → OBSERVATION OR PREDICTION → BASIS → LIMIT",
+            "downloads": [
+              {
+                "file": "ai-future-evidence-cards.txt",
+                "label": "Case evidence cards (text)",
+                "note": "Synthetic observations, stated assumptions and branch evidence."
+              },
+              {
+                "file": "ai-future-career-cards.txt",
+                "label": "Career and domain cards (text)",
+                "note": "The book's career list as optional transfer prompts, plus the Harbour Co-op card with its eight retail tasks and five stakeholder roles. The assessed pack uses the one common retail domain."
+              }
+            ]
+          },
+          "reflection": "Which prediction would be easiest to mistake for a fact, and what evidence would it need?"
+        },
+        {
+          "id": "b7s2",
+          "title": "Discover: narrow AI and AGI",
+          "minutes": 20,
+          "type": "DISCOVER",
+          "pageRef": "Student Book pp. 32–35",
+          "intro": "Every system in this book is narrow. AGI is an idea about something else, and a word headlines use loosely.",
+          "study": {
+            "title": "Narrow systems, a hypothesis, and a forecast",
+            "body": ["Narrow AI means a system built for specific tasks: sorting messages, recognising a plant disease, generating text for a particular job. Everything you have used in this course is narrow, however impressive it looked. Being very good at one task is not evidence of being able to do a different one.", "AGI, artificial general intelligence, is the idea of a system with broad, human-like capability across many kinds of tasks. It is a serious research goal and a hypothesis, not a product you can download. When someone tells you exactly when it will arrive, the useful question is how they know.", "A third kind of sentence appears in the same paragraphs and is neither: a forecast about the future, such as a claim that a whole category of job will vanish by a stated year. Forecasts are built on assumptions, reasonable experts disagree about them, and timelines and impacts are genuinely uncertain. Sorting a sentence into narrow system, hypothetical general capability, or uncertain forecast is most of the skill."],
+            "example": "A library system that predicts which returned books need repair is narrow: it was trained on repair records and nothing else. \"By 2035 no one will work at a lending desk\" is not a statement about that system at all; it is a forecast about demand, funding and what readers want.",
+            "keywords": ["Narrow AI", "AGI", "Uncertainty"]
+          },
+          "activity": {
+            "kind": "quiz",
+            "title": "A task, a general capability, or a forecast?",
+            "instructions": "Sort each statement into one of the three categories. These test the distinction the book draws between narrow systems, the hypothesis of general capability and an uncertain claim about the future. None of them is about which adoption option Harbour Co-op should choose. You can change your answers after reading the study material.",
+            "items": [
+              ["A system trained to sort product messages into request types", "Narrow AI"],
+              ["A model trained to recognise plant disease in images", "Narrow AI"],
+              ["An assistant generating text for a particular task", "Narrow AI"],
+              ["A hypothetical system with broad, human-like capability across many tasks", "AGI (hypothetical)"],
+              ["By 2035 every retail job will disappear", "Uncertain forecast"],
+              ["General AI will definitely arrive in a particular year", "Uncertain forecast"]
+            ],
+            "options": ["Narrow AI", "AGI (hypothetical)", "Uncertain forecast"],
+            "downloads": [
+              {
+                "file": "ai-future-career-cards.txt",
+                "label": "Career and domain cards (text)",
+                "note": "The book's career list as optional transfer prompts, plus the Harbour Co-op card with its eight retail tasks and five stakeholder roles. The assessed pack uses the one common retail domain."
+              }
+            ]
+          },
+          "reflection": "Why does a convincing performance on one task fail to settle a prediction about general intelligence?"
+        },
+        {
+          "id": "b7s3",
+          "title": "Career transformation map",
+          "minutes": 30,
+          "type": "TRY + INVESTIGATE",
+          "pageRef": "Student Book pp. 32–35",
+          "intro": "Break one job into tasks, then judge each task separately against the case evidence.",
+          "study": {
+            "title": "A job is a bundle of tasks",
+            "body": ["Automation means a task done by a machine instead of a person. Augmentation means a person doing a task better or faster with a machine's help. The two are different outcomes with different consequences, and a job contains both at once alongside tasks that stay strongly human.", "Technology usually changes the bundle, not the whole job at once. That is why the unit of analysis here is the task, not the job title. Harbour Co-op's audit measured ten staff hours on routine request handling only; the rest of the job, the stock work, the relationships and the unusual cases, was never measured at all.", "So time released is not a count of jobs lost. It is capacity that someone has to decide what to do with, and that decision is a trade-off: gaining one thing at the cost of another. For every task you judge, name the human capability and the responsibility that stay, because that is what the count of hours does not show."],
+            "example": "At a library lending desk, issuing a book on a barcode is close to automated, recommending a next read is augmented when a suggestion list is only a starting point, and telling a reader that their fine will be waived is strongly human because someone has to answer for the decision.",
+            "keywords": ["Automation", "Augmentation", "Trade-off"]
+          },
+          "activity": {
+            "kind": "chain",
+            "title": "Career transformation map",
+            "instructions": "Use the common domain for this pack: retail customer-service work at fictional Harbour Co-op, so every future rests on comparable evidence. Choose five tasks from the career card: checking order status, drafting a routine reply, interpreting an unclear return request, explaining a refusal, resolving an unusual complaint, correcting a wrong record, supporting a customer without digital access, or deciding an exception. Put at least one task in each category — automated, augmented, strongly human — and justify it from an evidence card rather than sorting by habit. The case's ten measured hours cover routine request handling only; the whole job also contains stock work, relationships and unusual cases, and time released is not a count of jobs lost. Evidence: Career transformation map.",
+            "columns": [
+              ["task", "Task within the retail job"],
+              ["change", "Automated / augmented / strongly human"],
+              ["basis", "Evidence card and assumption behind this judgement"],
+              ["human", "Human capability and responsibility that remain"]
+            ],
+            "rows": 5,
+            "minRows": 5,
+            "head": "TASK → POSSIBLE CHANGE → EVIDENCE AND ASSUMPTION → HUMAN ROLE",
+            "downloads": [
+              {
+                "file": "ai-future-career-cards.txt",
+                "label": "Career and domain cards (text)",
+                "note": "The book's career list as optional transfer prompts, plus the Harbour Co-op card with its eight retail tasks and five stakeholder roles. The assessed pack uses the one common retail domain."
+              },
+              {
+                "file": "ai-future-evidence-cards.txt",
+                "label": "Case evidence cards (text)",
+                "note": "Synthetic observations, stated assumptions and branch evidence."
+              },
+              {
+                "file": "ai-future-career-map.csv",
+                "label": "Career transformation map (CSV)",
+                "note": "Task, possible change, evidence and assumption, human capability and responsibility. Five empty rows."
+              }
+            ]
+          },
+          "reflection": "Does the technology replace a task, or a whole job?"
+        },
+        {
+          "id": "b7s4",
+          "title": "Three futures",
+          "minutes": 30,
+          "type": "MAKE + TEST",
+          "pageRef": "Student Book pp. 32–35",
+          "intro": "Advise Harbour Co-op. Follow three different routes through the same case, then build your three futures from what you actually saw.",
+          "study": {
+            "title": "Choices, consequences and three futures",
+            "body": ["You are the AI Adoption Adviser. Each starting choice reveals a different consequence and a new evidence card, and then offers two further choices; the eight ending points are modelled possibilities, not measured results. There is no winner, no score and no correct route, so the work is the reasoning you record before each choice, not the numbers you reach.", "Read the comparison table as eight separate dimensions: value, tasks, safety, fairness, privacy, accountability, uncertainty and sustainability. They do not add up to one number, and a route that looks best on released capacity can be the worst on the group B error rate. Group B means a support route, not a label for a kind of person.", "Then build the book's three futures from three different routes you recorded. Each scenario needs a technology change, a human response, and an unintended consequence. No scenario is allowed to be “everything's fine” or “everything's ruined”. You decide which recorded route deserves the optimistic, concerning or balanced label and why. The next session's stakeholder lens supplies the fuller impact analysis; these narratives are the canvas, not three predictions of what will happen."],
+            "example": "In a library, an adviser might record one route that automates renewals and one that keeps a staffed counter, and find that the faster route loses the readers who never renew online. That is the unintended consequence, and it comes from the branch evidence rather than from a guess about libraries in general.",
+            "keywords": ["Scenario", "Trade-off", "Uncertainty"]
+          },
+          "activity": {
+            "kind": "decision",
+            "title": "AI Adoption Decision Simulator",
+            "instructions": "Read the case, cite evidence and explain each choice before revealing its consequences. Record three different starting routes, including no deployment, then use them to build three possible 2035 futures. The numbers describe a fictional exercise, not a forecast.",
+            "scenario": {
+              "id": "harbour-retail",
+              "title": "Harbour Co-op: routine customer requests",
+              "role": "AI Adoption Adviser",
+              "brief": "Harbour Co-op is considering AI for routine order and return requests. Advise its service manager using the evidence cards. Compare value, changes to tasks, safety, fairness, privacy, accountability and uncertainty. Customers must still have a way to ask a person for help.",
+              "groups": [
+                ["A", "Standard digital requests", 80],
+                ["B", "Requests needing language or access support", 20]
+              ],
+              "baseline": [10, 0, 0, 0, 4, 4, 0, 0],
+              "hourValueEUR": 20
+            },
+            "metricKeys": ["humanHours", "costEUR", "automated", "assisted", "wrongA", "wrongB", "retentionDays", "energyUnits"],
+            "start": "start",
+            "evidence": [
+              {
+                "id": "E1",
+                "status": "Fictional baseline observation",
+                "text": "A one-week audit covers 100 routine requests: 80 standard digital requests (A) and 20 needing language or access support (B). Staff use 10 hours. Four A requests and four B requests receive a wrong answer or missed resolution. This is one small week, not the whole job or a representative study."
+              },
+              {
+                "id": "E2",
+                "status": "Fictional prototype observation",
+                "text": "A sandbox replay of the same 100 requests, with no live customer decisions, leaves 4 wrong A outcomes and 8 wrong B outcomes when AI answers without review. The same cases were used while developing the prototype, so this is not independent evidence of future performance."
+              },
+              {
+                "id": "E3",
+                "status": "Fictional stakeholder evidence",
+                "text": "The service manager wants more time for complex cases. Workers want training and authority to override AI, not a promise that saved task time means jobs must disappear. The access adviser says a staffed phone or counter route must remain. No customer consultation or workforce agreement has yet been completed."
+              },
+              {
+                "id": "E4",
+                "status": "Model assumption",
+                "text": "Human task capacity is valued at €20 per hour. Costs below are weekly AI, training and support costs; initial purchase costs are unknown. Retention measures days of new AI transcript storage, not the existing order records. Energy units are an invented comparison index for added AI use, not measured kWh or carbon. All 2035 outcomes require assumptions about demand, reliability, staffing and governance."
+              },
+              {
+                "id": "EP",
+                "status": "Fictional pilot observation",
+                "text": "The limited pilot handles 10 requests automatically and assists a person on 10 more. The remaining 80 are handled without AI. The week uses 9 staff hours and €30 extra cost; 3 A and 4 B outcomes remain wrong. Some language and access needs still fall through the support route. Wider rollout has not been tested."
+              },
+              {
+                "id": "EH",
+                "status": "Fictional human+AI observation",
+                "text": "People approve all 100 AI-assisted replies. The week uses 7 staff hours and €40 extra cost; 2 A and 4 B outcomes remain wrong. Reviewers report rushing unfamiliar cases. A human approval step alone has not removed the unequal error rates."
+              },
+              {
+                "id": "EF",
+                "status": "Fictional automation observation",
+                "text": "All 100 routine replies are automatic. The week still uses 3 staff hours on exceptions and complaints and costs €60 extra; 4 A and 8 B outcomes remain wrong. The supplier points to its average performance, while customers ask who can correct an error and restore a human route."
+              },
+              {
+                "id": "EN",
+                "status": "Fictional no-deployment observation",
+                "text": "The service keeps handling all 100 requests without AI: 10 staff hours and no extra AI cost, with 4 A and 4 B outcomes wrong. The queue and language/access difficulties remain. Staff propose clearer scripts and training; keeping the present system is also a choice with consequences."
+              }
+            ],
+            "nodes": [
+              {
+                "id": "start",
+                "title": "Choose an adoption approach",
+                "evidenceIds": ["E1", "E2", "E3", "E4"],
+                "metrics": null,
+                "consequence": "Read the baseline and prototype evidence before choosing. What would this approach change, and what might it miss?",
+                "accountability": "The service manager owns the adoption decision.",
+                "uncertainty": "One small audit and a reused sandbox sample cannot predict 2035.",
+                "choices": [
+                  {
+                    "id": "pilot",
+                    "label": "Pilot",
+                    "next": "pilot-review"
+                  },
+                  {
+                    "id": "human",
+                    "label": "Human+AI",
+                    "next": "human-review"
+                  },
+                  {
+                    "id": "full",
+                    "label": "Full automation",
+                    "next": "full-review"
+                  },
+                  {
+                    "id": "none",
+                    "label": "No deployment",
+                    "next": "none-review"
+                  }
+                ]
+              },
+              {
+                "id": "pilot-review",
+                "title": "The pilot exposes access gaps",
+                "evidenceIds": ["EP"],
+                "metrics": [9, 30, 10, 10, 3, 4, 30, 2],
+                "consequence": "The small pilot releases little time and still misses support needs. Keep its scope and improve access, or expand before wider testing?",
+                "accountability": "The service manager can halt the pilot; staff can correct a reply.",
+                "uncertainty": "Small pilot coverage leaves scale and different users untested.",
+                "choices": [
+                  {
+                    "id": "support",
+                    "label": "Keep the pilot small and fund access support",
+                    "next": "pilot-support"
+                  },
+                  {
+                    "id": "expand",
+                    "label": "Expand now with the existing support",
+                    "next": "pilot-expand"
+                  }
+                ]
+              },
+              {
+                "id": "human-review",
+                "title": "Reviewers are rushing",
+                "evidenceIds": ["EH"],
+                "metrics": [7, 40, 0, 100, 2, 4, 30, 5],
+                "consequence": "Human approval catches some mistakes, but rushed review leaves an access gap. Fund review time and training, or use faster approval targets?",
+                "accountability": "The shift lead must give reviewers time and authority to override.",
+                "uncertainty": "A review checkbox does not establish that a person checked carefully.",
+                "choices": [
+                  {
+                    "id": "resource",
+                    "label": "Fund reviewer time and training",
+                    "next": "human-resource"
+                  },
+                  {
+                    "id": "targets",
+                    "label": "Set faster approval targets",
+                    "next": "human-targets"
+                  }
+                ]
+              },
+              {
+                "id": "full-review",
+                "title": "Complaints need an owner",
+                "evidenceIds": ["EF"],
+                "metrics": [3, 60, 100, 0, 4, 8, 90, 8],
+                "consequence": "Routine replies are fast, but support requests go wrong more often. Add an appeal and audit team, or keep automation and supplier-led complaints?",
+                "accountability": "The retailer remains responsible even when the supplier runs the model.",
+                "uncertainty": "Average performance hides the B error rate and says little about rare serious failures.",
+                "choices": [
+                  {
+                    "id": "audit",
+                    "label": "Add human appeals and targeted audits",
+                    "next": "full-audit"
+                  },
+                  {
+                    "id": "speed",
+                    "label": "Keep automatic replies and supplier-led complaints",
+                    "next": "full-speed"
+                  }
+                ]
+              },
+              {
+                "id": "none-review",
+                "title": "The existing queue remains",
+                "evidenceIds": ["EN"],
+                "metrics": [10, 0, 0, 0, 4, 4, 0, 0],
+                "consequence": "Avoiding AI avoids new transcript storage and AI energy use, but existing errors remain. Improve the manual service, or retain the current process?",
+                "accountability": "The service manager still owns errors and access to support.",
+                "uncertainty": "The baseline can change; doing nothing gives no new evidence about alternatives.",
+                "choices": [
+                  {
+                    "id": "train",
+                    "label": "Improve scripts and train staff without AI",
+                    "next": "none-train"
+                  },
+                  {
+                    "id": "wait",
+                    "label": "Keep the current process and review later",
+                    "next": "none-wait"
+                  }
+                ]
+              },
+              {
+                "id": "pilot-support",
+                "title": "Keep the pilot small and fund access support",
+                "evidenceIds": ["EP", "E4"],
+                "metrics": [9.5, 40, 10, 10, 3, 2, 7, 2],
+                "consequence": "Access support and a seven-day AI transcript limit reduce some risks, but training uses time and the small pilot offers little capacity gain. Most work remains manual; errors do not disappear.",
+                "accountability": "The service manager owns the pilot; the access lead checks unresolved cases and can request a halt.",
+                "uncertainty": "Test an independent sample with more supported requests before any expansion; the improvement from support is assumed.",
+                "choices": []
+              },
+              {
+                "id": "pilot-expand",
+                "title": "Expand now with the existing support",
+                "evidenceIds": ["EP", "E4"],
+                "metrics": [4, 70, 60, 20, 3, 7, 90, 7],
+                "consequence": "Expansion releases routine task time, but support errors and transcript exposure rise. Staff shift towards complaints while some customers struggle to get help.",
+                "accountability": "The service manager owns expansion and must provide correction and a human appeal route.",
+                "uncertainty": "Test whether the support team can handle the extra cases; neither scale nor the staffing assumption is established.",
+                "choices": []
+              },
+              {
+                "id": "human-resource",
+                "title": "Fund reviewer time and training",
+                "evidenceIds": ["EH", "E4"],
+                "metrics": [8, 50, 0, 100, 1, 2, 7, 6],
+                "consequence": "Funded reviewers and shorter retention reduce mistakes and exposure while keeping people in the workflow. More review time and training consume most of the capacity benefit; AI energy use remains.",
+                "accountability": "The shift lead assigns trained reviewers; the service manager can stop use and must correct known errors.",
+                "uncertainty": "Check that reviewers exercise independent judgement on new cases; training effects and longer-term workload remain assumptions.",
+                "choices": []
+              },
+              {
+                "id": "human-targets",
+                "title": "Set faster approval targets",
+                "evidenceIds": ["EH", "E4"],
+                "metrics": [5, 40, 0, 100, 3, 6, 30, 5],
+                "consequence": "Faster approvals release more time, but rubber-stamping lets errors through, especially for supported requests. Human presence has not guaranteed meaningful oversight.",
+                "accountability": "The service manager owns the targets; the shift lead must escalate unsafe review pressure.",
+                "uncertainty": "Observe actual review behaviour and support access; quicker approval is not evidence of careful checking.",
+                "choices": []
+              },
+              {
+                "id": "full-audit",
+                "title": "Add human appeals and targeted audits",
+                "evidenceIds": ["EF", "E4"],
+                "metrics": [5, 80, 80, 20, 2, 4, 7, 9],
+                "consequence": "Appeals and audits catch some errors and limit stored transcripts, but need staff and extra resources. Most routine replies remain automatic and customers may still suffer an error before an appeal.",
+                "accountability": "A retailer appeals lead can override, correct and pause the service; the manager remains accountable.",
+                "uncertainty": "Test whether customers can reach appeals in time, including people without digital access; audit success is assumed.",
+                "choices": []
+              },
+              {
+                "id": "full-speed",
+                "title": "Keep automatic replies and supplier-led complaints",
+                "evidenceIds": ["EF", "E4"],
+                "metrics": [2, 60, 100, 0, 4, 10, 90, 8],
+                "consequence": "Automatic handling offers the largest modelled capacity gain, but support errors and long transcript retention remain. Reduced routine work may become complaint work; the model does not decide job losses.",
+                "accountability": "The service manager remains accountable; forwarding complaints to the supplier does not transfer that duty.",
+                "uncertainty": "Independently test new cases and the complaint route before relying on these gains; supplier averages cannot settle local harm.",
+                "choices": []
+              },
+              {
+                "id": "none-train",
+                "title": "Improve scripts and train staff without AI",
+                "evidenceIds": ["EN", "E4"],
+                "metrics": [9, 30, 0, 0, 3, 3, 0, 0],
+                "consequence": "Clearer scripts and training improve the manual service without new AI transcripts or AI energy use. Gains are modest, training costs money and some errors remain.",
+                "accountability": "The service manager and training lead own the manual process and correction route.",
+                "uncertainty": "Check whether training improves new cases and whether demand outgrows capacity; the assumed improvement is not guaranteed.",
+                "choices": []
+              },
+              {
+                "id": "none-wait",
+                "title": "Keep the current process and review later",
+                "evidenceIds": ["EN", "E4"],
+                "metrics": [10, 0, 0, 0, 4, 4, 0, 0],
+                "consequence": "Keeping the process avoids new AI costs and exposure, but keeps its errors, workload and unequal access outcomes. A review date alone does not improve the service.",
+                "accountability": "The service manager owns the current queue and must act on known errors.",
+                "uncertainty": "Set a review date and collect fresh queue and access evidence; future demand and better alternatives remain unknown.",
+                "choices": []
+              }
+            ],
+            "minRuns": 3,
+            "requiredStarts": ["none"],
+            "futureLabels": [
+              ["optimistic", "Optimistic"],
+              ["concerning", "Concerning"],
+              ["balanced", "Balanced"]
+            ],
+            "fields": [
+              ["comparison", "Which choices changed the outcome, who gained or carried the risk, and which assumption would you test next…"]
+            ],
+            "downloads": [
+              {
+                "file": "ai-future-evidence-cards.txt",
+                "label": "Case evidence cards (text)",
+                "note": "Synthetic observations, stated assumptions and branch evidence."
+              },
+              {
+                "file": "ai-future-branch-cards.txt",
+                "label": "Branching paper walkthrough (text)",
+                "note": "The same choices and consequences, with no recommended route."
+              },
+              {
+                "file": "ai-future-scenario-canvas.md",
+                "label": "2035 scenario canvas (Markdown)",
+                "note": "Three futures, human choices, unintended effects and uncertainty."
+              },
+              {
+                "file": "ai-future-decision-log.csv",
+                "label": "Decision log (CSV)",
+                "note": "Choices, evidence, alternatives and reasons."
+              }
+            ]
+          },
+          "reflection": "Which part of your scenario is evidence-based, and which is speculation?"
+        },
+        {
+          "id": "b7s5",
+          "title": "The stakeholder lens",
+          "minutes": 25,
+          "type": "BREAK + QUESTION",
+          "pageRef": "Student Book pp. 32–35",
+          "intro": "Go back through your three futures as five different people and find where their interests clash.",
+          "study": {
+            "title": "Five people, one decision",
+            "body": ["Societal impact means effects on communities, fairness, work and wellbeing, not just on one individual. The book names five lenses: a worker, a customer or citizen, an employer, a regulator, and someone at risk of being excluded. In this case those are a service worker, a customer, the service manager, a public-interest regulator, and a customer who needs a staffed language or access route.", "The same recorded route looks different through each lens. A route that releases capacity is good news to the manager, an unanswered question about job security to the worker, and irrelevant to a customer who cannot get through on the phone. None of those readings is wrong; they are different interests in the same evidence.", "Accountability is who answers for a decision when it goes wrong. Name the safeguard you would add for each clash, then name what the safeguard still costs, because a safeguard that has no cost is usually a safeguard nobody has thought about. One error rate does not settle fairness, and a count from one small week does not settle anything on its own."],
+            "example": "A library that moves renewals online saves counter time for the manager, gives the assistant more shelving and fewer conversations, and quietly removes the only route for a reader with no internet at home. The safeguard, a staffed counter hour each day, costs the saved time back.",
+            "keywords": ["Societal impact", "Accountability", "Trade-off"]
+          },
+          "activity": {
+            "kind": "chain",
+            "title": "The stakeholder lens",
+            "instructions": "One row for each of the five named stakeholders on the case card: service worker; customer; service manager; public-interest regulator; customer needing a staffed language or access route. In each row compare your three recorded futures by run id, cite a case card or a result with its count or stated limitation, and name whose interests clash and which safeguard still leaves a trade-off. Across the table cover value, jobs and tasks, safety, fairness, privacy, accountability, uncertainty and sustainability. One error rate does not settle fairness. Evidence: Stakeholder analysis.",
+            "columns": [
+              ["stakeholder", "Stakeholder"],
+              ["impact", "Benefits and risks across my three futures, with run ids"],
+              ["evidence", "A case card or result with its count or stated limitation"],
+              ["clash", "Whose interests clash, and which safeguard leaves a trade-off"]
+            ],
+            "rows": 5,
+            "minRows": 5,
+            "head": "STAKEHOLDER → THREE FUTURES → EVIDENCE → CONFLICT AND SAFEGUARD",
+            "downloads": [
+              {
+                "file": "ai-future-evidence-cards.txt",
+                "label": "Case evidence cards (text)",
+                "note": "Synthetic observations, stated assumptions and branch evidence."
+              },
+              {
+                "file": "ai-future-stakeholder-analysis.csv",
+                "label": "Stakeholder analysis (CSV)",
+                "note": "Five named stakeholders, three-future impacts, evidence and limit, conflict and safeguard. Response cells are empty."
+              }
+            ]
+          },
+          "reflection": "Who benefits? Who carries the risk?"
+        },
+        {
+          "id": "b7s6",
+          "title": "Policy choice debate",
+          "minutes": 25,
+          "type": "QUESTION + IMPROVE",
+          "pageRef": "Student Book pp. 32–35",
+          "intro": "Argue both sides of one proposal, then answer the strongest objection in writing.",
+          "study": {
+            "title": "Argue both sides, then decide",
+            "body": ["The proposal is the book's second example: \"High-stakes AI decisions must always have human review.\" Debating it properly means building the strongest case for it and the strongest case against it, including the cost and the limits of human review, before you say what you would argue for.", "Your own evidence complicates it. The human+AI branch shows people approving all 100 replies while reviewers rush unfamiliar cases, and the faster-approval route shows errors rising for supported requests. Human review is not a magic guarantee: an approval click is not the same thing as a person checking.", "It also matters which decision you mean. A routine order-status reply and a refusal that materially affects a customer are not the same risk, so a rule that treats them identically is either too slow or too weak. Say who can override, correct or stop the service, and how a customer reaches that person. This is a fictional proposal for debate, not a description of current law."],
+            "example": "A library could require a human to approve every automatic overdue notice, which is a lot of clicking, or only the ones that block a reader's account. The second rule is narrower, cheaper and easier to take seriously, and it names the decision that actually costs the reader something.",
+            "keywords": ["Accountability", "Trade-off", "Societal impact"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Policy choice debate",
+            "instructions": "Self-paced: argue both sides yourself, then answer the strongest objection in writing. A partner may challenge your argument if one is available, but the written answer is the evidence. Use your own retailer runs, especially the human+AI card and the two review branches, and distinguish a routine order-status reply from a disputed refusal that materially affects a customer. Do not invent current legal duties or claim this fictional proposal is law. Evidence: Governance choice and debate reflection.",
+            "fields": ["My argument for the proposal, using my retailer evidence and its limits…", "The strongest argument against it, including the cost or limitation of human review…", "My response and revised governance choice: who can override, correct or stop the service, and how a customer reaches them…", "My debate reflection: which evidence or objection changed my view, or why my view survived the strongest objection…"],
+            "downloads": [
+              {
+                "file": "ai-future-policy-cards.txt",
+                "label": "Policy choice cards (text)",
+                "note": "The human-review proposal, prompts for both sides, the routine-versus-high-stakes distinction and who can correct, override or stop. No legal claim."
+              }
+            ]
+          },
+          "reflection": "What makes a human checkpoint meaningful rather than a quick approval click?"
+        },
+        {
+          "id": "b7s7",
+          "title": "Future skills card",
+          "minutes": 20,
+          "type": "MAKE + REFLECT",
+          "pageRef": "Student Book pp. 32–35",
+          "intro": "Name three human capabilities that matter more in your chosen future, and one thing you will do this year.",
+          "study": {
+            "title": "What becomes more valuable",
+            "body": ["Future skills are human capabilities that become more valuable as AI spreads. The blank card suggests critical judgement, communication, empathy, domain knowledge and negotiating priorities; you choose three and tie each one to a task on your own map, not to a general claim about the future of work.", "The tie is what makes it evidence. \"Communication matters\" says nothing; \"explaining a refusal is the task my map marked strongly human, and the automation branch turned routine work into complaint work\" says where the capability is used and why the case supports it.", "Then make one action concrete: what you will do during TY, when, and what would show you tried. A capability you cannot practise this year is a wish. Evidence of trying is better than evidence of succeeding, because the point is that you attempted something and can say what happened."],
+            "example": "A student aiming at library and archive work might pick domain knowledge and plan to spend two lunchtimes shadowing the school library's cataloguing, with the notes they took as evidence that they actually turned up.",
+            "keywords": ["Future skills", "Augmentation", "Automation"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Future skills card",
+            "instructions": "Choose three capabilities and connect each one to a task on your own career transformation map and to one of your recorded futures. The card suggests critical judgement, communication, empathy, domain knowledge and negotiating priorities; you may name another if you can justify it. Then make one action concrete enough to check: what you will do during TY, when, and what evidence would show you tried. Evidence: Future skills card.",
+            "fields": ["Human capability 1: where it matters in my chosen future, and why…", "Human capability 2: where it matters in my chosen future, and why…", "Human capability 3: where it matters in my chosen future, and why…", "One concrete action during TY to build one capability: what I will do, when, and evidence that I tried…"],
+            "downloads": [
+              {
+                "file": "ai-future-skills-card.md",
+                "label": "Future skills card (Markdown)",
+                "note": "Three blank capability sections with reasons, and one TY action with a time and evidence of trying."
+              }
+            ]
+          },
+          "reflection": "Which human capability becomes more important, not less?"
+        },
+        {
+          "id": "b7s8",
+          "title": "Reflection",
+          "minutes": 10,
+          "type": "REFLECT + EVIDENCE",
+          "pageRef": "Student Book pp. 32–35",
+          "intro": "Give Harbour Co-op your recommendation, and say what would make you change it.",
+          "study": {
+            "title": "A recommendation you can defend",
+            "body": ["Name one of the four approaches: pilot, human+AI, full automation or no deployment. Any of them can be defended well, including no deployment, because the case has no highest-value answer: the route with the largest released capacity also has the largest gap between the two groups.", "What makes it defensible is the rest: the recorded run and the case card you are citing, the alternative you considered and rejected, who gains, who carries a cost or risk, and what stays uncertain. A recommendation with no alternative in it is a preference, not advice.", "Finish with the governance commitment: the accountable role, a review or stop trigger, and the next evidence to collect. A trigger has to be something someone could actually notice, such as a measurable service threshold or a specific incident that requires a pause. Check that all five portfolio items exist and that your recommendation follows the debate you just wrote."],
+            "example": "A library adviser might recommend a small pilot, name the branch manager as accountable, and set the trigger at any month where a reader cannot reach a person within one working day — a condition someone can check without arguing about it.",
+            "keywords": ["Accountability", "Uncertainty", "Future skills"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Final recommendation",
+            "instructions": "Cite a recorded run and a case card in each field. A stop trigger must be a measurable service threshold or a concrete incident requiring a pause, not a general intention to keep an eye on it. The highest capacity value is not automatically approved, and a fully reasoned no-deployment recommendation is worth as much as a pilot. Check that your five portfolio items are present — scenario canvas, career transformation map, stakeholder analysis, future skills card, debate reflection — and that this recommendation follows the debate in b7s6. Evidence: Final recommendation.",
+            "fields": ["My final recommendation: pilot, human+AI, full automation or no deployment; which follow-up conditions I support, and why…", "My strongest evidence and the alternative I considered: who gains, who carries a cost or risk, and what stays uncertain…", "My governance commitment: accountable role, review or stop trigger, next evidence to collect, and the human choice that matters most…"],
+            "downloads": [
+              {
+                "file": "ai-future-scenario-canvas.md",
+                "label": "2035 scenario canvas (Markdown)",
+                "note": "Three futures, human choices, unintended effects and uncertainty."
+              }
+            ]
+          },
+          "reflection": "Which future outcome depends most on human choices, rather than on the technology itself?"
+        }
+      ],
+      "lab": {
+        "title": "AI Adoption Decision Simulator",
+        "summary": "You advise a fictional retailer, follow adoption choices through new evidence and further decisions, compare three possible futures and defend a recommendation with safeguards and limits.",
+        "stages": [
+          ["DO", "b7s3", "Map the tasks before choosing AI"],
+          ["TEST", "b7s1", "Separate observation from prediction"],
+          ["MAKE", "b7s4", "Build three futures through branching choices"],
+          ["BREAK", "b7s5", "Challenge each future through five stakeholders"],
+          ["IMPROVE", "b7s6", "Defend and revise a governance choice"],
+          ["PROVE", "b7s8", "Justify the final recommendation"]
+        ]
+      },
+      "myths": [
+        ["AGI already exists, in the same sense as today's chatbots.", "Today's systems are narrow, however impressive. AGI is a hypothesis and a goal, not a product you can download."],
+        ["Every task that can be automated should be.", "“Can” and “should” are different questions. Some tasks are automated and worse for it. Your stakeholder lens showed you who decides."],
+        ["Future-of-work predictions are facts.", "They're forecasts built on assumptions. Reasonable experts disagree. Treat them as scenarios."]
+      ],
+      "selfCheck": {
+        "Getting started": ["I can describe a plausible AI-related change in a career or domain"],
+        "Getting there": ["I built more than one scenario", "I identified trade-offs and future skills"],
+        "Going further": ["I separate evidence from speculation", "I analysed stakeholders", "I can defend a governance choice"]
+      },
+      "levelUp": "Find two credible but different forecasts about AI and work. Explain why reasonable experts can disagree, and identify the assumptions behind each one."
     }
   ]
 }
