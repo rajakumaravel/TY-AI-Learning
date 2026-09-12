@@ -1197,13 +1197,13 @@ const INNO_POINTS = [
   "What's still uncertain, or what you'd test next."
 ];
 const INNO_STARTERS = [
-  ['A prompt workflow', 'good at testing whether a written instruction produces something usable', 'cannot test whether anyone would bother following it'],
-  ['A chatbot mock-up', 'good at testing whether the conversation makes sense to someone else', 'cannot test accuracy, because you are writing the answers'],
-  ['A spreadsheet', 'good at testing whether a calculation or a count answers the question', 'cannot test whether anyone would open it'],
-  ['A simple web page', 'good at testing whether people find and understand the thing', 'cannot test what happens at scale, or over months'],
-  ['A classifier', 'good at testing whether the categories you invented hold up on real examples', 'cannot test whether the categories were the right ones to invent'],
-  ['A simulated presentation', 'good at testing whether the idea is understood and wanted', 'cannot test whether it works'],
-  ['Code', 'good at testing behaviour you cannot fake', 'cannot be changed quickly, and it is easy to spend the hour on the code instead of the question']
+  ['A prompt workflow', 'testing whether a written instruction produces something usable', 'whether anyone would bother following it'],
+  ['A chatbot mock-up', 'testing whether the conversation makes sense to someone else', 'accuracy, because you are writing the answers yourself'],
+  ['A spreadsheet', 'testing whether a calculation or a count answers the question', 'whether anyone would open it'],
+  ['A simple web page', 'testing whether people find and understand the thing', 'what happens at scale, or over months'],
+  ['A classifier', 'testing whether the categories you invented hold up on real examples', 'whether the categories were the right ones to invent'],
+  ['A simulated presentation', 'testing whether the idea is understood and wanted', 'whether it actually works'],
+  ['Code', 'testing behaviour you cannot fake', 'whether the idea is worth building, and it is easy to spend the whole hour on the code instead of the question']
 ];
 const INNO_STARTING_POINTS = [
   'A school FAQ or event assistant',
@@ -1363,7 +1363,7 @@ BEFORE YOU BUILD, WRITE THIS DOWN:
 `);
 
 writeFileSync(join(OUT, 'innovation-peer-test-sheet.csv'), `tester,task_given,what_worked,where_confused,what_failed,unexpected\n${',,,,,\n'.repeat(3)}`);
-writeFileSync(join(OUT, 'innovation-risk-register.csv'), `change_or_risk,evidence_or_attack,safeguard,what_remains\n${',,,\n'.repeat(5)}`);
+writeFileSync(join(OUT, 'innovation-risk-register.csv'), `# Red-team attacks to cover: could it hallucinate? be biased? leak private data? be misused? make people over-rely on it? "None" is not a residual.\nchange_or_risk,evidence_or_attack,safeguard,what_remains\n${',,,\n'.repeat(5)}`);
 
 innoFile('presentation-guide.md', `# Presentation guide (Chapter 8, hour 8 "Sprint 4 · Demo and reflection")
 

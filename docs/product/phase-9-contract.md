@@ -95,7 +95,7 @@ Block8-only vocabulary in the scoring regexes (concept: `problem fram\w*|user ne
 
 `block8`: title "AI Innovation Project", role "Innovation Lead", client "Training centre and the community around it", objective from the mission. Acceptance criteria from the docx descriptors and the book's six judging criteria. Deliverables, exactly the book's nine portfolio items: "Problem statement and user evidence", "Three solution options, including the non-AI one", "Responsible AI and data canvas", "The prototype", "Test record", "Iteration log", "Risk register", "Final presentation", "Individual reflection".
 
-This is the one chapter whose workspace is the whole chapter, so the six lab stages import from six different sessions and the evidence list is the portfolio. `summariseActivity` needs no new branch: every kind used here already has one. Check the existing 50-item evidence cap against nine deliverables plus imported stage evidence before shipping.
+This is the one chapter whose workspace is the whole chapter, so the six lab stages import from five different sessions, because b8s7 supplies both BREAK and IMPROVE, as the book combines improve and red-team into one hour and the evidence list is the portfolio. `summariseActivity` needs no new branch: every kind used here already has one. Check the existing 50-item evidence cap against nine deliverables plus imported stage evidence before shipping.
 
 ## Server
 

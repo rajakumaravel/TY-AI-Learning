@@ -193,8 +193,10 @@ test('b8s5 is the only tool session and its non-AI route is a full route',()=>{
   assert.ok(!/sample/i.test(a.fallback.steps.join(' ')),'the second fallback is the non-AI build, not a sample download');
   // The contract: nothing in activityReady may require the tool to have been opened.
   const answers={0:'The biggest assumption is that people would read it',1:'A one page list built in a spreadsheet',2:'The dates fall out of order when I add a row',3:'It cannot send anything to anyone yet'};
+  fill('b8s5',{...answers,ack:true,mode:'fallback'});
+  assert.equal(context.activityReady(session('b8s5')),true,'the non-AI route completes without the tool ever being opened');
   fill('b8s5',{...answers,mode:'fallback'});
-  assert.equal(context.activityReady(session('b8s5')),true,'the fallback route completes with the tool never acknowledged');
+  assert.equal(context.activityReady(session('b8s5')),false,'the non-AI route still needs the safety acknowledgement, as every other lab does');
   fill('b8s5',{...answers});
   assert.equal(context.activityReady(session('b8s5')),false,'the tool route still needs the acknowledgement');
   fill('b8s5',{...answers,ack:true});
@@ -295,7 +297,9 @@ test('the chapter downloads exist, and no student file hands over an answer',()=
   assert.ok(exists('docs/teacher/innovation-project.KEY.txt'),'teacher key exists');
   assert.ok(!exists('public/datasets/innovation-project.KEY.txt'),'the teacher key is never published');
   assert.equal(read('public/datasets/innovation-peer-test-sheet.csv').split('\n')[0].trim(),'tester,task_given,what_worked,where_confused,what_failed,unexpected');
-  assert.equal(read('public/datasets/innovation-risk-register.csv').split('\n')[0].trim(),'change_or_risk,evidence_or_attack,safeguard,what_remains');
+  const register=read('public/datasets/innovation-risk-register.csv').split('\n');
+  assert.match(register[0],/hallucinate\?.*biased\?.*leak private data\?.*misused\?.*over-rely/,'the register names the five red-team attacks the download note promises');
+  assert.equal(register[1].trim(),'change_or_risk,evidence_or_attack,safeguard,what_remains');
   const canvas=read('public/datasets/innovation-project-canvas.md');
   assert.ok(!/bike rack/i.test(canvas),'the canvas ships blank, with no worked example');
   for(const file of DOWNLOADS){

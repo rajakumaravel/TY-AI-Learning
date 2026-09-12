@@ -250,7 +250,7 @@ test('chapter 8 downloads are generated, blank, offered in the right sessions, a
   assert.deepEqual(at('b8s7'),['innovation-risk-register.csv']);
   assert.deepEqual(at('b8s8'),['innovation-presentation-guide.md','innovation-rubric.txt']);
   assert.equal(fs.readFileSync('public/datasets/innovation-peer-test-sheet.csv','utf8'),`tester,task_given,what_worked,where_confused,what_failed,unexpected\n${',,,,,\n'.repeat(3)}`);
-  assert.equal(fs.readFileSync('public/datasets/innovation-risk-register.csv','utf8'),`change_or_risk,evidence_or_attack,safeguard,what_remains\n${',,,\n'.repeat(5)}`);
+  assert.equal(fs.readFileSync('public/datasets/innovation-risk-register.csv','utf8'),`# Red-team attacks to cover: could it hallucinate? be biased? leak private data? be misused? make people over-rely on it? "None" is not a residual.\nchange_or_risk,evidence_or_attack,safeguard,what_remains\n${',,,\n'.repeat(5)}`);
   const cards=fs.readFileSync('public/datasets/innovation-problem-cards.txt','utf8');
   for(const p of ['A school FAQ or event assistant','Study-planning or revision support','A lost-property workflow','Canteen or sustainability data analysis','A local tourism information assistant','Sports-club coordination','A career exploration assistant','Making community information more accessible','A school survey insight tool','A non-AI solution, because your team concluded AI adds no real value here'])assert.ok(cards.includes(p),p);
   assert.match(cards,/real, understandable, useful, testable, safe/);

@@ -452,7 +452,7 @@ export const CHAPTER8_FIELDS = {
     'My individual reflection: what I learned across the whole programme, and what I would do differently: the thing that changed most for me is that I now write the success criteria before building, because in Chapter 2 I judged a model by how good the demo looked and here I could see exactly how that goes wrong. I also learned that rejecting AI can be the right answer and still be the whole project. What I would do differently is interview before framing rather than after: I had half a solution in my head before I asked Person A anything, and it took the evidence about not knowing in advance to move me off it.'
   ]
 };
-export const CHAPTER8_TESTLOG_FIELDS = ['tester', 'task_given', 'what_worked', 'where_confused', 'what_failed', 'unexpected'];
+export const CHAPTER8_TESTLOG_FIELDS = ['tester', 'task', 'worked', 'confused', 'failed', 'unexpected'];
 export const CHAPTER8_TESTLOG = [
   ['Person A', 'Take a microwave slot for today without asking me anything', 'Found the sheet on the door and wrote a slot in under ten seconds', 'Asked out loud whether one slot meant one dish or one person', 'Wrote a time overlapping the slot above, because the lines were blank', 'Said they would trust the sheet rather than walk down and look for themselves'],
   ['Person B', 'Find out whether 12:30 is already busy, then decide what to do', 'Read the filled slots and decided to come at 12:50 instead', 'Could not tell whether the sheet was today\'s or yesterday\'s', 'Nothing failed outright, but they checked the date twice before trusting it', 'Went back upstairs to tell two other people, which I had not designed for'],

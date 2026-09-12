@@ -5,32 +5,32 @@ Rough is fine. Rough is the point. A prototype is a rough, cheap version built t
 Each form below tests some things and not others. Pick the one that tests YOUR assumption, not the one that looks most impressive.
 
 A prompt workflow
-  Good at: good at testing whether a written instruction produces something usable.
-  Cannot test: cannot test whether anyone would bother following it.
+  Good at: testing whether a written instruction produces something usable.
+  Cannot test: whether anyone would bother following it.
 
 A chatbot mock-up
-  Good at: good at testing whether the conversation makes sense to someone else.
-  Cannot test: cannot test accuracy, because you are writing the answers.
+  Good at: testing whether the conversation makes sense to someone else.
+  Cannot test: accuracy, because you are writing the answers yourself.
 
 A spreadsheet
-  Good at: good at testing whether a calculation or a count answers the question.
-  Cannot test: cannot test whether anyone would open it.
+  Good at: testing whether a calculation or a count answers the question.
+  Cannot test: whether anyone would open it.
 
 A simple web page
-  Good at: good at testing whether people find and understand the thing.
-  Cannot test: cannot test what happens at scale, or over months.
+  Good at: testing whether people find and understand the thing.
+  Cannot test: what happens at scale, or over months.
 
 A classifier
-  Good at: good at testing whether the categories you invented hold up on real examples.
-  Cannot test: cannot test whether the categories were the right ones to invent.
+  Good at: testing whether the categories you invented hold up on real examples.
+  Cannot test: whether the categories were the right ones to invent.
 
 A simulated presentation
-  Good at: good at testing whether the idea is understood and wanted.
-  Cannot test: cannot test whether it works.
+  Good at: testing whether the idea is understood and wanted.
+  Cannot test: whether it actually works.
 
 Code
-  Good at: good at testing behaviour you cannot fake.
-  Cannot test: cannot be changed quickly, and it is easy to spend the hour on the code instead of the question.
+  Good at: testing behaviour you cannot fake.
+  Cannot test: whether the idea is worth building, and it is easy to spend the whole hour on the code instead of the question.
 
 AI IS OPTIONAL HERE. If your hour-3 comparison chose the non-AI option, building that is the full route and not a lesser one. A spreadsheet, a paper mock-up, a simple page or a written workflow all count, and the judging table rewards the simplest approach that works.
 
