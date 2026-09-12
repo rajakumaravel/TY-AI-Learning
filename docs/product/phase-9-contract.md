@@ -1,0 +1,125 @@
+# Phase 9 contract — Chapter 8: AI Innovation Project
+
+Shared contract for parallel implementation. Sources, in precedence order: `docs/source/student-book.txt` pages 36–41, `docs/source/curriculum-pilot-v1.txt` section "12. Block 8 - AI Innovation Project (8 hours)" and the Appendix A sheets it names, then `docs/source/curriculum-review-data-integrity.txt` where it touches evidence, testing and residual risk. Read the sources before touching code; quote the book where this contract says verbatim. Standing policy remains in `docs/product/chapter-contract-template.md`, unchanged.
+
+Deployment context: the portal runs in a third-party training centre, not a school. Where the book says "your teacher" or "school", portal copy says "the training centre" or "the training centre or the community around it". Book text quoted as the book stays verbatim. The book assumes a team; the portal is self-paced and individual, so every "your team" becomes the student's own decision with an optional partner, and the peer test becomes "classmates, people at the training centre, or someone at home". Chapter 7 is the preceding `block7`; this chapter adds `block8` and is the last chapter in the programme.
+
+**This chapter is the culmination, so it reuses and does not reinvent.** It introduces no new activity kind. Chapters 1–7 already provide `quiz`, `textfields`, `daymap`, `lab`, `testlog`, `matrix`, `dataset`, `chain`, `prompt`, `annotate`, `simulator` and `decision`; the nine portfolio artefacts the book asks for map onto `chain`, `textfields`, `testlog` and one `lab`. The book's own myth-buster applies to the build as much as to the student: "The project has to solve a problem. The best answer is the least complex one that works."
+
+## Tool decision
+
+No session requires an AI tool, and the chapter's mission says so: "AI is optional: your team must justify whether it adds genuine value, and be ready to say 'it doesn't' if that's what your evidence shows." Only b8s5, the build session, offers one, as a `lab` with the standing acknowledgement gate. Primary: **DuckDuckGo AI Chat**, `https://duck.ai`, free and no account, as in Chapters 4 and 6. Fallback: **Microsoft Copilot**, `https://copilot.microsoft.com`, usable without signing in. **The second fallback is deliberately not a sample download: it is building the non-AI version.** A student whose tool is blocked, or who concluded AI adds nothing, follows the same steps with a spreadsheet, a paper mock-up, a simple page or a written workflow, and that route must record exactly the same evidence and count as complete. Nothing in `activityReady` may require the tool to have been opened.
+
+Safety notes for b8s5 (the four standing notes, tool name filled): "Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them." · "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback." · "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked." · "Nothing typed into this portal is sent to the tool; copy across yourself and paste short extracts back here."
+
+**Research safety is a fifth note, and it belongs to b8s2, not b8s5.** The book's "Research safely" box (p.37) governs the user research: only ask questions the training centre has approved, collect no personal data you do not need, and everything from Chapter 3 applies to the student's own project now. b8s2's instructions carry this verbatim in substance, and its fields must never ask for a real person's name, contact details or anything identifying. Record participants as "Person A", "Person B".
+
+## Block
+
+```text
+id: block8   number: "08"   title: "AI Innovation Project"   duration: "8 hours" (sessions total 480 min)
+badge: "AI Innovator"   outcomes: ["LO1","LO2","LO3","LO4","LO5","LO6","LO7","LO8","LO9"]
+pageRef on every session: "Student Book pp. 36–41"
+description: book p.36 opening paragraph, shortened to two sentences in the same words, keeping "AI is optional. Part of the project is deciding whether it genuinely helps."
+mission (p.37, verbatim): "Solve a real school or community problem with a responsible, testable prototype. AI is optional: your team must justify whether it adds genuine value, and be ready to say “it doesn't” if that's what your evidence shows."
+route: the book's eight hours pp.38, verbatim labels, each prefixed by its sprint as the book prints it: [["Hour 1","Sprint 1 · Problem hunt"],["Hour 2","Sprint 1 · Understand the user"],["Hour 3","Sprint 2 · Design options"],["Hour 4","Sprint 2 · Responsible design"],["Hour 5","Sprint 3 · Build the prototype"],["Hour 6","Sprint 3 · Test"],["Hour 7","Sprint 4 · Improve and red-team"],["Hour 8","Sprint 4 · Demo and reflection"]]
+final: the book's nine portfolio items as one sentence: "Your problem statement and user evidence, your three solution options including the non-AI one, your responsible AI and data canvas, your prototype, your test record, your iteration log, your risk register, your final presentation, and your individual reflection."
+lab: { title: "AI Innovation Project", summary: "You find a real problem, understand the person who has it, compare an AI and a non-AI answer, build the roughest thing that tests your biggest assumption, watch real people use it, then improve it and say honestly what is still wrong with it.", stages: [["DO","b8s1","Find a problem worth solving"],["TEST","b8s6","Watch real people use it"],["MAKE","b8s5","Build the smallest prototype"],["BREAK","b8s7","Red-team your own solution"],["IMPROVE","b8s7","Change one thing because of evidence"],["PROVE","b8s8","Present the evidence, including what failed"]] }
+myths (p.40, verbatim, three pairs)
+selfCheck (p.40, verbatim statements, matched to the docx descriptors): { "Getting started": ["I defined a problem and built a basic prototype", "I can describe what it does"], "Getting there": ["I used evidence from users", "I tested, improved and identified key risks"], "Going further": ["I compared AI and non-AI options", "I set success criteria in advance", "I red-teamed the solution and communicated uncertainty honestly"] }
+levelUp (p.41, verbatim): "Add a simple evaluation plan with one quantitative measure (a number) and one qualitative measure (what people say). Run a second test cycle and compare the results with the first."
+```
+
+Key words (p.37), each in at least one session's `study.keywords`: problem framing, user need, success criteria, prototype, testing, iteration, risk, responsible AI, human oversight, value proposition, red-teaming.
+
+## Sessions (ids fixed; minutes sum to 480)
+
+| id | title (book label) | min | type | activity.kind |
+| --- | --- | --- | --- | --- |
+| b8s1 | Sprint 1 · Problem hunt | 60 | DISCOVER + QUESTION | `chain`, 5 rows |
+| b8s2 | Sprint 1 · Understand the user | 60 | INVESTIGATE | `textfields`, 5 fields |
+| b8s3 | Sprint 2 · Design options | 60 | PREDICT + TRY | `chain`, 3 rows |
+| b8s4 | Sprint 2 · Responsible design | 60 | QUESTION + MAKE | `textfields`, 5 fields |
+| b8s5 | Sprint 3 · Build the prototype | 60 | MAKE | `lab`, 4 fields |
+| b8s6 | Sprint 3 · Test | 60 | TEST | `testlog` |
+| b8s7 | Sprint 4 · Improve and red-team | 60 | IMPROVE + BREAK | `chain`, 5 rows |
+| b8s8 | Sprint 4 · Demo and reflection | 60 | REFLECT + EVIDENCE | `textfields`, 9 fields |
+
+Every session keeps `intro`, `study{title, body[3], example, keywords}`, `reflection`. Study text is written for a 15–16 year old from the book's own explanations. Worked examples must use a problem **not** on the book's starting-points list and not one a student is likely to choose, so no example hands over an answer: use "the training centre's bike rack is full by 9am and nobody knows which days are worst". The five "Think about it" questions (p.39) are the reflections for b8s3 ("Would this problem still be worth solving without AI?"), b8s5 ("What's the smallest prototype that can test your biggest assumption?"), b8s4 ("What happens when the AI is wrong?" and, as b8s7's, "Which decision must stay with a human?") and b8s7's second is covered by "What evidence shows your change actually improved things?", which is b8s6's reflection. b8s1's reflection is "Which of your five problems did you reject, and which of the five tests did it fail?"; b8s2's is "What did the person actually need, as opposed to what they first asked for?"; b8s8's is "What is still uncertain about your solution, and what would you test next?"
+
+b8s1's study body must contain the book's five tests verbatim as a list: real, understandable, useful, testable, safe. b8s3's must contain the sentence "at least one must not use AI". b8s5's must contain "Rough is fine. Rough is the point." verbatim. b8s8's must contain the book's eight presentation points in order.
+
+**b8s1 chain.** At least five problems, then the choice. columns `[["problem","Problem I noticed"],["who","Who has it, and where I saw it"],["tests","Which of the five tests it passes: real, understandable, useful, testable, safe"],["verdict","Chosen, or rejected because…"]]`, rows 5, minRows 5, head "PROBLEM → WHO HAS IT → FIVE TESTS → CHOSEN OR REJECTED". Instructions say exactly one row may be marked chosen. Downloads: `innovation-problem-cards.txt`, `innovation-project-canvas.md`. Evidence label "Problem statement and user evidence".
+
+**b8s2 textfields.** Five fields: "The user: who they are, in a sentence, with no name or identifying detail…", "How they do it now, step by step…", "The pain points, and which one hurts most…", "My evidence: what I asked, who I asked as Person A, Person B, and what they said…", "The constraints: time, money, permission, skills, what the training centre allows…". Instructions carry the research-safety rule and the Chapter 3 link. No field may ask for a real name. Downloads: `innovation-interview-guide.txt`, project canvas. Evidence label "User evidence".
+
+**b8s3 chain.** columns `[["option","Solution option"],["ai","Uses AI / no AI"],["fit","Why it fits the problem, and what it costs in complexity"],["verdict","Chosen, or rejected because…"]]`, rows 3, minRows 3, head "OPTION → AI OR NOT → FIT AND COST → VERDICT". Instructions require at least one row marked "no AI" and exactly one chosen, and ask the student to answer in the row whether AI adds genuine value or just complexity. A non-AI option may be the chosen one; nothing in the chapter may score that lower. Downloads: project canvas. Evidence label "Three solution options, including the non-AI one".
+
+**b8s4 textfields.** Five fields: "The data flow: what goes in, what the solution does with it, what comes out, and what is stored…", "The human decision points: what a person must decide, check or approve…", "The failure modes: what could go wrong, for whom, and how badly…", "The safeguards: what stops each failure mode, or limits it…", "My success criteria, written before I build: how I will know it worked, and what would count as it not working…". Instructions state that the success criteria are written before any building and are not edited afterwards to match the result. Downloads: `innovation-responsible-canvas.md`, project canvas. Evidence label "Responsible AI and data canvas".
+
+**b8s5 lab.** `tool: { name: "DuckDuckGo AI Chat", url: "https://duck.ai", free: true }`, `privacy` = the four standing notes. `steps` (5): name the biggest assumption your prototype has to test; choose the roughest form that tests it, from a prompt workflow, a chatbot mock-up, a spreadsheet, a simple page, a classifier, a simulated presentation or code; build only that; try it once yourself and note where it already breaks; write down what it cannot do yet. `fallback: { title: "No AI, or the tool is blocked?", steps: [try Microsoft Copilot at copilot.microsoft.com without signing in; or build the non-AI version, which is a full route and not a lesser one: a spreadsheet, a paper mock-up, a simple page or a written workflow; record the same four things either way] }`. `fields` (4): "My biggest assumption, and why the prototype tests it…", "What I built, in a sentence, and which form I chose…", "What already breaks when I try it myself…", "What it cannot do yet, and what I left out on purpose…". Downloads: `innovation-prototype-starters.txt`, project canvas. Evidence label "The prototype".
+
+**b8s6 testlog.** The book's watch-don't-help rule. Reuse the Chapter 2 `testlog` shape with this chapter's columns: tester (Person A, Person B…), what they were asked to do, what worked, where they got confused, what failed, and the one thing you did not expect. Minimum three testers. Instructions quote the book: "Don't help them while they use it. Watch." Downloads: `innovation-peer-test-sheet.csv`. Evidence label "Test record".
+
+**b8s7 chain.** Improvement and red-team in one table. columns `[["item","The change I made, or the risk I found"],["evidence","The test evidence or the attack that found it"],["safeguard","What I changed, or the safeguard I added"],["residual","What is still wrong, or still possible, after that"]]`, rows 5, minRows 5, head "CHANGE OR RISK → EVIDENCE → SAFEGUARD → WHAT REMAINS". Instructions require at least one row to be an evidence-driven change from b8s6 and at least three rows to be red-team findings across the book's five attacks: could it hallucinate, be biased, leak private data, be misused, or make people over-rely on it. The residual column may not be left as "none": the book's point is that something always remains. Downloads: `innovation-risk-register.csv`. Evidence labels "Iteration log" and "Risk register".
+
+**b8s8 textfields.** Nine fields, the book's eight presentation points in order followed by the individual reflection: "1. The problem, and who experiences it…", "2. The evidence you gathered…", "3. The solution, and why AI is or isn't appropriate…", "4. A demonstration of the prototype: what you would show, and in what order…", "5. What happened during testing…", "6. One change you made because of evidence…", "7. One important risk, and its safeguard…", "8. What's still uncertain, or what you'd test next…", "My individual reflection: what I learned across the whole programme, and what I would do differently…". Downloads: `innovation-presentation-guide.md`, `innovation-rubric.txt`. Evidence labels "Final presentation" and "Individual reflection".
+
+## Chapter page
+
+Myth-busters, self-check and level-up render through the existing block fields. Chapter card colour for `.block-8`. Two additions, both small and scoped:
+
+- **The six judging criteria (p.41) must be visible before the student starts, not after.** The book says so in as many words: "Read them before you start, not after." Render them from a new optional block field `rubric`, as a three-column table (Getting started / Getting there / Going further) for the six criteria Problem, Solution choice, Prototype, Testing, Responsible AI, Presentation, in a `.chapter-rubric` container on the chapter page above the session list. Only `block8` sets `rubric`; every earlier chapter renders unchanged.
+- **The programme-complete state.** Chapter 8 is the last chapter, so after its capstone the home page has no next chapter to unlock. The chapter card and the portfolio must say the programme is complete rather than leaving the student on a screen that implies more is coming. The book's line is "Badge earned: AI Innovator ✓ · Programme complete".
+
+## Files (`scripts/generate-datasets.mjs`, deterministic, `public/datasets/`)
+
+- `innovation-project-canvas.md`: the Innovation Project Canvas the book lists under "What you'll need", as blank headed sections matching the eight hours, so a student can work on paper and copy in. No filled example.
+- `innovation-problem-cards.txt`: the book's ten starting points from p.39 verbatim, including "A non-AI solution, because your team concluded AI adds no real value here", plus the five tests and the instruction to generate at least five problems of their own first. These are starting points, not a menu to pick from without looking around.
+- `innovation-interview-guide.txt`: six approved, non-identifying questions about a task and its pain points, the rule that nothing identifying is recorded, participants labelled Person A onward, and a short note on what to do if someone volunteers personal information anyway.
+- `innovation-responsible-canvas.md`: blank sections for data flow, human decision points, failure modes, safeguards and success criteria, with the success-criteria section placed before the build section to make the ordering visible.
+- `innovation-prototype-starters.txt`: the book's seven prototype forms with one honest sentence each on what each is good at testing and what it cannot test, and a reminder that rough is the point.
+- `innovation-peer-test-sheet.csv`: headers `tester,task_given,what_worked,where_confused,what_failed,unexpected`, three empty rows.
+- `innovation-risk-register.csv`: headers `change_or_risk,evidence_or_attack,safeguard,what_remains`, five empty rows.
+- `innovation-presentation-guide.md`: the eight presentation points in order with the 3–5 minute timing and one line on what each point must contain, plus the book's myth that hiding limitations is assessed against.
+- `innovation-rubric.txt`: the six criteria from p.41 with all three levels, as the student-facing copy of what `rubric` renders.
+- Teacher key `docs/teacher/innovation-project.KEY.txt`: what good and weak evidence looks like at each of the six criteria, the five-test screening applied to three worked example problems, the point that a non-AI chosen solution can score at the highest level, common failure patterns (success criteria written after the result, a residual risk of "none", a demo mistaken for evidence of usefulness), and guidance for assessing an individual student on a chapter the book writes for teams. Never under `public/`.
+
+## Capstone (`lib/chapter-capstone.mjs`)
+
+`CAPSTONES.block8 = { id: "block8-capstone", title: "AI Innovator review", brief: <a different scenario in prose: another learner's project pack is handed in for review. Their problem is that people at a community centre miss events they would have wanted to attend. Their chosen solution is an AI assistant that reads the noticeboard photos and sends personalised suggestions. Their pack contains a demo that runs, three testers who all said it was "good", success criteria written in the same session as the results, one risk listed as "AI might be wrong sometimes" with the safeguard "check it", a residual risk of "none", and no non-AI option because "AI is the point of the project". The student reviews it as the training centre would>, prompts: [ (1, Emerging) what the pack shows and what is missing, and what the simplest non-AI option for this problem would be; (2, Developing) which claims the evidence does not support, what a structured test would have recorded instead of "good", and one change the evidence would actually justify; (3, Extending) red-team the assistant across hallucination, bias, privacy, misuse and over-reliance, say which decision must stay with a person and who is accountable, and explain why "residual risk: none" is the answer that most undermines the pack ] }`.
+
+Block8-only vocabulary in the scoring regexes (concept: `problem fram\w*|user need|success criteri\w*|prototyp\w*|test\w*|iterat\w*|risk\w*|responsible ai|human oversight|value proposition|red.team\w*|assumption|evidence|residual|safeguard|accountab\w*`; action: `define|frame|interview|compare|prototype|build|test|watch|iterate|improve|red.team|limit|disclose|reject|simplify|measure`; scenario-evidence: `\b(?:community centre|noticeboard|events?|attend\w*|suggestions?|testers?|demo|pack|photos?)\b`). Chapters 1–7 scoring unchanged; select these expressions only for `block8`. A review that concludes the non-AI option is better must be able to reach the highest level.
+
+## Project brief (`lib/project-briefs.mjs`)
+
+`block8`: title "AI Innovation Project", role "Innovation Lead", client "Training centre and the community around it", objective from the mission. Acceptance criteria from the docx descriptors and the book's six judging criteria. Deliverables, exactly the book's nine portfolio items: "Problem statement and user evidence", "Three solution options, including the non-AI one", "Responsible AI and data canvas", "The prototype", "Test record", "Iteration log", "Risk register", "Final presentation", "Individual reflection".
+
+This is the one chapter whose workspace is the whole chapter, so the six lab stages import from six different sessions and the evidence list is the portfolio. `summariseActivity` needs no new branch: every kind used here already has one. Check the existing 50-item evidence cap against nine deliverables plus imported stage evidence before shipping.
+
+## Server
+
+`requiredSessions.block8 = ['b8s1','b8s2','b8s3','b8s4','b8s5','b8s6','b8s7','b8s8']`. `blockOrder` derives from the server list; Chapter 8 capstone and project writes return 409 until Chapter 7 practical work and capstone qualification are complete. Preserve every earlier gate.
+
+## Tests
+
+- `tests/v21.test.mjs`: eight chapters, durations 120/240/180/240/180/180/180/480; Chapter 8 badge, all nine outcomes, exact eight session ids, kinds and minutes `[60,60,60,60,60,60,60,60]`.
+- New `tests/innovation-project.test.mjs`: block shape per contract, all eleven key words, verbatim mission/route/myths/levelUp/selfCheck, the nine portfolio items, the six lab stages, page refs. The five tests appear verbatim in b8s1; "at least one must not use AI" in b8s3; "Rough is fine. Rough is the point." in b8s5; the eight presentation points in order in b8s8. b8s5 is the only session with a tool, carries all four safety notes, and its fallback offers the non-AI build rather than a sample. **`activityReady` for b8s5 must pass on the fallback route with the tool never acknowledged** — assert this explicitly, because a gate that requires the tool would contradict the chapter's mission. b8s2's fields must not ask for a name or contact detail. b8s7 requires at least three red-team rows and rejects a residual of "none". The `rubric` field renders six criteria at three levels and only `block8` sets it; earlier chapters render unchanged. The programme-complete state appears after the Chapter 8 capstone and no ninth chapter is implied.
+- Downloads exist on disk, generation is repeatable, the teacher key is outside `public/`, and no student download contains a filled canvas, a worked problem choice or the answer to the capstone review.
+- Server list; Chapter 8 project shape with the nine deliverables; capstone vocabulary gating, including that a review recommending the non-AI option scores as highly as one recommending AI; earlier-chapter scoring regression.
+- `tests/experience-labs.test.mjs`, `tests/lab-datasets.test.mjs`: keep green.
+- Acceptance: `CHAPTER8_SESSIONS`, `CAPSTONE8_ANSWERS`; API acceptance covers the Chapter 7→8 gate. UI acceptance and live walkthrough drive all eight sessions with real clicks, complete b8s5 **by the fallback route** to prove the non-AI path is a full route, submit the Chapter 8 capstone and project, and check the programme-complete state on the home page and portfolio. `ui-audit.mjs` screenshots the rubric table and the programme-complete card.
+
+## Docs
+
+`docs/releases/phase-9-chapter-8.md`; README pilot-features line; ROADMAP current work → Phase 9 done, Phase 10 next. Record that no new activity kind was added, the optional-AI tool decision and its non-AI fallback, the research-safety rule, and the teacher-key location.
+
+## File ownership
+
+| Agent | Owns |
+| --- | --- |
+| content | `curriculum.json`, `scripts/generate-datasets.mjs`, `public/datasets/*`, `docs/teacher/*`, `tests/v21.test.mjs`, `tests/experience-labs.test.mjs`, `tests/lab-datasets.test.mjs`, `docs/releases/phase-9-chapter-8.md`, `README.md`, `ROADMAP.md` |
+| student-ui | `app.js`, `index.html`, `styles.css`, `admin.js`, `lib/chapter-capstone.mjs`, `lib/project-briefs.mjs`, `tests/chapter-capstone.test.mjs`, `tests/innovation-project.test.mjs` |
+| workspace-api | `project-workspace.js`, `functions/api/[[path]].js`, `tests/project-workspace*.test.mjs`, `tests/cloudflare-runtime.test.mjs`, `tests/acceptance/*` |
+
+Selector contract: rubric `.chapter-rubric [data-criterion]`; programme-complete `.programme-complete`; lab `.lab`, `input[data-ack]`, `#labToolLink`, `button[data-fallback]`, `#labFallback`, `textarea[data-i]`; chain `input[data-i][data-f]`; testlog `input[data-i][data-f]`; textfields `textarea[data-i]`; downloads `.downloads a[download]`; session completion `#reflectionText #saveSession`; capstone `textarea[data-capstone] #submitCapstone`; workspace `#projectWorkspaceBtn-block8 #pwImportLab #pwAddEvidence #pwAddLog #pwSave #pwSubmit .pw-status`; myths `#mythBusters`; self-check `.self-check`; level-up `.level-up`.
