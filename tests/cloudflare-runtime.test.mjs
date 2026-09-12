@@ -55,4 +55,5 @@ test('server derives chapter qualification from chapter_assessments and gates th
   assert.match(fn,/block3:\['b3s1','b3s2','b3s3','b3s4','b3s5','b3s6'\]/);
   assert.match(fn,/block4:\['b4s1','b4s2','b4s3','b4s4','b4s5','b4s6','b4s7','b4s8','b4s9','b4s10'\]/);
   assert.match(fn,/block5:\['b5s1','b5s2','b5s3','b5s4','b5s5','b5s6','b5s7','b5s8','b5s9'\]/);
+  assert.match(fn,/block7:\['b7s1','b7s2','b7s3','b7s4','b7s5','b7s6','b7s7','b7s8'\]/);
 });
