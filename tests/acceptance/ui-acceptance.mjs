@@ -277,8 +277,13 @@ try {
   await da.page.waitForSelector('#adminAnalytics [data-measure]', { timeout: 15000 }).catch(() => {});
   const measures = new Set(await da.page.$$eval('#adminAnalytics [data-measure]', els => els.map(e => e.dataset.measure)).catch(() => []));
   check('admin analytics view renders all six measures', ['completion', 'improvement', 'dropoff', 'agreement', 'labs', 'feedback'].every(m => measures.has(m)), JSON.stringify([...measures]));
-  await da.page.waitForSelector('#adminAnalytics [data-suppressed]', { timeout: 15000 }).catch(() => {});
-  check('admin analytics view suppresses a cell in this small pilot', (await da.page.$$('#adminAnalytics [data-suppressed]')).length > 0);
+  // Whether any cell is suppressed depends on how many learners exist right now, so assert the rule instead of
+  // the weather: the view states the rule, and no cell ever shows a live count between 1 and 4.
+  const analyticsNote = await da.page.textContent('#adminAnalytics').catch(() => '');
+  check('admin analytics view states the suppression rule', /fewer than 5/i.test(analyticsNote));
+  const smallCounts = await da.page.$$eval('#adminAnalytics td:not([data-suppressed])', els =>
+    els.map(e => e.textContent.trim()).filter(t => /^[1-4]$/.test(t)));
+  check('admin analytics view never shows a count below the suppression threshold', smallCounts.length === 0, JSON.stringify(smallCounts));
   const analyticsText = await da.page.textContent('#adminAnalytics').catch(() => '');
   check('admin analytics view names no learner id, display name or reviewed_by', noIdentifiers(analyticsText, [a.id, admin.id, p10.id, a.displayName, p10.displayName].filter(Boolean)));
   await da.context.close();
