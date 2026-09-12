@@ -50,6 +50,12 @@ Live cutover acceptance against a deployment (needs `supabase login` and `npx pl
 ACCEPTANCE_BASE_URL=https://<deployment>.ty-ai-learning.pages.dev npm run acceptance
 ```
 
+To browse every chapter as a reviewer without working through the gates, open a deployment as a throwaway account that has completed Chapters 1–3 (add `--admin` to also open `/admin`); the account is deleted when the browser closes:
+
+```bash
+ACCEPTANCE_BASE_URL=https://preview-main.ty-ai-learning.pages.dev npm run browse -- --admin
+```
+
 Every branch push, including `main`, deploys to the Cloudflare Pages Preview environment as `preview-<branch>` (so `main` is served at `https://preview-main.ty-ai-learning.pages.dev`). The Production release workflow is manual dispatch only; it applies database migrations before deploying. Production is deferred until all roadmap phases are accepted on Preview.
 
 The [ADR-007 acceptance checklist](docs/decisions/ADR-007-cloudflare-supabase-platform.md) is evidenced on Preview; only the Production release itself is outstanding. Phase 2 follows; see [ROADMAP](ROADMAP.md).
