@@ -175,9 +175,6 @@ async function submitChapterAssessment(){
     reconcileBadges();
     await api('progress',{method:'PUT',body:JSON.stringify({state})});
     saveLocal();renderHome();renderChapterCapstone();
-    // Cloud state can land while the learner is already on the Portfolio, which otherwise keeps showing zeros
-    // and exports an empty file.
-    if(!document.getElementById('portfolioView')?.classList.contains('hidden'))renderPortfolio();
   }catch(err){feedback('capstoneFeedback',err.message,'warn');btn.disabled=false}
 }
 
@@ -229,7 +226,10 @@ function renderPortfolio(){reconcileBadges();document.getElementById('portfolioP
 
 async function signIn(){try{setSync('Opening Google…');await oauthLogin('google')}catch(err){setSync('Google sign-in unavailable','error');console.error(err)}}
 async function signOut(){try{await logout()}catch(err){console.error(err)}user=null;cloudError=null;state=loadLocal(ANON_KEY);reconcileBadges();setSync('Local mode');renderHome();show('homeView')}
-async function initAuth(){state=loadLocal(ANON_KEY);try{await handleAuthCallback()}catch(err){console.warn('Identity callback',err)}let identityUser=null;try{identityUser=await getUser()}catch(err){console.warn('Identity lookup',err)}if(!identityUser){reconcileBadges();setSync('Local mode');renderHome();return}try{const session=await api('session');user=session.student;cloudError=null;const cloud=sanitizeState(session.state);const anon=loadLocal(ANON_KEY);if(isEmpty(cloud)&&!isEmpty(anon)){state=anon;reconcileBadges();saveLocal();await api('progress',{method:'PUT',body:JSON.stringify({state})});localStorage.removeItem(ANON_KEY)}else{state=cloud;reconcileBadges();saveLocal()}setSync('Cloud synced','online')}catch(err){console.error('Session restore failed',err.status||'',err);user={id:identityUser.id,email:identityUser.email,displayName:String(identityUser.userMetadata?.full_name||identityUser.email||'Student').slice(0,80)};cloudError=err.status?`HTTP ${err.status}: ${err.message}`:(err.message||'network error');state=loadLocal(ANON_KEY);reconcileBadges();setSync('Signed in · cloud sync unavailable','error')}renderHome()}
+// Cloud state arrives after the first paint. A learner already looking at the Portfolio would otherwise keep
+// seeing zeros, and an export taken from that screen would contain none of their work.
+function refreshOpenView(){const pv=document.getElementById('portfolioView');if(pv&&!pv.classList.contains('hidden'))renderPortfolio()}
+async function initAuth(){state=loadLocal(ANON_KEY);try{await handleAuthCallback()}catch(err){console.warn('Identity callback',err)}let identityUser=null;try{identityUser=await getUser()}catch(err){console.warn('Identity lookup',err)}if(!identityUser){reconcileBadges();setSync('Local mode');renderHome();return}try{const session=await api('session');user=session.student;cloudError=null;const cloud=sanitizeState(session.state);const anon=loadLocal(ANON_KEY);if(isEmpty(cloud)&&!isEmpty(anon)){state=anon;reconcileBadges();saveLocal();await api('progress',{method:'PUT',body:JSON.stringify({state})});localStorage.removeItem(ANON_KEY)}else{state=cloud;reconcileBadges();saveLocal()}setSync('Cloud synced','online')}catch(err){console.error('Session restore failed',err.status||'',err);user={id:identityUser.id,email:identityUser.email,displayName:String(identityUser.userMetadata?.full_name||identityUser.email||'Student').slice(0,80)};cloudError=err.status?`HTTP ${err.status}: ${err.message}`:(err.message||'network error');state=loadLocal(ANON_KEY);reconcileBadges();setSync('Signed in · cloud sync unavailable','error')}renderHome();refreshOpenView()}
 
 function bind(){document.getElementById('homeBtn').onclick=()=>{renderHome();show('homeView')};document.getElementById('backBtn').onclick=()=>{renderHome();show('homeView')};document.getElementById('portfolioBack').onclick=()=>{renderHome();show('homeView')};document.getElementById('portfolioBtn').onclick=()=>{renderPortfolio();show('portfolioView')};document.getElementById('exportPortfolio').onclick=exportPortfolio;document.getElementById('exportCoordinatorSummary').onclick=exportCoordinatorSummary;document.getElementById('authBtn').onclick=()=>user?signOut():signIn();document.getElementById('accountAction').onclick=()=>user?signOut():signIn()}
 
