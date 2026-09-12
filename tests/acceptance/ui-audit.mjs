@@ -1,6 +1,7 @@
 // Visual audit helper: full-page screenshots of every main screen at phone and desktop widths. Not part of npm test.
 // ACCEPTANCE_BASE_URL=... SHOTS=<dir> node tests/acceptance/ui-audit.mjs
 import { chromium } from 'playwright';
+import { writeFileSync, readFileSync } from 'node:fs';
 import { BASE, REF, api, createUser, cleanup, CHAPTER1_SESSIONS, CHAPTER2_SESSIONS, CHAPTER3_SESSIONS, CHAPTER4_SESSIONS, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS, CHAPTER6_FIELDS, CHAPTER6_SESSIONS, CAPSTONE6_ANSWERS, CHAPTER7_RUNS, decisionStep, recordDecisionRun, restartDecision, fillDecisionCanvas, CHAPTER7_SESSIONS, CAPSTONE7_ANSWERS, CHAPTER8_SESSIONS, CAPSTONE8_ANSWERS, CHAPTER8_FIELDS } from './lib.mjs';
 const OUT=process.env.SHOTS||'ui-audit-shots';
 const KEY=`sb-${REF}-auth-token`;
@@ -60,6 +61,12 @@ try{
     await p.click('[data-block-home], #homeBtn'); await p.click('[data-block="0"]'); await p.waitForSelector('#labBanner'); await p.click('[data-lab-session="b1lab"]'); await p.waitForSelector('#labToolLink'); await shot('lab-session');
     await p.waitForSelector('#projectWorkspaceBtn',{timeout:15000}); await p.click('#projectWorkspaceBtn'); await p.waitForSelector('#projectWorkspaceModal.open'); await shot('workspace',false);
     await p.click('.pw-close'); await p.click('#portfolioBtn'); await shot('portfolio');
+    // Phase 10: the rendered export as a student would see it printed, not the trigger button.
+    await p.waitForSelector('#exportPortfolio',{timeout:15000});
+    const [exportDownload]=await Promise.all([p.waitForEvent('download'),p.click('#exportPortfolio')]);
+    const exportPath=`${OUT}/${tag}-portfolio-export.html`; writeFileSync(exportPath,readFileSync(await exportDownload.path(),'utf8'));
+    const exportPage=await ctx.newPage(); await exportPage.goto(`file://${process.cwd()}/${exportPath}`,{waitUntil:'load'});
+    await exportPage.screenshot({path:`${OUT}/${tag}-portfolio-export.png`,fullPage:true}); await exportPage.close();
     const hs=await p.evaluate(()=>({sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth})); console.log(tag,'scroll/client width',hs);
     await ctx.close();
   }
@@ -69,6 +76,8 @@ try{
     await p.goto(`${BASE}/`,{waitUntil:'load'}); await p.evaluate(([k,v])=>localStorage.setItem(k,v),[KEY,JSON.stringify(admin.session)]);
     await p.goto(`${BASE}/admin`,{waitUntil:'load'}); await p.waitForSelector('#studentRows [data-student]',{timeout:20000}); await p.screenshot({path:`${OUT}/${tag}-admin.png`,fullPage:true});
     await p.click(`[data-student="${u.id}"]`); await p.waitForFunction(()=>!/Loading student evidence/.test(document.getElementById('detailContent')?.textContent||''),null,{timeout:20000}); await p.screenshot({path:`${OUT}/${tag}-admin-detail.png`,fullPage:true});
+    // Phase 10: the pilot analytics view, aggregates and suppression as an admin sees them.
+    await p.waitForSelector('#adminAnalytics [data-measure]',{timeout:15000}).catch(()=>{}); await p.screenshot({path:`${OUT}/${tag}-admin-analytics.png`,fullPage:true});
     await ctx.close();
   }
 }catch(e){console.log('ERR',e.message)}finally{await browser.close();await cleanup(users)}
