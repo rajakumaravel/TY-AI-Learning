@@ -50,7 +50,7 @@ async function currentLearner(context){
 const blockOrder=Object.keys(requiredSessions);
 async function chapterQualifications(db,userId){
   const {data,error}=await db.from('chapter_assessments').select('block_id,suggested_level,suggested_score,teacher_level,submitted_at').eq('user_id',userId); if(error)throw error;
-  const map={}; for(const row of data||[])map[row.block_id]={submittedAt:row.submitted_at,level:row.teacher_level||row.suggested_level,score:row.suggested_score}; return map;
+  const map={}; for(const row of data||[])map[row.block_id]={submittedAt:row.submitted_at,level:row.teacher_level||row.suggested_level,teacherLevel:row.teacher_level||null,suggestedLevel:row.suggested_level,score:row.suggested_score}; return map;
 }
 async function withServerQualifications(db,userId,state){
   const clean=state&&typeof state==='object'&&!Array.isArray(state)?state:{};

@@ -32,14 +32,15 @@ function fixture(){
         ],
         evidence:[
           {label:'What surprised you',value:`It got the weather wrong. ${marker(2)}`}
-        ]
+        ],
+        // The project belongs to its chapter, the way the app assembles it.
+        project:{
+          status:'submitted',
+          deliverables:[['Prototype',`A working prototype. ${marker(3)}`],['Test log','Three testers, two confused']],
+          finalRecommendation:`We should pilot this with one class first. ${marker(4)}`
+        }
       }
-    ],
-    project:{
-      chapter:'Innovation project',
-      deliverables:['A working prototype','A test log'],
-      finalRecommendation:`We should pilot this with one class first. ${marker(3)}`
-    }
+    ]
   };
 }
 
@@ -104,11 +105,15 @@ test('two separate artefacts: the coordinator summary is not the portfolio expor
   assert.doesNotMatch(summary,/portfolio-export/);
 });
 
-test('app.js wires the two export controls without adding an endpoint or a fetch',()=>{
+test('the export adds no endpoint: it builds from held state plus the existing projects route',()=>{
   assert.match(app,/exportPortfolio/);
   assert.match(app,/exportCoordinatorSummary/);
   assert.match(app,/buildPortfolioExport/);
   assert.match(app,/buildCoordinatorSummary/);
+  // Reading the projects route the workspace already uses is fine; a route invented for export is not.
+  assert.match(app,/api\('projects\/'/,'project work is read through the existing projects route');
+  const invented=app.match(/api\('(?!progress|projects\/|chapter-assessment)[a-z-]+/g)||[];
+  assert.deepEqual(invented.filter(x=>/export|portfolio|summary/i.test(x)),[],'no route invented for the export');
 });
 
 test('index.html carries the two labelled export controls',()=>{
