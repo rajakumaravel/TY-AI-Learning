@@ -1,0 +1,38 @@
+How your project will be judged (Chapter 8, AI Innovation Project)
+
+Read them before you start, not after. These are the same six criteria that appear at the top of the chapter page.
+
+=== Problem ===
+Getting started: Problem is identifiable.
+Getting there: Problem and user are clearly defined with evidence.
+Going further: Problem is well-bounded, evidence-based and compared with other ways of framing it.
+
+=== Solution choice ===
+Getting started: You have a solution idea.
+Getting there: You explain why your approach fits the problem.
+Going further: You compare AI and non-AI options and justify the simplest approach that works.
+
+=== Prototype ===
+Getting started: A basic demonstration.
+Getting there: The prototype tests a core assumption.
+Going further: The prototype is designed around measurable success and failure criteria.
+
+=== Testing ===
+Getting started: You got feedback.
+Getting there: You recorded test evidence and made a change.
+Going further: You ran structured tests, red-teamed failure modes and compared versions.
+
+=== Responsible AI ===
+Getting started: You named a risk.
+Getting there: You identified privacy, bias, hallucination or oversight issues and a safeguard.
+Going further: You analysed trade-offs, remaining risk, who's affected and who's accountable.
+
+=== Presentation ===
+Getting started: You described the idea.
+Getting there: You communicated problem, prototype, test and learning clearly.
+Going further: You used evidence, acknowledged uncertainty and handled challenge questions thoughtfully.
+
+LEVEL UP (OPTIONAL CHALLENGE)
+Add a simple evaluation plan with one quantitative measure (a number) and one qualitative measure (what people say). Run a second test cycle and compare the results with the first.
+
+Badge earned: AI Innovator ✓ · Programme complete

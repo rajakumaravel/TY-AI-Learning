@@ -347,7 +347,7 @@ Every development phase must satisfy all of the following before production acce
 
 Do not start multiple major phases in parallel. Complete the current phase, verify it with real/pilot usage where appropriate, record findings, then proceed to the next phase.
 
-**Current work: Phase 8 — Chapter 7: Our AI Future implementation is done (see `docs/product/phase-8-contract.md` and `docs/releases/phase-8-chapter-7.md`); next is Phase 9 — Chapter 8: AI Innovation Project.** Live deployment acceptance remains pending. Phase 7 — Chapter 6 is complete (`docs/releases/phase-7-chapter-6.md`).
+**Current work: Phase 9 — Chapter 8: AI Innovation Project implementation is done (see `docs/product/phase-9-contract.md` and `docs/releases/phase-9-chapter-8.md`); next is Phase 10 — Portfolio, School Reporting and Pilot Analytics.** All eight chapters of the Student Book are now in the portal. Live deployment acceptance remains pending. Phase 8 — Chapter 7 is complete (`docs/releases/phase-8-chapter-7.md`).
 
 Phase 2 merged 2026-09-11 (PR #6).
 

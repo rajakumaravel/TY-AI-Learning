@@ -178,3 +178,30 @@ test('chapter 7 lab is the in-product AI Adoption Decision Simulator with no AI 
   assert.ok(Object.keys(d.nodes[0]).every(k=>k!=='score'),'no combined score');
   assert.doesNotMatch(JSON.stringify(d.nodes),/"correct"|"best"|"winner"|"score"/i,'no correct terminal');
 });
+
+test('chapter 8 lab is the whole chapter, and its one AI tool is optional with a non-AI build as the fallback',()=>{
+  const b=course.blocks[7];
+  assert.equal(b.lab.title,'AI Innovation Project');
+  assert.match(b.lab.summary,/roughest thing that tests your biggest assumption/);
+  assert.deepEqual(b.lab.stages,[['DO','b8s1','Find a problem worth solving'],['TEST','b8s6','Watch real people use it'],['MAKE','b8s5','Build the smallest prototype'],['BREAK','b8s7','Red-team your own solution'],['IMPROVE','b8s7','Change one thing because of evidence'],['PROVE','b8s8','Present the evidence, including what failed']]);
+  assert.equal(new Set(b.lab.stages.map(x=>x[1])).size,5,'the six stages import from five different sessions');
+  const labs=b.sessions.filter(s=>s.activity.kind==='lab');
+  assert.deepEqual(labs.map(s=>s.id),['b8s5'],'b8s5 is the only lab session in the chapter');
+  const a=labs[0].activity;
+  assert.deepEqual(a.tool,{name:'DuckDuckGo AI Chat',url:'https://duck.ai',free:true});
+  assert.deepEqual(a.privacy,[
+    'Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.',
+    'No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.',
+    'The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked.',
+    'Nothing typed into this portal is sent to the tool; copy across yourself and paste short extracts back here.'
+  ]);
+  assert.equal(a.steps.length,5);
+  assert.equal(a.fields.length,4);
+  assert.equal(a.fallback.title,'No AI, or the tool is blocked?');
+  const fb=a.fallback.steps.join(' ');
+  assert.match(fb,/copilot\.microsoft\.com/);
+  assert.match(fb,/full route and not a lesser one/);
+  assert.doesNotMatch(fb,/sample output/i,'the second fallback is building the non-AI version, not a sample download');
+  for(const s of b.sessions.filter(s=>s.id!=='b8s5'))assert.ok(!s.activity.tool&&!s.activity.privacy,`${s.id} needs no AI tool`);
+  assert.ok(b.sessions.find(s=>s.id==='b8s2').activity.instructions.includes('no names, no contact details'),'b8s2 carries the research-safety rule');
+});

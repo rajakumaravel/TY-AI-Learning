@@ -1,0 +1,38 @@
+Approved interview questions (Chapter 8, AI Innovation Project, hour 2 "Sprint 1 · Understand the user")
+
+RESEARCH SAFELY. Read this before you ask anybody anything.
+- Only ask questions the training centre has approved. These six are approved. If you want to ask something else, get it approved first.
+- Collect no personal data you don't need. For this project that means: none.
+- Everything from Chapter 3 applies here, to your own project now.
+- Label everyone Person A, Person B, Person C. Never write down a name, a phone number, an email address, a class or group, an age, a photo, or anything else that would let someone work out who you spoke to.
+- Ask about the task. Do not ask about the person.
+
+=== THE SIX APPROVED QUESTIONS ===
+1. Walk me through the last time you did this. What happened first?
+2. What did you do next, and after that?
+3. Where does it usually go wrong?
+4. What do you do instead when it goes wrong?
+5. How often does that happen?
+6. If one part of this got easier, which part would you pick?
+
+Ask them in that order. Let the person finish. Write down what they said, not what you hoped they would say. A quiet answer you did not expect is worth more than three that agree with you.
+
+=== IF SOMEONE VOLUNTEERS PERSONAL INFORMATION ANYWAY ===
+People often will, without being asked. When it happens:
+- Don't write it down. Not in your notes, not in the portal, not "just to remember who said what".
+- Tell them you haven't written it down, so they know.
+- If it is already written down, cross it out or delete it now, before you go on.
+- If what they told you suggests somebody is at risk, stop the interview and tell a member of staff at the training centre. That is not a research decision and it is not yours to handle alone.
+
+=== RECORDING SHEET ===
+Person A — task described:
+Person A — where it goes wrong:
+Person A — what they do instead:
+
+Person B — task described:
+Person B — where it goes wrong:
+Person B — what they do instead:
+
+Person C — task described:
+Person C — where it goes wrong:
+Person C — what they do instead:

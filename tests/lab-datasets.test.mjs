@@ -232,6 +232,54 @@ test('the chapter 7 teacher key computes all eight outcomes and the quiz key, an
   for(const re of [/jobs will go/,/No AI means no risk/,/An audit removes the harm/])assert.match(key,re);
 });
 
+test('chapter 8 downloads are generated, blank, offered in the right sessions, and the teacher key stays outside public/',()=>{
+  const files=['innovation-project-canvas.md','innovation-problem-cards.txt','innovation-interview-guide.txt','innovation-responsible-canvas.md','innovation-prototype-starters.txt','innovation-peer-test-sheet.csv','innovation-risk-register.csv','innovation-presentation-guide.md','innovation-rubric.txt'];
+  for(const file of files){
+    assert.ok(fs.existsSync(`public/datasets/${file}`),`${file} missing`);
+    assert.ok(manifest[file]>0,`${file} not in manifest`);
+  }
+  assert.ok(fs.existsSync('docs/teacher/innovation-project.KEY.txt'),'teacher key generated outside public/');
+  assert.ok(!fs.readdirSync('public/datasets').some(f=>/^innovation.*KEY/i.test(f)),'the chapter 8 teacher key is never served');
+  const at=id=>downloads.filter(d=>d.session===id).map(d=>d.file);
+  assert.deepEqual(at('b8s1'),['innovation-problem-cards.txt','innovation-project-canvas.md']);
+  assert.deepEqual(at('b8s2'),['innovation-interview-guide.txt','innovation-project-canvas.md']);
+  assert.deepEqual(at('b8s3'),['innovation-project-canvas.md']);
+  assert.deepEqual(at('b8s4'),['innovation-responsible-canvas.md','innovation-project-canvas.md']);
+  assert.deepEqual(at('b8s5'),['innovation-prototype-starters.txt','innovation-project-canvas.md']);
+  assert.deepEqual(at('b8s6'),['innovation-peer-test-sheet.csv']);
+  assert.deepEqual(at('b8s7'),['innovation-risk-register.csv']);
+  assert.deepEqual(at('b8s8'),['innovation-presentation-guide.md','innovation-rubric.txt']);
+  assert.equal(fs.readFileSync('public/datasets/innovation-peer-test-sheet.csv','utf8'),`tester,task_given,what_worked,where_confused,what_failed,unexpected\n${',,,,,\n'.repeat(3)}`);
+  assert.equal(fs.readFileSync('public/datasets/innovation-risk-register.csv','utf8'),`change_or_risk,evidence_or_attack,safeguard,what_remains\n${',,,\n'.repeat(5)}`);
+  const cards=fs.readFileSync('public/datasets/innovation-problem-cards.txt','utf8');
+  for(const p of ['A school FAQ or event assistant','Study-planning or revision support','A lost-property workflow','Canteen or sustainability data analysis','A local tourism information assistant','Sports-club coordination','A career exploration assistant','Making community information more accessible','A school survey insight tool','A non-AI solution, because your team concluded AI adds no real value here'])assert.ok(cards.includes(p),p);
+  assert.match(cards,/real, understandable, useful, testable, safe/);
+  assert.match(cards,/Generate at least five problems of your own/);
+  assert.match(cards,/not a menu to pick from without looking around/);
+  const guide=fs.readFileSync('public/datasets/innovation-interview-guide.txt','utf8');
+  assert.equal((guide.match(/^\d\. /gm)||[]).length,6,'six approved questions');
+  assert.match(guide,/Person A, Person B, Person C/);
+  assert.match(guide,/volunteers personal information/i);
+  const rc=fs.readFileSync('public/datasets/innovation-responsible-canvas.md','utf8');
+  assert.ok(rc.indexOf('## 5. Success criteria')<rc.indexOf('## 6. Build'),'success criteria come before the build section');
+  const starters=fs.readFileSync('public/datasets/innovation-prototype-starters.txt','utf8');
+  assert.equal((starters.match(/^  Good at: /gm)||[]).length,7,'the seven prototype forms');
+  assert.equal((starters.match(/^  Cannot test: /gm)||[]).length,7);
+  assert.match(starters,/Rough is fine\. Rough is the point\./);
+  const pres=fs.readFileSync('public/datasets/innovation-presentation-guide.md','utf8');
+  assert.match(pres,/3–5 minutes/);
+  for(const [i,p] of ['The problem, and who experiences it','The evidence you gathered',"The solution, and why AI is or isn't appropriate",'A demonstration of the prototype','What happened during testing','One change you made because of evidence','One important risk, and its safeguard',"What's still uncertain, or what you'd test next"].entries())assert.ok(pres.includes(`${i+1}. **${p}**`),p);
+  assert.match(pres,/Hide the limitations in the presentation/);
+  const rubric=fs.readFileSync('public/datasets/innovation-rubric.txt','utf8');
+  for(const c of ['Problem','Solution choice','Prototype','Testing','Responsible AI','Presentation'])assert.ok(rubric.includes(`=== ${c} ===`),c);
+  assert.equal((rubric.match(/^Getting started: /gm)||[]).length,6);
+  assert.match(rubric,/Read them before you start, not after/);
+  const canvas=fs.readFileSync('public/datasets/innovation-project-canvas.md','utf8');
+  assert.equal((canvas.match(/^## Hour \d · Sprint /gm)||[]).length,8,'a blank section for each of the eight hours');
+  assert.doesNotMatch(canvas,/bike rack|community centre|noticeboard/i,'no filled canvas and no worked problem choice');
+  for(const file of files)assert.doesNotMatch(fs.readFileSync(`public/datasets/${file}`,'utf8'),/community centre|noticeboard/i,`${file} does not answer the capstone review`);
+});
+
 test('dataset archives stay small enough for school connections',()=>{
   for(const [file,size] of Object.entries(manifest))assert.ok(size<1_000_000,`${file} is ${size} bytes`);
 });

@@ -1,0 +1,40 @@
+Prototype forms (Chapter 8, AI Innovation Project, hour 5 "Sprint 3 · Build the prototype")
+
+Rough is fine. Rough is the point. A prototype is a rough, cheap version built to learn, not to impress, and the version you want is the smallest one that can test your biggest assumption. Time spent making it look finished is time not spent finding out whether it is wrong.
+
+Each form below tests some things and not others. Pick the one that tests YOUR assumption, not the one that looks most impressive.
+
+A prompt workflow
+  Good at: good at testing whether a written instruction produces something usable.
+  Cannot test: cannot test whether anyone would bother following it.
+
+A chatbot mock-up
+  Good at: good at testing whether the conversation makes sense to someone else.
+  Cannot test: cannot test accuracy, because you are writing the answers.
+
+A spreadsheet
+  Good at: good at testing whether a calculation or a count answers the question.
+  Cannot test: cannot test whether anyone would open it.
+
+A simple web page
+  Good at: good at testing whether people find and understand the thing.
+  Cannot test: cannot test what happens at scale, or over months.
+
+A classifier
+  Good at: good at testing whether the categories you invented hold up on real examples.
+  Cannot test: cannot test whether the categories were the right ones to invent.
+
+A simulated presentation
+  Good at: good at testing whether the idea is understood and wanted.
+  Cannot test: cannot test whether it works.
+
+Code
+  Good at: good at testing behaviour you cannot fake.
+  Cannot test: cannot be changed quickly, and it is easy to spend the hour on the code instead of the question.
+
+AI IS OPTIONAL HERE. If your hour-3 comparison chose the non-AI option, building that is the full route and not a lesser one. A spreadsheet, a paper mock-up, a simple page or a written workflow all count, and the judging table rewards the simplest approach that works.
+
+BEFORE YOU BUILD, WRITE THIS DOWN:
+- My biggest assumption (the belief that, if false, makes the whole thing pointless):
+- The form I chose, and why it tests that assumption:
+- What I am leaving out on purpose:

@@ -1176,6 +1176,296 @@ UNSUPPORTED CLAIMS TO CHALLENGE:
 NO TERMINAL IS CORRECT. There is no combined score and no ranked outcome anywhere in the fixture. Assess the reasoning, the cited evidence, the alternative considered, the named accountable role and the stated trigger — not which approach the student chose.
 `);
 
+// ---------- Chapter 8: AI Innovation Project. Blank canvases and starting points only; the six criteria, the eight
+// presentation points and the five red-team attacks are read from curriculum.json so the downloads cannot drift from
+// the chapter. Nothing here contains a filled canvas, a worked problem choice or the capstone review answer.
+const BLOCK8 = JSON.parse(readFileSync(new URL('../curriculum.json', import.meta.url), 'utf8')).blocks.find(b => b.id === 'block8');
+const innoSession = id => BLOCK8.sessions.find(s => s.id === id);
+const innoFile = (name, text) => writeFileSync(join(OUT, `innovation-${name}`), text);
+const INNO_HOURS = BLOCK8.route.map(([hour, label], i) => [hour, label, BLOCK8.sessions[i]]);
+const INNO_TESTS = ['real', 'understandable', 'useful', 'testable', 'safe'];
+const INNO_ATTACKS = ['hallucinate', 'be biased', 'leak private data', 'be misused', 'make people over-rely on it'];
+// The book's eight presentation points, p.39, verbatim and in order.
+const INNO_POINTS = [
+  'The problem, and who experiences it.',
+  'The evidence you gathered.',
+  "The solution, and why AI is or isn't appropriate.",
+  'A demonstration of the prototype.',
+  'What happened during testing.',
+  'One change you made because of evidence.',
+  'One important risk, and its safeguard.',
+  "What's still uncertain, or what you'd test next."
+];
+const INNO_STARTERS = [
+  ['A prompt workflow', 'good at testing whether a written instruction produces something usable', 'cannot test whether anyone would bother following it'],
+  ['A chatbot mock-up', 'good at testing whether the conversation makes sense to someone else', 'cannot test accuracy, because you are writing the answers'],
+  ['A spreadsheet', 'good at testing whether a calculation or a count answers the question', 'cannot test whether anyone would open it'],
+  ['A simple web page', 'good at testing whether people find and understand the thing', 'cannot test what happens at scale, or over months'],
+  ['A classifier', 'good at testing whether the categories you invented hold up on real examples', 'cannot test whether the categories were the right ones to invent'],
+  ['A simulated presentation', 'good at testing whether the idea is understood and wanted', 'cannot test whether it works'],
+  ['Code', 'good at testing behaviour you cannot fake', 'cannot be changed quickly, and it is easy to spend the hour on the code instead of the question']
+];
+const INNO_STARTING_POINTS = [
+  'A school FAQ or event assistant',
+  'Study-planning or revision support',
+  'A lost-property workflow',
+  'Canteen or sustainability data analysis',
+  'A local tourism information assistant',
+  'Sports-club coordination',
+  'A career exploration assistant',
+  'Making community information more accessible',
+  'A school survey insight tool',
+  'A non-AI solution, because your team concluded AI adds no real value here'
+];
+
+innoFile('project-canvas.md', `# Innovation Project Canvas (Chapter 8, AI Innovation Project)
+
+Blank on purpose. Work on paper or in a document if you prefer, then copy your answers into the portal. There is no example filled in here, because the problem has to be one you noticed yourself.
+
+${INNO_HOURS.map(([hour, label, s]) => `## ${hour} · ${label}\n\n${s.activity.kind === 'chain' || s.activity.kind === 'testlog'
+  ? s.activity.columns.map(([, head]) => `- ${head}:`).join('\n') + `\n\n(${s.activity.minRows} rows minimum.)`
+  : (s.activity.fields || []).map(f => `- ${typeof f === 'string' ? f.replace(/…$/, '') : f}:`).join('\n')}\n\n- Think about it: ${s.reflection}`).join('\n\n')}
+
+## Portfolio check
+
+${BLOCK8.final.replace(/^Your /, '').split(/, and |, /).map(x => `- [ ] ${x.replace(/\.$/, '').replace(/^your /, '')}`).join('\n')}
+`);
+
+innoFile('problem-cards.txt', `Problem starting points and the five tests (Chapter 8, AI Innovation Project, hour 1 "Sprint 1 · Problem hunt")
+
+FIRST, AND BEFORE YOU READ THE LIST BELOW:
+Generate at least five problems of your own. Look at the training centre and the community around it with fresh eyes: where do people waste time, get confused, or get left out? Write down what you actually saw, and who you saw it happen to. The list further down is a set of places to look when you are stuck. It is not a menu to pick from without looking around, and a problem chosen off it without your own observation will fail the first test.
+
+=== THE FIVE TESTS ===
+Choose one problem using five tests: ${INNO_TESTS.join(', ')}.
+
+- Real — somebody actually has this problem and you saw it, rather than imagined it.
+- Understandable — you can state it in one sentence that someone else would recognise.
+- Useful — solving it would change something for the person who has it.
+- Testable — you could tell whether your answer worked, and you could tell if it didn't.
+- Safe — working on it needs no personal data you don't need, and puts nobody at risk.
+
+A problem that fails one test is not a bad problem. It is a problem for a different project. Write down which test it failed; that is the evidence that you screened it rather than picked the first idea.
+
+=== STUCK FOR A PROBLEM? SOME STARTING POINTS ===
+${INNO_STARTING_POINTS.map(x => `- ${x}`).join('\n')}
+
+The last one is a real option, not a consolation prize. The judging table's top level for Solution choice is "You compare AI and non-AI options and justify the simplest approach that works."
+`);
+
+innoFile('interview-guide.txt', `Approved interview questions (Chapter 8, AI Innovation Project, hour 2 "Sprint 1 · Understand the user")
+
+RESEARCH SAFELY. Read this before you ask anybody anything.
+- Only ask questions the training centre has approved. These six are approved. If you want to ask something else, get it approved first.
+- Collect no personal data you don't need. For this project that means: none.
+- Everything from Chapter 3 applies here, to your own project now.
+- Label everyone Person A, Person B, Person C. Never write down a name, a phone number, an email address, a class or group, an age, a photo, or anything else that would let someone work out who you spoke to.
+- Ask about the task. Do not ask about the person.
+
+=== THE SIX APPROVED QUESTIONS ===
+1. Walk me through the last time you did this. What happened first?
+2. What did you do next, and after that?
+3. Where does it usually go wrong?
+4. What do you do instead when it goes wrong?
+5. How often does that happen?
+6. If one part of this got easier, which part would you pick?
+
+Ask them in that order. Let the person finish. Write down what they said, not what you hoped they would say. A quiet answer you did not expect is worth more than three that agree with you.
+
+=== IF SOMEONE VOLUNTEERS PERSONAL INFORMATION ANYWAY ===
+People often will, without being asked. When it happens:
+- Don't write it down. Not in your notes, not in the portal, not "just to remember who said what".
+- Tell them you haven't written it down, so they know.
+- If it is already written down, cross it out or delete it now, before you go on.
+- If what they told you suggests somebody is at risk, stop the interview and tell a member of staff at the training centre. That is not a research decision and it is not yours to handle alone.
+
+=== RECORDING SHEET ===
+Person A — task described:
+Person A — where it goes wrong:
+Person A — what they do instead:
+
+Person B — task described:
+Person B — where it goes wrong:
+Person B — what they do instead:
+
+Person C — task described:
+Person C — where it goes wrong:
+Person C — what they do instead:
+`);
+
+innoFile('responsible-canvas.md', `# Responsible AI and data canvas (Chapter 8, hour 4 "Sprint 2 · Responsible design")
+
+Blank on purpose. Fill the sections in this order. The success criteria come **before** the build section, and that ordering is the point of the session: criteria written after the results are not criteria, they are a description of what happened.
+
+## 1. Data flow
+
+- What goes in:
+- What the solution does with it:
+- What comes out:
+- What is stored, where, and for how long:
+
+## 2. Human decision points
+
+- What a person must decide:
+- What a person must check:
+- What a person must approve:
+- Who that person is, by role:
+
+## 3. Failure modes
+
+| What could go wrong | For whom | How badly |
+| --- | --- | --- |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+
+"It might be wrong sometimes" is not a failure mode. Say what goes wrong, to whom, and how badly.
+
+## 4. Safeguards
+
+| Failure mode | What stops it, or limits it | Who does it, and when |
+| --- | --- | --- |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+
+"Check it" is not a safeguard. Name who checks what, when, and what they do when the check fails.
+
+## 5. Success criteria — written before I build
+
+- How I will know it worked:
+- What would count as it not working:
+- Date written:
+
+Do not edit this section after you have results. If the result misses the criteria, that is a finding.
+
+## 6. Build — not before section 5 is finished
+
+- The biggest assumption this prototype has to test:
+- The roughest form that tests it:
+- What I am deliberately leaving out:
+`);
+
+innoFile('prototype-starters.txt', `Prototype forms (Chapter 8, AI Innovation Project, hour 5 "Sprint 3 · Build the prototype")
+
+Rough is fine. Rough is the point. A prototype is a rough, cheap version built to learn, not to impress, and the version you want is the smallest one that can test your biggest assumption. Time spent making it look finished is time not spent finding out whether it is wrong.
+
+Each form below tests some things and not others. Pick the one that tests YOUR assumption, not the one that looks most impressive.
+
+${INNO_STARTERS.map(([form, good, cant]) => `${form}\n  Good at: ${good}.\n  Cannot test: ${cant}.`).join('\n\n')}
+
+AI IS OPTIONAL HERE. If your hour-3 comparison chose the non-AI option, building that is the full route and not a lesser one. A spreadsheet, a paper mock-up, a simple page or a written workflow all count, and the judging table rewards the simplest approach that works.
+
+BEFORE YOU BUILD, WRITE THIS DOWN:
+- My biggest assumption (the belief that, if false, makes the whole thing pointless):
+- The form I chose, and why it tests that assumption:
+- What I am leaving out on purpose:
+`);
+
+writeFileSync(join(OUT, 'innovation-peer-test-sheet.csv'), `tester,task_given,what_worked,where_confused,what_failed,unexpected\n${',,,,,\n'.repeat(3)}`);
+writeFileSync(join(OUT, 'innovation-risk-register.csv'), `change_or_risk,evidence_or_attack,safeguard,what_remains\n${',,,\n'.repeat(5)}`);
+
+innoFile('presentation-guide.md', `# Presentation guide (Chapter 8, hour 8 "Sprint 4 · Demo and reflection")
+
+**3–5 minutes, in this order.** Eight points in five minutes is roughly thirty seconds each, so plan one sentence and one piece of evidence per point.
+
+${INNO_POINTS.map((p, i) => `${i + 1}. **${p.replace(/\.$/, '')}** — ${[
+  'name the problem in one sentence and say who has it. Not "people", a person you actually spoke to.',
+  'what you asked, how many people, and what they said. Say how small the sample is before anyone else does.',
+  'the option you chose and the ones you rejected, including the non-AI one. "AI added complexity without adding value, so we didn\'t use it" is a top-level answer here.',
+  'say what you would show and in what order. A demo proves it runs; it does not prove it is useful.',
+  'what your testers did, where they got confused, what failed, and the one thing you did not expect.',
+  'the change, and the specific observation that caused it. Anyone should be able to trace one to the other.',
+  'one risk that matters, and the safeguard. Then what remains after the safeguard, because something always does.',
+  'name something genuinely uncertain and the test that would settle it. A project with nothing uncertain has not been tested.'
+][i]}`).join('\n')}
+
+## The myth this is assessed against
+
+"Hide the limitations in the presentation." Actually: naming the limitations is one of the things you're being assessed on. Teams that hide them look like teams that didn't test.
+
+## Timing sheet
+
+| Point | Planned seconds | Evidence I will show |
+| --- | --- | --- |
+${INNO_POINTS.map((_, i) => `| ${i + 1} |  |  |`).join('\n')}
+`);
+
+innoFile('rubric.txt', `How your project will be judged (Chapter 8, AI Innovation Project)
+
+Read them before you start, not after. These are the same six criteria that appear at the top of the chapter page.
+
+${BLOCK8.rubric.map(([criterion, ...levels]) => `=== ${criterion} ===\n${['Getting started', 'Getting there', 'Going further'].map((lvl, i) => `${lvl}: ${levels[i]}`).join('\n')}`).join('\n\n')}
+
+LEVEL UP (OPTIONAL CHALLENGE)
+${BLOCK8.levelUp}
+
+Badge earned: ${BLOCK8.badge} ✓ · Programme complete
+`);
+
+writeFileSync('docs/teacher/innovation-project.KEY.txt', `TEACHER KEY — Chapter 8, AI Innovation Project. Keep this out of student hands; it is generated outside public/ and is never served.
+
+This chapter is written in the Student Book for teams. In this portal it is self-paced and individual: "your team" is the student's own decision with an optional partner, and the peer test is classmates, people at the training centre, or someone at home. Assess the individual's evidence, not a group artefact. A student working alone can reach every level.
+
+=== WHAT GOOD AND WEAK EVIDENCE LOOKS LIKE, AT EACH OF THE SIX CRITERIA ===
+${BLOCK8.rubric.map(([criterion, started, there, further], i) => `${i + 1}. ${criterion}
+   Getting started: ${started}
+   Getting there: ${there}
+   Going further: ${further}
+   GOOD: ${[
+    'the problem is one sentence, tied to a place and a time the student observed, and the student can say which of the five tests each rejected problem failed.',
+    'three options are genuinely different, at least one uses no AI, and the complexity cost is priced for each — including who maintains it after the student stops.',
+    'the biggest assumption is named before the build, the form chosen tests that assumption, and something was deliberately left out.',
+    'at least three testers, behaviour recorded rather than opinion, and the "unexpected" column is filled with something the student could not have written in advance.',
+    'failure modes name who is harmed and how badly, safeguards name a person and a moment, and the residual column says what is still possible.',
+    'the eight points run in order in the time, the demo and the test evidence are kept apart, and point 8 names something genuinely uncertain.'
+  ][i]}
+   WEAK: ${[
+    'a problem class rather than a problem ("communication is bad"), or a starting point copied off the card with no observation behind it.',
+    'three variants of the same option, or a non-AI option written to lose so that the AI option can win.',
+    'a polished demo of something that tests nothing, or a build with no stated assumption.',
+    'three testers who all said "good", no confusion recorded, and nothing unexpected.',
+    '"the AI might be wrong sometimes" as the failure mode and "check it" as the safeguard.',
+    'the demo doing the work of the evidence, and limitations left out.'
+  ][i]}`).join('\n\n')}
+
+=== THE FIVE-TEST SCREENING, APPLIED TO THREE WORKED EXAMPLE PROBLEMS ===
+These are for demonstrating the screen in discussion. They are deliberately not on the book's starting-points list and are unlikely student choices, so none of them hands over an answer.
+
+1. "The bike rack is full by 9am and nobody knows which days are worst."
+   ${INNO_TESTS.map(t => `${t}: ${({ real: 'yes — four bikes on the railing last Tuesday, observed', understandable: 'yes — one sentence', useful: 'yes — people arrive and hunt for a space', testable: 'yes — count bikes and railings for a week, before and after', safe: 'yes — counting bikes records nothing about any person' })[t]}`).join('; ')}.
+   VERDICT: passes all five. A viable project, and the non-AI answer (a counted chart) is almost certainly the right one.
+
+2. "People at the training centre are stressed."
+   ${INNO_TESTS.map(t => `${t}: ${({ real: 'possibly, but not observed — reported as a feeling', understandable: 'no — not one recognisable sentence', useful: 'unclear, because it is not bounded', testable: 'no — you could not tell whether you had solved it', safe: 'no — investigating it means collecting personal and possibly health-related information' })[t]}`).join('; ')}.
+   VERDICT: fails understandable, testable and safe. Reject. It could be reframed into something bounded and safe, and asking the student to try is the useful move.
+
+3. "The printer queue is a mess at lunchtime."
+   ${INNO_TESTS.map(t => `${t}: ${({ real: 'yes — observed queue', understandable: 'yes, once "a mess" is replaced with what actually happens', useful: 'yes, if lunchtime printing matters to the person', testable: 'yes — time the queue', safe: 'yes, provided nobody records what is being printed' })[t]}`).join('; ')}.
+   VERDICT: passes once framed, with one safety condition attached. A good example of a problem that is not rejected but tightened.
+
+=== A NON-AI CHOSEN SOLUTION CAN SCORE AT THE HIGHEST LEVEL ===
+This is the most common marking error in this chapter. The top level of Solution choice is "${BLOCK8.rubric[1][3]}" A student who compares three options, shows with evidence that AI adds complexity without adding value, and builds a spreadsheet or a paper chart instead has met that level exactly. Do not reward the AI route for being the AI route, and do not treat the fallback path in hour 5 as a reduced route: it records the same four things and counts as complete. Nothing in the chapter requires the tool to have been opened.
+
+=== COMMON FAILURE PATTERNS ===
+- Success criteria written after the result. Check the hour-4 canvas against the hour-6 log: criteria that describe exactly what happened, including the odd numbers, were written afterwards. The fix is not a penalty, it is asking what would have counted as failure.
+- A residual risk of "none". The book's whole point in hour 7 is that something always remains. "None" means the red-team was not serious, or the safeguard was not examined. Push on the safeguard: who does it, how often, and what happens when they are busy.
+- A demo mistaken for evidence of usefulness. A demo proves it runs. Test evidence from real users proves it's useful. If points 4 and 5 of the presentation say the same thing, the student has only one of the two.
+- Building in hour 1. If the hour-1 table has one row, or five rows written after the choice was made, the screen did not happen.
+- The AI option chosen before the comparison. Look for a non-AI option written to lose.
+- Personal data in the hour-2 fields. Names, contact details or a class in the user evidence is a Chapter 3 failure and must be removed, not marked down and left in place.
+
+=== THE FIVE RED-TEAM ATTACKS (HOUR 7) ===
+Could it ${INNO_ATTACKS.join('? Could it ')}? A non-AI solution is exempt from the first only. A spreadsheet can be biased by who is in it, leaked, misused, and trusted far past what it measures.
+
+=== ASSESSING AN INDIVIDUAL ON A CHAPTER THE BOOK WRITES FOR TEAMS ===
+- The nine portfolio artefacts are the student's own: ${BLOCK8.final.replace(/^Your /, '')}
+- Where the book says "your team must justify", read "the student must justify". The mission is quoted verbatim from the book and keeps the book's wording; the portal copy around it does not.
+- An optional partner is allowed at hours 2 and 6 (asking people, watching people). The written evidence is individual in every hour.
+- A student who cannot find three testers should say so in the test record and say what that costs the evidence. That is an honest limitation and is assessed as one, not as a missing deliverable.
+- The individual reflection in hour 8 covers the whole programme, not this chapter. A reflection that only recaps the project has missed the question.
+`);
+
 rmSync(WORK, { recursive: true, force: true });
 const manifest =Object.fromEntries(readdirSync(OUT).filter(f => !f.startsWith('.')).sort().map(f => [f, statSync(join(OUT, f)).size]));
 // Include the manifest's own byte size without depending on the previous run.
