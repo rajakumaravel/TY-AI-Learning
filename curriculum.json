@@ -2615,6 +2615,354 @@
         "Going further": ["I separate evidence from speculation", "I analysed stakeholders", "I can defend a governance choice"]
       },
       "levelUp": "Find two credible but different forecasts about AI and work. Explain why reasonable experts can disagree, and identify the assumptions behind each one."
+    },
+    {
+      "id": "block8",
+      "number": "08",
+      "title": "AI Innovation Project",
+      "duration": "8 hours",
+      "badge": "AI Innovator",
+      "outcomes": ["LO1", "LO2", "LO3", "LO4", "LO5", "LO6", "LO7", "LO8", "LO9"],
+      "description": "This is where the whole programme comes together: you'll pick a real problem in the training centre or the community around it, understand the people who have it, design a responsible solution, build a rough prototype, test it on real people, improve it, and present it honestly, including what didn't work. AI is optional. Part of the project is deciding whether it genuinely helps.",
+      "mission": "Solve a real school or community problem with a responsible, testable prototype. AI is optional: your team must justify whether it adds genuine value, and be ready to say “it doesn't” if that's what your evidence shows.",
+      "route": [
+        ["Hour 1", "Sprint 1 · Problem hunt"],
+        ["Hour 2", "Sprint 1 · Understand the user"],
+        ["Hour 3", "Sprint 2 · Design options"],
+        ["Hour 4", "Sprint 2 · Responsible design"],
+        ["Hour 5", "Sprint 3 · Build the prototype"],
+        ["Hour 6", "Sprint 3 · Test"],
+        ["Hour 7", "Sprint 4 · Improve and red-team"],
+        ["Hour 8", "Sprint 4 · Demo and reflection"]
+      ],
+      "final": "Your problem statement and user evidence, your three solution options including the non-AI one, your responsible AI and data canvas, your prototype, your test record, your iteration log, your risk register, your final presentation, and your individual reflection.",
+      "sessions": [
+        {
+          "id": "b8s1",
+          "title": "Sprint 1 · Problem hunt",
+          "minutes": 60,
+          "type": "DISCOVER + QUESTION",
+          "pageRef": "Student Book pp. 36–41",
+          "intro": "Look at the training centre and the community around it with fresh eyes, write down at least five problems you actually noticed, then choose one with the book's five tests.",
+          "study": {
+            "title": "Five problems first, then five tests",
+            "body": ["Problem framing means describing a problem clearly enough that you could tell whether you had solved it. \"People are bad at recycling\" is not framed. \"The canteen bins are contaminated by 11am, so the whole bag goes to landfill\" is framed, because you could count contaminated bags before and after. You will want to build in hour one. Don't. The problem comes first.", "Generating at least five problems before you choose one is what stops you defending the first idea you had. Look for where people waste time, get confused, or get left out. The last one matters most, because a problem that leaves people out is usually invisible to everyone it does not leave out, which is why nobody has fixed it yet.", "Then screen every problem with the book's five tests: real, understandable, useful, testable, safe. Real means somebody actually has it and you saw it, rather than imagined it. Understandable means you can state it in one sentence. Useful means solving it would change something for that person. Testable means you could tell whether your answer worked. Safe means working on it needs no personal data you don't need and puts nobody at risk. A problem that fails one test is not a bad problem; it is a problem for a different project, and saying which test it failed is the evidence that you screened it."],
+            "example": "The training centre's bike rack is full by 9am and nobody knows which days are worst. Real: four bikes were chained to the railing last Tuesday. Understandable: one sentence. Useful: people arrive and hunt for a space. Testable: you could count bikes and railings for a week. Safe: counting bikes records nothing about any person.",
+            "keywords": ["problem framing", "user need", "value proposition"]
+          },
+          "activity": {
+            "kind": "chain",
+            "title": "Problem hunt",
+            "instructions": "Write five problems you noticed yourself, one per row, before you choose any of them. Say who has each problem and where you saw it, not where you imagine it happens. In the tests column name which of the five tests it passes and which it fails. Exactly one row may be marked chosen; every other verdict starts \"Rejected because…\" and names the test it failed. The starting-points card is a list of places to look, not a menu to pick from without looking around. Evidence: Problem statement and user evidence.",
+            "columns": [
+              ["problem", "Problem I noticed"],
+              ["who", "Who has it, and where I saw it"],
+              ["tests", "Which of the five tests it passes: real, understandable, useful, testable, safe"],
+              ["verdict", "Chosen, or rejected because…"]
+            ],
+            "rows": 5,
+            "minRows": 5,
+            "head": "PROBLEM → WHO HAS IT → FIVE TESTS → CHOSEN OR REJECTED",
+            "downloads": [
+              {
+                "file": "innovation-problem-cards.txt",
+                "label": "Problem starting points and the five tests (text)",
+                "note": "The book's ten starting points, the five tests written out, and the rule that you generate at least five problems of your own first."
+              },
+              {
+                "file": "innovation-project-canvas.md",
+                "label": "Innovation Project Canvas (Markdown)",
+                "note": "Blank headed sections for all eight hours, so you can work on paper or in a document and copy the evidence in here."
+              }
+            ]
+          },
+          "reflection": "Which of your five problems did you reject, and which of the five tests did it fail?"
+        },
+        {
+          "id": "b8s2",
+          "title": "Sprint 1 · Understand the user",
+          "minutes": 60,
+          "type": "INVESTIGATE",
+          "pageRef": "Student Book pp. 36–41",
+          "intro": "Define the user, how they do it now, the pain points, the evidence and the constraints — with approved questions only, and nothing identifying written down.",
+          "study": {
+            "title": "What they ask for is not always what they need",
+            "body": ["A user need is what the person with the problem actually needs, which may not be what they first ask for. Ask about the bike rack and someone may say \"we need more racks\". Watch them instead and you may find they need to know before leaving home whether cycling is worth it. Those are different problems with different answers, and only one of them is cheap.", "So ask about the task, not about your idea. Walk through how they do it now, step by step, and ask where it goes wrong, what they do instead when it does, and how often that happens. Pain points are the steps that hurt; say which one hurts most, because that is the one your prototype has to touch. Constraints are evidence too: time, money, permission, skills and what the training centre allows are what decide whether anything you design can exist at all.", "Research safely. Only ask questions the training centre has approved, and collect no personal data you don't need. Everything from Chapter 3 applies here, to your own project now. Record people as Person A, Person B, Person C, and never write down a name, a phone number, a class, a photo or anything else that could identify them. If someone volunteers something personal anyway, don't write it down, and tell them you haven't."],
+            "example": "Person A first said the bike rack problem is \"there aren't enough racks\". Asked to describe last Tuesday step by step, Person A said they cycled in, found no space, locked to a railing and worried about it all morning. The need underneath is a safe place to leave a bike — or knowing in advance that there won't be one.",
+            "keywords": ["user need", "problem framing", "risk"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Understand the user",
+            "instructions": "Ask two or three people about the task, using approved questions only. Collect no personal data you do not need, and record nothing that identifies anyone: no names, no contact details, no class, no photos. Label the people you asked Person A, Person B, Person C. If someone volunteers personal information anyway, leave it out of these fields. Everything from Chapter 3 applies here, to your own project now. Write what they said, not what you hoped they would say. Evidence: User evidence.",
+            "fields": ["The user: who they are, in a sentence, with no name or identifying detail…", "How they do it now, step by step…", "The pain points, and which one hurts most…", "My evidence: what I asked, who I asked as Person A, Person B, and what they said…", "The constraints: time, money, permission, skills, what the training centre allows…"],
+            "downloads": [
+              {
+                "file": "innovation-interview-guide.txt",
+                "label": "Approved interview questions (text)",
+                "note": "Six approved, non-identifying questions about a task and its pain points, the Person A labelling rule, and what to do if someone volunteers personal information."
+              },
+              {
+                "file": "innovation-project-canvas.md",
+                "label": "Innovation Project Canvas (Markdown)",
+                "note": "Blank headed sections for all eight hours, so you can work on paper or in a document and copy the evidence in here."
+              }
+            ]
+          },
+          "reflection": "What did the person actually need, as opposed to what they first asked for?"
+        },
+        {
+          "id": "b8s3",
+          "title": "Sprint 2 · Design options",
+          "minutes": 60,
+          "type": "PREDICT + TRY",
+          "pageRef": "Student Book pp. 36–41",
+          "intro": "Generate three solution approaches, compare them honestly, and decide whether AI genuinely adds value or just adds complexity.",
+          "study": {
+            "title": "Three options, and at least one must not use AI",
+            "body": ["Generate three solution approaches, and at least one must not use AI. This is not a formality you tick off before building the thing you already wanted to build. The book's own myth-buster is blunt about it: the project has to solve a problem, and the best answer is the least complex one that works. Sometimes that's a spreadsheet.", "A value proposition is the one sentence that says why anyone would want this. Write one for each option before you compare them, and write it from the user's side: not \"it uses AI to analyse rack data\" but \"you know on Sunday whether Wednesday is worth cycling\". Then price each option in complexity — what has to be built, learned, maintained, checked and paid for, and by whom after you stop working on it.", "Deciding whether AI adds genuine value means asking what it does that the simpler option cannot. If the AI version is only faster at something nobody was waiting for, it adds complexity, not value. Choosing the non-AI option is a full answer here and can reach the highest level of the Solution choice criterion, which asks you to compare AI and non-AI options and justify the simplest approach that works. Nothing in this chapter scores a non-AI choice lower."],
+            "example": "For the bike rack: (a) a shared sheet where people log whether they found a space, no AI; (b) a one-page chart of last week's counts, no AI; (c) an assistant that reads a photo of the rack each morning and predicts tomorrow, AI. Option (c) costs the most to build, check and keep honest, and it answers a question the counts in (b) already answer.",
+            "keywords": ["value proposition", "prototype", "problem framing"]
+          },
+          "activity": {
+            "kind": "chain",
+            "title": "Design options",
+            "instructions": "Write three options for the problem you chose in hour 1. At least one must not use AI: mark its AI column \"no AI\". In the fit column give the one-sentence value proposition, then answer directly whether AI adds genuine value here or just complexity, and say what the option costs in complexity — building, learning, maintaining, checking, paying. Exactly one row is marked chosen; the other two verdicts start \"Rejected because…\". A non-AI option may be the chosen one, and nothing in this chapter scores that lower. Evidence: Three solution options, including the non-AI one.",
+            "columns": [
+              ["option", "Solution option"],
+              ["ai", "Uses AI / no AI"],
+              ["fit", "Why it fits the problem, and what it costs in complexity"],
+              ["verdict", "Chosen, or rejected because…"]
+            ],
+            "rows": 3,
+            "minRows": 3,
+            "head": "OPTION → AI OR NOT → FIT AND COST → VERDICT",
+            "downloads": [
+              {
+                "file": "innovation-project-canvas.md",
+                "label": "Innovation Project Canvas (Markdown)",
+                "note": "Blank headed sections for all eight hours, so you can work on paper or in a document and copy the evidence in here."
+              }
+            ]
+          },
+          "reflection": "Would this problem still be worth solving without AI?"
+        },
+        {
+          "id": "b8s4",
+          "title": "Sprint 2 · Responsible design",
+          "minutes": 60,
+          "type": "QUESTION + MAKE",
+          "pageRef": "Student Book pp. 36–41",
+          "intro": "Map the data flow, mark the human decision points, list the failure modes and safeguards — then, before you build anything, write your success criteria.",
+          "study": {
+            "title": "Write the success criteria before you build",
+            "body": ["Map the data flow first: what goes in, what the solution does with it, what comes out, and what is stored. Storage is the part people forget, and it is the part that turns a small idea into a data problem. If any of it involves another person, Chapter 3's rule still stands: collect none you don't need, and hold it no longer than you need it.", "Human oversight is the decisions a person must keep. Responsible AI means harm is anticipated, limited and owned by a named person, so mark on your flow exactly where somebody must decide, check or approve, and say who that is. A failure mode is what could go wrong, for whom, and how badly. \"The AI might be wrong sometimes\" is not a failure mode, and \"check it\" is not a safeguard: name who checks what, when they check it, and what they do when the check fails.", "Success criteria are how you'll know, before you build, whether it worked. Write them now, and write what would count as it not working, because a criterion that nothing could fail is not a criterion. Then leave them alone. Criteria edited after the results are not criteria, they are a description of what happened, and setting them in advance is exactly what the Prototype and Testing rows of the judging table are looking for."],
+            "example": "Bike rack criteria, written in hour 4 and not touched afterwards: three of five people can tell me, within ten seconds of looking at it, which two days next week are worst; and at least two of them say they would look at it again. It has failed if anyone has to ask me what they are looking at.",
+            "keywords": ["responsible AI", "human oversight", "success criteria", "risk"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Responsible AI and data canvas",
+            "instructions": "Fill these five in order; the last one is the point of the session. Your success criteria are written now, before any building, and you do not edit them afterwards to match the result — if the result misses them, that is a finding, not a mistake. Name a person for every human decision point. \"It might be wrong\" and \"check it\" are not accepted as a failure mode and a safeguard. If your chosen option uses no AI, fill the same five in: a spreadsheet has a data flow, failure modes and safeguards too. Evidence: Responsible AI and data canvas.",
+            "fields": ["The data flow: what goes in, what the solution does with it, what comes out, and what is stored…", "The human decision points: what a person must decide, check or approve…", "The failure modes: what could go wrong, for whom, and how badly…", "The safeguards: what stops each failure mode, or limits it…", "My success criteria, written before I build: how I will know it worked, and what would count as it not working…"],
+            "downloads": [
+              {
+                "file": "innovation-responsible-canvas.md",
+                "label": "Responsible AI and data canvas (Markdown)",
+                "note": "Blank sections for data flow, human decision points, failure modes, safeguards and success criteria, with the success criteria placed before the build section."
+              },
+              {
+                "file": "innovation-project-canvas.md",
+                "label": "Innovation Project Canvas (Markdown)",
+                "note": "Blank headed sections for all eight hours, so you can work on paper or in a document and copy the evidence in here."
+              }
+            ]
+          },
+          "reflection": "What happens when the AI is wrong?"
+        },
+        {
+          "id": "b8s5",
+          "title": "Sprint 3 · Build the prototype",
+          "minutes": 60,
+          "type": "MAKE",
+          "pageRef": "Student Book pp. 36–41",
+          "intro": "Build the smallest version that tests your biggest assumption. An AI tool is offered and is optional; building the non-AI version is a full route.",
+          "study": {
+            "title": "Rough is fine. Rough is the point.",
+            "body": ["A prototype is a rough, cheap version built to learn, not to impress. The version you want is the smallest one that can test your biggest assumption, and nothing more. Rough is fine. Rough is the point. Time spent making it look finished is time not spent finding out whether it is wrong.", "So name the assumption first. Your biggest assumption is the belief that, if it turned out to be false, would make the whole solution pointless — usually a belief about people rather than about technology. \"People would change which day they cycle if they knew\" is an assumption. \"The chart renders correctly\" is not; it is a detail you can fix later.", "Then pick the roughest form that can test it: a prompt workflow, a chatbot mock-up, a spreadsheet, a simple web page, a classifier, a simulated presentation, or code. A paper mock-up tests whether people understand something; it cannot test speed or accuracy. A spreadsheet tests a calculation; it cannot test whether anyone would open it. AI is optional here too, and if your hour-3 comparison chose the non-AI option, building that is the full route, not a lesser one."],
+            "example": "The bike rack's biggest assumption is that people would change when they cycle if they knew which days are worst. The roughest thing that tests it is a sheet of paper on the wall with last week's counts drawn as five bars. No app, no model, ten minutes — and it already tells you whether anyone stops to read it.",
+            "keywords": ["prototype", "success criteria", "iteration"]
+          },
+          "activity": {
+            "kind": "lab",
+            "title": "Build the smallest prototype",
+            "instructions": "Read the safety notes, then decide whether this session needs an AI tool at all. It is optional. If you want one, acknowledge the notes and open DuckDuckGo AI Chat; if it is blocked, or if your evidence says AI adds nothing here, use the fallback and build the non-AI version instead. Both routes record the same four things below and both count as complete. Evidence: The prototype.",
+            "tool": {
+              "name": "DuckDuckGo AI Chat",
+              "url": "https://duck.ai",
+              "free": true
+            },
+            "privacy": ["Never type your name, address, school, photos, or anything about another person into an AI tool. Use made-up details if a prompt needs them.", "No accounts. DuckDuckGo AI Chat works without signing in; if a tool asks you to sign in, stop and use the fallback.", "The AI is not a fact source. Confident wording is not confident truth. Anything you will rely on gets checked.", "Nothing typed into this portal is sent to the tool; copy across yourself and paste short extracts back here."],
+            "steps": ["Name the biggest assumption your prototype has to test, in one sentence.", "Choose the roughest form that tests it: a prompt workflow, a chatbot mock-up, a spreadsheet, a simple page, a classifier, a simulated presentation, or code.", "Build only that. Anything not needed to test the assumption stays out.", "Try it once yourself and note where it already breaks.", "Write down what it cannot do yet, and what you left out on purpose."],
+            "fallback": {
+              "title": "No AI, or the tool is blocked?",
+              "steps": ["Try Microsoft Copilot at copilot.microsoft.com. It works without signing in.", "Or build the non-AI version. This is a full route and not a lesser one: a spreadsheet, a paper mock-up, a simple page or a written workflow all count, and the judging table rewards the simplest approach that works.", "Record the same four things either way: the assumption, what you built, where it already breaks, and what it cannot do yet."]
+            },
+            "fields": ["My biggest assumption, and why the prototype tests it…", "What I built, in a sentence, and which form I chose…", "What already breaks when I try it myself…", "What it cannot do yet, and what I left out on purpose…"],
+            "downloads": [
+              {
+                "file": "innovation-prototype-starters.txt",
+                "label": "Prototype forms (text)",
+                "note": "The book's seven forms with one honest line each on what it is good at testing and what it cannot test, and the reminder that rough is the point."
+              },
+              {
+                "file": "innovation-project-canvas.md",
+                "label": "Innovation Project Canvas (Markdown)",
+                "note": "Blank headed sections for all eight hours, so you can work on paper or in a document and copy the evidence in here."
+              }
+            ]
+          },
+          "reflection": "What's the smallest prototype that can test your biggest assumption?"
+        },
+        {
+          "id": "b8s6",
+          "title": "Sprint 3 · Test",
+          "minutes": 60,
+          "type": "TEST",
+          "pageRef": "Student Book pp. 36–41",
+          "intro": "Give the prototype to at least three people, give them a task, then stop talking and record what actually happens.",
+          "study": {
+            "title": "Don't help them while they use it. Watch.",
+            "body": ["Testing is giving the prototype to real people and watching what happens. Give it to classmates, people at the training centre, or someone at home. Tell them the task once, then stop. Don't help them while they use it. Watch. The moment you explain, you have tested your explanation instead of your prototype, and you cannot un-test it.", "What you are recording is behaviour, not opinion. \"It's good\" is not test evidence; three people saying \"it's good\" is three people being polite. Record what they were asked to do, what worked, where they got confused, what failed, and the one thing you didn't expect. That last column is where the useful findings usually are, because it is the only one you could not have written in advance.", "A demo proves it runs. Test evidence from real users proves it's useful. They're different, and this is the session that produces the second kind. Three testers is the minimum here and it is not a big sample, so say so when you present. Record participants as Person A, Person B and Person C, with nothing identifying, exactly as in hour 2."],
+            "example": "Person A was asked which two days next week are worst for the bike rack. They read the bars left to right, said \"Wednesday and Thursday\", then asked whether the numbers were bikes or free spaces. That question was the unexpected thing: the chart had no label, and nobody who made it could have noticed.",
+            "keywords": ["testing", "success criteria", "prototype"]
+          },
+          "activity": {
+            "kind": "testlog",
+            "title": "Peer test log",
+            "instructions": "Test with at least three people, one row each. Give the task, then \"Don't help them while they use it. Watch.\" Write what they did, not what they meant. If nothing failed, the task was probably too easy or you helped: run it again with a harder task. Every tester is Person A, Person B, Person C — no names, no identifying details. Check the result against the success criteria you wrote in hour 4 without editing those criteria. Evidence: Test record.",
+            "columns": [
+              ["tester", "Tester (Person A, Person B…)"],
+              ["task", "What they were asked to do"],
+              ["worked", "What worked"],
+              ["confused", "Where they got confused"],
+              ["failed", "What failed"],
+              ["unexpected", "The one thing I did not expect"]
+            ],
+            "rows": 3,
+            "minRows": 3,
+            "head": "TESTER → TASK → WORKED → CONFUSED → FAILED → UNEXPECTED",
+            "downloads": [
+              {
+                "file": "innovation-peer-test-sheet.csv",
+                "label": "Peer test sheet (CSV)",
+                "note": "The same six columns as the on-screen log, with three empty rows, for recording on paper or in a spreadsheet while you watch."
+              }
+            ]
+          },
+          "reflection": "What evidence shows your change actually improved things?"
+        },
+        {
+          "id": "b8s7",
+          "title": "Sprint 4 · Improve and red-team",
+          "minutes": 60,
+          "type": "IMPROVE + BREAK",
+          "pageRef": "Student Book pp. 36–41",
+          "intro": "Make one change driven by test evidence, then attack your own solution across the book's five failure modes and write down what remains.",
+          "study": {
+            "title": "Change one thing, then attack it",
+            "body": ["Iteration is changing it based on what you learned, then testing again. Make one change driven by test evidence — a specific observation from hour 6, not a feeling you had afterwards. Name the evidence in the same row as the change, so anyone reading it can check that one actually caused the other. One evidence-driven change done properly is worth more than five improvements you cannot trace.", "Then red-team it: deliberately try to break your own solution before someone else does. The book gives five attacks. Could it hallucinate? Be biased? Leak private data? Be misused? Make people over-rely on it? A non-AI solution is not exempt from any of these except perhaps the first — a spreadsheet can be biased by who is in it, leaked, misused, and trusted far past what it actually measures.", "Then write down the limitations that remain. Honestly. Every safeguard leaves something behind: a check catches most errors, not all; a warning is read by most people, not all; a human reviewer approves quickly when there are a hundred to approve. \"Residual risk: none\" is not an answer, it is a sign the attack was not serious. Human oversight is the decision that stays with a person after all of that, and somebody has to be accountable for it by name."],
+            "example": "Bike rack: Person A asked whether the bars were bikes or spaces, so the change was a label — evidence-driven, traceable, small. Red-team: nothing personal leaks if someone photographs the sheet, because it counts bikes. But if enough people trust the chart and all shift to the quiet day, the quiet day stops being quiet. Over-reliance makes the chart wrong, and no label fixes that.",
+            "keywords": ["iteration", "red-teaming", "risk", "human oversight"]
+          },
+          "activity": {
+            "kind": "chain",
+            "title": "Iteration log and risk register",
+            "instructions": "Five rows in one table. At least one row is a change you made because of specific evidence from your hour-6 test log, named in the evidence column. At least three rows are red-team findings, and between them they cover the book's five attacks: could it hallucinate, be biased, leak private data, be misused, or make people over-rely on it. Every row needs a residual: what is still wrong, or still possible, after the safeguard. \"None\" is not accepted — something always remains, and saying what it is is the thing being assessed. Evidence: Iteration log and Risk register.",
+            "columns": [
+              ["item", "The change I made, or the risk I found"],
+              ["evidence", "The test evidence or the attack that found it"],
+              ["safeguard", "What I changed, or the safeguard I added"],
+              ["residual", "What is still wrong, or still possible, after that"]
+            ],
+            "rows": 5,
+            "minRows": 5,
+            "head": "CHANGE OR RISK → EVIDENCE → SAFEGUARD → WHAT REMAINS",
+            "downloads": [
+              {
+                "file": "innovation-risk-register.csv",
+                "label": "Risk register and iteration log (CSV)",
+                "note": "The same four columns as the on-screen table, five empty rows, with the five red-team attacks listed in the header comment."
+              }
+            ]
+          },
+          "reflection": "Which decision must stay with a human?"
+        },
+        {
+          "id": "b8s8",
+          "title": "Sprint 4 · Demo and reflection",
+          "minutes": 60,
+          "type": "REFLECT + EVIDENCE",
+          "pageRef": "Student Book pp. 36–41",
+          "intro": "Write your 3–5 minute presentation in the book's eight points, then finish with your individual reflection on the whole programme.",
+          "study": {
+            "title": "Present the evidence, including what failed",
+            "body": ["Your presentation is 3–5 minutes, in the book's order. 1. The problem, and who experiences it. 2. The evidence you gathered. 3. The solution, and why AI is or isn't appropriate. 4. A demonstration of the prototype. 5. What happened during testing. 6. One change you made because of evidence. 7. One important risk, and its safeguard. 8. What's still uncertain, or what you'd test next. Eight points in five minutes is roughly thirty seconds each, so every point is one sentence and one piece of evidence.", "Point 3 is where a non-AI answer is strongest, not weakest: saying \"we compared and AI added complexity without adding value, so we didn't use it\" is the top of the Solution choice criterion. Point 4 is a demonstration, and a demo proves it runs; point 5 is what proves it useful. Keep them apart, and do not let the demo do the work of the evidence.", "Hiding the limitations is the myth this chapter is most likely to catch you on. Naming the limitations is one of the things you're being assessed on, and teams that hide them look like teams that didn't test. Then the individual reflection: this is the last chapter of the programme, so it is yours alone — what you learned across all eight chapters, and what you would do differently."],
+            "example": "The bike rack demo takes forty seconds: here are the counts, here is the chart, here is Person A reading it and asking what the numbers meant, here is the label I added because of that, here is the risk that people all shift to the quiet day, and here is what I still don't know — whether anyone actually changed their day.",
+            "keywords": ["value proposition", "testing", "responsible AI", "red-teaming"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Final presentation and individual reflection",
+            "instructions": "Write the eight points in order, one or two sentences each, each carrying the evidence you would show. Point 4 says what you would demonstrate and in what order, not how impressive it is. Point 8 has to name something genuinely uncertain; a project with nothing uncertain has not been tested. Then write your individual reflection: your own words, about the whole programme, not a summary of this chapter. Evidence: Final presentation and Individual reflection.",
+            "fields": ["1. The problem, and who experiences it…", "2. The evidence you gathered…", "3. The solution, and why AI is or isn't appropriate…", "4. A demonstration of the prototype: what you would show, and in what order…", "5. What happened during testing…", "6. One change you made because of evidence…", "7. One important risk, and its safeguard…", "8. What's still uncertain, or what you'd test next…", "My individual reflection: what I learned across the whole programme, and what I would do differently…"],
+            "downloads": [
+              {
+                "file": "innovation-presentation-guide.md",
+                "label": "Presentation guide (Markdown)",
+                "note": "The eight points in order with the 3–5 minute timing and one line on what each point must contain."
+              },
+              {
+                "file": "innovation-rubric.txt",
+                "label": "The six judging criteria (text)",
+                "note": "The same six criteria at three levels that appear at the top of this chapter. Read them before you start, not after."
+              }
+            ]
+          },
+          "reflection": "What is still uncertain about your solution, and what would you test next?"
+        }
+      ],
+      "lab": {
+        "title": "AI Innovation Project",
+        "summary": "You find a real problem, understand the person who has it, compare an AI and a non-AI answer, build the roughest thing that tests your biggest assumption, watch real people use it, then improve it and say honestly what is still wrong with it.",
+        "stages": [
+          ["DO", "b8s1", "Find a problem worth solving"],
+          ["TEST", "b8s6", "Watch real people use it"],
+          ["MAKE", "b8s5", "Build the smallest prototype"],
+          ["BREAK", "b8s7", "Red-team your own solution"],
+          ["IMPROVE", "b8s7", "Change one thing because of evidence"],
+          ["PROVE", "b8s8", "Present the evidence, including what failed"]
+        ]
+      },
+      "myths": [
+        ["The project has to use the most advanced AI.", "The project has to solve a problem. The best answer is the least complex one that works. Sometimes that's a spreadsheet."],
+        ["A working demo proves the idea is useful.", "A demo proves it runs. Test evidence from real users proves it's useful. They're different."],
+        ["Hide the limitations in the presentation.", "Naming the limitations is one of the things you're being assessed on. Teams that hide them look like teams that didn't test."]
+      ],
+      "selfCheck": {
+        "Getting started": ["I defined a problem and built a basic prototype", "I can describe what it does"],
+        "Getting there": ["I used evidence from users", "I tested, improved and identified key risks"],
+        "Going further": ["I compared AI and non-AI options", "I set success criteria in advance", "I red-teamed the solution and communicated uncertainty honestly"]
+      },
+      "levelUp": "Add a simple evaluation plan with one quantitative measure (a number) and one qualitative measure (what people say). Run a second test cycle and compare the results with the first.",
+      "rubric": [
+        ["Problem", "Problem is identifiable.", "Problem and user are clearly defined with evidence.", "Problem is well-bounded, evidence-based and compared with other ways of framing it."],
+        ["Solution choice", "You have a solution idea.", "You explain why your approach fits the problem.", "You compare AI and non-AI options and justify the simplest approach that works."],
+        ["Prototype", "A basic demonstration.", "The prototype tests a core assumption.", "The prototype is designed around measurable success and failure criteria."],
+        ["Testing", "You got feedback.", "You recorded test evidence and made a change.", "You ran structured tests, red-teamed failure modes and compared versions."],
+        ["Responsible AI", "You named a risk.", "You identified privacy, bias, hallucination or oversight issues and a safeguard.", "You analysed trade-offs, remaining risk, who's affected and who's accountable."],
+        ["Presentation", "You described the idea.", "You communicated problem, prototype, test and learning clearly.", "You used evidence, acknowledged uncertainty and handled challenge questions thoughtfully."]
+      ]
     }
   ]
 }

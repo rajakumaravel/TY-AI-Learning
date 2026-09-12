@@ -1,0 +1,29 @@
+Problem starting points and the five tests (Chapter 8, AI Innovation Project, hour 1 "Sprint 1 · Problem hunt")
+
+FIRST, AND BEFORE YOU READ THE LIST BELOW:
+Generate at least five problems of your own. Look at the training centre and the community around it with fresh eyes: where do people waste time, get confused, or get left out? Write down what you actually saw, and who you saw it happen to. The list further down is a set of places to look when you are stuck. It is not a menu to pick from without looking around, and a problem chosen off it without your own observation will fail the first test.
+
+=== THE FIVE TESTS ===
+Choose one problem using five tests: real, understandable, useful, testable, safe.
+
+- Real — somebody actually has this problem and you saw it, rather than imagined it.
+- Understandable — you can state it in one sentence that someone else would recognise.
+- Useful — solving it would change something for the person who has it.
+- Testable — you could tell whether your answer worked, and you could tell if it didn't.
+- Safe — working on it needs no personal data you don't need, and puts nobody at risk.
+
+A problem that fails one test is not a bad problem. It is a problem for a different project. Write down which test it failed; that is the evidence that you screened it rather than picked the first idea.
+
+=== STUCK FOR A PROBLEM? SOME STARTING POINTS ===
+- A school FAQ or event assistant
+- Study-planning or revision support
+- A lost-property workflow
+- Canteen or sustainability data analysis
+- A local tourism information assistant
+- Sports-club coordination
+- A career exploration assistant
+- Making community information more accessible
+- A school survey insight tool
+- A non-AI solution, because your team concluded AI adds no real value here
+
+The last one is a real option, not a consolation prize. The judging table's top level for Solution choice is "You compare AI and non-AI options and justify the simplest approach that works."

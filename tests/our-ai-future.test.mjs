@@ -456,7 +456,7 @@ test('the chapter assessment evidence area shows the saved decision summary',()=
   assert.match(items[0][1],/EN: /);
   assert.match(items[1][0],/Optimistic future · run 1/);
   assert.equal(items[2][0],'Comparison and uncertainty');
-  assert.match(app,/function labEvidenceHTML\(b\)\{const items=\[\.\.\.b\.sessions\.filter\(s=>s\.activity\.kind==='lab'\)/,'the existing lab evidence rendering is preserved');
+  assert.match(app,/function stageEvidenceItems\(b\)\{[\s\S]{0,400}?s\.activity\.kind==='lab'/,'lab sessions still contribute their field evidence');
 });
 
 test('Chapter 7 downloads exist on disk and the teacher key never reaches the students',()=>{
@@ -487,7 +487,7 @@ test('the Chapter 7 server list gates the chapter behind Chapter 6',()=>{
   assert.match(api,/const blockOrder=Object\.keys\(requiredSessions\)/);
   const server=vm.createContext({});
   vm.runInContext(api.match(/^const requiredSessions=.*$/m)[0]+'\nglobalThis.sessions=requiredSessions;',server);
-  assert.deepEqual(Object.keys(server.sessions),['block1','block2','block3','block4','block5','block6','block7']);
+  assert.deepEqual(Object.keys(server.sessions).slice(0,7),['block1','block2','block3','block4','block5','block6','block7']);
   assert.deepEqual(plain(server.sessions.block7),ids);
 });
 

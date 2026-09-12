@@ -159,7 +159,7 @@ export async function completeChapter6UI(page, afterSession = async () => {}) {
       for (let i=0;i<CHAPTER6_FIELDS[sid].length;i++) await page.fill(`textarea[data-i="${i}"]`,CHAPTER6_FIELDS[sid][i]);
       await page.fill('#reflectionText','I used the prepared sample and independently checked my own thinking and evidence.');
       await page.click('#saveSession');
-      check(`${sid} sample route still requires acknowledgement`, /Finish the required/.test(await page.textContent('#lessonFeedback')));
+      check(`${sid} sample route still requires acknowledgement`, /tick the box|Finish the required/.test(await page.textContent('#lessonFeedback')));
       await page.check('[data-ack]');
       check(`${sid} acknowledgement enables link`,await page.$eval('#labToolLink',el=>el.getAttribute('aria-disabled')==='false'));
     } else {
@@ -388,4 +388,171 @@ export async function completeChapter7UI(page, afterSession = async () => {}) {
   const kept=await page.$$eval('#pwEvidence .pw-evidence',rows=>rows.map(r=>({label:r.querySelector('[data-f="label"]')?.value||'',note:r.querySelector('[data-f="note"]')?.value||''})));
   check('Chapter 7 project submitted with the future skills card and final recommendation',/submitted/i.test(await page.textContent('.pw-status'))&&kept.some(r=>r.label==='Future skills card'&&r.note.includes('critical judgement')));
   await page.click('.pw-close');
+}
+
+export const CHAPTER8_SESSIONS = ['b8s1', 'b8s2', 'b8s3', 'b8s4', 'b8s5', 'b8s6', 'b8s7', 'b8s8'];
+export const CAPSTONE8_ANSWERS = {
+  q1: 'The pack shows a prototype that runs and a problem statement of a kind: people at the community centre miss events they would have wanted to attend. What it shows is a demo. What is missing is almost everything the six criteria ask for. There is no problem framing beyond a one-line complaint, no interview evidence and no user need separated from what people first asked for, so nobody knows whether the real barrier is that the noticeboard is hard to see, that events are announced late, or that people simply are not free on those evenings. There is no non-AI option at all, rejected with "AI is the point of the project", which is the reverse of how a solution should be chosen. The success criteria were written in the same session as the results, so they measure nothing. The simplest non-AI option for this problem is a printed weekly what-is-on sheet at the door and on the counter, with a sign-up list people can add their name to, plus a one-line text or email reminder the day before for anyone who asks for it. That costs a photocopier and ten minutes a week, it needs no photos of the noticeboard and no personal profile of anyone, and until someone can show it fails, it is the answer that should be compared against.',
+  q2: 'The claims the evidence does not support are the important ones. "Three testers all said it was good" supports nothing: three people being polite about a demo is not test evidence that the assistant helps anyone attend an event, and a demo running proves it runs, not that it is useful. "Success criteria met" cannot be claimed at all, because the criteria were written in the same session as the results; criteria written after the fact are a description of what happened, not a measure, and I would reject that part of the pack outright. The claim that AI adds value is unsupported because no non-AI option was ever compared, so there is no baseline to measure against. A structured test would have recorded, for each tester and against a task they were actually asked to do, what worked, exactly where they got confused, what failed, and the one thing the builder did not expect, with the builder watching and not helping; it would also have recorded a number, such as how many of the suggested events each tester would genuinely have attended, and what they said in their own words. The one change the evidence would actually justify is small and concrete: the testers all said "good" and nothing else, which is evidence that the questions were leading, so the next iteration should be to test again with three new testers, a real task and no prompting, before changing the prototype at all.',
+  q3: 'Red-teaming the assistant across the five attacks. Hallucination: reading noticeboard photos means the model can misread a date, a room or a price and confidently send a person to an event that does not exist; a safeguard is that no suggestion is sent unless it matches an entry a person has typed into the centre diary, and every message carries its source and the words "check at the desk". Bias: personalised suggestions learn from who already attends, so the people who are already included get more invitations and the people the community centre most wants to reach get fewer; a safeguard is to send the full listing to everyone and treat personalisation as an addition, never a filter. Privacy: photos of a public noticeboard capture other people\'s handwritten names, phone numbers and notices, and a personalised assistant builds a profile of what each member is interested in; the safeguards are to photograph nothing, take the listing from the typed diary, hold no interest profile, and collect a contact detail only from someone who asks for reminders and can stop them in one reply. Misuse: anyone who can post on the board can get a message pushed to every member, so a named member of staff must approve each send. Over-reliance: if members stop reading the board because the assistant tells them what matters, anything it misses effectively stops existing, so the printed listing stays on the door whatever the assistant does. The decision that must stay with a person is which events are promoted and to whom, and the accountable role is the named community centre coordinator who approves each send and can switch the assistant off; human oversight here is not a review step added at the end, it is the approval the send depends on. "Residual risk: none" is the answer that most undermines the whole pack, because it is the one claim we already know is false: every safeguard above limits a risk without removing it, and an honest residual list is the evidence that the builder actually red-teamed their own work rather than defending it. A reviewer reading "none" learns that the risk register was written to look finished, which puts every other claim in the pack, including the demo and the three testers, back in doubt.'
+};
+// One deterministic pass through the Chapter 8 activities: a training-centre microwave queue, chosen over four rejected
+// problems and solved by the non-AI option, so the acceptance run proves the non-AI route is a full route.
+export const CHAPTER8_CHAINS = {
+  b8s1: [
+    ['The two kitchen microwaves are queued twenty deep at 12:30 and people give up and eat cold food', 'Learners on the day programme, in the ground-floor kitchen at lunch', 'Real, understandable, useful, testable and safe: it passes all five tests', 'Chosen'],
+    ['Nobody knows which study room upstairs is free', 'Learners looking for quiet space, first-floor corridor', 'Real, understandable and useful, but I cannot see the room bookings', 'Rejected because it fails testable: I have no way to measure whether a change worked'],
+    ['Lost property piles up in a box at reception', 'Reception staff and learners, front desk', 'Real and understandable, but the labelled box already works', 'Rejected because it fails useful: solving it would change almost nothing'],
+    ['Evening class notices go up too late for people to plan', 'Adults attending evening classes, main noticeboard', 'Real, understandable and useful, but testing it needs personal contact details', 'Rejected because it fails safe: I would have to collect phone numbers I do not need'],
+    ['New learners cannot find the right room on their first day', 'First-week learners, main corridor', 'Real and understandable, but it has too many causes to frame as one problem', 'Rejected because it fails testable: I could not tell which cause my change affected']
+  ],
+  b8s3: [
+    ['A paper sign-up sheet on the kitchen door with five-minute slots from 12:15 to 13:15', 'No AI', 'It fits because the real need is seeing the queue before walking down, and it costs one photocopy a day and no permission from anyone', 'Chosen because it is the least complex answer that solves the problem'],
+    ['A shared spreadsheet people update on their phones as they start and finish', 'No AI', 'It fits the same need but costs everyone a login and depends on people updating it while holding a hot container', 'Rejected because the complexity it adds is carried by the user, not by me'],
+    ['An assistant that reads a webcam of the kitchen and predicts the wait', 'Uses AI', 'It would fit if the problem were prediction, but the problem is visibility; it costs a camera pointed at people eating, a model that can be wrong, and permission I would not get', 'Rejected because AI adds complexity and a privacy risk here, not genuine value']
+  ],
+  b8s7: [
+    ['Change from testing: slot times printed on the sheet instead of blank lines for people to write', 'Person B and Person C both wrote overlapping times, and Person A asked what counted as a slot', 'The sheet now prints 12:15, 12:20, 12:25 and so on, with one name line each', 'People can still write across two lines, and nothing stops someone who never signs up walking in'],
+    ['Red-team, hallucination: the AI option I rejected would have read a blurred webcam frame and stated a wait time that was simply wrong', 'I tried the rejected option by describing three photos and getting three confident, different answers', 'Not building it, and if a future version predicts anything it shows the raw count beside the prediction', 'Any predicted number can still be trusted more than it deserves, including by me'],
+    ['Red-team, bias: the sheet favours people who arrive early, read English comfortably and are confident enough to write on a public list', 'Person C hesitated before writing and asked whether they were allowed to take a slot', 'A staff member keeps two unbooked slots at the end for anyone who could not sign up', 'The people least likely to sign up are still the least likely to be served, and two slots is a guess'],
+    ['Red-team, privacy: full names and a daily routine of who is in the building at 12:30 sit on a public door', 'Reading my own prototype as if I were a stranger in the corridor', 'First names or initials only, and the sheet is taken down and binned at 13:30 each day', 'Someone can still photograph the sheet at 12:00, and initials still identify people in a small centre'],
+    ['Red-team, misuse and over-reliance: one person books four slots for friends, and others stop looking into the kitchen because the sheet says it is full', 'Person A said they would probably trust the sheet rather than walk down and check', 'One slot per name per day is printed on the sheet, and the wording says the sheet is a guide, not a booking', 'Nothing enforces one slot per person, and a stale sheet now sends people away from a free microwave']
+  ]
+};
+export const CHAPTER8_FIELDS = {
+  b8s2: [
+    'The user: a learner on the full-time day programme who brings food from home most days and has a thirty-minute lunch break, recorded with no name and no identifying detail.',
+    'How they do it now, step by step: they leave the classroom at 12:30, walk down to the ground-floor kitchen, see a queue of about twenty people, wait two or three minutes, decide the break is too short, and either eat the food cold or buy something instead.',
+    'The pain points, and which one hurts most: the walk down and back is wasted, the wait is unpredictable, and the break is short. The one that hurts most is not the queue itself but not knowing about it until they are already standing in it.',
+    'My evidence: I asked the six approved questions about how lunch works and what goes wrong. Person A said they stopped bringing food because of it. Person B said they go at 12:15 to beat the rush, which makes the rush. Person C said they would use the kitchen if they knew when it was quiet. I recorded no names and no contact details.',
+    'The constraints: eight hours of project time, no budget beyond photocopying, no permission to install anything in the kitchen or point a camera at people, no access to building systems, and whatever I build has to work with what the training centre already allows.'
+  ],
+  b8s4: [
+    'The data flow: what goes in is a first name or initials and a chosen five-minute slot, written by the person themselves. What the solution does with it is display it, nothing more. What comes out is a visible list of which slots are taken. What is stored is one sheet of paper for one day, binned at 13:30; nothing is kept overnight and nothing is digital.',
+    'The human decision points: a person decides whether to sign up at all, a person decides whether to wait or come back, and a staff member decides who gets the two held-back slots and can take the sheet down if it is being abused. Nothing automatic decides anything about a person.',
+    'The failure modes: the sheet looks full so people stop coming and a microwave sits idle; someone books slots for friends; someone writes a full name and a stranger photographs the sheet; the sheet goes missing at 12:20 and the queue returns; people trust the sheet instead of looking.',
+    'The safeguards: one slot per name per day printed on the sheet; initials or first names only, with the sheet binned each day; two unbooked slots held back by staff; wording that says the sheet is a guide and not a booking; a spare copy at reception if the door copy disappears.',
+    'My success criteria, written before I build and not edited afterwards: it works if at least half the slots are used on three consecutive days, if at least two of three testers say they now know whether to walk down before they do, and if no full name or contact detail appears on any sheet. It has not worked if the 12:30 queue is unchanged, if people ignore the sheet, or if anyone writes information about themselves that I did not ask for.'
+  ],
+  b8s5: [
+    'My biggest assumption, and why the prototype tests it: I am assuming people will read and use a sign-up sheet on the door at all. If they walk past it the whole idea fails, so the roughest possible sheet on the real door tests exactly that and nothing else.',
+    'What I built, in a sentence, and which form I chose: I chose a paper mock-up, because the assumption is about human behaviour at a door and no software is needed to test it. I printed one A4 sheet with twelve five-minute slots from 12:15 to 13:15, one name line each, a title saying it is a guide and not a booking, and a line saying one slot per person per day.',
+    'What already breaks when I try it myself: the slots are too small to write in with a pen while holding a lunch box, the sheet curls off the door with one piece of tape, and I had already written across two lines myself before anyone else saw it.',
+    'What it cannot do yet, and what I left out on purpose: it cannot tell anyone anything before they leave the classroom, which is the pain point that hurts most, and it cannot stop one person taking four slots. I left out any digital version, any reminder and any counting on purpose, because none of those are needed to find out whether people use a sheet at all.'
+  ],
+  b8s8: [
+    '1. The problem, and who experiences it: learners on the full-time day programme bring food from home and lose most of a thirty-minute break to an unpredictable queue at the two ground-floor microwaves, and several have stopped bringing food at all.',
+    '2. The evidence you gathered: the six approved questions with three participants recorded as Person A, Person B and Person C, no names and no contact details. Person A had stopped bringing food, Person B goes early and so creates the rush, Person C would use the kitchen if they knew when it was quiet. The pain point is not the queue, it is not knowing until you are in it.',
+    '3. The solution, and why AI is or isn\'t appropriate: a printed five-minute slot sheet on the kitchen door. I compared three options including an assistant that reads a webcam and predicts the wait. AI is not appropriate here: the need is visibility, not prediction, and the AI option would have added a camera pointed at people eating, a model that can be confidently wrong, and a permission I would not get. The least complex answer that works is paper.',
+    '4. A demonstration of the prototype: what I would show, and in what order: the blank sheet as it goes up at 12:10, the same sheet photographed at 12:35 with slots filled in, then the second version with printed times beside the first version with blank lines, so the change driven by testing is visible in one look.',
+    '5. What happened during testing: three testers used it with me watching and not helping. Two wrote overlapping times because the lines were blank, one asked whether they were allowed to take a slot at all, and the thing I did not expect was that one tester said they would trust the sheet rather than walk down and look, which is a risk I had not written down.',
+    '6. One change you made because of evidence: I printed the slot times on the sheet instead of leaving blank lines, because two of three testers wrote overlapping times. That is the change the test record actually justifies; I did not change anything else.',
+    '7. One important risk, and its safeguard: the sheet puts names and a daily routine of who is in the building at 12:30 on a public door. The safeguard is initials or first names only and the sheet binned at 13:30 each day, with nothing kept overnight and nothing digital.',
+    '8. What\'s still uncertain, or what you\'d test next: I do not know whether the sheet survives a week without a staff member re-printing it, and I never tested the pain point that hurts most, which is knowing before you leave the classroom. I would run a second cycle over five days and measure how many of the twelve slots are used and how many people still arrive without signing up.',
+    'My individual reflection: what I learned across the whole programme, and what I would do differently: the thing that changed most for me is that I now write the success criteria before building, because in Chapter 2 I judged a model by how good the demo looked and here I could see exactly how that goes wrong. I also learned that rejecting AI can be the right answer and still be the whole project. What I would do differently is interview before framing rather than after: I had half a solution in my head before I asked Person A anything, and it took the evidence about not knowing in advance to move me off it.'
+  ]
+};
+export const CHAPTER8_TESTLOG_FIELDS = ['tester', 'task', 'worked', 'confused', 'failed', 'unexpected'];
+export const CHAPTER8_TESTLOG = [
+  ['Person A', 'Take a microwave slot for today without asking me anything', 'Found the sheet on the door and wrote a slot in under ten seconds', 'Asked out loud whether one slot meant one dish or one person', 'Wrote a time overlapping the slot above, because the lines were blank', 'Said they would trust the sheet rather than walk down and look for themselves'],
+  ['Person B', 'Find out whether 12:30 is already busy, then decide what to do', 'Read the filled slots and decided to come at 12:50 instead', 'Could not tell whether the sheet was today\'s or yesterday\'s', 'Nothing failed outright, but they checked the date twice before trusting it', 'Went back upstairs to tell two other people, which I had not designed for'],
+  ['Person C', 'Sign up for a slot and say what you would change', 'Understood the five-minute slots straight away once they saw a filled one', 'Hesitated before writing and asked whether they were allowed to take a slot', 'Wrote a full first name and surname, which the sheet should not be collecting', 'Suggested the sheet should say who to ask if every slot is taken']
+];
+export const CHAPTER8_REFLECTIONS = {
+  b8s1: 'I rejected the evening class notices because it failed safe: testing it would have meant collecting phone numbers I did not need, and the study rooms failed testable because I cannot see the bookings.',
+  b8s2: 'Person C first asked for a third microwave. What they actually needed was to know whether the kitchen was busy before walking down, which costs nothing and is what I built for.',
+  b8s3: 'Yes, and it is better solved without AI: the need is seeing the queue, not predicting it, so the paper sheet solves the real problem and the webcam option would have added a risk for no gain.',
+  b8s4: 'If the AI option I rejected were wrong it would send people away from a free microwave with a confident number, which is why the human decision to walk down and look has to stay available.',
+  b8s5: 'One printed A4 sheet on the real door, because my biggest assumption is that people will use a sign-up sheet at all, and no software is needed to find that out.',
+  b8s6: 'Two of three testers wrote overlapping times on blank lines, so printing the slot times is the only change the evidence justifies; I will know it worked if the next testers write inside the slots.',
+  b8s7: 'Whether a person who could not sign up still gets a slot must stay with a staff member, because no rule I print on the sheet can see who was left out.',
+  b8s8: 'I never tested whether people can find out before they leave the classroom, which is the pain point that hurts most, so a five-day second cycle measuring slot use is what I would test next.'
+};
+export const CHAPTER8_RECOMMENDATION = 'I recommend the printed five-minute slot sheet on the kitchen door, and I recommend against the AI assistant I compared it with. The evidence is that the pain point is not the queue but not knowing about it, and a sheet on the door answers that for one photocopy a day, with no camera, no accounts and nothing kept overnight. Testing with three participants justified exactly one change, printing the slot times instead of leaving blank lines, and it surfaced a risk I had not written down, that people will trust the sheet instead of looking. The residual risks are real and I am not claiming otherwise: nothing enforces one slot per person, initials still identify people in a small centre, a stale sheet now sends people away from a free microwave, and the people least confident about writing on a public list are still the least likely to be served. The accountable person is the staff member who holds back two slots and can take the sheet down. What I would test next is a five-day second cycle measuring how many of the twelve slots are used and how many people arrive without signing up.';
+
+// Real clicks and typing for all eight Chapter 8 sessions, including b8s5 by the fallback route with the tool never
+// acknowledged, then the capstone, the programme-complete state and the portfolio project.
+export async function completeChapter8UI(page, afterSession = async () => {}) {
+  await page.click('#homeBtn');
+  await page.waitForFunction(() => { const b=document.querySelector('[data-block="7"]');return b&&!b.disabled&&!b.classList.contains('locked'); }, null, { timeout: 15000 });
+  await page.click('[data-block="7"]');
+  await page.waitForSelector('#labBanner .lab-stage');
+  check('Chapter 8 has six stages and the book myth-busters', (await page.$$('#labBanner .lab-stage')).length===6 && /least complex one that works/i.test(await page.textContent('#mythBusters')));
+  check('Chapter 8 shows the six judging criteria before the sessions start', (await page.$$('.chapter-rubric [data-criterion]')).length===6);
+  for (const sid of CHAPTER8_SESSIONS) {
+    await page.click(`[data-session="${sid}"]`);
+    await page.waitForFunction(id=>document.querySelector('.session-link.active')?.dataset.session===id,sid);
+    if (CHAPTER8_CHAINS[sid]) {
+      const keys=sid==='b8s1'?['problem','who','tests','verdict']:sid==='b8s3'?['option','ai','fit','verdict']:['item','evidence','safeguard','residual'];
+      const rows=CHAPTER8_CHAINS[sid];
+      for (let i=0;i<rows.length;i++) for (const [j,f] of keys.entries()) await page.fill(`input[data-i="${i}"][data-f="${f}"]`,rows[i][j]);
+      check(`${sid} chain renders its ${rows.length} declared rows`,(await page.$$(`input[data-i][data-f="${keys[0]}"]`)).length===rows.length);
+      if (sid==='b8s3') check('b8s3 keeps a non-AI option and exactly one chosen row',rows.filter(r=>/^no ai$/i.test(r[1])).length>=1&&rows.filter(r=>/^Chosen/.test(r[3])).length===1);
+      if (sid==='b8s7') check('b8s7 carries an evidence-driven change, three or more red-team rows and no residual of "none"',/^Change from testing/.test(rows[0][0])&&rows.filter(r=>/^Red-team/.test(r[0])).length>=3&&rows.every(r=>!/^none\.?$/i.test(r[3].trim())));
+    } else if (sid==='b8s5') {
+      await page.waitForSelector('.lab',{timeout:15000});
+      check('b8s5 is the Chapter 8 session that offers a tool, and it is DuckDuckGo AI Chat',Boolean(await page.$('#labToolLink'))&&/duck\.ai/.test(await page.getAttribute('#labToolLink','href')));
+      await page.click('button[data-fallback]');
+      await page.waitForSelector('#labFallback',{timeout:10000});
+      check('b8s5 fallback offers the non-AI build rather than a sample download',/non-AI|without AI|spreadsheet|paper/i.test(await page.textContent('#labFallback')));
+      for (let i=0;i<CHAPTER8_FIELDS.b8s5.length;i++) await page.fill(`textarea[data-i="${i}"]`,CHAPTER8_FIELDS.b8s5[i]);
+      // The non-AI route needs no tool visit, but the safety notice is acknowledged here as on every other lab.
+      check('b8s5 tool link stays disabled until the safety notice is acknowledged',(await page.getAttribute('#labToolLink','aria-disabled'))==='true');
+      await page.check('input[data-ack]');
+      check('b8s5 completes on the non-AI route with the tool never opened',(await page.getAttribute('#labFallback','hidden'))===null);
+    } else if (sid==='b8s6') {
+      await page.waitForSelector('input[data-i="0"][data-f]',{timeout:15000});
+      const keys=await page.$$eval('input[data-i="0"][data-f]',els=>els.map(e=>e.dataset.f));
+      for (let i=0;i<CHAPTER8_TESTLOG.length;i++) for (const [j,f] of keys.entries()) await page.fill(`input[data-i="${i}"][data-f="${f}"]`,CHAPTER8_TESTLOG[i][j]||'');
+      check('b8s6 records three testers across six watch-do-not-help columns',keys.length===6&&(await page.$$(`input[data-i][data-f="${keys[0]}"]`)).length>=3);
+    } else {
+      for (let i=0;i<CHAPTER8_FIELDS[sid].length;i++) await page.fill(`textarea[data-i="${i}"]`,CHAPTER8_FIELDS[sid][i]);
+      if (sid==='b8s2') check('b8s2 asks for no real name or contact detail',!/\b(full name|surname|phone number|email address|contact detail)\b/i.test(await page.$$eval('textarea[data-i]',els=>els.map(e=>e.placeholder||'').join(' '))));
+      if (sid==='b8s8') check('b8s8 takes the eight presentation points and the individual reflection',(await page.$$('textarea[data-i]')).length===9);
+    }
+    const downloads=await page.$$eval('.downloads a[download]',els=>els.map(e=>e.href));
+    for (const href of downloads) check(`${sid} download served: ${href.split('/').pop()}`,(await fetch(href)).status===200);
+    await page.fill('#reflectionText',CHAPTER8_REFLECTIONS[sid]);
+    await page.click('#saveSession');
+    await page.waitForFunction(()=>/complete/i.test(document.getElementById('lessonFeedback')?.textContent||''),null,{timeout:15000});
+    check(`${sid} saves complete evidence`,/complete/i.test(await page.textContent('#lessonFeedback')));
+    await afterSession(sid);
+  }
+  await page.waitForSelector('#chapterCapstoneHost textarea[data-capstone]');
+  check('Chapter 8 shows self-check and level-up',Boolean(await page.$('.self-check'))&&Boolean(await page.$('.level-up')));
+  check('Chapter 8 capstone evidence area shows the saved test record',/Person A/.test(await page.textContent('#chapterCapstoneHost')));
+  for (const [i,answer] of Object.values(CAPSTONE8_ANSWERS).entries()) await page.fill(`textarea[data-capstone="${i}"]`,answer);
+  await page.click('#submitCapstone');
+  await page.waitForFunction(()=>/COMPLETE/.test(document.getElementById('chapterCapstoneHost')?.textContent||''),null,{timeout:20000});
+  check('Chapter 8 capstone qualified, so a review recommending the non-AI option reaches the highest level',/Going further/.test(await page.textContent('#chapterCapstoneHost')));
+  await page.click('#homeBtn');
+  await page.waitForSelector('#homeView .programme-complete',{timeout:15000});
+  check('Home shows the programme-complete state and implies no ninth chapter',/Programme complete/i.test(await page.textContent('#homeView .programme-complete'))&&!(await page.$('[data-block="8"]')));
+  await page.click('[data-block="7"]');
+  await page.waitForSelector('#projectWorkspaceBtn-block8',{timeout:15000});
+  await page.click('#projectWorkspaceBtn-block8');
+  await page.waitForSelector('#projectWorkspaceModal.open');
+  check('Chapter 8 project lists the nine portfolio deliverables',(await page.$$('#projectWorkspaceModal li')).length>=9&&/Individual reflection/.test(await page.textContent('#projectWorkspaceModal')));
+  await page.click('#pwImportLab');
+  await page.waitForFunction(()=>/Imported/.test(document.getElementById('pwMessage')?.textContent||''),null,{timeout:15000});
+  const imported=await page.$$eval('#pwEvidence textarea',els=>els.map(e=>e.value).join('\n'));
+  check('Chapter 8 import carries every stage session, including the test record and the red-team residuals',(await page.$$('#pwEvidence .pw-evidence')).length>=5&&/microwaves are queued/.test(imported)&&/Person A/.test(imported)&&/Red-team, privacy/.test(imported)&&imported.includes(CHAPTER8_FIELDS.b8s5[0].slice(0,40)));
+  await page.click('#pwAddLog');
+  await page.click('#pwAddEvidence');
+  const extra=page.locator('#pwEvidence .pw-evidence').last();
+  await extra.locator('[data-f="label"]').fill('Individual reflection');
+  await extra.locator('[data-f="note"]').fill(CHAPTER8_FIELDS.b8s8[8]);
+  await page.fill('#pwLog textarea[data-f="did"]','Generated five problems and screened them against the five tests, interviewed three participants as Person A to C, compared three options including two without AI, wrote success criteria before building, built a paper sheet, watched three testers, then made one evidence-driven change and red-teamed my own solution.');
+  await page.fill('#pwLog textarea[data-f="result"]','A chosen problem with user evidence, three compared options with the non-AI one chosen, a responsible design canvas with criteria written in advance, a paper prototype, a three-tester record, one justified change and a risk register whose residuals are not "none".');
+  await page.fill('#pwRecommendation',CHAPTER8_RECOMMENDATION);
+  await page.click('#pwSave');
+  await page.waitForFunction(()=>/Saved/.test(document.getElementById('pwMessage')?.textContent||''),null,{timeout:15000});
+  await page.click('#pwSubmit');
+  await page.waitForFunction(()=>/submitted/i.test(document.querySelector('.pw-status')?.textContent||''),null,{timeout:15000});
+  const kept=await page.$$eval('#pwEvidence .pw-evidence',rows=>rows.map(r=>({label:r.querySelector('[data-f="label"]')?.value||'',note:r.querySelector('[data-f="note"]')?.value||''})));
+  check('Chapter 8 project submitted with the individual reflection and final recommendation',/submitted/i.test(await page.textContent('.pw-status'))&&kept.some(r=>r.label==='Individual reflection'&&r.note.includes('success criteria before building')));
+  await page.click('.pw-close');
+  await page.click('#portfolioBtn');
+  await page.waitForSelector('#portfolioView .programme-complete',{timeout:15000});
+  check('Portfolio shows the programme complete with the AI Innovator badge',/AI Innovator/i.test(await page.textContent('#portfolioView .programme-complete')));
 }

@@ -8,7 +8,7 @@ const api=fs.readFileSync('netlify/functions/api.mts','utf8');
 const adr=fs.readFileSync('docs/decisions/ADR-004-chapter-capstone-assessment.md','utf8');
 
 test('pilot chapters each have applied capstones',()=>{
-  assert.equal(Object.keys(CAPSTONES).length,7);
+  assert.equal(Object.keys(CAPSTONES).length,8);
   assert.match(CAPSTONES.block1.brief,/school|adviser/i);
   assert.match(CAPSTONES.block2.brief,/model|failure/i);
   assert.match(CAPSTONES.block3.brief,/homework.*question.*infer.*ability band/is);
@@ -31,6 +31,31 @@ test('pilot chapters each have applied capstones',()=>{
   assert.equal(CAPSTONES.block7.id,'block7-capstone');
   assert.equal(CAPSTONES.block7.title,'Future Thinker review');
   assert.equal(CAPSTONES.block7.prompts.length,3);
+  assert.match(CAPSTONES.block8.brief,/community centre.*noticeboard.*three testers.*good.*success criteria written in the same session.*AI might be wrong sometimes.*residual risk of “none”.*no non-AI option/is);
+  assert.equal(CAPSTONES.block8.id,'block8-capstone');
+  assert.equal(CAPSTONES.block8.title,'AI Innovator review');
+  assert.equal(CAPSTONES.block8.prompts.length,3);
+});
+
+test('block8 capstone scoring counts innovation vocabulary and the review-pack evidence',()=>{
+  const weak=assessChapterCapstone({blockId:'block8',answers:{0:'The pack is fine.',1:'They tested it.',2:'It might be wrong.'}});
+  const strong=assessChapterCapstone({blockId:'block8',answers:{
+    0:'The pack shows a demo and photos of the noticeboard at the community centre, but the user need is never defined and there is no non-AI option, so the simplest answer is a shared events list that anyone can read.',
+    1:'Three testers saying it was good is not test evidence, because a structured test would have recorded the task each tester was given, where they got confused and what failed, therefore the only change the evidence justifies is a clearer suggestion screen.',
+    2:'Red-teaming the assistant, it could hallucinate an event, be biased about which events it suggests, leak a private photo, be misused or make people over-rely on it, so a named person must approve what is sent and a residual risk of none hides the safeguard that is missing.'
+  }});
+  assert.ok(strong.score>weak.score);
+  assert.equal(strong.criteria.understanding,2);
+  assert.equal(strong.criteria.evidence,2);
+  assert.equal(strong.criteria.reasoning,2);
+  assert.equal(strong.level,'Going further');
+  const unique='User need, success criteria, red-teaming, human oversight and value proposition with residual safeguards.';
+  assert.equal(assessChapterCapstone({blockId:'block8',answers:{0:unique}}).criteria.understanding,1);
+  for(const id of ['block1','block2','block3','block4','block5','block6','block7'])assert.equal(assessChapterCapstone({blockId:id,answers:{0:unique}}).criteria.understanding,0,`${id} ignores block8 vocabulary`);
+  const packEvidence='The community centre noticeboard photos, the three testers and the demo in the pack.';
+  assert.equal(assessChapterCapstone({blockId:'block8',answers:{0:packEvidence}}).criteria.evidence,1);
+  for(const id of ['block1','block2','block3','block4','block5','block6','block7'])assert.equal(assessChapterCapstone({blockId:id,answers:{0:packEvidence}}).criteria.evidence,0,`${id} ignores the review-pack evidence`);
+  assert.deepEqual(assessChapterCapstone({blockId:'block2',answers:{0:'Accuracy is 80%.',1:'Background.',2:'Retest.'}}).criteria,{understanding:1,evidence:1,reasoning:1,ownWords:0});
 });
 
 test('block7 capstone scoring counts future-thinking vocabulary and the bus evidence',()=>{
