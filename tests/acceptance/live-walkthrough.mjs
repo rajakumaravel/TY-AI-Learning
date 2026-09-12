@@ -6,7 +6,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { BASE, REF, check, results, createUser, cleanup, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS, CAPSTONE4_ANSWERS, CAPSTONE5_ANSWERS, completeChapter6UI, completeChapter7UI } from './lib.mjs';
+import { BASE, REF, check, results, createUser, cleanup, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS, CAPSTONE4_ANSWERS, CAPSTONE5_ANSWERS, completeChapter6UI, completeChapter7UI, completeChapter8UI } from './lib.mjs';
 
 const SHOTS = process.env.SHOTS || 'live-shots';
 mkdirSync(SHOTS, { recursive: true });
@@ -575,6 +575,20 @@ try {
   });
   await completeChapter7UI(page, async sid => step(page, `Chapter 7 ${sid}: saved evidence`, async()=>true));
   await step(page, 'Chapter 7 capstone and project completed', async()=>true);
+  await context.close();
+
+  // ---------- Chapter 8: Chapter 7 is qualified through the UI above, then all eight sessions with real clicks,
+  // the build session by the fallback route with the tool never acknowledged, the capstone, the programme-complete
+  // state and the project with imported lab evidence.
+  ({ context, page } = await device(browser, student.session));
+  await page.waitForFunction(()=>/Welcome/.test(document.getElementById('welcomeName')?.textContent||''),null,{timeout:15000});
+  await step(page, 'Home: Chapter 7 done, Chapter 8 unlocked', async () => {
+    const done = await page.$eval('[data-block="6"]', el => el.classList.contains('done'));
+    const unlocked = await page.$eval('[data-block="7"]', el => !el.classList.contains('locked') && !el.disabled);
+    return done && unlocked;
+  });
+  await completeChapter8UI(page, async sid => step(page, `Chapter 8 ${sid}: saved project evidence`, async()=>true));
+  await step(page, 'Chapter 8 capstone, project and programme-complete state', async()=>await page.textContent('.programme-complete'));
   await context.close();
 
   // ---------- non-admin blocked
