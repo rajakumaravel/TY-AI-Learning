@@ -15,3 +15,9 @@ ui-audit-shots/
 .github/agents/
 .github/hooks/
 .github/skills/
+
+# Impeccable run artifacts. The design record (.impeccable/design.json) and critique snapshots are tracked;
+# screenshots and the throwaway preview page are not.
+.impeccable/critique-shots/
+.impeccable/after-shots/
+.impeccable/preview/

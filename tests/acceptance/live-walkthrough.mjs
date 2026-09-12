@@ -83,7 +83,7 @@ try {
   // ---------- student, chapter 1
   ({ context, page } = await device(browser, student.session));
   await page.waitForFunction(() => /Welcome/.test(document.getElementById('welcomeName')?.textContent || ''), null, { timeout: 15000 });
-  await step(page, 'Student signed in, cloud synced', async () => (await page.textContent('#syncStatus')).includes('Cloud'));
+  await step(page, 'Student signed in, saved to account', async () => (await page.textContent('#syncStatus')).includes('Saved to your account'));
   await page.click('[data-block="0"]');
   await page.waitForSelector('#labBanner .lab-stage');
   await step(page, 'Chapter 1 opens with mission and six lab stages', async () => (await page.$$('#labBanner .lab-stage')).length === 6);

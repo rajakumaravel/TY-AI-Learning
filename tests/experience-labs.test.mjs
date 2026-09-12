@@ -93,7 +93,11 @@ test('chapter 5 lab is the in-product create-detect-reduce-bias sequence with no
 
 test('student UI gates the external tool behind the safety notice and requires lab evidence',()=>{
   assert.match(app,/data-ack/);
-  assert.match(app,/id="labToolLink" class="primary external \$\{ack\?'':'disabled'\}/);
+  // Until the notice is acknowledged there must be no href in the document at all: pointer-events:none stopped a
+  // mouse and nothing else, so the old dimmed anchor kept tabIndex 0 and a live href for any keyboard user.
+  assert.match(app,/function toolGateHTML\(tool,ack\)\{return ack\?/);
+  assert.match(app,/<button id="labToolLink" type="button" class="primary external is-locked" disabled>/);
+  assert.doesNotMatch(app,/labToolLink[^\n]*\$\{ack\?'':'disabled'\}/);
   assert.match(app,/if\(a\.kind==='lab'\)return Boolean\(v\.ack\)&&a\.fields\.every/);
   assert.match(app,/data-fallback/);
   assert.match(app,/renderLabBanner\(\)/);

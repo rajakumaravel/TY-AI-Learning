@@ -39,7 +39,7 @@ test('admin review only renders http(s) evidence links as anchors', () => {
 test('signed-in learner with a failing API is not shown as signed out, and never pushes stale state', () => {
   assert.match(app, /let cloudError=null/);
   assert.match(app, /Signed in · cloud sync unavailable/);
-  assert.match(app, /if\(!user\|\|cloudError\)return;/);
+  assert.match(app, /if\(!user\|\|cloudError\)\{setSync\([^)]*\);return\}/);
   assert.match(app, /if\(cloudError\)\{feedback\('capstoneFeedback'/);
   assert.doesNotMatch(app, /Netlify Identity account/);
 });

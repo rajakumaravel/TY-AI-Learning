@@ -24,7 +24,8 @@ const lineFunction=(source,name)=>{const m=source.match(new RegExp(`^function ${
 const state={activity:{}};
 const context=vm.createContext({state,COURSE:course});
 vm.runInContext(app.match(/^const esc=.*$/m)[0],context);
-for(const name of ['activityReady','safetyHTML','parseCSV','datasetSummary','datasetHTML'])vm.runInContext(lineFunction(app,name),context);
+for(const name of ['LOCK_ICON','EXTERNAL_ICON'])vm.runInContext(app.match(new RegExp(`^const ${name}=.*$`,'m'))[0],context);
+for(const name of ['toolGateHTML','ackHTML','activityReady','safetyHTML','parseCSV','datasetSummary','datasetHTML'])vm.runInContext(lineFunction(app,name),context);
 vm.runInContext(app.slice(app.indexOf('function activityBodyHTML('),app.indexOf('function labEvidenceHTML(')),context);
 const workspace=read('project-workspace.js');
 for(const name of ['summariseActivity','labEvidenceItems'])vm.runInContext(lineFunction(workspace,name),context);
@@ -107,14 +108,15 @@ test('all eight workflow steps are visible and assessable across b6s4 and b6s5',
 test('real reused renderers expose raw viewer, steps, fields, fallback and acknowledgement',()=>{
   for(const sid of toolIds){
     const s=session(sid);state.activity[sid]={};let html=context.activityBodyHTML(s);
-    assert.match(html,/class="lab"/);assert.match(html,/data-ack/);assert.match(html,/aria-disabled="true"/);assert.match(html,/id="labFallback"[^>]*hidden/);
+    assert.match(html,/class="lab"/);assert.match(html,/data-ack/);assert.match(html,/id="labToolLink"[^>]*disabled/);assert.match(html,/id="labFallback"[^>]*hidden/);
     assert.equal((html.match(/<textarea data-i=/g)||[]).length,s.activity.fields.length);
     assert.match(html,/class="steps"/);
     const escape=vm.runInContext('esc',context);
     for(const text of [...s.activity.steps,...s.activity.fields,...s.activity.privacy,...s.activity.fallback.steps])assert.ok(html.includes(escape(text)),`${sid}: ${text}`);
-    assert.match(html,/id="labToolLink"[^>]*href="https:\/\/duck.ai"/);assert.match(html,/data-fallback/);
-    state.activity[sid]={mode:'fallback'};html=context.activityBodyHTML(s);assert.match(html,/id="labFallback" class="lab-fallback" >/);assert.match(html,/aria-disabled="true"/);
-    state.activity[sid].ack=true;html=context.activityBodyHTML(s);assert.match(html,/data-ack checked/);assert.match(html,/aria-disabled="false"/);
+    // No acknowledgement, no href anywhere in the rendered markup: the gate is a disabled button, not a dimmed link.
+    assert.doesNotMatch(html,/href="https:\/\/duck.ai"/);assert.match(html,/data-fallback/);
+    state.activity[sid]={mode:'fallback'};html=context.activityBodyHTML(s);assert.match(html,/id="labFallback" class="lab-fallback" >/);assert.match(html,/id="labToolLink"[^>]*disabled/);assert.doesNotMatch(html,/href="https:\/\/duck.ai"/);
+    state.activity[sid].ack=true;html=context.activityBodyHTML(s);assert.match(html,/data-ack checked/);assert.match(html,/id="labToolLink"[^>]*href="https:\/\/duck.ai"/);assert.doesNotMatch(html,/is-locked/);
   }
   assert.match(context.activityBodyHTML(session('b6s4')),/data-dataset="ai-work-event-budget-raw.csv" data-readonly/);
   const raw=context.parseCSV(read('public/datasets/ai-work-event-budget-raw.csv'));
@@ -125,22 +127,25 @@ test('real reused renderers expose raw viewer, steps, fields, fallback and ackno
 
 test('lab controls preserve evidence when acknowledging and switching fallback routes',()=>{
   for(const sid of toolIds){
-    const s=session(sid),localState={activity:{[sid]:{}}},attributes={},classes=new Set();let syncs=0;
+    const s=session(sid),localState={activity:{[sid]:{}}};let syncs=0,gate='';
     const fields=s.activity.fields.map((_,i)=>({tagName:'TEXTAREA',dataset:{i:String(i)},value:answers[sid][i],closest:()=>null,addEventListener(type,handler){assert.equal(type,'input');this.input=handler}}));
     const ack={checked:false},button={},fallback={hidden:true};
-    const link={classList:{toggle(name,on){if(on)classes.add(name);else classes.delete(name)}},setAttribute(name,value){attributes[name]=value}};
+    const link={set outerHTML(html){gate=html}};
     const panel={querySelectorAll:selector=>selector==='[data-i]'?fields:[],querySelector:selector=>({'[data-ack]':ack,'[data-fallback]':button}[selector]||null)};
     const document={getElementById:id=>({lessonPanel:panel,labToolLink:link,labFallback:fallback}[id]||null)};
     const ui=vm.createContext({state:localState,document,scheduleSync:()=>syncs++});
+    for(const name of ['LOCK_ICON','EXTERNAL_ICON'])vm.runInContext(app.match(new RegExp(`^const ${name}=.*$`,'m'))[0],ui);
+    vm.runInContext(app.match(/^const esc=.*$/m)[0],ui);
+    vm.runInContext(lineFunction(app,'toolGateHTML'),ui);
     vm.runInContext(lineFunction(app,'wireActivity'),ui);
     vm.runInContext(lineFunction(app,'activityReady'),ui);
     ui.wireActivity(s);fields.forEach(f=>f.input());
     const saved=Object.fromEntries(fields.map((f,i)=>[i,f.value]));
     button.onclick();assert.equal(localState.activity[sid].mode,'fallback');assert.equal(fallback.hidden,false);assert.equal(ui.activityReady(s),false);
-    ack.checked=true;ack.onchange();assert.equal(attributes['aria-disabled'],'false');assert.equal(classes.has('disabled'),false);assert.equal(ui.activityReady(s),true);
+    ack.checked=true;ack.onchange();assert.match(gate,/^<a id="labToolLink"[^>]*href="https:\/\/duck.ai"/);assert.doesNotMatch(gate,/disabled/);assert.equal(ui.activityReady(s),true);
     button.onclick();assert.equal(localState.activity[sid].mode,'tool');assert.equal(fallback.hidden,true);assert.equal(button.textContent,'Tool blocked?');
     for(const [i,value] of Object.entries(saved))assert.equal(localState.activity[sid][i],value);
-    ack.checked=false;ack.onchange();assert.equal(attributes['aria-disabled'],'true');assert.equal(classes.has('disabled'),true);assert.equal(ui.activityReady(s),false);
+    ack.checked=false;ack.onchange();assert.match(gate,/^<button id="labToolLink"[^>]*disabled>/);assert.doesNotMatch(gate,/href=/);assert.equal(ui.activityReady(s),false);
     assert.equal(syncs,fields.length+4,'each evidence edit and control change is saved');
   }
 });
