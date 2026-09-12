@@ -4,10 +4,13 @@
 //
 // Each browser context is a fresh "device" with no local state; the Supabase session is injected into
 // localStorage the same way the Google OAuth callback would store it. Covers cross-device persistence,
-// the Chapter 1→2 gate as rendered, and admin-page rejection for a non-admin account.
+// the chapter gates as rendered (1→2 through 4→5), the Chapter 5 annotate and simulator kinds, and admin-page rejection for a non-admin account.
 
 import { chromium } from 'playwright';
-import { BASE, REF, api, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS } from './lib.mjs';
+import { BASE, REF, api, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS } from './lib.mjs';
+
+// The annotate/simulator controls re-render on input, so ranges are set with a real input event rather than page.fill.
+async function setRange(page, key, value) { await page.$eval(`input[type=range][data-sim="${key}"]`, (el, v) => { el.value = v; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, String(value)); }
 
 const STORAGE_KEY = `sb-${REF}-auth-token`;
 
@@ -138,7 +141,67 @@ try {
   await d5.page.click('#composeV2');
   const composed = await d5.page.$eval('textarea[data-version="v2"][data-field="prompt"]', el => el.value);
   check('Compose v2 writes the four C-T-C-F parts into the v2 prompt', Object.values(parts).every(v => composed.includes(v)) && /\n\n/.test(composed), JSON.stringify(composed));
+  await d5.page.click('[data-block-home], #homeBtn');
+  check('device 5 Chapter 5 locked until Chapter 4 qualified', await d5.page.$eval('[data-block="4"]', el => el.classList.contains('locked') && el.disabled));
+  const lock5 = await d5.page.$eval('[data-block="4"]', el => el.textContent);
+  check('device 5 Chapter 5 card explains the gate', /Complete Chapter 0?4 assessment/i.test(lock5), lock5.slice(-80));
   await d5.context.close();
+
+  // Chapter 4 completed and qualified server-side, then Chapter 5 opens with the annotate and simulator kinds
+  const done4 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS, ...CHAPTER3_SESSIONS, ...CHAPTER4_SESSIONS], reflections: {}, activity: {}, badges: [], chapterAssessments: {} } }) });
+  check('server accepts Chapter 4 completion', done4.status === 200);
+  const cap4 = await api('chapter-assessment/block4', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE4_ANSWERS }) });
+  check('Chapter 4 capstone accepted', cap4.status === 200 && Boolean(cap4.body?.assessment?.submittedAt), JSON.stringify(cap4.body));
+
+  let d6 = await device(browser, a.session);
+  await d6.page.waitForFunction(() => { const el = document.querySelector('[data-block="4"]'); return el && !el.classList.contains('locked'); }, null, { timeout: 15000 }).catch(() => {});
+  check('device 6 Chapter 5 unlocked after Chapter 4 capstone', await d6.page.$eval('[data-block="4"]', el => !el.classList.contains('locked') && !el.disabled));
+  await d6.page.click('[data-block="4"]');
+  await d6.page.waitForSelector('#labBanner .lab-stage', { timeout: 10000 });
+  check('chapter 5 shows six Experience Lab stages', (await d6.page.$$('#labBanner .lab-stage')).length === 6);
+  check('chapter 5 renders the Myth-busters section', Boolean(await d6.page.$('#mythBusters')) && /one source, not ten/.test(await d6.page.textContent('#mythBusters')));
+  check('chapter 5 renders no AI tool safety notice', !(await d6.page.$('#labToolLink')) && !(await d6.page.$('[data-ack]')));
+  await d6.page.click('[data-session="b5s3"]');
+  await d6.page.waitForSelector('.annotate-lab button.annotate-sentence[data-sentence]', { timeout: 15000 });
+  const sentences = (await d6.page.$$('.annotate-lab button.annotate-sentence[data-sentence]')).length;
+  check('b5s3 splits the served article into sentence buttons', sentences >= 10, `sentences=${sentences}`);
+  const article = await fetch(`${BASE}/datasets/news-detective-article.txt`);
+  check('news detective article is served with HTTP 200', article.status === 200, `status ${article.status}`);
+  const markTypes = await d6.page.$$eval('select#annotateMark option', els => els.map(o => o.textContent.trim()).filter(Boolean));
+  check('b5s3 mark menu lists the four highlighter marks', ['Factual claim', 'Emotional framing', 'Missing source', 'Unsupported certainty'].every(t => markTypes.includes(t)), JSON.stringify(markTypes));
+  const noteA = 'Names a founding year that can be checked.';
+  await (await d6.page.$$('.annotate-lab button.annotate-sentence'))[1].click();
+  check('clicking a sentence fills the annotate target', /Sentence \d+/.test(await d6.page.$eval('#annotateTarget', el => el.value || el.textContent)));
+  await d6.page.selectOption('select#annotateMark', { label: 'Factual claim' });
+  await d6.page.fill('textarea#annotateNote', noteA);
+  await d6.page.click('button#annotateAdd');
+  await d6.page.waitForFunction((n) => (document.querySelector('.annotate-findings')?.textContent || '').includes(n), noteA, { timeout: 10000 }).catch(() => {});
+  check('adding a mark via the form appears in the findings list', (await d6.page.textContent('.annotate-findings')).includes(noteA));
+  const noteB = 'Experts agree with nothing to back it up.';
+  await (await d6.page.$$('.annotate-lab button.annotate-sentence'))[3].click();
+  await d6.page.selectOption('select#annotateMark', { label: 'Unsupported certainty' });
+  await d6.page.fill('textarea#annotateNote', noteB);
+  await d6.page.click('button#annotateAdd');
+  await d6.page.waitForFunction((n) => (document.querySelector('.annotate-findings')?.textContent || '').includes(n), noteB, { timeout: 10000 }).catch(() => {});
+  const counts = await d6.page.textContent('.annotate-counts');
+  check('annotate counts show one Factual claim and one Unsupported certainty', /Factual claim\D*1/.test(counts) && /Unsupported certainty\D*1/.test(counts), counts);
+  check('marked sentences carry the marked class', (await d6.page.$$('.annotate-lab button.annotate-sentence.marked')).length === 2);
+  await d6.page.click('[data-session="b5s5"]');
+  await d6.page.waitForSelector('.bias-sim input[type=range][data-sim="shareB"]', { timeout: 15000 });
+  check('b5s5 renders the simulator controls and results', Boolean(await d6.page.$('input[type=range][data-sim="proxy"]')) && Boolean(await d6.page.$('input[type=checkbox][data-sim="removed"]')) && Boolean(await d6.page.$('#simAccA')) && Boolean(await d6.page.$('#simAccB')) && Boolean(await d6.page.$('#simOverall')));
+  check('simulator default run: Group A 18/20, Group B 2/20', /18\/20/.test(await d6.page.textContent('#simAccA')) && /\b2\/20/.test(await d6.page.textContent('#simAccB')), `${await d6.page.textContent('#simAccA')} | ${await d6.page.textContent('#simAccB')}`);
+  await setRange(d6.page, 'shareB', 50);
+  await d6.page.check('input[type=checkbox][data-sim="removed"]');
+  check('simulator shareB 50 / proxy 80 / removed: Group B 13/20', /13\/20/.test(await d6.page.textContent('#simAccB')), await d6.page.textContent('#simAccB'));
+  await setRange(d6.page, 'proxy', 0);
+  check('simulator shareB 50 / proxy 0 / removed: Group B 18/20, overall 36/40 · 90%', /18\/20/.test(await d6.page.textContent('#simAccB')) && /36\/40/.test(await d6.page.textContent('#simOverall')) && /90%/.test(await d6.page.textContent('#simOverall')), `${await d6.page.textContent('#simAccB')} | ${await d6.page.textContent('#simOverall')}`);
+  await d6.page.click('button#simRecord');
+  await d6.page.waitForFunction(() => (document.querySelector('.sim-runs')?.textContent || '').length > 0, null, { timeout: 10000 }).catch(() => {});
+  check('Record this run appends the run to the runs list', /18\/20|90%/.test(await d6.page.textContent('.sim-runs')), await d6.page.textContent('.sim-runs'));
+  check('b5s5 renders the three simulator fields', (await d6.page.$$('.bias-sim textarea[data-i], textarea[data-i]')).length >= 3);
+  const served5 = await Promise.all(['claim-cards.txt', 'annotation-sheet.csv', 'bias-station-cards.txt', 'bias-simulator-worksheet.csv', 'corrected-version-template.md', 'synthetic-media-checklist.txt', 'verification-log-A2.csv'].map(f => fetch(`${BASE}/datasets/${f}`, { method: 'HEAD' }).then(r => r.status)));
+  check('chapter 5 downloads are served with HTTP 200', served5.every(s => s === 200), JSON.stringify(served5));
+  await d6.context.close();
 
   // Admin page: student rejected, admin admitted
   const ds = await device(browser, a.session, '/admin');

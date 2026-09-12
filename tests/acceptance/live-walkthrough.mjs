@@ -6,7 +6,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { BASE, REF, check, results, createUser, cleanup, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS, CAPSTONE4_ANSWERS } from './lib.mjs';
+import { BASE, REF, check, results, createUser, cleanup, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS, CAPSTONE4_ANSWERS, CAPSTONE5_ANSWERS } from './lib.mjs';
 
 const SHOTS = process.env.SHOTS || 'live-shots';
 mkdirSync(SHOTS, { recursive: true });
@@ -41,6 +41,22 @@ async function saveSession(page, expectNext) {
   if (/Finish the required|Add a little more/i.test(fb)) throw new Error(fb);
   if (expectNext) { await page.waitForSelector('#nextSession', { timeout: 10000 }); await page.waitForSelector('#lessonFeedback .assessment-card', { timeout: 15000 }).catch(() => {}); await page.click('#nextSession'); await page.waitForFunction((id) => document.querySelector('.session-link.active')?.dataset.session === id, expectNext, { timeout: 10000 }); }
   return fb;
+}
+
+// Chapter 5 helpers: the annotate and simulator kinds re-render on every change, so sentence buttons are re-queried per mark and ranges get a real input event.
+async function addMark(page, index, type, note) {
+  await (await page.$$('.annotate-lab button.annotate-sentence[data-sentence]'))[index].click();
+  await page.selectOption('select#annotateMark', { label: type });
+  await page.fill('textarea#annotateNote', note);
+  await page.click('button#annotateAdd');
+  await page.waitForFunction((n) => (document.querySelector('.annotate-findings')?.textContent || '').includes(n), note, { timeout: 10000 });
+}
+async function setRange(page, key, value) { await page.$eval(`input[type=range][data-sim="${key}"]`, (el, v) => { el.value = v; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, String(value)); }
+async function recordRun(page) {
+  const before = (await page.textContent('.sim-runs').catch(() => '')).length;
+  await page.click('button#simRecord');
+  await page.waitForFunction((n) => (document.querySelector('.sim-runs')?.textContent || '').length > n, before, { timeout: 10000 });
+  return `${await page.textContent('#simAccB')} · ${await page.textContent('#simOverall')}`;
 }
 
 async function submitCapstone(page, answers) {
@@ -404,6 +420,136 @@ try {
     return await page.textContent('#pwMessage');
   });
   await step(page, 'Submit chapter 4 project', async () => {
+    await page.click('#pwSubmit');
+    await page.waitForFunction(() => /submitted/i.test(document.querySelector('.pw-status')?.textContent || ''), null, { timeout: 15000 });
+    return await page.textContent('.pw-status');
+  });
+  await page.click('.pw-close');
+
+  // ---------- student, chapter 4 capstone (submitted above) unlocks chapter 5
+  await page.click('#homeBtn');
+  await step(page, 'Home: Chapter 4 done, Chapter 5 unlocked', async () => {
+    const done = await page.$eval('[data-block="3"]', el => el.classList.contains('done'));
+    const unlocked = await page.$eval('[data-block="4"]', el => !el.classList.contains('locked') && !el.disabled);
+    return done && unlocked;
+  });
+
+  // ---------- student, chapter 5 (reload so the fourth workspace launcher initialises with the new unlock)
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForFunction(() => /Welcome/.test(document.getElementById('welcomeName')?.textContent || ''), null, { timeout: 15000 });
+  await page.click('[data-block="4"]');
+  await page.waitForSelector('#labBanner .lab-stage');
+  await step(page, 'Chapter 5 opens with six lab stages; Chapter 5 project launcher present', async () => {
+    await page.waitForSelector('#projectWorkspaceBtn-block5', { timeout: 15000 });
+    const label = await page.textContent('#projectWorkspaceBtn-block5');
+    return (await page.$$('#labBanner .lab-stage')).length === 6 && /^Project: .+/.test(label) ? label : false;
+  });
+  await step(page, 'Chapter 5 page shows the Myth-busters section and no AI tool safety notice', async () => /one source, not ten/.test(await page.textContent('#mythBusters')) && !(await page.$('#labToolLink')) && !(await page.$('[data-ack]')));
+  await step(page, 'The confidence trap chain: three claim cards ranked before checking, verdicts after, save', async () => {
+    const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
+    const cards = [['Transition Year was introduced in Irish schools in 1974', '4', 'true', 'It sounded like a textbook fact and it was one.'], ['The River Shannon is the longest river in Europe', '3', 'false', 'Confident wording; it is the longest in Ireland, not Europe.'], ['Most Irish teenagers would rather learn from an AI tutor than from a teacher', '2', "can't be verified", 'No survey I could find asks this question.']];
+    for (let i = 0; i < 3; i++) for (const [j, f] of ['statement', 'before', 'verdict', 'fooled'].entries()) await page.fill(`input[data-i="${i}"][data-f="${f}"]`, cards[i][j]);
+    const fb = await saveSession(page, 'b5s2');
+    return dl.some(h => /claim-cards/.test(h)) ? `${fb} downloads=${dl.length}` : `downloads=${dl.length}`;
+  });
+  await step(page, 'Which habit comes first? quiz: choose every answer, save', async () => {
+    const selects = await page.$$('select[data-i]');
+    for (const sel of selects) await sel.selectOption({ index: 1 });
+    const fb = await saveSession(page, 'b5s3');
+    return selects.length === 8 ? fb : `items=${selects.length}`;
+  });
+  await step(page, 'AI News Detective annotate: article split into sentences, six marks of four types, counts shown, save', async () => {
+    await page.waitForSelector('.annotate-lab button.annotate-sentence[data-sentence]', { timeout: 15000 });
+    const sentences = (await page.$$('.annotate-lab button.annotate-sentence[data-sentence]')).length;
+    const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
+    const marks = [[1, 'Factual claim', 'Transition Year exists and is optional; checkable.'], [2, 'Factual claim', 'Names a founding year that can be checked.'], [3, 'Unsupported certainty', 'Experts agree, but no expert is named.'], [4, 'Emotional framing', 'Loaded wording meant to make me worried.'], [5, 'Missing source', 'A recent survey with no name or link.'], [6, 'Unsupported certainty', 'Beyond doubt is not evidence.']];
+    for (const [i, type, note] of marks) await addMark(page, i, type, note);
+    const counts = await page.textContent('.annotate-counts');
+    const marked = (await page.$$('.annotate-lab button.annotate-sentence.marked')).length;
+    const fb = await saveSession(page, 'b5s4');
+    return sentences >= 10 && marked === 6 && /Factual claim\D*2/.test(counts) && /Unsupported certainty\D*2/.test(counts) && dl.some(h => /news-detective-article/.test(h)) ? `sentences=${sentences} · ${counts.trim()} · ${fb}` : `sentences=${sentences} marked=${marked} counts=${counts} downloads=${dl.length}`;
+  });
+  await step(page, 'Lateral verification chain (Sheet A2): five claims checked in new tabs, save', async () => {
+    const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
+    const claims = [['Transition Year began in 1974', 'Department of Education page on Transition Year', 'Independent', 'Supported'], ['The National AI Tutoring Act 2025 was passed', 'Irish Statute Book search', 'Independent', 'Wrong'], ['A recent survey found 78% of parents want AI tutors', 'No named survey found; two sites repeat the article', 'Repeating it', 'Uncertain'], ['The Leaving Certificate is the final exam', 'State Examinations Commission site', 'Independent', 'Supported'], ['The Department of Education runs the system', 'gov.ie Department of Education page', 'Independent', 'Supported']];
+    for (let i = 0; i < 5; i++) for (const [j, f] of ['claim', 'source', 'independent', 'verdict'].entries()) await page.fill(`input[data-i="${i}"][data-f="${f}"]`, claims[i][j]);
+    const fb = await saveSession(page, 'b5s5');
+    return dl.some(h => /verification-log-A2/.test(h)) ? `${fb} downloads=${dl.length}` : `downloads=${dl.length}`;
+  });
+  await step(page, 'Bias simulator: three runs recorded (2/20, 13/20, 18/20 for Group B), three fields, save', async () => {
+    await page.waitForSelector('.bias-sim input[type=range][data-sim="shareB"]', { timeout: 15000 });
+    const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
+    const a18 = /18\/20/.test(await page.textContent('#simAccA'));
+    const run1 = await recordRun(page);
+    await setRange(page, 'shareB', 50);
+    await page.check('input[type=checkbox][data-sim="removed"]');
+    const run2 = await recordRun(page);
+    await setRange(page, 'proxy', 0);
+    const run3 = await recordRun(page);
+    const runs = (await page.textContent('.sim-runs')).split(/18\/20|13\/20|2\/20/).length - 1;
+    await page.fill('textarea[data-i="0"]', long('Raised Group B from 10% to 50% of the training data, then removed the sensitive field, then weakened the postcode proxy; Group A stayed at 90% while Group B climbed.'));
+    await page.fill('textarea[data-i="1"]', long('The bias entered at collection because Group B was under-represented, and through a proxy because postcode stood in for the group even after the field was removed.'));
+    await page.fill('textarea[data-i="2"]', long('Group B applicants are affected; I would collect balanced training data and drop or weaken the postcode feature before using the model.'));
+    const fb = await saveSession(page, 'b5s6');
+    const ok = a18 && /\b2\/20/.test(run1) && /13\/20/.test(run2) && /18\/20/.test(run3) && runs >= 3 && dl.some(h => /bias-simulator-worksheet/.test(h));
+    return ok ? `${run1} | ${run2} | ${run3} · ${fb}` : `A18=${a18} run1=${run1} run2=${run2} run3=${run3} runs=${runs} downloads=${dl.length}`;
+  });
+  await step(page, 'Bias stations chain: four stations, where bias enters, who is affected, which kind, save', async () => {
+    const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
+    const stations = [['Hiring data', 'The data: past hires were mostly one group', 'Applicants from under-represented groups', 'Representation bias'], ['Image generation', 'The data: stereotyped images dominate the training set', 'Anyone who does not match the stereotype', 'Representation bias'], ['Discipline analytics', 'How people use it: staff trust the flag without checking', 'Students flagged from past records', 'Automation bias'], ['Recommendation feeds', 'The design: engagement is the only goal', 'Users pushed towards extreme content', 'Framing']];
+    for (let i = 0; i < 4; i++) for (const [j, f] of ['station', 'enters', 'affected', 'kind'].entries()) await page.fill(`input[data-i="${i}"][data-f="${f}"]`, stations[i][j]);
+    const fb = await saveSession(page, 'b5s7');
+    return dl.some(h => /bias-station-cards/.test(h)) ? `${fb} downloads=${dl.length}` : `downloads=${dl.length}`;
+  });
+  await step(page, 'Improve the output: corrected version and two explanations, template download listed, save', async () => {
+    const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
+    const areas = await page.$$('textarea[data-i]');
+    await page.fill('textarea[data-i="0"]', 'Corrected version: Transition Year is an optional year in Irish secondary schools, run by the Department of Education, and the Leaving Certificate remains the final exam. A plan for AI tutors in every classroom by 2028 has been discussed, but no Act has been passed and the survey figure quoted could not be verified, so it is marked uncertain. Sources: Department of Education, State Examinations Commission.');
+    await page.fill('textarea[data-i="1"]', long('Took out the invented Act, the fabricated report and the experts agree line.'));
+    await page.fill('textarea[data-i="2"]', long('It is shorter and calmer, and every claim left in has a named source.'));
+    const fb = await saveSession(page, 'b5s8');
+    return areas.length === 3 && dl.some(h => /corrected-version-template/.test(h)) ? `${fb} downloads=${dl.length}` : `fields=${areas.length} downloads=${dl.length}`;
+  });
+  await step(page, 'Synthetic media: two responses, checklist download listed, save', async () => {
+    const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
+    const n = await fillTextfields(page, 2);
+    const fb = await saveSession(page, 'b5s9');
+    return n === 2 && dl.some(h => /synthetic-media-checklist/.test(h)) ? `${fb} downloads=${dl.length}` : `fields=${n} downloads=${dl.length}`;
+  });
+  await step(page, 'Reflection: my three-step rule, save, chapter 5 practical complete', async () => {
+    await page.fill('textarea[data-i="0"]', 'Stop and notice how it makes me feel.');
+    await page.fill('textarea[data-i="1"]', 'Open new tabs and find independent coverage.');
+    await page.fill('textarea[data-i="2"]', 'Trace the claim back to its original evidence.');
+    const fb = await saveSession(page, null);
+    return /chapter assessment/i.test(fb) ? fb : false;
+  });
+  await page.waitForSelector('#chapterCapstoneHost textarea[data-capstone]', { timeout: 10000 });
+  await step(page, 'Submit chapter 5 capstone, formative level returned', async () => submitCapstone(page, CAPSTONE5_ANSWERS));
+
+  // ---------- chapter 5 project workspace
+  await page.click('#projectWorkspaceBtn-block5');
+  await page.waitForSelector('#projectWorkspaceModal.open', { timeout: 15000 });
+  await step(page, 'Chapter 5 Project Workspace opens with brief and acceptance criteria', async () => {
+    const eyebrow = await page.textContent('#projectWorkspaceModal .eyebrow');
+    return /CHAPTER 5 PROJECT/.test(eyebrow) && (await page.$$('#projectWorkspaceModal li')).length >= 3 ? eyebrow : false;
+  });
+  await step(page, 'Import chapter 5 lab evidence adds the annotated article, verification chain and simulator runs as evidence', async () => {
+    await page.click('#pwImportLab');
+    await page.waitForFunction(() => /Imported/.test(document.getElementById('pwMessage')?.textContent || ''), null, { timeout: 15000 });
+    const n = (await page.$$('#pwEvidence .pw-evidence')).length;
+    const values = await page.$$eval('#pwEvidence textarea', els => els.map(e => e.value).join('\n'));
+    return n >= 3 && /6 marks: /.test(values) && /3 runs; Group B 10%–90%; overall 50%–90%/.test(values) && / → Independent → Supported/.test(values) ? `${await page.textContent('#pwMessage')} (${n} items)` : `only ${n} items: ${values.slice(0, 160)}`;
+  });
+  await step(page, 'Chapter 5 work log entry and recommendation, save', async () => {
+    await page.click('#pwAddLog');
+    await page.fill('#pwLog .pw-entry textarea[data-f="did"]', 'Marked up the AI article, verified five claims laterally, ran the bias simulator three times, worked the four stations and published a corrected version.');
+    await page.fill('#pwLog .pw-entry textarea[data-f="result"]', 'Two claims wrong, one uncertain; Group B only reached 90% once the proxy was weakened; corrected version is shorter and sourced.');
+    await page.fill('#pwRecommendation', long('Publish only the corrected version with the uncertain parts labelled and the sources added; less exciting, more trustworthy.'));
+    await page.click('#pwSave');
+    await page.waitForFunction(() => /Saved/.test(document.getElementById('pwMessage')?.textContent || ''), null, { timeout: 15000 });
+    return await page.textContent('#pwMessage');
+  });
+  await step(page, 'Submit chapter 5 project', async () => {
     await page.click('#pwSubmit');
     await page.waitForFunction(() => /submitted/i.test(document.querySelector('.pw-status')?.textContent || ''), null, { timeout: 15000 });
     return await page.textContent('.pw-status');
