@@ -1,0 +1,13 @@
+AI for Learning & Work — tutor cards
+Use made-up details only. Record your starting point before any help.
+
+Comparison: use the same safe learning question in two fresh conversations in the same tool.
+1. Give me the answer: how much flour is half of a recipe that uses three quarters of a cup?
+2. Teach me through questions: how much flour is half of a recipe that uses three quarters of a cup? Ask one question and wait for my attempt before giving feedback.
+Predict which will leave evidence of your thinking. Keep short extracts and compare them.
+
+Tutoring scaffold: prior knowledge → example → question → student attempt → feedback.
+Prompt: I want to understand fractions in a recipe. Find out what I already know. Give a small example, ask me one question and hold back the full explanation until I have tried. Wait for my answer, then give feedback.
+Repair if needed: You gave the answer too soon. Give only one hint and wait for my attempt.
+Use the staged b6s2 sample if the tool is blocked; attempt each question before reading the next turn.
+Close the tool and hide the saved conversation before explaining from memory in b6s3. Compare with your starting point, then check a worked example or non-AI source.

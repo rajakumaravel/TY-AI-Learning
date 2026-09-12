@@ -6,7 +6,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { BASE, REF, check, results, createUser, cleanup, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS, CAPSTONE4_ANSWERS, CAPSTONE5_ANSWERS } from './lib.mjs';
+import { BASE, REF, check, results, createUser, cleanup, CAPSTONE1_ANSWERS, CAPSTONE2_ANSWERS, CAPSTONE3_ANSWERS, CAPSTONE4_ANSWERS, CAPSTONE5_ANSWERS, completeChapter6UI } from './lib.mjs';
 
 const SHOTS = process.env.SHOTS || 'live-shots';
 mkdirSync(SHOTS, { recursive: true });
@@ -555,6 +555,13 @@ try {
     return await page.textContent('.pw-status');
   });
   await page.click('.pw-close');
+  await context.close();
+
+  // ---------- Chapter 6: all sessions, independent sample review, capstone and project.
+  ({ context, page } = await device(browser, student.session));
+  await page.waitForFunction(()=>/Welcome/.test(document.getElementById('welcomeName')?.textContent||''),null,{timeout:15000});
+  await completeChapter6UI(page, async sid => step(page, `Chapter 6 ${sid}: saved sample-route evidence`, async()=>true));
+  await step(page, 'Chapter 6 capstone and project completed', async()=>true);
   await context.close();
 
   // ---------- non-admin blocked

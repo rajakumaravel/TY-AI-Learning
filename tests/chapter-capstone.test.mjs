@@ -8,7 +8,7 @@ const api=fs.readFileSync('netlify/functions/api.mts','utf8');
 const adr=fs.readFileSync('docs/decisions/ADR-004-chapter-capstone-assessment.md','utf8');
 
 test('pilot chapters each have applied capstones',()=>{
-  assert.equal(Object.keys(CAPSTONES).length,5);
+  assert.equal(Object.keys(CAPSTONES).length,6);
   assert.match(CAPSTONES.block1.brief,/school|adviser/i);
   assert.match(CAPSTONES.block2.brief,/model|failure/i);
   assert.match(CAPSTONES.block3.brief,/homework.*question.*infer.*ability band/is);
@@ -23,6 +23,10 @@ test('pilot chapters each have applied capstones',()=>{
   assert.equal(CAPSTONES.block5.id,'block5-capstone');
   assert.equal(CAPSTONES.block5.title,'AI Investigator review');
   assert.equal(CAPSTONES.block5.prompts.length,3);
+  assert.match(CAPSTONES.block6.brief,/placement team.*workshop feedback.*12 returned forms.*one exact duplicate.*two unanswered rating cells.*AI tutor.*every attendee was satisfied.*next workshop will be more popular.*disclosing AI assistance/is);
+  assert.equal(CAPSTONES.block6.id,'block6-capstone');
+  assert.equal(CAPSTONES.block6.title,'Digital Collaborator review');
+  assert.equal(CAPSTONES.block6.prompts.length,3);
 });
 
 test('block5 capstone scoring counts trust-and-bias vocabulary as concept and action',()=>{

@@ -4,10 +4,10 @@
 //
 // Each browser context is a fresh "device" with no local state; the Supabase session is injected into
 // localStorage the same way the Google OAuth callback would store it. Covers cross-device persistence,
-// the chapter gates as rendered (1→2 through 4→5), the Chapter 5 annotate and simulator kinds, and admin-page rejection for a non-admin account.
+// the chapter gates as rendered (1→2 through 5→6), the Chapter 5 annotate and simulator kinds, and admin-page rejection for a non-admin account.
 
 import { chromium } from 'playwright';
-import { BASE, REF, api, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS } from './lib.mjs';
+import { BASE, REF, api, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS, completeChapter6UI } from './lib.mjs';
 
 // The annotate/simulator controls re-render on input, so ranges are set with a real input event rather than page.fill.
 async function setRange(page, key, value) { await page.$eval(`input[type=range][data-sim="${key}"]`, (el, v) => { el.value = v; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, String(value)); }
@@ -202,6 +202,20 @@ try {
   const served5 = await Promise.all(['claim-cards.txt', 'annotation-sheet.csv', 'bias-station-cards.txt', 'bias-simulator-worksheet.csv', 'corrected-version-template.md', 'synthetic-media-checklist.txt', 'verification-log-A2.csv'].map(f => fetch(`${BASE}/datasets/${f}`, { method: 'HEAD' }).then(r => r.status)));
   check('chapter 5 downloads are served with HTTP 200', served5.every(s => s === 200), JSON.stringify(served5));
   await d6.context.close();
+
+  // Chapter 5 → 6 gate, then all Chapter 6 sessions and its project through real controls.
+  const done5 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS, ...CHAPTER3_SESSIONS, ...CHAPTER4_SESSIONS, ...CHAPTER5_SESSIONS], reflections: {}, activity: {}, badges: [] } }) });
+  check('server accepts Chapter 5 completion', done5.status === 200);
+  const locked6 = await device(browser, a.session);
+  await locked6.page.waitForSelector('[data-block="5"]');
+  check('Chapter 6 remains locked before Chapter 5 capstone', await locked6.page.$eval('[data-block="5"]',el=>el.disabled&&el.classList.contains('locked')));
+  await locked6.context.close();
+  const cap5 = await api('chapter-assessment/block5', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE5_ANSWERS }) });
+  check('Chapter 5 capstone accepted',cap5.status===200&&Boolean(cap5.body?.assessment?.submittedAt));
+  const d7 = await device(browser, a.session);
+  await d7.page.waitForFunction(()=>/Welcome/.test(document.getElementById('welcomeName')?.textContent||''),null,{timeout:15000});
+  await completeChapter6UI(d7.page);
+  await d7.context.close();
 
   // Admin page: student rejected, admin admitted
   const ds = await device(browser, a.session, '/admin');

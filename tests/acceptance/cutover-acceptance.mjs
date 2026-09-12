@@ -6,7 +6,7 @@
 // Creates three throwaway auth users (two students, one app-metadata admin), exercises the API and RLS, then deletes them.
 
 import { randomUUID } from 'node:crypto';
-import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS } from './lib.mjs';
+import { BASE, api, rest, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS, CHAPTER6_SESSIONS, CAPSTONE6_ANSWERS, CHAPTER6_FIELDS, CHAPTER6_DISCLOSURE, CHAPTER6_RECOMMENDATION } from './lib.mjs';
 
 const users = [];
 try {
@@ -152,11 +152,17 @@ try {
   check('student A submits Chapter 4 project', submit4.status === 200 && submit4.body?.project?.status === 'submitted' && submit4.body?.project?.submittedSnapshot?.finalRecommendation === workspace4.finalRecommendation, JSON.stringify(submit4.body));
   check('student B Chapter 4 project save is 409 without Chapter 3 qualification', (await api('projects/block4', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
 
+  // Chapter 6 writes are rejected before Chapter 5 qualification, including project submission.
+  for (const [path,method,body] of [['chapter-assessment/block6','POST',{answers:CAPSTONE6_ANSWERS}],['projects/block6','PUT',{workspace:{}}],['projects/block6/submit','POST',{}]]) {
+    const res=await api(path,a.token,{method,body:JSON.stringify(body)});
+    check(`${path} is 409 before Chapter 5 qualification`,res.status===409);
+  }
   // Chapter 4 → 5 gate: student A is Chapter 4 qualified (cap4 above), so Chapter 5 needs only its nine sessions
   const cap5early = await api('chapter-assessment/block5', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE5_ANSWERS }) });
   check('Chapter 5 capstone is 409 before Chapter 5 sessions complete', cap5early.status === 409, `status ${cap5early.status}`);
   const done5 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { ...state, completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS, ...CHAPTER3_SESSIONS, ...CHAPTER4_SESSIONS, ...CHAPTER5_SESSIONS] } }) });
   check('student A marks all Chapter 5 sessions complete', done5.status === 200);
+  check('Chapter 5 practical completion alone does not unlock Chapter 6 project', (await api('projects/block6',a.token,{method:'PUT',body:JSON.stringify({workspace:{}})})).status===409);
   const cap5 = await api('chapter-assessment/block5', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE5_ANSWERS }) });
   check('Chapter 5 capstone accepted after sessions complete', cap5.status === 200 && Boolean(cap5.body?.assessment?.submittedAt) && Boolean(cap5.body?.assessment?.suggestedLevel), JSON.stringify(cap5.body));
   const workspace5 = {
@@ -173,6 +179,24 @@ try {
   const submit5 = await api('projects/block5/submit', a.token, { method: 'POST' });
   check('student A submits Chapter 5 project', submit5.status === 200 && submit5.body?.project?.status === 'submitted' && submit5.body?.project?.submittedSnapshot?.finalRecommendation === workspace5.finalRecommendation, JSON.stringify(submit5.body));
   check('student B Chapter 5 project save is 409 without Chapter 4 qualification', (await api('projects/block5', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
+  // Chapter 5 qualified; Chapter 6 practical sessions and assessment are now available.
+  check('Chapter 6 capstone requires its own eight sessions',(await api('chapter-assessment/block6',a.token,{method:'POST',body:JSON.stringify({answers:CAPSTONE6_ANSWERS})})).status===409);
+  const activity6=Object.fromEntries(Object.entries(CHAPTER6_FIELDS).map(([sid,fields])=>[sid,{...Object.fromEntries(fields.map((v,i)=>[i,v])),...(['b6s1','b6s2','b6s4','b6s6'].includes(sid)?{ack:true,mode:'fallback'}:{})}]));
+  activity6.b6s7=Object.fromEntries(CHAPTER6_DISCLOSURE.map((r,i)=>[i,Object.fromEntries(['scenario','decision','reason','wording'].map((k,j)=>[k,r[j]]))]));
+  const done6=await api('progress',a.token,{method:'PUT',body:JSON.stringify({state:{...state,completed:[...CHAPTER1_SESSIONS,...CHAPTER2_SESSIONS,...CHAPTER3_SESSIONS,...CHAPTER4_SESSIONS,...CHAPTER5_SESSIONS,...CHAPTER6_SESSIONS],activity:activity6}})});
+  check('Chapter 6 calculated evidence saves',done6.status===200);
+  const cap6=await api('chapter-assessment/block6',a.token,{method:'POST',body:JSON.stringify({answers:CAPSTONE6_ANSWERS})});
+  check('Chapter 6 feedback capstone qualifies',cap6.status===200&&Boolean(cap6.body?.assessment?.submittedAt)&&cap6.body?.assessment?.suggestedLevel==='Going further');
+  const workspace6={
+    workLog:[{did:'Preserved and cleaned a working copy, validated exclusions, calculated seven eligible lines and reviewed every claim.',result:'Partial subtotal €249.00, four held records and the unsupported attendance prediction removed.'}],
+    evidence:[{label:'Data Cleaning Log and validation evidence',note:CHAPTER6_FIELDS.b6s4.slice(3,6).join(' | '),url:''},{label:'Filled human-review checklist',note:CHAPTER6_FIELDS.b6s5.join(' | '),url:''},{label:'Disclosure choices',note:CHAPTER6_DISCLOSURE.map(r=>r.join(' → ')).join('; '),url:''}],
+    finalRecommendation:CHAPTER6_RECOMMENDATION
+  };
+  const save6=await api('projects/block6',a.token,{method:'PUT',body:JSON.stringify({workspace:workspace6})});
+  check('Chapter 6 project write succeeds after Chapter 5 qualification',save6.status===200&&save6.body?.project?.brief?.chapter==='AI for Learning & Work');
+  const submit6=await api('projects/block6/submit',a.token,{method:'POST'});
+  check('Chapter 6 submitted snapshot retains cleaning, review and disclosure evidence',submit6.status===200&&submit6.body?.project?.status==='submitted'&&(submit6.body?.project?.submittedSnapshot?.evidence||[]).length===workspace6.evidence.length&&workspace6.evidence.every((e,i)=>{const got=(submit6.body?.project?.submittedSnapshot?.evidence||[])[i]||{};return got.label===e.label&&got.note===e.note&&got.url===e.url})&&submit6.body?.project?.submittedSnapshot?.finalRecommendation===CHAPTER6_RECOMMENDATION);
+  check('student B Chapter 6 remains locked',(await api('projects/block6',b.token,{method:'PUT',body:JSON.stringify({workspace:workspace6})})).status===409);
 } catch (error) {
   check('run completed without exception', false, error.message);
 } finally {

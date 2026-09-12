@@ -1,0 +1,24 @@
+FICTIONAL TRAINING-CENTRE OPEN DAY — events team request and meeting notes
+All details and cost records are synthetic. No personal data is needed.
+
+Request: prepare a concise open-day cost briefing for the training centre events team, with a defensible eligible subtotal, category breakdown, mean eligible line cost and unresolved items before approval. Draft a professional email or briefing; do not send it. Spending requires the events lead's human approval after the outstanding source checks.
+
+Preparation: the training centre supplies LibreOffice Calc, installed before the session, and Writer if you want a separate document. Download: https://www.libreoffice.org/download/ . No account is required. You can keep your final briefing in the portal's textfields.
+AI route: DuckDuckGo AI Chat at https://duck.ai, free text chat without signing in. If blocked or asked for an account, payment or an unavailable feature, try https://copilot.microsoft.com without signing in; otherwise use the matching session in ai-work-sample-outputs.txt. No uploads or account-dependent office integrations are required. The sample replaces chat, not your own cleaning, calculations or final work product.
+
+Meeting notes / data rules:
+- All prices are euro per unit. Unit cost is from 0 to 500 inclusive.
+- Quantity is an integer from 1 to 100. Refunds are not recorded in this export.
+- Valid categories: Venue / Materials / Catering / Transport.
+- Each item ID identifies one cost line; item is the description of that cost.
+- Trim category whitespace, standardise category case and map Vneue to Venue.
+- Convert an explicit euro price to a number without changing its value.
+- Compare every field before removing an exact duplicate. Keep the first source row and log the surplus row removed.
+- Hold both records of a conflicting ID until the source is checked. Do not choose the more convenient value.
+- Missing and invalid quantities remain flagged, not guessed. Exclude held or invalid records from numerical analysis and name those exclusions.
+- There is no attendance, income, historical comparison or complete-event-cost evidence in this brief. Known eligible costs are a partial subtotal, not a complete budget.
+
+Method: Preserve → Profile → Define rules → Clean → Validate → Analyse → AI assist → Human review (the review document calls the last step Human verify).
+Save an untouched raw_v1 and a separate working copy. Use raw data row numbers, excluding the header, throughout your log. Record every change, removal and flag; Verified by means a source, rule or record comparison, not your personal name.
+Keep raw, working, profile, rules, cleaning log, validation and analysis sheets in your local workbook. Paste compact log, formulas, results and limitations into the portal; a filename alone is not assessable evidence. Imported project notes allow 4,000 characters each; add extra evidence notes for overflow.
+Calculate line cost = quantity × unit cost, an eligible subtotal, category totals and mean eligible line cost with an explicit included count. Reconcile every removed or held row and retain unresolved flags. Ask AI only to critique or phrase your validated synthetic figures and limitations. In b6s5 independently check every numerical and factual claim, hand-check a line and inspect formula ranges, before signing off a chart or concise summary.

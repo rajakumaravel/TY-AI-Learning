@@ -687,7 +687,225 @@ the sensitive field kept and round(6 × proxy/100) with it removed.
 The review's 8.1 table (Group A 18/20, Group B 11/20, overall 72.5%) is the discussion anchor: is 72.5% enough?
 `);
 
+// ---------- Chapter 6: AI for Learning & Work. One fixed raw fixture; answers only in docs/teacher.
+const WORK_BUDGET = [
+  ['E01','Venue','Hall','1','80'],
+  ['E02','materials ','Paper packs','4','5'],
+  ['E03','Catering','Juice cartons','6','3'],
+  ['E04','Materials','Poster sheets','10','€1.50'],
+  ['E05','transport','Minibus','1','60'],
+  ['E06','Catering','Sandwich trays','3','12'],
+  ['E07','Materials','Marker packs','2','4'],
+  ['E08','Vneue','Display stand','1','20'],
+  ['E09','Catering','Fruit boxes','','10'],
+  ['E10','Transport','Taxi','-1','15'],
+  ['E03','Catering','Juice cartons','6','3'],
+  ['E07','Materials','Marker packs','20','4']
+];
+const workCsv = (rows) => rows.map(row => row.map(v => /[,"\n]/.test(String(v)) ? `"${String(v).replaceAll('"','""')}"` : String(v)).join(',')).join('\n')+'\n';
+const workFile = (name, text) => writeFileSync(join(OUT, `ai-work-${name}`), text);
+workFile('event-budget-raw.csv', workCsv([['item_id','category','item','quantity','unit_cost_eur'], ...WORK_BUDGET]));
+workFile('tutor-cards.txt', `AI for Learning & Work — tutor cards
+Use made-up details only. Record your starting point before any help.
+
+Comparison: use the same safe learning question in two fresh conversations in the same tool.
+1. Give me the answer: how much flour is half of a recipe that uses three quarters of a cup?
+2. Teach me through questions: how much flour is half of a recipe that uses three quarters of a cup? Ask one question and wait for my attempt before giving feedback.
+Predict which will leave evidence of your thinking. Keep short extracts and compare them.
+
+Tutoring scaffold: prior knowledge → example → question → student attempt → feedback.
+Prompt: I want to understand fractions in a recipe. Find out what I already know. Give a small example, ask me one question and hold back the full explanation until I have tried. Wait for my answer, then give feedback.
+Repair if needed: You gave the answer too soon. Give only one hint and wait for my attempt.
+Use the staged b6s2 sample if the tool is blocked; attempt each question before reading the next turn.
+Close the tool and hide the saved conversation before explaining from memory in b6s3. Compare with your starting point, then check a worked example or non-AI source.
+`);
+workFile('workplace-brief.txt', `FICTIONAL TRAINING-CENTRE OPEN DAY — events team request and meeting notes
+All details and cost records are synthetic. No personal data is needed.
+
+Request: prepare a concise open-day cost briefing for the training centre events team, with a defensible eligible subtotal, category breakdown, mean eligible line cost and unresolved items before approval. Draft a professional email or briefing; do not send it. Spending requires the events lead's human approval after the outstanding source checks.
+
+Preparation: the training centre supplies LibreOffice Calc, installed before the session, and Writer if you want a separate document. Download: https://www.libreoffice.org/download/ . No account is required. You can keep your final briefing in the portal's textfields.
+AI route: DuckDuckGo AI Chat at https://duck.ai, free text chat without signing in. If blocked or asked for an account, payment or an unavailable feature, try https://copilot.microsoft.com without signing in; otherwise use the matching session in ai-work-sample-outputs.txt. No uploads or account-dependent office integrations are required. The sample replaces chat, not your own cleaning, calculations or final work product.
+
+Meeting notes / data rules:
+- All prices are euro per unit. Unit cost is from 0 to 500 inclusive.
+- Quantity is an integer from 1 to 100. Refunds are not recorded in this export.
+- Valid categories: Venue / Materials / Catering / Transport.
+- Each item ID identifies one cost line; item is the description of that cost.
+- Trim category whitespace, standardise category case and map Vneue to Venue.
+- Convert an explicit euro price to a number without changing its value.
+- Compare every field before removing an exact duplicate. Keep the first source row and log the surplus row removed.
+- Hold both records of a conflicting ID until the source is checked. Do not choose the more convenient value.
+- Missing and invalid quantities remain flagged, not guessed. Exclude held or invalid records from numerical analysis and name those exclusions.
+- There is no attendance, income, historical comparison or complete-event-cost evidence in this brief. Known eligible costs are a partial subtotal, not a complete budget.
+
+Method: Preserve → Profile → Define rules → Clean → Validate → Analyse → AI assist → Human review (the review document calls the last step Human verify).
+Save an untouched raw_v1 and a separate working copy. Use raw data row numbers, excluding the header, throughout your log. Record every change, removal and flag; Verified by means a source, rule or record comparison, not your personal name.
+Keep raw, working, profile, rules, cleaning log, validation and analysis sheets in your local workbook. Paste compact log, formulas, results and limitations into the portal; a filename alone is not assessable evidence. Imported project notes allow 4,000 characters each; add extra evidence notes for overflow.
+Calculate line cost = quantity × unit cost, an eligible subtotal, category totals and mean eligible line cost with an explicit included count. Reconcile every removed or held row and retain unresolved flags. Ask AI only to critique or phrase your validated synthetic figures and limitations. In b6s5 independently check every numerical and factual claim, hand-check a line and inspect formula ranges, before signing off a chart or concise summary.
+`);
+workFile('data-dictionary.csv', workCsv([['field','meaning','type','unit','allowed_values_or_range','missing_or_conflict_rule','source'], ...['item_id','category','item','quantity','unit_cost_eur'].map(f=>[f,'','','','','',''])]));
+workFile('cleaning-log.csv', 'Row / field,Original,Issue,Action,Reason,Verified by\n'+',,,,,\n'.repeat(10));
+workFile('validation-checklist.csv', workCsv([['check','before','after','evidence_or_formula','unresolved_action'], ...['Raw preservation','Row count','Field count','Blanks','Exact duplicates','Conflicting IDs','Categories','Units','Ranges','Held rows','Reconciliation'].map(f=>[f,'','','',''])]));
+workFile('human-review-checklist.csv', 'claim,spreadsheet_cell_or_source,formula_or_independent_check,verdict,change_or_removal,human_sign_off\n'+',,,,,\n'.repeat(8));
+const WORK_CLAIMS = [
+  ['Recorded venue costs are €100.', 'SUPPORTED', 'Eligible source rows 1 and 8: 1 × 80 + 1 × 20. This describes recorded venue costs only.'],
+  ['Eligible line costs total €300.', 'WRONG', 'The seven eligible source rows total €249.00; check the formula range and exclusions.'],
+  ['Attendance will rise by 20%.', 'UNCERTAIN', 'Unsupported prediction: the brief has no attendance or historical comparison evidence. Remove it; do not invent a baseline.']
+];
+const WORK_EDITS = [
+  ['Please review the recorded costs before approving spending.', 'ACCEPTED', 'Clear, polite request consistent with the brief; the events lead must approve.'],
+  ['The figures are complete and ready for approval.', 'REJECTED', 'Removes the draft caveat about unresolved items and wrongly claims completeness. The brief requires outstanding source checks before spending.']
+];
+workFile('sample-outputs.txt', `SYNTHETIC SAMPLES — AI for Learning & Work
+These are prepared examples, not a live tool's responses. Record the sample route in your evidence. They are suggestions to test against your own thinking, spreadsheet and brief. Do not treat the samples as an answer key.
+
+=== b6s1: answer-giving and tutoring comparison ===
+Prompt A: Give me the answer: how much flour is half of a recipe that uses three quarters of a cup?
+Output A: Half of three quarters is three eighths of a cup.
+Prompt B (fresh conversation): Teach me through questions: how much flour is half of a recipe that uses three quarters of a cup? Wait for my attempt.
+Tutor: Imagine splitting each quarter into two equal pieces. What fraction of a cup is each smaller piece?
+STUDENT-ATTEMPT PAUSE: Write your own answer before reading further.
+Feedback: Splitting a quarter into two makes eighths. Now how many of those smaller pieces make half of three quarters? Keep your attempt and compare which conversation shows your thinking.
+
+=== b6s2: staged AI tutor challenge — fractions in a recipe ===
+Before starting: record what you understand about halving fractions.
+Prompt: Find out what I know about fractions in a recipe, give an example and ask questions. Hold back the full explanation until I have tried.
+Tutor turn 1: What does the denominator tell you in one quarter of a cup?
+STUDENT-ATTEMPT PAUSE: Write your attempt before reading turn 2.
+Tutor turn 2 / feedback: The denominator says how many equal parts make one whole. Example: cutting a whole into four equal parts makes quarters. If you halve each quarter, how many equal parts now make the whole?
+STUDENT-ATTEMPT PAUSE: Write your attempt before reading turn 3.
+Tutor turn 3 / feedback: There are eight equal parts, so each is one eighth. A recipe uses three quarters of a cup. How much would half the recipe use? Explain your reasoning before asking for the full explanation.
+STUDENT-ATTEMPT PAUSE: Write your answer and reasoning before reading turn 4.
+Tutor turn 4 / feedback: Half of each quarter is one eighth, so half of three quarters is three eighths. Compare this reasoning with your own attempt; record what still needs another try. If an earlier turn gave away too much, record a repaired prompt asking for only one hint.
+For b6s3 close this sample and explain from memory before reopening notes.
+
+=== b6s4: suggested interpretation for Human review in b6s5 ===
+Sample prompt: Suggest a concise interpretation of the synthetic budget figures I have calculated, keeping any limitations. I will check every claim independently.
+Sample output:
+${WORK_CLAIMS.map(c=>c[0]).join('\n')}
+Use your own calculations and the source brief to check each claim in b6s5. If your live output has no error, also review this sample.
+
+=== b6s6: professional communication editing ===
+Student draft for this sample: Can the events team review these recorded costs? Some items are unresolved and need source checks before spending is approved.
+Sample editing prompt: Edit for clarity and professional tone. Preserve my meaning, figures and caveats; do not invent facts.
+Suggested edit:
+${WORK_EDITS.map(c=>c[0]).join(' ')}
+Compare every suggestion with the draft and brief; record what you accept or reject and why. Draft only: no email is sent.
+`);
+workFile('briefing-template.md', `# Workplace briefing
+
+## Audience and request
+Who needs this and which decision will it support?
+
+## My own draft before AI
+Write from your checked summary.
+
+## Verified figures and formulas
+Record line costs, eligible subtotal, category totals, included count, mean and exclusions. Name cells and formula ranges.
+
+## Unresolved items
+What is held or flagged? Which source must be checked?
+
+## Suggested edits
+Keep the editing prompt and short output.
+
+## Accepted / rejected changes with reasons
+Check every suggestion against the draft and evidence.
+
+## Final concise summary (or chart, data and caption)
+Include verified figures, included count and limitations.
+
+## Disclosure
+What did AI contribute and what did I check myself?
+
+## Human approval checkpoint
+Who verifies, decides or approves before spending, and what must happen first?
+`);
+workFile('disclosure-cards.txt', `Disclosure scenarios — decide individually; compare with a partner if available.
+Choose disclose / no disclosure needed / check expectations first. Explain audience, expectations and authorship, then write what you would say or why no disclosure is needed. Explain one reasonable disagreement. There is no universal yes/no key.
+
+1. Private brainstorming: you use AI to think of possible hobbies. Audience: yourself. What changes if you later publish the ideas?
+2. Assessed work at the training centre: AI helps you practise and edit. Audience: the assessor, who expects evidence of your learning. Check the training centre's assessment expectations.
+3. Drafting a CV with made-up details: AI suggests clearer wording. Audience: a hypothetical employer expecting an accurate account of skills. Could the wording imply invented experience?
+4. Workplace report: AI suggests interpretations of a cost table. Audience: a team deciding how to spend money. What assistance and human checks does it need to know about?
+5. Creative project: AI suggests dialogue for a fictional scene. Audience: viewers and collaborators who may have different expectations about authorship. What was agreed before making it?
+
+Disagreement: describe two reasonable choices in one case. Which difference in expectations explains them, and whose expectations would you check?
+`);
+workFile('learning-contract.md', `# My AI-use learning contract
+For my learning and assessed work at the training centre. Make each rule specific enough to catch myself breaking it.
+
+## AI helps me with…
+Specific learning or work tasks, and the checks I keep:
+
+## AI does not replace…
+My thinking, authorship and decisions; where I must stop and verify:
+
+## I disclose AI use when…
+What I will say, and whose expectations I will check:
+
+## My repeatable workflow and human checkpoints
+Step → who verifies → who decides → who approves → evidence needed before proceeding.
+`);
+// Teacher-only reference: computed from the same raw fixture, retaining source row identities.
+const workSeen = new Set();
+const workRetained = WORK_BUDGET.map((row,i)=>({source:i+1,row})).filter(({row})=>{const signature=JSON.stringify(row);if(workSeen.has(signature))return false;workSeen.add(signature);return true});
+const workConflicts = new Set(workRetained.filter(x=>workRetained.some(y=>x.source!==y.source&&x.row[0]===y.row[0])).map(x=>x.row[0]));
+const workEligible = workRetained.filter(({row})=>!workConflicts.has(row[0])&&/^\d+$/.test(row[3])&&Number(row[3])>=1&&Number(row[3])<=100).map(({source,row})=>({source,category:({materials:'Materials',transport:'Transport',Vneue:'Venue'})[row[1].trim()]||row[1].trim(),cost:Number(row[3])*Number(row[4].replace('€',''))}));
+const workTotal = workEligible.reduce((n,r)=>n+r.cost,0);
+writeFileSync(join('docs/teacher','ai-work-event-budget.KEY.txt'), `TEACHER KEY — Chapter 6 AI for Learning & Work. Never deploy under public/.
+The raw CSV and this key use the same fixed WORK_BUDGET fixture. Data row numbers exclude the header.
+
+RAW PROFILE: ${WORK_BUDGET.length} rows, 5 fields, 1 blank cell, 1 surplus exact-duplicate row, 2 repeated-ID groups of which 1 is conflicting, 1 invalid quantity, 3 category-normalisation cells and 1 currency-format cell.
+
+SOURCE RECORDS (unchanged raw values):
+${WORK_BUDGET.map((r,i)=>`${i+1}: ${r.join(',')}`).join('\n')}
+
+DATA DICTIONARY:
+item_id: text identifier for one cost line; unique after exact-duplicate removal; hold both conflicting records pending source check.
+category: text; Venue / Materials / Catering / Transport; trim whitespace, standardise case and map Vneue to Venue per meeting notes.
+item: text description; do not invent a missing description; check source if ambiguous.
+quantity: integer units, 1–100 inclusive; missing/invalid values flagged and excluded, never guessed; refunds are not in this export.
+unit_cost_eur: numeric euro per unit, 0–500 inclusive; remove explicit euro formatting without changing value; missing/invalid costs require a source check.
+Source for all rules: fictional workplace brief and meeting notes.
+
+DATA CLEANING LOG: Row / field | Original | Issue | Action | Reason | Verified by
+2 / category | materials[trailing space] | whitespace and case | Materials | valid category | brief category rule
+4 / unit_cost_eur | €1.50 | currency format | numeric 1.50 | euro per unit unchanged | brief units rule
+5 / category | transport | case | Transport | valid category | brief category rule
+8 / category | Vneue | spelling | Venue | explicit mapping | brief category rule
+11 / whole row | E03,Catering,Juice cartons,6,3 | exact duplicate | remove surplus row 11 | all five fields match row 3 | full record comparison with source row 3
+7 / item_id and quantity | E07; 2 | conflicting ID | flag and hold original record | cannot tell whether 2 or 20 is intended | compare all fields with row 12; brief conflict rule
+12 / item_id and quantity | E07; 20 | conflicting ID | flag and hold original record | no source supports choosing either | compare all fields with row 7; brief conflict rule
+9 / quantity | blank | missing | flag and hold; leave blank | no evidence of intended quantity | brief missing-value rule; source check needed
+10 / quantity | -1 | invalid range | flag and hold; retain -1 | quantities are 1–100 and refunds not recorded | brief range rule; source check needed
+
+VALIDATE: raw_v1 unchanged. ${workRetained.length} retained rows, 5 raw fields; 1 missing and 1 invalid quantity remain documented flags, and 2 conflicting records remain held. Exact duplicate surplus is now 0. Three category cells and one currency-format cell resolved. E03 is no longer repeated; E07 remains a conflicting ID group. Do not claim zero outstanding issues.
+Reconciliation: 12 raw = 1 removed exact duplicate + 11 retained; 11 retained = 7 eligible + 4 held (source rows 7, 9, 10, 12). Keep the originals traceable; do not silently change a held value.
+
+ANALYSE: eligible source rows ${workEligible.map(r=>r.source).join(', ')}.
+${workEligible.map(r=>`Source row ${r.source}: ${r.category} line cost €${r.cost.toFixed(2)}`).join('\n')}
+Eligible subtotal ${workTotal.toFixed(2)}; ${['Venue','Materials','Catering','Transport'].map(c=>`${c} ${workEligible.filter(r=>r.category===c).reduce((n,r)=>n+r.cost,0).toFixed(2)}`).join('; ')}.
+Mean eligible line cost ${workTotal} / ${workEligible.length} = ${(workTotal/workEligible.length).toFixed(2)} rounded to two decimal places. Seven included rows. These are partial known costs, not the complete budget.
+
+FORMULAS (Calc; retain source rows with header at row 1 and removed row marked): add F eligible as 1 or 0 after validation; G lineCost =IF(F2=1;D2*E2;0), copied through G13. E holds numeric working-copy prices. Subtotal =SUM(G2:G13); included count =COUNTIF(F2:F13;1); category example =SUMIF(B2:B13;"Venue";G2:G13); mean =SUM(G2:G13)/COUNTIF(F2:F13;1). The removed surplus row has F=0; both conflicts, missing and invalid quantities have F=0. Equivalent formulas or a separate eligible analysis sheet are valid if source rows reconcile. Never use 11 or 12 as the mean denominator.
+Hand check: source row 4, 10 × €1.50 = €15.00. Check every formula range and every excluded record independently.
+
+SAMPLE REVIEW:
+${WORK_CLAIMS.map(([claim,verdict,why])=>`[${verdict}] ${claim} ${why}`).join('\n')}
+${WORK_EDITS.map(([claim,verdict,why])=>`[${verdict}] ${claim} ${why}`).join('\n')}
+Tutor b6s1: [SUPPORTED] half of three quarters is three eighths; splitting quarters in two makes eighths, by fraction arithmetic. The student must attempt the question before reading feedback.
+Tutor b6s2: [SUPPORTED] a denominator counts equal parts of the whole; halving quarters makes eight equal parts; half of three quarters is three eighths. Verify using a fraction drawing or arithmetic, and compare the student's reasoning. Feedback is conditional teaching support, not proof that the student learned; b6s3's memory explanation is the evidence.
+The b6s6 draft's unresolved-items caveat is [SUPPORTED] by the four held records and brief. Restore it and preserve human approval. The polite request is [ACCEPTED]; completeness is [WRONG] as a factual claim and [REJECTED] as an edit.
+
+DISCLOSURE DISCUSSION: accept justified contextual choices, not a universal yes/no rule. Private brainstorming may need no disclosure; assessed work should follow training centre expectations; a CV must not imply invented experience; a workplace report should explain material AI assistance and human checks; creative authorship depends on audience and agreed expectations. Students may check expectations first and explain a reasonable disagreement. The learning contract should name who verifies, decides or approves before proceeding.
+`);
+
 rmSync(WORK, { recursive: true, force: true });
 const manifest =Object.fromEntries(readdirSync(OUT).filter(f => !f.startsWith('.')).sort().map(f => [f, statSync(join(OUT, f)).size]));
+// Include the manifest's own byte size without depending on the previous run.
+let manifestText;
+do { manifestText = JSON.stringify(manifest, null, 2) + '\n'; manifest['manifest.json'] = Buffer.byteLength(manifestText); } while (Buffer.byteLength(JSON.stringify(manifest, null, 2) + '\n') !== Buffer.byteLength(manifestText));
 writeFileSync(join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
 console.log(manifest);
