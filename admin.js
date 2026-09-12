@@ -108,7 +108,7 @@ async function loadStudents() {
 // learner id or a reviewed_by, and never turns a suppressed figure back into a number — see ADR-008 §3.
 const blockLabel = (id) => id === "none" ? "Not started" : (() => { const b = COURSE.blocks.find((x) => x.id === id); return b ? `Chapter ${b.number} · ${b.title}` : id; })();
 function analyticsCell(cell) {
-  return cell && cell.suppressed ? `<td data-suppressed>${esc(cell.label)}</td>` : `<td>${cell ? cell.count : 0}</td>`;
+  return cell && cell.suppressed ? `<td data-suppressed>${esc(cell.label)}</td>` : `<td data-count>${cell ? cell.count : 0}</td>`;
 }
 function ensureAnalyticsSection() {
   if ($("adminAnalytics")) return;

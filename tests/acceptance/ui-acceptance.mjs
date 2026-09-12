@@ -281,7 +281,8 @@ try {
   // the weather: the view states the rule, and no cell ever shows a live count between 1 and 4.
   const analyticsNote = await da.page.textContent('#adminAnalytics').catch(() => '');
   check('admin analytics view states the suppression rule', /fewer than 5/i.test(analyticsNote));
-  const smallCounts = await da.page.$$eval('#adminAnalytics td:not([data-suppressed])', els =>
+  // Only the count cells: the first column of several tables is a label that legitimately reads 1, 2, 3 or 4.
+  const smallCounts = await da.page.$$eval('#adminAnalytics td[data-count]', els =>
     els.map(e => e.textContent.trim()).filter(t => /^[1-4]$/.test(t)));
   check('admin analytics view never shows a count below the suppression threshold', smallCounts.length === 0, JSON.stringify(smallCounts));
   // The tables must actually render. They were empty for a while because the renderer passed CSS selectors to a
