@@ -1302,6 +1302,7 @@
           },
           "activity": {
             "kind": "textfields",
+            "minLengths": [120, 20, 20],
             "title": "Corrected version",
             "instructions": "Write the corrected version of the article from your verification table: verified claims with their sources, uncertain claims labelled as uncertain, wrong claims and loaded framing gone. Use the template download if it helps. Then explain what you took out and why your version is more trustworthy.",
             "fields": ["The corrected version of the article: keep only the verified claims, label anything uncertain as uncertain, add the real sources…", "What I took out, and why (loaded framing, unsupported certainty, missing sources)…", "Why my version is less exciting and more trustworthy…"],
@@ -1335,6 +1336,7 @@
           },
           "activity": {
             "kind": "textfields",
+            "minLengths": [20, 20],
             "title": "Synthetic media",
             "instructions": "Answer in your own words. No example clip is needed; think of the kind of clip that would make you angry, and use the checklist download.",
             "fields": ["A clip that made you angry: what would you check before believing it (provenance, other coverage, who gains from you sharing it)…", "One way 'seeing is believing' is weaker now, in your own words…"],
@@ -1363,6 +1365,7 @@
           },
           "activity": {
             "kind": "textfields",
+            "minLengths": [8, 8, 8],
             "title": "My three-step trust rule",
             "instructions": "Write your own three-step rule for checking important AI-generated information. Make it short enough to actually use. One step per field.",
             "fields": ["Step 1…", "Step 2…", "Step 3…"]

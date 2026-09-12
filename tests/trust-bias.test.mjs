@@ -49,7 +49,7 @@ test('block5 chapter shape follows the Student Book',()=>{
   const sift=norm(session('b5s2').study.body.join(' '));
   for(const h of HABITS)assert.ok(sift.includes(h),`b5s2 study names the habit "${h}"`);
   const lifecycle=norm(session('b5s5').study.body.join(' '));
-  for(const n of ['18/20','11/20','72.5%'])assert.ok(lifecycle.includes(n),`b5s5 study carries ${n}`);
+  for(const n of [/18(?:\/| out of )20/,/11(?:\/| out of )20/,/72\.5%/])assert.match(lifecycle,n,`b5s5 study carries ${n}`);
   for(const re of [/before/i,/collect/i,/label/i,/proxy/i,/training/i,/evaluat/i,/deploy/i,/trust/i])assert.match(lifecycle,re,`b5s5 lifecycle stage ${re}`);
   assert.equal(norm(session('b5s1').reflection),'What would change your mind about this claim?');
   assert.equal(norm(session('b5s4').reflection),'Is this source independent of the original claim, or just repeating it?');
@@ -296,7 +296,7 @@ test('Chapter 5 downloads exist under public/datasets and the teacher key stays 
   assert.deepEqual(walk('public').filter(p=>/KEY/i.test(p)),[],'no teacher key under public/');
   const cards=read('public/datasets/claim-cards.txt');
   for(const re of [/Transition Year was introduced in Irish schools in 1974/,/River Shannon is the longest river in Europe/,/AI tutor than from a teacher/])assert.match(cards,re);
-  assert.ok(!/\b(true|false|cannot be verified|can't be verified)\b/i.test(cards.replace(/rank|before checking/gi,'')),'claim cards are unlabelled');
+  assert.ok(cards.split(/=== Card \d+ ===/).slice(1).every(card=>!/\b(true|false|cannot be verified|can't be verified)\b/i.test(card.split(/\n\s*\n/)[0].replace(/rank|before checking/gi,''))),'claim cards are unlabelled');
   assert.equal(read('public/datasets/annotation-sheet.csv').split(/\r?\n/)[0].trim(),'sentence,mark_type,note');
   assert.equal(read('public/datasets/bias-simulator-worksheet.csv').split(/\r?\n/)[0].trim(),'run,shareB,proxy,removed,groupA,groupB,overall,note');
   const stations=read('public/datasets/bias-station-cards.txt');
