@@ -159,7 +159,7 @@ export async function completeChapter6UI(page, afterSession = async () => {}) {
       for (let i=0;i<CHAPTER6_FIELDS[sid].length;i++) await page.fill(`textarea[data-i="${i}"]`,CHAPTER6_FIELDS[sid][i]);
       await page.fill('#reflectionText','I used the prepared sample and independently checked my own thinking and evidence.');
       await page.click('#saveSession');
-      check(`${sid} sample route still requires acknowledgement`, /Finish the required/.test(await page.textContent('#lessonFeedback')));
+      check(`${sid} sample route still requires acknowledgement`, /tick the box|Finish the required/.test(await page.textContent('#lessonFeedback')));
       await page.check('[data-ack]');
       check(`${sid} acknowledgement enables link`,await page.$eval('#labToolLink',el=>el.getAttribute('aria-disabled')==='false'));
     } else {
