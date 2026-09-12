@@ -39,8 +39,12 @@ try{
     for(const [i,value] of CHAPTER6_FIELDS.b6s5.entries())await p.fill(`textarea[data-i="${i}"]`,value);
     await shot('chapter6-human-review');
     await p.click('#homeBtn'); await p.click('[data-block="6"]'); await p.waitForSelector('#labBanner .lab-stage'); await shot('chapter7');
-    await p.click('[data-session="b7s4"]'); await p.waitForSelector('.decision-lab input[name="decisionChoice"][data-choice="none"]',{timeout:15000});
-    await decisionStep(p,...CHAPTER7_RUNS[0].start); await p.waitForSelector(`input[name="decisionChoice"][data-choice="${CHAPTER7_RUNS[0].follow[0]}"]`,{timeout:10000});
+    // The desktop pass advances this user's saved decision path, so the phone pass arrives mid-path or at an
+    // outcome. Only drive the simulator when it is actually at the start node; otherwise just capture what it shows.
+    await p.click('[data-session="b7s4"]'); await p.waitForSelector('.decision-lab',{timeout:15000});
+    if (await p.$(`input[name="decisionChoice"][data-choice="none"]`)) {
+      await decisionStep(p,...CHAPTER7_RUNS[0].start); await p.waitForSelector(`input[name="decisionChoice"][data-choice="${CHAPTER7_RUNS[0].follow[0]}"]`,{timeout:10000});
+    }
     await shot('chapter7-decision-node');
     await decisionStep(p,...CHAPTER7_RUNS[0].follow); await p.waitForSelector('button#decisionRecord',{timeout:10000}); await p.click('button#decisionRecord');
     for(const run of CHAPTER7_RUNS.slice(1)){await restartDecision(p);await recordDecisionRun(p,run)}

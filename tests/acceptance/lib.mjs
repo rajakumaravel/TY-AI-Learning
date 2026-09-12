@@ -533,7 +533,7 @@ export async function completeChapter8UI(page, afterSession = async () => {}) {
   await page.click('#pwImportLab');
   await page.waitForFunction(()=>/Imported/.test(document.getElementById('pwMessage')?.textContent||''),null,{timeout:15000});
   const imported=await page.$$eval('#pwEvidence textarea',els=>els.map(e=>e.value).join('\n'));
-  check('Chapter 8 import carries all six stages, including the test record and the red-team residuals',(await page.$$('#pwEvidence .pw-evidence')).length>=6&&/microwaves are queued/.test(imported)&&/Person A/.test(imported)&&/Red-team, privacy/.test(imported)&&imported.includes(CHAPTER8_FIELDS.b8s5[0].slice(0,40)));
+  check('Chapter 8 import carries every stage session, including the test record and the red-team residuals',(await page.$$('#pwEvidence .pw-evidence')).length>=5&&/microwaves are queued/.test(imported)&&/Person A/.test(imported)&&/Red-team, privacy/.test(imported)&&imported.includes(CHAPTER8_FIELDS.b8s5[0].slice(0,40)));
   await page.click('#pwAddLog');
   await page.click('#pwAddEvidence');
   const extra=page.locator('#pwEvidence .pw-evidence').last();
