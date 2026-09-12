@@ -8,7 +8,7 @@ const api=fs.readFileSync('netlify/functions/api.mts','utf8');
 const adr=fs.readFileSync('docs/decisions/ADR-004-chapter-capstone-assessment.md','utf8');
 
 test('pilot chapters each have applied capstones',()=>{
-  assert.equal(Object.keys(CAPSTONES).length,6);
+  assert.equal(Object.keys(CAPSTONES).length,7);
   assert.match(CAPSTONES.block1.brief,/school|adviser/i);
   assert.match(CAPSTONES.block2.brief,/model|failure/i);
   assert.match(CAPSTONES.block3.brief,/homework.*question.*infer.*ability band/is);
@@ -27,6 +27,33 @@ test('pilot chapters each have applied capstones',()=>{
   assert.equal(CAPSTONES.block6.id,'block6-capstone');
   assert.equal(CAPSTONES.block6.title,'Digital Collaborator review');
   assert.equal(CAPSTONES.block6.prompts.length,3);
+  assert.match(CAPSTONES.block7.brief,/community bus service.*45 of 50 standard bookings.*14 of 20 phone-assisted bookings.*48 of 50.*12 of 20.*four staff hours.*90 days.*winter demand.*pilot, human\+AI, full automation and no deployment/is);
+  assert.equal(CAPSTONES.block7.id,'block7-capstone');
+  assert.equal(CAPSTONES.block7.title,'Future Thinker review');
+  assert.equal(CAPSTONES.block7.prompts.length,3);
+});
+
+test('block7 capstone scoring counts future-thinking vocabulary and the bus evidence',()=>{
+  const weak=assessChapterCapstone({blockId:'block7',answers:{0:'AI will change things.',1:'There are three futures.',2:'I would use AI.'}});
+  const strong=assessChapterCapstone({blockId:'block7',answers:{
+    0:'Narrow AI could allocate standard bookings automatically, which is automation, while a driver checking an unusual request with a suggestion is augmentation; AGI is still a hypothesis, so the opportunity is released time and the risk is that phone-assisted passengers lose the staffed route.',
+    1:'My three scenarios are a pilot, human review and no deployment: the sandbox served 48 of 50 standard bookings but only 12 of 20 phone-assisted bookings, therefore the trade-off falls on the passengers who need help, and the future skills that matter are judgement and communication with drivers.',
+    2:'I recommend a pilot rather than full automation because the four-hour estimate excludes appeals and winter demand is unevidenced, so the service manager stays accountable, any passenger can reach a person to override a booking, and I would stop the pilot if phone-assisted errors rise.'
+  }});
+  assert.ok(strong.score>weak.score);
+  assert.equal(strong.criteria.understanding,2);
+  assert.equal(strong.criteria.evidence,2);
+  assert.equal(strong.criteria.reasoning,2);
+  assert.ok(['Getting there','Going further'].includes(strong.level));
+  const unique='Narrow AI, AGI, augmentation, societal impact and future skills raise a governance trade-off about inclusion and sustainability.';
+  assert.equal(assessChapterCapstone({blockId:'block7',answers:{0:unique}}).criteria.understanding,1);
+  for(const id of ['block1','block2','block3','block4','block5','block6'])assert.equal(assessChapterCapstone({blockId:id,answers:{0:unique}}).criteria.understanding,0,`${id} ignores block7 vocabulary`);
+  const busEvidence='The winter bookings of phone-assisted passengers and the drivers of each bus.';
+  assert.equal(assessChapterCapstone({blockId:'block7',answers:{0:busEvidence}}).criteria.evidence,1);
+  for(const id of ['block1','block2','block3','block4','block5','block6'])assert.equal(assessChapterCapstone({blockId:id,answers:{0:busEvidence}}).criteria.evidence,0,`${id} ignores the bus scenario evidence`);
+  // A copied Chapter 7 retailer answer carries no bus-service evidence of its own.
+  assert.equal(assessChapterCapstone({blockId:'block7',answers:{0:'Harbour Co-op released 8 hours and 100 routine retail requests were automatic.'}}).criteria.evidence,0);
+  assert.deepEqual(assessChapterCapstone({blockId:'block2',answers:{0:'Accuracy is 80%.',1:'Background.',2:'Retest.'}}).criteria,{understanding:1,evidence:1,reasoning:1,ownWords:0});
 });
 
 test('block5 capstone scoring counts trust-and-bias vocabulary as concept and action',()=>{
