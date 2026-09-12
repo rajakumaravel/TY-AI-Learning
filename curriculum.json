@@ -1046,6 +1046,353 @@
         "Going further": ["I build criteria to judge outputs", "I compare outputs critically", "I can explain how framing and confirmation bias affect results"]
       },
       "levelUp": "Write an evaluation rubric with four criteria. Score two AI outputs against it. Then justify which one is better using the scores, not just which one you prefer."
+    },
+    {
+      "id": "block5",
+      "number": "05",
+      "title": "Trust, Bias & Misinformation",
+      "duration": "3 hours",
+      "badge": "AI Investigator",
+      "outcomes": ["LO4", "LO6", "LO9"],
+      "description": "Fluent is not the same as true. In this chapter you'll learn to separate how something sounds from how reliable it is, hunt for the different ways bias sneaks into AI systems, verify claims the way a good journalist does, and then fix a piece of misleading AI-generated content so it's actually trustworthy.",
+      "mission": "Investigate one AI-generated article or set of claims. Produce an evidence table, identify at least one bias risk, and publish a corrected version with the uncertain parts clearly marked.",
+      "route": [
+        ["0–15 min", "The confidence trap"],
+        ["15–35 min", "Discover: the trust checklist"],
+        ["35–70 min", "AI News Detective"],
+        ["70–100 min", "Lateral verification"],
+        ["100–125 min", "Bias stations"],
+        ["125–150 min", "Improve the output"],
+        ["150–170 min", "Synthetic media"],
+        ["170–180 min", "Reflection"]
+      ],
+      "final": "Your annotated AI output, your verification table (Sheet A2), your bias analysis from the stations and the simulator, your corrected version, and your personal three-step trust rule.",
+      "sessions": [
+        {
+          "id": "b5s1",
+          "title": "The confidence trap",
+          "minutes": 15,
+          "type": "PREDICT + TEST",
+          "pageRef": "Student Book pp. 23–27",
+          "intro": "You'll see three confident statements. One is true, one is false, one can't be verified either way. Rank how confident you are in each before checking. Then check. Notice which one fooled you and why.",
+          "study": {
+            "title": "Confident is not the same as correct",
+            "body": ["All three statements on the claim cards are written in the same confident tone. That is the trap. Misinformation is false or misleading information, spread without meaning harm; disinformation is false information spread on purpose to deceive. Both arrive sounding just as sure of themselves as the truth does, and an AI hallucination, a fluent but wrong or invented output, sounds exactly the same again.", "So before you check anything, write down how confident you are in each statement, from 1 to 5. That number is the experiment. When you check, one statement will turn out to be true, one false, and one will be a statement that nobody can settle either way because nobody has measured it. Notice which one your confidence got wrong and what it was reacting to: a familiar-sounding fact, a precise year, a claim about what most people think.", "Trusting a machine's output more than you should, just because it's a machine, is called automation bias, and it works on people too: a confident person, a tidy paragraph, a number with a decimal point. The habit this chapter builds is to treat confidence as a feeling to notice, not as evidence. Evidence comes from checking, which is what the rest of the chapter is about."],
+            "example": "“The River Shannon is the longest river in Europe.” It sounds right, because the Shannon is the longest river in Ireland and you have heard that sentence before. A one-tab check finds the Volga, more than ten times longer. The confidence came from familiarity, not from anything you had checked.",
+            "keywords": ["misinformation", "disinformation", "hallucination", "automation bias"]
+          },
+          "activity": {
+            "kind": "chain",
+            "title": "The confidence trap",
+            "instructions": "Copy each of the three statements from the claim cards into a row: “Transition Year was introduced in Irish schools in 1974”, “The River Shannon is the longest river in Europe”, and “Most Irish teenagers would rather learn from an AI tutor than from a teacher”. Rank your confidence in each from 1 to 5 before you check anything. Then open a new tab and check each one, record the verdict (true, false, or can't be verified), and say what fooled you or what tipped you off.",
+            "columns": [
+              ["statement", "Statement (copy the card)"],
+              ["before", "My confidence before checking (1–5)"],
+              ["verdict", "After checking: true / false / can't be verified"],
+              ["fooled", "What fooled me, or what tipped me off"]
+            ],
+            "rows": 3,
+            "minRows": 3,
+            "head": "STATEMENT → CONFIDENCE BEFORE → VERDICT → WHY",
+            "downloads": [
+              {
+                "label": "Claim cards (text)",
+                "file": "claim-cards.txt",
+                "note": "The three confident statements, unlabelled: one true, one false, one that cannot be verified either way. Rank your confidence before you check."
+              }
+            ]
+          },
+          "reflection": "What would change your mind about this claim?"
+        },
+        {
+          "id": "b5s2",
+          "title": "Discover: the trust checklist",
+          "minutes": 20,
+          "type": "DISCOVER",
+          "pageRef": "Student Book pp. 23–27",
+          "intro": "Four habits, easy to remember, that work on news, on social posts and on AI output alike.",
+          "study": {
+            "title": "Stop, Investigate, Find, Trace",
+            "body": ["Stop. Don't share or react yet. Notice how it makes you feel. A post that makes you angry or thrilled is doing something to you before you have checked a single word, and that feeling is often the point of the framing: the wording and emphasis chosen to shape what a message makes you feel or believe. Stopping costs nothing and it is the habit that makes the other three possible.", "Investigate the source. Who made this? Why? What do others say about them? That is provenance: where something came from and how it got to you. Find better coverage. Open new tabs. Do reliable, independent sources agree? Leaving the page you are on to see what other sources say about it is lateral reading, and it is how professional fact-checkers work: sideways, in new tabs, not by scrolling further down the same page.", "Trace the claim. Follow it back to the original evidence. Was context lost? A statistic, a quote or a headline can pass through ten sites and change a little each time, and the version that reaches you may say something the original never did. The four habits go in this order because each one is cheaper than the next: stopping takes a second, tracing a claim can take ten minutes, and you only need to trace the claims that survived the first three checks."],
+            "example": "A headline says “Study finds phones halve teenagers' attention span.” Stop: it made you nod. Investigate the source: a site you have never heard of with no author. Find better coverage: two newspapers ran it, both citing the same site. Trace the claim: the study measured 40 students for one afternoon and never used the word “halve”. Ten minutes, four habits, one claim that shrank at every step.",
+            "keywords": ["lateral reading", "provenance", "framing", "misinformation"]
+          },
+          "activity": {
+            "kind": "quiz",
+            "title": "Which habit comes first?",
+            "instructions": "For each situation, choose the habit from the trust checklist that you would reach for first. More than one habit will usually apply in the end; the question is which one the checklist points to first. You can change your answers after reading the study material.",
+            "items": [
+              ["A post that makes you angry the moment you read it", "Stop"],
+              ["A site you have never heard of is reporting a big story", "Investigate the source"],
+              ["One article says it, and you cannot find any other coverage", "Find better coverage"],
+              ["A statistic with no link to where it came from", "Trace the claim"],
+              ["A screenshot of a headline, with no link to the article", "Trace the claim"],
+              ["A friend forwards you something they say is definitely true", "Stop"],
+              ["A chatbot answer that gives a confident date", "Find better coverage"],
+              ["A video clip that seems too neat", "Investigate the source"]
+            ],
+            "options": ["Stop", "Investigate the source", "Find better coverage", "Trace the claim"]
+          },
+          "reflection": "Which of the four habits do you already do without thinking, and which one would you have to make yourself do?"
+        },
+        {
+          "id": "b5s3",
+          "title": "AI News Detective",
+          "minutes": 30,
+          "type": "TRY + INVESTIGATE",
+          "pageRef": "Student Book pp. 23–27",
+          "intro": "Go through a short news-style article written in the style of AI with a highlighter. Mark: factual claims, emotional framing, missing sources, and certainty that isn't backed up. Count them.",
+          "study": {
+            "title": "Four colours of highlighter",
+            "body": ["The article in this session was written for the course in the style of AI-generated news and is labelled as synthetic at the top; no real plan, law, survey or report is described. Read it the way a good journalist reads a press release: sentence by sentence, asking what each sentence is doing. Four things are worth marking. A factual claim is a sentence that could be checked: a year, a number, a name, a statement that something exists. Emotional framing is wording chosen to make you feel something before you have checked anything.", "A missing source is a claim that would need one and comes without it: “a recent survey”, “experts”, “the report”, with no name, date or link. Unsupported certainty is a sentence that is sure of itself with nothing behind it: “It is beyond doubt”, “Experts agree”, “will”. A sentence can earn more than one mark, and the most misleading sentences usually do: a confident, emotional, unsourced claim is the AI hallucination in its natural habitat.", "Mark at least six sentences, use at least three of the four types, and write a short note on each one saying what you noticed. Then count them, as the book says. The count tells you what kind of article this is: mostly checkable claims with sources, or mostly feeling and certainty with nothing underneath. You will verify the factual claims in the next session, so the more carefully you mark them now, the easier that becomes."],
+            "example": "“It is beyond doubt that students who refuse to use them will be left behind.” Unsupported certainty: nothing backs “beyond doubt”. Emotional framing: “refuse” and “left behind” are chosen to worry you. No factual claim at all: there is nothing in the sentence you could check. Two marks, one note: sounds like a fact, is actually a feeling.",
+            "keywords": ["framing", "hallucination", "provenance", "misinformation"]
+          },
+          "activity": {
+            "kind": "annotate",
+            "title": "AI News Detective",
+            "instructions": "Click a sentence in the article, choose the mark type, write a short note on what you noticed, and add it. Mark factual claims, emotional framing, missing sources and unsupported certainty; a sentence can carry more than one mark. Mark at least six sentences and use at least three types, including at least one factual claim and one unsupported certainty. Count them when you are done. If you would rather mark up an article you generated yourself with the Chapter 4 tool, paste short extracts into your notes; the checks are the same.",
+            "file": "news-detective-article.txt",
+            "markTypes": ["Factual claim", "Emotional framing", "Missing source", "Unsupported certainty"],
+            "minMarks": 6,
+            "requiredMarks": ["Factual claim", "Unsupported certainty"],
+            "downloads": [
+              {
+                "label": "AI news article, synthetic (text)",
+                "file": "news-detective-article.txt",
+                "note": "A short news-style article written for this course in the style of AI-generated news, clearly labelled synthetic. Factual claims, emotional framing, missing sources and unsupported certainty are mixed and unmarked, on purpose."
+              },
+              {
+                "label": "Annotation sheet (CSV)",
+                "file": "annotation-sheet.csv",
+                "note": "Sentence, mark type, note. Use it if you would rather mark up the article on paper or in a spreadsheet, then copy your marks across."
+              }
+            ]
+          },
+          "reflection": "What's missing from the framing? What's not being said?"
+        },
+        {
+          "id": "b5s4",
+          "title": "Lateral verification",
+          "minutes": 30,
+          "type": "TEST + INVESTIGATE",
+          "pageRef": "Student Book pp. 23–27",
+          "intro": "Pick 3–5 of the claims. Open new tabs and check each against independent, reliable sources. Log each claim as supported, uncertain or wrong.",
+          "study": {
+            "title": "Sideways, in new tabs",
+            "body": ["Lateral reading means checking a source by leaving it and seeing what other sources say about it. For each factual claim you marked, open a new tab and search for the claim itself, not the article. Look for a source that is independent of the original: an official body, a national statistics office, a law database, a museum, a primary document. A page that repeats the article's wording, or cites the article, is not independent; it is the same claim wearing a different address.", "Do not fact-check by asking another chatbot. That's just asking a second pattern-predictor. A chatbot will produce a confident answer about the “National AI Tutoring Act 2025” whether or not it exists, because it is continuing a pattern, not reading a record. Provenance is where something came from and how it got to you, and a chatbot's answer has no provenance you can follow.", "Give each claim a verdict. Supported: an independent, reliable source says the same. Uncertain: sources disagree, the claim is too vague to check, or you found nothing either way. Wrong: a reliable source contradicts it, or the thing it names does not exist. Write down where you looked even when you found nothing; “no such Act on the Irish Statute Book” is a finding, and it is the finding that separates checking from believing."],
+            "example": "Claim: “Transition Year was founded in 1986.” New tab: the Department of Education and the NCCA both give 1974 as the pilot year in three schools, and 1994 as the year it was made widely available. Independent of the article: yes, official records. Verdict: wrong. Note the two dates; the article's year matches neither.",
+            "keywords": ["lateral reading", "provenance", "hallucination", "disinformation"]
+          },
+          "activity": {
+            "kind": "chain",
+            "title": "Verification table (Sheet A2)",
+            "instructions": "Pick three to five factual claims from the article you marked. For each one, open a new tab and search for the claim against independent, reliable sources. Do not fact-check by asking another chatbot. That's just asking a second pattern-predictor. Name the source and where you found it, say whether it is independent of the original claim or just repeating it, and log the verdict: supported, uncertain or wrong.",
+            "columns": [
+              ["claim", "Claim from the article"],
+              ["source", "Independent source I found (name and where)"],
+              ["independent", "Independent of the original, or repeating it?"],
+              ["verdict", "Supported / uncertain / wrong"]
+            ],
+            "rows": 5,
+            "minRows": 3,
+            "head": "CLAIM → SOURCE → INDEPENDENT? → VERDICT",
+            "downloads": [
+              {
+                "label": "AI news article, synthetic (text)",
+                "file": "news-detective-article.txt",
+                "note": "A short news-style article written for this course in the style of AI-generated news, clearly labelled synthetic. Factual claims, emotional framing, missing sources and unsupported certainty are mixed and unmarked, on purpose."
+              },
+              {
+                "label": "Verification log, Sheet A2 (CSV)",
+                "file": "verification-log-A2.csv",
+                "note": "Claim, source checked, supported / uncertain / wrong, what I changed. Three empty rows."
+              }
+            ]
+          },
+          "reflection": "Is this source independent of the original claim, or just repeating it?"
+        },
+        {
+          "id": "b5s5",
+          "title": "Bias simulator",
+          "minutes": 20,
+          "type": "MAKE + BREAK",
+          "pageRef": "Student Book pp. 23–27",
+          "intro": "Build a biased outcome on purpose, then try to fix it. Change how much of one group is in the training data, decide whether the model can see a sensitive field, and watch what happens to each group.",
+          "study": {
+            "title": "Where bias gets in",
+            "body": ["Bias is a systematic skew in data, design or use that produces unfair results, and it can get in at every stage of a system's life. Before the data exists, past decisions may already have been unequal, so the history the model learns from is skewed. At collection, only some people end up in the dataset: selection bias, when the data collected doesn't fairly represent the whole picture, and representation bias, when some groups are missing or under-counted. At labelling, the people writing the answers may apply a label differently for different groups.", "Then there is feature choice: a field like postcode can stand in for a group even after the sensitive field has been removed, which is called a proxy. In training, the model learns the patterns of the majority group best. In evaluation, the test set may hide the hard cases. In deployment, the model may be used for something it was never tested on. And in how a person trusts the output, automation bias: the person believes the machine because it looks objective. Removing one field fixes none of the other stages.", "One number can hide all of this. A model gets 18 out of 20 decisions right for Group A (90%) and 11 out of 20 right for Group B (55%). Reported as a single figure, it scores 29 out of 40, or 72.5%. That sounds like a passable system. It is a system that fails one group nearly half the time. In the simulator you will see the same thing happen: the overall number moves a little while one group moves a lot, and the fix that looks obvious, deleting the sensitive field, helps only as much as the proxy is weak."],
+            "example": "Set Group B to 10% of the training data and keep the sensitive field: Group A stays at 18/20 while Group B falls to 2/20, and the overall figure still reads 50%. Now remove the field with the postcode proxy at 80%: Group B rises, but not to where Group A is, because the postcode is still telling the model most of what the field did.",
+            "keywords": ["bias", "selection bias", "representation bias", "automation bias"]
+          },
+          "activity": {
+            "kind": "simulator",
+            "title": "Bias simulator: a shortlisting model",
+            "instructions": "Move the sliders, tick or untick the sensitive field, and watch the results table. Record at least two runs that differ in at least one setting: one where you have made the outcome as unfair as you can, and one where you have tried to fix it. Then answer the three questions from your runs.",
+            "scenario": "A model shortlists applicants for a training-centre placement. It was trained on past decisions. Two groups apply in equal numbers, 20 from each, but the training data does not contain them equally.",
+            "controls": [
+              ["shareB", "Share of Group B in the training data (%)", 5, 50, 5, 10],
+              ["proxy", "How strongly a proxy feature (postcode) stands in for the group (%)", 0, 100, 10, 80]
+            ],
+            "toggle": ["removed", "Remove the sensitive field from the model"],
+            "minRuns": 2,
+            "fields": [
+              ["changed", "What I changed between my runs, and what happened to each group…"],
+              ["entered", "Where the bias entered (before the data, at collection, through a proxy, in training, in evaluation, in use)…"],
+              ["affected", "Who is affected, and what I would change in the data or the design to reduce it…"]
+            ],
+            "downloads": [
+              {
+                "label": "Bias simulator worksheet (CSV)",
+                "file": "bias-simulator-worksheet.csv",
+                "note": "Run, share of Group B, proxy strength, sensitive field removed, Group A, Group B, overall, note. Empty rows for your runs."
+              }
+            ]
+          },
+          "reflection": "Is 72.5% enough to describe this system? Which group carries more error, and would your answer change if the false negatives were much more harmful than the false positives?"
+        },
+        {
+          "id": "b5s6",
+          "title": "Bias stations",
+          "minutes": 20,
+          "type": "BREAK + QUESTION",
+          "pageRef": "Student Book pp. 23–27",
+          "intro": "Four short scenarios, four stations: hiring data, image generation and stereotypes, school discipline analytics, recommendation feeds. At each one, ask: where could bias enter (the data? the design? how people use it?) and who would be affected?",
+          "study": {
+            "title": "Four stations, three doors",
+            "body": ["Every station is the same three questions. Where could bias enter: in the data, in the design, or in how people use it? Who would be affected? And which kind of bias is it? Selection bias, when the data collected doesn't fairly represent the whole picture. Representation bias, when some groups are missing or under-counted. Framing, when the wording and emphasis shape what a person believes about the output. Automation bias, when the people using the system trust it more than they should, just because it's a machine. And a proxy, when a harmless-looking field stands in for a sensitive one.", "Hiring data: a model trained on who was hired before learns who was hired before, including every reason that had nothing to do with doing the job well. Image generation and stereotypes: a model trained on the internet's pictures produces the internet's assumptions about who does which job. The discipline analytics card is the book's school scenario, run here as a training centre: a model that predicts who is “likely to cause trouble” from past records learns who was written up before, not who did what.", "Recommendation feeds: a feed that learns from what you click shows you more of it, and the design decides whether “more of it” means more variety or more of the same. At each station, name the mechanism and the person on the receiving end. The mechanism matters because it decides the fix: a representation problem needs different data, a proxy problem needs a different design, and an automation problem needs a different rule about how people use the output."],
+            "example": "Discipline analytics. Where it enters: in the data, because the past records are the decisions of the people who wrote them up. Who is affected: the students the system flags, who may be watched more closely and so get written up more, which feeds the next model. Kind: selection bias in the records, and automation bias in the staff who trust the flag.",
+            "keywords": ["bias", "selection bias", "representation bias", "framing", "automation bias"]
+          },
+          "activity": {
+            "kind": "chain",
+            "title": "Bias stations",
+            "instructions": "One row per station from the station cards: hiring data, image generation and stereotypes, discipline analytics, recommendation feeds. For each, say where bias could enter (the data? the design? how people use it?), who would be affected, and which kind of bias you are looking at.",
+            "columns": [
+              ["station", "Station"],
+              ["enters", "Where could bias enter (the data? the design? how people use it?)"],
+              ["affected", "Who would be affected"],
+              ["kind", "Which kind of bias (selection, representation, framing, automation, proxy)"]
+            ],
+            "rows": 4,
+            "minRows": 4,
+            "head": "HIRING · IMAGES · DISCIPLINE · FEEDS",
+            "downloads": [
+              {
+                "label": "Bias station cards (text)",
+                "file": "bias-station-cards.txt",
+                "note": "The four station scenarios, plus the lifecycle map of where bias can enter a system, stage by stage, for reference."
+              }
+            ]
+          },
+          "reflection": "Which station would be hardest to fix by changing the data alone, and what else would have to change?"
+        },
+        {
+          "id": "b5s7",
+          "title": "Improve the output",
+          "minutes": 25,
+          "type": "IMPROVE",
+          "pageRef": "Student Book pp. 23–27",
+          "intro": "Rewrite the article. Keep only the verified claims. Label anything uncertain as uncertain. Add real sources. Take out the loaded framing. Your version should be less exciting and more trustworthy. That's the point.",
+          "study": {
+            "title": "Less exciting, more trustworthy",
+            "body": ["You now have three lists from your own work: the claims your verification table marked supported, the ones it marked uncertain, and the ones it marked wrong. The corrected version is built from the first list, with the second list kept but labelled, and the third list gone. Next to every claim you keep, write the real source you found. A claim with a source is worth more than five without, however dull it reads.", "Then take out the loaded framing. “Drowning in an outdated system” becomes nothing, because it was never a claim. “Experts agree” becomes either a named expert who actually said it, or nothing. Certainty that nothing backed becomes the honest version: “no plan has been announced”, “one survey with no published method”. That is what labelling uncertainty as uncertain looks like in practice.", "Your version should be less exciting and more trustworthy. That's the point. Misinformation spreads because it is more interesting than the truth, and a hallucination is interesting for the same reason: it says what a pattern predicts people want to read. Read your corrected version back and ask the honest question: could a sentence in it still be accurate and still be misleading, because of what it leaves out or how it is ordered? If so, fix that too."],
+            "example": "Original: “The National AI Tutoring Act 2025 makes the rollout a legal requirement for every school in the country.” Corrected: removed; no such Act exists on the Irish Statute Book (irishstatutebook.ie, searched by title). Original: “A recent survey found that 78% of parents want an AI tutor.” Corrected: “One unnamed survey is reported to have found 78% support; the survey, its method and its sample size could not be found, so this figure is uncertain.”",
+            "keywords": ["framing", "provenance", "misinformation", "hallucination"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Corrected version",
+            "instructions": "Write the corrected version of the article from your verification table: verified claims with their sources, uncertain claims labelled as uncertain, wrong claims and loaded framing gone. Use the template download if it helps. Then explain what you took out and why your version is more trustworthy.",
+            "fields": ["The corrected version of the article: keep only the verified claims, label anything uncertain as uncertain, add the real sources…", "What I took out, and why (loaded framing, unsupported certainty, missing sources)…", "Why my version is less exciting and more trustworthy…"],
+            "downloads": [
+              {
+                "label": "AI news article, synthetic (text)",
+                "file": "news-detective-article.txt",
+                "note": "A short news-style article written for this course in the style of AI-generated news, clearly labelled synthetic. Factual claims, emotional framing, missing sources and unsupported certainty are mixed and unmarked, on purpose."
+              },
+              {
+                "label": "Corrected version template (Markdown)",
+                "file": "corrected-version-template.md",
+                "note": "Headings for verified claims with sources, uncertain claims labelled as uncertain, sources, and what was removed. Fill it in, then paste your version above."
+              }
+            ]
+          },
+          "reflection": "Could a statement be accurate and still be misleading?"
+        },
+        {
+          "id": "b5s8",
+          "title": "Synthetic media",
+          "minutes": 10,
+          "type": "QUESTION",
+          "pageRef": "Student Book pp. 23–27",
+          "intro": "Voice, image and video generation. “Seeing is believing” was never fully true, and now it's weaker. The focus isn't on scary examples; it's on habits: what would you check before believing a clip that made you angry?",
+          "study": {
+            "title": "Seeing is not checking",
+            "body": ["Synthetic media, or a deepfake, is AI-generated audio, image or video that looks real. A voice can be cloned from a short recording, a face can be placed into a scene, and a clip can be produced of an event that never happened. None of this needs special skill any more, and the polished result is no sign of anything: looking professional now costs nothing.", "The habit is the same one you used on the article, applied to a clip. Stop, and notice that it made you angry; that is the feeling disinformation is designed to produce, because angry people share. Investigate the source: who posted it, and where did it come from before that? Provenance is the whole question with synthetic media. Find better coverage: has anyone independent reported the same event, or is every copy of the clip pointing back at one account?", "Ask who gains if you share it, look for the original rather than a re-upload, and wait. A real event has more than one witness and more than one source; a clip that exists only as itself is a clip you cannot verify. The checklist download puts these habits in one place. Nothing here needs a scary example; it needs the same four habits, used before the clip has finished playing."],
+            "example": "A clip of a well-known person saying something outrageous appears in a group chat. Stop: it made you furious. Investigate: the account that posted it was created last week. Find better coverage: no news outlet has it, and every copy online links back to that account. Provenance: none. Verdict: not something you can share as true, whatever it looks like.",
+            "keywords": ["synthetic media / deepfake", "provenance", "disinformation", "lateral reading"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "Synthetic media",
+            "instructions": "Answer in your own words. No example clip is needed; think of the kind of clip that would make you angry, and use the checklist download.",
+            "fields": ["A clip that made you angry: what would you check before believing it (provenance, other coverage, who gains from you sharing it)…", "One way 'seeing is believing' is weaker now, in your own words…"],
+            "downloads": [
+              {
+                "label": "Synthetic media checklist (text)",
+                "file": "synthetic-media-checklist.txt",
+                "note": "A short checklist of habits for a clip you did not expect: provenance, other coverage, who gains, look for the original, wait before sharing."
+              }
+            ]
+          },
+          "reflection": "Who gains when a clip like that gets shared, and what does that tell you about why it was made?"
+        },
+        {
+          "id": "b5s9",
+          "title": "Reflection: my three-step rule",
+          "minutes": 10,
+          "type": "REFLECT + EVIDENCE",
+          "pageRef": "Student Book pp. 23–27",
+          "intro": "Write your own three-step rule for checking important AI-generated information. Make it short enough to actually use.",
+          "study": {
+            "title": "Three steps you will actually take",
+            "body": ["You have ranked your confidence and been fooled, marked up an article, checked its claims sideways in new tabs, built a biased model and tried to fix it, and rewritten something misleading into something dull and true. Every one of those used the same few moves: stop, look at where it came from, look for an independent source, trace the claim, and treat confidence as a feeling rather than evidence.", "Your rule is three of those moves, in the order you would really do them, written short enough to say to yourself in the moment before you share, repeat or rely on something. A rule with seven steps is a rule nobody uses. A rule that says “check it” is a rule that tells you nothing. Somewhere between is a rule with three verbs and three objects: what you do, to what.", "Your portfolio for this chapter is your annotated AI output, your verification table, your bias analysis from the stations and the simulator, your corrected version, and this rule. Check that each one exists before you move on. Lateral reading and provenance are the two words most likely to end up in your rule; automation bias is the reason you need one."],
+            "example": "Step 1: Stop and name the feeling. Step 2: New tab, search the claim, not the page. Step 3: If I can't find where it came from, I don't repeat it. Three lines, usable in the time it takes a clip to play.",
+            "keywords": ["lateral reading", "provenance", "automation bias", "bias"]
+          },
+          "activity": {
+            "kind": "textfields",
+            "title": "My three-step trust rule",
+            "instructions": "Write your own three-step rule for checking important AI-generated information. Make it short enough to actually use. One step per field.",
+            "fields": ["Step 1…", "Step 2…", "Step 3…"]
+          },
+          "reflection": "Which step of your rule would you be most tempted to skip when you are in a hurry, and why?"
+        }
+      ],
+      "lab": {
+        "title": "Create, detect and reduce bias",
+        "summary": "You mark up an AI-written article, verify its claims against independent sources, build a biased outcome in a simulator and then fix it, and publish a version that is less exciting and more trustworthy.",
+        "stages": [
+          ["DO", "b5s3", "Mark up an AI news article"],
+          ["TEST", "b5s1", "The confidence trap"],
+          ["MAKE", "b5s5", "Create a biased outcome in the simulator"],
+          ["BREAK", "b5s6", "Find where bias enters at four stations"],
+          ["IMPROVE", "b5s7", "Publish a corrected version"],
+          ["PROVE", "b5s4", "Verify claims laterally"]
+        ]
+      },
+      "myths": [
+        ["Bias means the model has opinions.", "Models don't have opinions. Bias is a skew in the data, the design or the use. It can exist with nobody meaning it."],
+        ["Fake information looks unprofessional, so it's easy to spot.", "Generative AI produces polished, well-formatted, confident text and images on demand. Looking professional now costs nothing."],
+        ["Lots of websites say it, so lots of sources confirm it.", "Ten sites copying one original claim is one source, not ten. Trace it back."]
+      ],
+      "selfCheck": {
+        "Getting started": ["I can spot unsupported claims or possible bias, with prompts"],
+        "Getting there": ["I use independent sources to verify claims", "I can improve misleading content"],
+        "Going further": ["I trace evidence back to its origin", "I can tell different kinds of bias apart", "I can explain what's still uncertain after checking"]
+      },
+      "levelUp": "Take one claim that's repeated widely online. Trace it back towards its earliest available source. Show where along the way context was lost or changed."
     }
   ]
 }

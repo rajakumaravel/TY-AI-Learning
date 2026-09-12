@@ -1,0 +1,16 @@
+Synthetic media checklist (Chapter 5, Trust, Bias & Misinformation, session "Synthetic media")
+
+AI-generated audio, image or video that looks real is now cheap to make. "Seeing is believing" was never fully true,
+and now it is weaker. Before believing a clip, especially one that made you angry:
+
+1. Stop. Notice the feeling. Anger and outrage are what a clip made to be shared is designed to produce.
+2. Provenance. Who posted it, when was the account made, and where did the clip come from before that?
+3. Other coverage. Open new tabs. Has anyone independent reported the same event, or does every copy point back to
+   one account?
+4. Who gains? Ask who benefits if you share it, and whether the clip is asking you to do something.
+5. Look for the original. A re-upload, a crop or a clip with the sound replaced is not the original. Find the first
+   version, or note that you cannot.
+6. Wait. A real event has more than one witness and more than one source. If it is true, it will still be true
+   tomorrow, with better evidence.
+
+If you cannot answer 2 and 3, you cannot share it as true, whatever it looks like.

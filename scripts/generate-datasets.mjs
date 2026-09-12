@@ -535,6 +535,158 @@ I already know [what you already know, so the model does not repeat it].
 - What did this template get wrong last time, and what did you change?
 `);
 
+// ---------- Chapter 5: Trust, Bias & Misinformation. The article is built from tagged sentences so the teacher key marks
+// every sentence from the same data. Every sentence ends with a full stop and contains no other full stop, so the
+// portal's annotate renderer can split the article on ". " and number the sentences the same way the key does.
+const CLAIM_CARDS = [
+  ['Transition Year was introduced in Irish schools in 1974.', 'TRUE', 'Department of Education (gov.ie) and NCCA Transition Year pages: piloted in 1974 in three schools, made widely available in 1994.'],
+  ['The River Shannon is the longest river in Europe.', 'FALSE', 'The Shannon is the longest river in Ireland (about 360 km). The Volga, at over 3,500 km, is the longest in Europe; any atlas or Tailte Éireann.'],
+  ['Most Irish teenagers would rather learn from an AI tutor than from a teacher.', 'CANNOT BE VERIFIED', 'No national survey asks this question; "most" and "would rather" are undefined, and any figure a search turns up will be one small poll with its own wording. Neither true nor false can be shown.']
+];
+writeFileSync(join(OUT, 'claim-cards.txt'), `Claim cards (Chapter 5, Trust, Bias & Misinformation, session "The confidence trap")
+
+Three confident statements. One is true, one is false, one cannot be verified either way. They are not labelled.
+
+Before you check anything, rank how confident you are in each one, from 1 (no idea) to 5 (certain). Write the number
+down. Then open a new tab and check each statement against an independent, reliable source. Notice which one fooled
+you, and why.
+
+${CLAIM_CARDS.map((c, i) => `=== Card ${i + 1} ===\n${c[0]}`).join('\n\n')}
+
+A statement can be written just as confidently whether it is true, false, or something nobody has ever measured.
+`);
+
+// [sentence, mark types, verdict or null, how to check or note]. Verdicts (factual claims only): supported / uncertain / wrong.
+const ARTICLE = [
+  ['Every secondary classroom in Ireland will have an AI tutor by 2028 under a plan that is already being rolled out.', ['Factual claim', 'Unsupported certainty'], 'wrong', 'No such plan has been announced. Department of Education press releases and policy pages on gov.ie; the Oireachtas debates database. "Already being rolled out" is certainty with nothing behind it.'],
+  ['The tutors will arrive first in Transition Year, the optional year that sits between the Junior Cycle and the senior cycle.', ['Factual claim'], 'supported', 'The description of Transition Year is right: optional, between the Junior Cycle and the senior cycle (Department of Education, NCCA). "Will arrive first" rests on the plan in sentence 1, which does not exist.'],
+  ['Transition Year was founded in 1986 and has never been changed since.', ['Factual claim'], 'wrong', 'Transition Year was piloted in 1974 in three schools and made widely available in 1994 (Department of Education, NCCA); the programme guidelines have been revised since. Both halves of the sentence are wrong.'],
+  ['The Department of Education runs the country\'s school system, and it is the body that would have to sign off on any such plan.', ['Factual claim'], 'supported', 'gov.ie: the Department of Education is responsible for primary and post-primary education.'],
+  ['The tutors will be judged on results in the Leaving Certificate, the final exam at the end of secondary school.', ['Factual claim'], 'supported', 'The Leaving Certificate is the final examination of second-level education (State Examinations Commission, examinations.ie). How the tutors "will be judged" is not something anyone has said.'],
+  ['The National AI Tutoring Act 2025 makes the rollout a legal requirement for every school in the country.', ['Factual claim', 'Missing source'], 'wrong', 'No such Act exists. Search the Irish Statute Book (irishstatutebook.ie) by title and the Oireachtas bills database: nothing. A plausible name, a recent year, an invented law.'],
+  ['A recent survey found that 78% of parents want an AI tutor in their child\'s classroom.', ['Factual claim', 'Missing source'], 'uncertain', 'No survey is named, dated or linked, so the figure cannot be checked. "A recent survey" with no source is uncertain, not wrong: the right change is a label, not deletion.'],
+  ['Experts agree that AI tutors raise grades in every subject.', ['Unsupported certainty', 'Missing source'], null, 'No expert is named. Evidence on AI tutoring is mixed and subject-specific; "every subject" is a claim no study supports.'],
+  ['It is beyond doubt that students who refuse to use them will be left behind.', ['Unsupported certainty', 'Emotional framing'], null, '"Beyond doubt" backed by nothing; "refuse" and "left behind" are chosen to worry the reader. There is no checkable claim in the sentence.'],
+  ['Parents who have seen the plan describe it as a lifeline for children drowning in an outdated system.', ['Emotional framing', 'Missing source'], null, 'No parent is named or quoted; "lifeline" and "drowning" do the work a fact would do.'],
+  ['Critics are clinging to the past while a generation\'s future slips away.', ['Emotional framing'], null, 'Pure framing: it tells the reader what to feel about anyone who disagrees, and says nothing that could be checked.'],
+  ['The full figures are set out in the Department\'s 2025 report, Classrooms of Tomorrow, published in March.', ['Factual claim', 'Missing source'], 'wrong', 'Fabricated citation. No report of that title in the Department of Education publications on gov.ie or in the National Library of Ireland catalogue. A named report that cannot be found is a wrong claim, not a missing one.']
+];
+writeFileSync(join(OUT, 'news-detective-article.txt'), `SYNTHETIC ARTICLE (Chapter 5, Trust, Bias & Misinformation, session "AI News Detective"). This article was written for this course in the style of AI-generated news. No real AI tool produced it, and no real plan, law, survey or report is described. Mark it up the way you would mark up a real one.
+
+Headline: AI tutors in every Irish secondary classroom by 2028.
+
+${ARTICLE.map(x => x[0]).join(' ')}
+`);
+writeFileSync(join(OUT, 'annotation-sheet.csv'), 'sentence,mark_type,note\n' + ',,\n'.repeat(8));
+
+const STATIONS = [
+  ['Hiring data', 'A company trains a model to shortlist job applicants from the last ten years of its own hiring records. The records show who was called to interview and who was hired, but not who would have done the job well. Most of the people hired in those years came from two colleges and one part of the city. The model is now used on every application before a person reads it.', 'Data: historical and selection bias in the past decisions; a proxy through college and address. Use: automation bias when recruiters stop reading what the model rejects. Affected: applicants who look unlike past hires.'],
+  ['Image generation and stereotypes', 'An image generator is trained on pictures collected from the internet, with the captions people wrote for them. Ask it for "a nurse", "an engineer" or "a person from a city in Africa" and it produces the same kind of picture every time. A training centre uses it to make posters for a careers week. Nobody checks who appears in the pictures before they go up.', 'Data: representation bias in what the internet photographs and how it captions it. Design: the model returns the most typical image, so the stereotype is amplified. Use: nobody reviews the output. Affected: everyone who does not look like the "typical" picture, and the students who see the posters.'],
+  ['Discipline analytics', 'A chain of training centres buys a system that predicts which learners are "likely to cause trouble" from attendance, past write-ups and the area they live in. The write-ups were made by different staff over several years, and some staff wrote up far more than others. The flag is shown to tutors at the start of each course. Flagged learners are watched more closely, and so are written up more often.', 'Data: label bias in the write-ups, a proxy through home area. Deployment: a prediction used to decide who gets watched. Use: automation bias in the tutors, and a feedback loop that makes the next model worse. Affected: the flagged learners, who did nothing yet.'],
+  ['Recommendation feeds', 'A video app learns from what each person watches and shows them more of it. The design goal is time spent in the app. Nothing in the design measures whether what it recommends is true, varied or good for the person watching. A learner opens it to look up one thing and comes back an hour later.', 'Design: the objective is time spent, so the feed optimises for whatever keeps a person watching, often the most emotional content. Framing: what the feed surfaces shapes what the person believes is normal or true. Use: the person trusts the feed as a picture of the world. Affected: the person watching, and anyone the feed teaches them to distrust.']
+];
+const LIFECYCLE = [
+  ['World before data', 'Historical bias', 'Past decisions were unequal, so historical outcomes encode inequality.'],
+  ['Collection', 'Selection / sampling bias', 'Only people using an app enter the dataset.'],
+  ['Measurement', 'Measurement bias', "One group's behaviour is measured less accurately."],
+  ['Labelling', 'Label bias', 'Human raters apply an ambiguous label differently across groups.'],
+  ['Feature choice', 'Proxy bias', 'Postcode indirectly reveals socioeconomic status.'],
+  ['Training', 'Model / algorithmic bias', 'Patterns favour the majority group.'],
+  ['Evaluation', 'Evaluation bias', 'Test data under-represent difficult cases.'],
+  ['Deployment', 'Deployment bias', 'A model is used for a purpose it was not evaluated for.'],
+  ['Human response', 'Automation bias', 'A person trusts the model too much because it appears objective.']
+];
+writeFileSync(join(OUT, 'bias-station-cards.txt'), `Bias station cards (Chapter 5, Trust, Bias & Misinformation, session "Bias stations")
+
+Four short scenarios, four stations. At each one, ask: where could bias enter (the data? the design? how people use
+it?) and who would be affected? Then name the kind of bias: selection, representation, framing, automation or proxy.
+
+${STATIONS.map((s, i) => `=== Station ${i + 1}: ${s[0]} ===\n${s[1]}`).join('\n\n')}
+
+=== Where bias can enter: the lifecycle map ===
+${LIFECYCLE.map(l => `- ${l[0]} → ${l[1]}: ${l[2]}`).join('\n')}
+
+Removing one field fixes one stage. Most systems have bias at more than one.
+`);
+writeFileSync(join(OUT, 'bias-simulator-worksheet.csv'), 'run,shareB,proxy,removed,groupA,groupB,overall,note\n' + ',,,,,,,\n'.repeat(4));
+writeFileSync(join(OUT, 'corrected-version-template.md'), `# Corrected version
+
+Original: the synthetic article "AI tutors in every Irish secondary classroom by 2028".
+
+## Verified claims (with sources)
+- Claim: ________________  Source (name and where): ________________
+- Claim: ________________  Source (name and where): ________________
+
+## Uncertain claims (labelled as uncertain)
+- [UNCERTAIN] Claim: ________________  Why it is uncertain: ________________
+
+## Sources
+- ________________
+
+## What was removed, and why
+- Wrong claims: ________________
+- Loaded framing: ________________
+- Unsupported certainty: ________________
+- Missing sources: ________________
+
+Less exciting, more trustworthy. That is the point.
+`);
+writeFileSync(join(OUT, 'synthetic-media-checklist.txt'), `Synthetic media checklist (Chapter 5, Trust, Bias & Misinformation, session "Synthetic media")
+
+AI-generated audio, image or video that looks real is now cheap to make. "Seeing is believing" was never fully true,
+and now it is weaker. Before believing a clip, especially one that made you angry:
+
+1. Stop. Notice the feeling. Anger and outrage are what a clip made to be shared is designed to produce.
+2. Provenance. Who posted it, when was the account made, and where did the clip come from before that?
+3. Other coverage. Open new tabs. Has anyone independent reported the same event, or does every copy point back to
+   one account?
+4. Who gains? Ask who benefits if you share it, and whether the clip is asking you to do something.
+5. Look for the original. A re-upload, a crop or a clip with the sound replaced is not the original. Find the first
+   version, or note that you cannot.
+6. Wait. A real event has more than one witness and more than one source. If it is true, it will still be true
+   tomorrow, with better evidence.
+
+If you cannot answer 2 and 3, you cannot share it as true, whatever it looks like.
+`);
+
+mkdirSync('docs/teacher', { recursive: true });
+const markCount = t => ARTICLE.filter(x => x[1].includes(t)).length;
+writeFileSync(join('docs/teacher', 'news-detective-article.KEY.txt'), `AI News Detective (Chapter 5, Trust, Bias & Misinformation). TEACHER KEY: every sentence of news-detective-article.txt
+numbered and marked with its intended mark types; factual claims marked supported / uncertain / wrong with the source to
+check; the confidence-trap answers; the intended bias mechanisms per station. This key lives in docs/teacher and is never
+deployed with the site.
+
+The article is synthetic. It was written for this course in the style of AI-generated news; no AI tool produced it, and
+no real plan, Act, survey or report is described. Sentences are numbered from the first sentence of the article body,
+after the synthetic label and the headline.
+
+=== Article: ${ARTICLE.length} sentences; ${['Factual claim', 'Emotional framing', 'Missing source', 'Unsupported certainty'].map(t => `${markCount(t)} ${t.toLowerCase()}`).join(', ')} ===
+${ARTICLE.map((x, i) => `${i + 1}. [${x[1].map(t => t.toUpperCase()).join(' + ')}]${x[2] ? ` [${x[2].toUpperCase()}]` : ''} ${x[0]}\n   ${x[2] ? 'Check: ' : 'Note: '}${x[3]}`).join('\n')}
+
+Points worth drawing out in discussion:
+- Sentences 2, 4 and 5 are supported and still carry the article: a true description of Transition Year, the Department
+  and the Leaving Certificate lends credibility to the invented plan around them. Accurate and still misleading.
+- The invented Act (6) and the fabricated report (12) look exactly like real citations. A title search on the Irish
+  Statute Book and gov.ie finds nothing. That is the myth-buster "Lots of websites say it" in reverse: one source, none.
+- The survey (7) is uncertain, not wrong. The correct change in the corrected version is a label, not deletion.
+- Sentences 8 to 11 contain no checkable claim at all. Students who mark them as factual claims are reading the tone,
+  not the content; that is the confidence trap again.
+
+=== Confidence trap: claim cards ===
+${CLAIM_CARDS.map((c, i) => `Card ${i + 1}: ${c[0]}\n- ${c[1]}. ${c[2]}`).join('\n')}
+
+=== Bias stations: intended mechanisms ===
+${STATIONS.map((s, i) => `Station ${i + 1}, ${s[0]}: ${s[2]}`).join('\n')}
+
+=== Bias simulator: expected values ===
+Group A is always 18/20 (90%). Group B = clamp(round(6 + 12 × shareB/50) − penalty, 0, 20), where the penalty is 6 with
+the sensitive field kept and round(6 × proxy/100) with it removed.
+- shareB 10%, proxy 80%, field kept: Group B 2/20 (10%), overall 20/40 (50%).
+- shareB 50%, proxy 80%, field removed: Group B 13/20 (65%), overall 31/40 (77.5%).
+- shareB 50%, proxy 0%, field removed: Group B 18/20 (90%), overall 36/40 (90%).
+The review's 8.1 table (Group A 18/20, Group B 11/20, overall 72.5%) is the discussion anchor: is 72.5% enough?
+`);
+
 rmSync(WORK, { recursive: true, force: true });
 const manifest =Object.fromEntries(readdirSync(OUT).filter(f => !f.startsWith('.')).sort().map(f => [f, statSync(join(OUT, f)).size]));
 writeFileSync(join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');

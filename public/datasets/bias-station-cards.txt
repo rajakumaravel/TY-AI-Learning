@@ -1,0 +1,29 @@
+Bias station cards (Chapter 5, Trust, Bias & Misinformation, session "Bias stations")
+
+Four short scenarios, four stations. At each one, ask: where could bias enter (the data? the design? how people use
+it?) and who would be affected? Then name the kind of bias: selection, representation, framing, automation or proxy.
+
+=== Station 1: Hiring data ===
+A company trains a model to shortlist job applicants from the last ten years of its own hiring records. The records show who was called to interview and who was hired, but not who would have done the job well. Most of the people hired in those years came from two colleges and one part of the city. The model is now used on every application before a person reads it.
+
+=== Station 2: Image generation and stereotypes ===
+An image generator is trained on pictures collected from the internet, with the captions people wrote for them. Ask it for "a nurse", "an engineer" or "a person from a city in Africa" and it produces the same kind of picture every time. A training centre uses it to make posters for a careers week. Nobody checks who appears in the pictures before they go up.
+
+=== Station 3: Discipline analytics ===
+A chain of training centres buys a system that predicts which learners are "likely to cause trouble" from attendance, past write-ups and the area they live in. The write-ups were made by different staff over several years, and some staff wrote up far more than others. The flag is shown to tutors at the start of each course. Flagged learners are watched more closely, and so are written up more often.
+
+=== Station 4: Recommendation feeds ===
+A video app learns from what each person watches and shows them more of it. The design goal is time spent in the app. Nothing in the design measures whether what it recommends is true, varied or good for the person watching. A learner opens it to look up one thing and comes back an hour later.
+
+=== Where bias can enter: the lifecycle map ===
+- World before data → Historical bias: Past decisions were unequal, so historical outcomes encode inequality.
+- Collection → Selection / sampling bias: Only people using an app enter the dataset.
+- Measurement → Measurement bias: One group's behaviour is measured less accurately.
+- Labelling → Label bias: Human raters apply an ambiguous label differently across groups.
+- Feature choice → Proxy bias: Postcode indirectly reveals socioeconomic status.
+- Training → Model / algorithmic bias: Patterns favour the majority group.
+- Evaluation → Evaluation bias: Test data under-represent difficult cases.
+- Deployment → Deployment bias: A model is used for a purpose it was not evaluated for.
+- Human response → Automation bias: A person trusts the model too much because it appears objective.
+
+Removing one field fixes one stage. Most systems have bias at more than one.

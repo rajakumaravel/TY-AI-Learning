@@ -95,6 +95,69 @@ test('chapter 4 sample outputs are labelled synthetic, mix verdicts, and every c
   assert.match(template,/\[unsure\]/);
 });
 
+test('chapter 5 downloads are generated, in the manifest and offered in the right sessions; the teacher key stays outside public/',()=>{
+  const files=['claim-cards.txt','news-detective-article.txt','annotation-sheet.csv','bias-station-cards.txt','bias-simulator-worksheet.csv','corrected-version-template.md','synthetic-media-checklist.txt'];
+  for(const file of files){
+    assert.ok(fs.existsSync(`public/datasets/${file}`),`${file} missing`);
+    assert.ok(manifest[file]>0,`${file} not in manifest`);
+  }
+  assert.ok(fs.existsSync('docs/teacher/news-detective-article.KEY.txt'),'teacher key generated outside public/');
+  assert.ok(!fs.readdirSync('public/datasets').some(f=>/KEY/i.test(f)),'teacher key is never served');
+  assert.ok(!downloads.some(d=>/KEY/i.test(d.file)),'the teacher key is not offered to students');
+  assert.ok(downloads.some(d=>d.session==='b5s1'&&d.file==='claim-cards.txt'),'b5s1 claim cards');
+  for(const file of ['news-detective-article.txt','annotation-sheet.csv'])assert.ok(downloads.some(d=>d.session==='b5s3'&&d.file===file),`b5s3 ${file}`);
+  for(const file of ['news-detective-article.txt','verification-log-A2.csv'])assert.ok(downloads.some(d=>d.session==='b5s4'&&d.file===file),`b5s4 ${file}`);
+  assert.equal(course.blocks[4].sessions.find(s=>s.id==='b5s3').activity.file,'news-detective-article.txt','the annotate renderer fetches the same article');
+  assert.ok(downloads.some(d=>d.session==='b5s5'&&d.file==='bias-simulator-worksheet.csv'),'b5s5 worksheet');
+  assert.ok(downloads.some(d=>d.session==='b5s6'&&d.file==='bias-station-cards.txt'),'b5s6 station cards');
+  for(const file of ['news-detective-article.txt','corrected-version-template.md'])assert.ok(downloads.some(d=>d.session==='b5s7'&&d.file===file),`b5s7 ${file}`);
+  assert.ok(downloads.some(d=>d.session==='b5s8'&&d.file==='synthetic-media-checklist.txt'),'b5s8 checklist');
+  assert.equal(downloads.filter(d=>d.file==='verification-log-A2.csv').length,2,'Sheet A2 is reused from Chapter 4, not generated twice');
+});
+
+test('chapter 5 article is labelled synthetic, splits cleanly into sentences, mixes claims and framing, and every sentence is marked in the teacher key',()=>{
+  const article=fs.readFileSync('public/datasets/news-detective-article.txt','utf8');
+  assert.match(article,/^SYNTHETIC ARTICLE/);
+  assert.match(article,/AI tutors in every Irish secondary classroom by 2028/);
+  const body=article.trim().split('\n\n').pop();
+  const sentences=body.split('. ');
+  assert.ok(sentences.length>=10&&sentences.length<=12,`10–12 sentences, got ${sentences.length}`);
+  for(const s of sentences)assert.ok(!s.replace(/\.$/,'').includes('.'),`no full stop inside a sentence: ${s}`);
+  assert.doesNotMatch(article,/\[(FACTUAL CLAIM|EMOTIONAL FRAMING|MISSING SOURCE|UNSUPPORTED CERTAINTY|SUPPORTED|UNCERTAIN|WRONG)/,'marks are not shown to students');
+  for(const re of [/Transition Year/,/Department of Education/,/Leaving Certificate/,/National AI Tutoring Act 2025/,/recent survey/,/Experts agree/,/It is beyond doubt/,/Classrooms of Tomorrow/])assert.match(body,re);
+  const key=fs.readFileSync('docs/teacher/news-detective-article.KEY.txt','utf8');
+  const marked=[...key.matchAll(/^(\d+)\. \[([A-Z +]+)\](?: \[(SUPPORTED|UNCERTAIN|WRONG)\])? (.+)$/gm)];
+  assert.equal(marked.length,sentences.length,'every sentence is in the key');
+  marked.forEach((m,i)=>{assert.equal(Number(m[1]),i+1);assert.equal(m[4].replace(/\.$/,''),sentences[i].replace(/\.$/,''),`key sentence ${i+1} matches the article`)});
+  const types=t=>marked.filter(m=>m[2].split(' + ').includes(t));
+  assert.ok(types('FACTUAL CLAIM').length>=4,'at least four factual claims');
+  assert.ok(types('EMOTIONAL FRAMING').length>=2,'at least two emotionally framed sentences');
+  assert.ok(types('UNSUPPORTED CERTAINTY').length>=2,'at least two unsupported certainty sentences');
+  assert.ok(types('MISSING SOURCE').length>=1);
+  for(const m of marked)assert.equal(Boolean(m[3]),m[2].includes('FACTUAL CLAIM'),`verdict only on factual claims: ${m[1]}`);
+  assert.ok(marked.filter(m=>m[3]==='SUPPORTED').length>=3,'some claims are real-world supported');
+  assert.ok(marked.filter(m=>m[3]==='WRONG').length>=2,'at least two wrong claims');
+  assert.ok(marked.some(m=>m[3]==='UNCERTAIN'),'at least one uncertain claim');
+  assert.match(key,/Fabricated citation/);
+  assert.match(key,/Confidence trap: claim cards/);
+  for(const re of [/TRUE\./,/FALSE\./,/CANNOT BE VERIFIED\./])assert.match(key,re);
+  assert.match(key,/Bias stations: intended mechanisms/);
+  assert.match(key,/Group B 2\/20/);assert.match(key,/Group B 13\/20/);assert.match(key,/Group B 18\/20/);
+  const cards=fs.readFileSync('public/datasets/claim-cards.txt','utf8');
+  assert.equal((cards.match(/^=== Card \d ===/gm)||[]).length,3);
+  for(const re of [/Transition Year was introduced in Irish schools in 1974/,/The River Shannon is the longest river in Europe/,/Most Irish teenagers would rather learn from an AI tutor than from a teacher/,/rank how confident you are/i])assert.match(cards,re);
+  assert.doesNotMatch(cards,/TRUE|FALSE|CANNOT BE VERIFIED/,'claim cards are unlabelled');
+  const stations=fs.readFileSync('public/datasets/bias-station-cards.txt','utf8');
+  assert.equal((stations.match(/^=== Station \d: /gm)||[]).length,4);
+  for(const re of [/Hiring data/,/Image generation and stereotypes/,/Discipline analytics/,/Recommendation feeds/,/lifecycle map/,/Proxy bias/,/Automation bias/])assert.match(stations,re);
+  assert.match(fs.readFileSync('public/datasets/annotation-sheet.csv','utf8'),/^sentence,mark_type,note\n(,,\n)+$/);
+  assert.match(fs.readFileSync('public/datasets/bias-simulator-worksheet.csv','utf8'),/^run,shareB,proxy,removed,groupA,groupB,overall,note\n(,,,,,,,\n)+$/);
+  const template=fs.readFileSync('public/datasets/corrected-version-template.md','utf8');
+  for(const h of ['## Verified claims','## Uncertain claims','## Sources','## What was removed'])assert.ok(template.includes(h),h);
+  const checklist=fs.readFileSync('public/datasets/synthetic-media-checklist.txt','utf8');
+  for(const re of [/Provenance/,/Other coverage/,/Who gains/,/Look for the original/,/Wait/])assert.match(checklist,re);
+});
+
 test('dataset archives stay small enough for school connections',()=>{
   for(const [file,size] of Object.entries(manifest))assert.ok(size<1_000_000,`${file} is ${size} bytes`);
 });

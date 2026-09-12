@@ -13,6 +13,7 @@ This branch (`infra-cloudflare-supabase`) targets Cloudflare Pages, Pages Functi
 - Downloadable lab datasets and templates in each Chapter 2 session (`npm run datasets` regenerates them)
 - Chapter 3, Data Detective, following Student Book pp. 14–17: a category-level audit of one real service, collection → purpose → benefit → risk chains, a dataset fairness challenge over a synthetic, deliberately flawed club sign-up dataset, and a Responsible Data Card (Sheet A5) with a better data plan
 - Chapter 4, Generative AI & Prompting, following Student Book pp. 18–22: a three-version prompt experiment (Sheet A4) run through DuckDuckGo AI Chat with no account, a C-T-C-F prompt builder, the four useful roles, a three-claim verification log (Sheet A2) over synthetic sample outputs with a teacher key, injecting doubt, a reusable prompt template and a red-team check
+- Chapter 5, Trust, Bias & Misinformation, following Student Book pp. 23–27: a confidence trap, the SIFT trust checklist, a highlighter pass over a synthetic AI news article with a teacher key, lateral verification in new tabs (Sheet A2, no chatbot), an in-product bias simulator over subgroup accuracy and a proxy feature, four bias stations, a corrected version that is less exciting and more trustworthy, and a personal three-step trust rule
 - Applied chapter capstones, progression gates and badges
 - Google sign-in and account-owned progress
 - Chapter 2 Project Workspace with work logs, evidence and submitted snapshots

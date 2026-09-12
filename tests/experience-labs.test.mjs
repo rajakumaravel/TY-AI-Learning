@@ -17,7 +17,8 @@ test('every chapter declares an Experience Lab covering all six ADR-005 tests',(
     const ids=new Set(b.sessions.map(s=>s.id));
     assert.deepEqual(b.lab.stages.map(x=>x[0]),TAGS,`${b.id} stage tags`);
     for(const [,sid] of b.lab.stages)assert.ok(ids.has(sid),`${b.id} stage session ${sid} exists`);
-    assert.ok(b.sessions.some(s=>s.activity.kind==='lab'),`${b.id} has a lab session`);
+    if(b.id==='block5')assert.ok(!b.sessions.some(s=>s.activity.kind==='lab'||s.activity.tool),'chapter 5 opens no external tool, so it has no lab-kind session (Phase 6 contract)');
+    else assert.ok(b.sessions.some(s=>s.activity.kind==='lab'),`${b.id} has a lab session`);
   }
 });
 
@@ -78,6 +79,16 @@ test('chapter 4 lab runs the weak question through DuckDuckGo AI Chat with the f
   assert.equal(b.lab.title,'Make prompts compete');
   assert.deepEqual(b.lab.stages.map(x=>x[1]),['b4s3','b4s1','b4s8','b4s7','b4s4','b4s6']);
   for(const id of ['b4s3','b4s4','b4s5','b4s6','b4s7','b4s8'])assert.ok(Array.isArray(b.sessions.find(s=>s.id===id).activity.privacy)&&b.sessions.find(s=>s.id===id).activity.privacy.length===4&&b.sessions.find(s=>s.id===id).activity.tool?.url==='https://duck.ai',`${id} repeats the safety rules`);
+});
+
+test('chapter 5 lab is the in-product create-detect-reduce-bias sequence with no AI tool and no safety notes',()=>{
+  const b=course.blocks[4];
+  assert.equal(b.lab.title,'Create, detect and reduce bias');
+  assert.match(b.lab.summary,/less exciting and more trustworthy/);
+  assert.deepEqual(b.lab.stages,[['DO','b5s3','Mark up an AI news article'],['TEST','b5s1','The confidence trap'],['MAKE','b5s5','Create a biased outcome in the simulator'],['BREAK','b5s6','Find where bias enters at four stations'],['IMPROVE','b5s7','Publish a corrected version'],['PROVE','b5s4','Verify claims laterally']]);
+  assert.deepEqual(b.sessions.map(s=>s.activity.kind),['chain','quiz','annotate','chain','simulator','chain','textfields','textfields','textfields']);
+  for(const s of b.sessions){assert.equal(s.activity.tool,undefined,`${s.id} has no tool`);assert.equal(s.activity.privacy,undefined,`${s.id} has no safety notes`);assert.doesNotMatch(JSON.stringify(s),/duck\.ai|copilot/i,`${s.id} links no AI product`)}
+  assert.match(b.sessions.find(s=>s.id==='b5s4').activity.instructions,/open a new tab/i);
 });
 
 test('student UI gates the external tool behind the safety notice and requires lab evidence',()=>{

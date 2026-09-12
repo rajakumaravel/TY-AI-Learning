@@ -1,0 +1,18 @@
+Claim cards (Chapter 5, Trust, Bias & Misinformation, session "The confidence trap")
+
+Three confident statements. One is true, one is false, one cannot be verified either way. They are not labelled.
+
+Before you check anything, rank how confident you are in each one, from 1 (no idea) to 5 (certain). Write the number
+down. Then open a new tab and check each statement against an independent, reliable source. Notice which one fooled
+you, and why.
+
+=== Card 1 ===
+Transition Year was introduced in Irish schools in 1974.
+
+=== Card 2 ===
+The River Shannon is the longest river in Europe.
+
+=== Card 3 ===
+Most Irish teenagers would rather learn from an AI tutor than from a teacher.
+
+A statement can be written just as confidently whether it is true, false, or something nobody has ever measured.
