@@ -4,10 +4,10 @@
 //
 // Each browser context is a fresh "device" with no local state; the Supabase session is injected into
 // localStorage the same way the Google OAuth callback would store it. Covers cross-device persistence,
-// the chapter gates as rendered (1→2 through 6→7), the Chapter 5 annotate and simulator kinds, the Chapter 7 decision kind, and admin-page rejection for a non-admin account.
+// the chapter gates as rendered (1→2 through 7→8), the Chapter 5 annotate and simulator kinds, the Chapter 7 decision kind, and admin-page rejection for a non-admin account.
 
 import { chromium } from 'playwright';
-import { BASE, REF, api, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS, completeChapter6UI, completeChapter7UI } from './lib.mjs';
+import { BASE, REF, api, check, finish, createUser, cleanup, CHAPTER1_SESSIONS, CAPSTONE1_ANSWERS, CHAPTER2_SESSIONS, CAPSTONE2_ANSWERS, CHAPTER3_SESSIONS, CAPSTONE3_ANSWERS, CHAPTER4_SESSIONS, CAPSTONE4_ANSWERS, CHAPTER5_SESSIONS, CAPSTONE5_ANSWERS, completeChapter6UI, completeChapter7UI, completeChapter8UI } from './lib.mjs';
 
 // The annotate/simulator controls re-render on input, so ranges are set with a real input event rather than page.fill.
 async function setRange(page, key, value) { await page.$eval(`input[type=range][data-sim="${key}"]`, (el, v) => { el.value = v; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, String(value)); }
@@ -210,6 +210,8 @@ try {
   await locked6.page.waitForSelector('[data-block="5"]');
   check('Chapter 6 remains locked before Chapter 5 capstone', await locked6.page.$eval('[data-block="5"]',el=>el.disabled&&el.classList.contains('locked')));
   check('Chapter 7 card is locked and names the Chapter 6 gate', await locked6.page.$eval('[data-block="6"]',el=>el.disabled&&el.classList.contains('locked')&&/Complete Chapter 0?6 assessment/i.test(el.textContent)));
+  check('Chapter 8 card is locked and names the Chapter 7 gate', await locked6.page.$eval('[data-block="7"]',el=>el.disabled&&el.classList.contains('locked')&&/Complete Chapter 0?7 assessment/i.test(el.textContent)));
+  check('no ninth chapter card is offered', (await locked6.page.$$('[data-block="8"]')).length===0);
   await locked6.context.close();
   const cap5 = await api('chapter-assessment/block5', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE5_ANSWERS }) });
   check('Chapter 5 capstone accepted',cap5.status===200&&Boolean(cap5.body?.assessment?.submittedAt));
@@ -224,6 +226,13 @@ try {
   check('Chapter 7 unlocked after the Chapter 6 capstone', await d8.page.$eval('[data-block="6"]',el=>!el.classList.contains('locked')&&!el.disabled));
   await completeChapter7UI(d8.page);
   await d8.context.close();
+
+  // Chapter 7 → 8 gate as rendered, then every Chapter 8 session, the fallback build route and the programme-complete state.
+  const d9 = await device(browser, a.session);
+  await d9.page.waitForFunction(()=>{const el=document.querySelector('[data-block="7"]');return el&&!el.classList.contains('locked')},null,{timeout:15000});
+  check('Chapter 8 unlocked after the Chapter 7 capstone', await d9.page.$eval('[data-block="7"]',el=>!el.classList.contains('locked')&&!el.disabled));
+  await completeChapter8UI(d9.page);
+  await d9.context.close();
 
   // Admin page: student rejected, admin admitted
   const ds = await device(browser, a.session, '/admin');

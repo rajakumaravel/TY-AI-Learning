@@ -27,6 +27,9 @@ test('project workspace requests and lab evidence are parameterised by project, 
   assert.match(student,/a\.kind==='annotate'/);
   assert.match(student,/a\.kind==='simulator'/);
   assert.match(student,/a\.kind==='decision'/);
+  // Chapter 8 adds no kind: its six lab stages import through the existing lab/textfields, chain and testlog branches.
+  assert.match(student,/a\.kind==='lab'\|\|a\.kind==='textfields'/);
+  assert.match(student,/a\.kind==='testlog'/);
   assert.match(student,/`Project: \$\{PROJECT_BRIEFS\[projectId\]\.chapter\}`/);
   assert.match(student,/CHAPTER \$\{chapterNumber\(activeProjectId\)\} PROJECT/);
   assert.match(student,/'projectWorkspaceBtn':`projectWorkspaceBtn-\$\{projectId\}`/);
