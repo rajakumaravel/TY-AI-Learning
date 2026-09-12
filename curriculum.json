@@ -2482,7 +2482,7 @@
           "activity": {
             "kind": "chain",
             "title": "The stakeholder lens",
-            "instructions": "One row for each of the five named stakeholders on the case card: service worker; customer; service manager; public-interest regulator; customer needing a staffed language or access route. In each row compare your three recorded futures by run id, cite a case card or a result with its count or stated limitation, and name whose interests clash and which safeguard still leaves a trade-off. Across the table cover value, jobs and tasks, safety, fairness, privacy, accountability, uncertainty and sustainability. One error rate does not settle fairness. Evidence: Stakeholder analysis.",
+            "instructions": "One row for each of the five named stakeholders on the case card: service worker; customer or citizen; service manager, who is the book's employer; public-interest regulator; customer needing a staffed language or access route, who is the book's someone at risk of being excluded. In each row compare your three recorded futures by run id, cite a case card or a result with its count or stated limitation, and name whose interests clash and which safeguard still leaves a trade-off. Across the table cover value, jobs and tasks, safety, fairness, privacy, accountability, uncertainty and sustainability. One error rate does not settle fairness. Evidence: Stakeholder analysis.",
             "columns": [
               ["stakeholder", "Stakeholder"],
               ["impact", "Benefits and risks across my three futures, with run ids"],

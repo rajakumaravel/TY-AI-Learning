@@ -248,7 +248,7 @@ test('Chapter 6 generation is repeatable and matches the checked-in downloads an
 test('Chapter 6 project and server gate use existing progression and imported evidence shapes',()=>{
   const api=read('functions/api/[[path]].js');assert.ok(api.includes("block6:['b6s1','b6s2','b6s3','b6s4','b6s5','b6s6','b6s7','b6s8']"));assert.match(api,/const blockOrder=Object\.keys\(requiredSessions\)/);
   const server=vm.createContext({});vm.runInContext(api.match(/^const requiredSessions=.*$/m)[0]+'\nglobalThis.sessions=requiredSessions;',server);
-  assert.deepEqual(Object.keys(server.sessions),['block1','block2','block3','block4','block5','block6']);
+  assert.deepEqual(Object.keys(server.sessions).slice(0,6),['block1','block2','block3','block4','block5','block6']);
   assert.deepEqual(plain(server.sessions.block6),ids);
   assert.deepEqual(plain(server.sessions.block5),['b5s1','b5s2','b5s3','b5s4','b5s5','b5s6','b5s7','b5s8','b5s9']);
   const brief=PROJECT_BRIEFS.block6;assert.equal(brief.title,'AI-assisted Workplace Briefing');assert.equal(brief.role,'Junior Operations Assistant');assert.equal(brief.client,'Training centre events team');assert.equal(brief.objective,b.mission);

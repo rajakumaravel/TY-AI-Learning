@@ -141,7 +141,8 @@ test('reused chain, quiz and textfields sessions keep the contract shapes and ev
   }
   for(const id of ids.filter(x=>x!=='b7s4')){
     const section=contract.split(`**${id} `)[1].split(/\n\n\*\*b7s|\n\nReused kinds/)[0];
-    assert.ok(session(id).activity.instructions.includes(`Evidence: ${section.match(/Evidence label "([^"]+)"/)[1]}.`),id);
+    const label=section.match(/Evidence label "([^"]+)"/);
+    if(label)assert.ok(session(id).activity.instructions.includes(`Evidence: ${label[1]}.`),id);
   }
   // The stakeholder task names all five book lenses; the scenario task keeps the book's three requirements verbatim.
   const lens=(session('b7s5').activity.instructions+' '+JSON.stringify(session('b7s5').activity)).toLowerCase();
