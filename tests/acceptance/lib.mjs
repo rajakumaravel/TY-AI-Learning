@@ -525,6 +525,7 @@ export async function completeChapter8UI(page, afterSession = async () => {}) {
   await page.click('#homeBtn');
   await page.waitForSelector('.programme-complete',{timeout:15000});
   check('Home shows the programme-complete state and implies no ninth chapter',/Programme complete/i.test(await page.textContent('.programme-complete'))&&!(await page.$('[data-block="8"]')));
+  await page.click('[data-block="7"]');
   await page.waitForSelector('#projectWorkspaceBtn-block8',{timeout:15000});
   await page.click('#projectWorkspaceBtn-block8');
   await page.waitForSelector('#projectWorkspaceModal.open');
