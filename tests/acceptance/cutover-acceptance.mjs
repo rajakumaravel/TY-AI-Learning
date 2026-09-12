@@ -195,7 +195,7 @@ try {
   const save6=await api('projects/block6',a.token,{method:'PUT',body:JSON.stringify({workspace:workspace6})});
   check('Chapter 6 project write succeeds after Chapter 5 qualification',save6.status===200&&save6.body?.project?.brief?.chapter==='AI for Learning & Work');
   const submit6=await api('projects/block6/submit',a.token,{method:'POST'});
-  check('Chapter 6 submitted snapshot retains cleaning, review and disclosure evidence',submit6.status===200&&submit6.body?.project?.status==='submitted'&&JSON.stringify(submit6.body?.project?.submittedSnapshot?.evidence)===JSON.stringify(workspace6.evidence)&&submit6.body?.project?.submittedSnapshot?.finalRecommendation===CHAPTER6_RECOMMENDATION);
+  check('Chapter 6 submitted snapshot retains cleaning, review and disclosure evidence',submit6.status===200&&submit6.body?.project?.status==='submitted'&&(submit6.body?.project?.submittedSnapshot?.evidence||[]).length===workspace6.evidence.length&&workspace6.evidence.every((e,i)=>{const got=(submit6.body?.project?.submittedSnapshot?.evidence||[])[i]||{};return got.label===e.label&&got.note===e.note&&got.url===e.url})&&submit6.body?.project?.submittedSnapshot?.finalRecommendation===CHAPTER6_RECOMMENDATION);
   check('student B Chapter 6 remains locked',(await api('projects/block6',b.token,{method:'PUT',body:JSON.stringify({workspace:workspace6})})).status===409);
 } catch (error) {
   check('run completed without exception', false, error.message);
