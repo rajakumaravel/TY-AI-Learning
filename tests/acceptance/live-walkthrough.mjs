@@ -83,7 +83,7 @@ try {
   // ---------- student, chapter 1
   ({ context, page } = await device(browser, student.session));
   await page.waitForFunction(() => /Welcome/.test(document.getElementById('welcomeName')?.textContent || ''), null, { timeout: 15000 });
-  await step(page, 'Student signed in, cloud synced', async () => (await page.textContent('#syncStatus')).includes('Cloud'));
+  await step(page, 'Student signed in, saved to account', async () => (await page.textContent('#syncStatus')).includes('Saved to your account'));
   await page.click('[data-block="0"]');
   await page.waitForSelector('#labBanner .lab-stage');
   await step(page, 'Chapter 1 opens with mission and six lab stages', async () => (await page.$$('#labBanner .lab-stage')).length === 6);
@@ -94,7 +94,7 @@ try {
   });
   await step(page, 'Lab session: acknowledge safety notice, tool link enables, downloads listed', async () => {
     await page.check('[data-ack]');
-    const enabled = await page.$eval('#labToolLink', el => !el.classList.contains('disabled'));
+    const enabled = await page.$eval('#labToolLink', el => el.tagName === 'A' && Boolean(el.getAttribute('href')));
     const dl = (await page.$$('.downloads a[download]')).length;
     return enabled && dl >= 2 ? `downloads=${dl}` : false;
   });
@@ -219,7 +219,7 @@ try {
   await page.click('.pw-close');
 
   // ---------- student, chapter 2 capstone unlocks chapter 3
-  await step(page, 'Chapter 3 locked until the chapter 2 assessment', async () => page.$eval('[data-block="2"]', el => el.classList.contains('locked') && el.disabled));
+  await step(page, 'Chapter 3 locked until the chapter 2 assessment', async () => page.$eval('[data-block="2"]', el => el.classList.contains('locked') && !el.disabled));
   await page.click('[data-block="1"]');
   await page.waitForSelector('#chapterCapstoneHost textarea[data-capstone]', { timeout: 15000 });
   await step(page, 'Submit chapter 2 capstone, formative level returned', async () => submitCapstone(page, CAPSTONE2_ANSWERS));
@@ -339,7 +339,7 @@ try {
   await step(page, 'Chapter 4 page shows the Myth-busters section', async () => /Clear beats long/.test(await page.textContent('#mythBusters')));
   await step(page, 'Same task, different prompts lab: safety notice, DuckDuckGo AI Chat link, downloads, four fields, save', async () => {
     await page.check('[data-ack]');
-    const enabled = await page.$eval('#labToolLink', el => !el.classList.contains('disabled') && /duck\.ai/.test(el.getAttribute('href') || ''));
+    const enabled = await page.$eval('#labToolLink', el => el.tagName === 'A' && /duck\.ai/.test(el.getAttribute('href') || ''));
     const dl = await page.$$eval('.downloads a[download]', a => a.map(x => x.getAttribute('href')));
     const n = await fillTextfields(page, 4);
     const fb = await saveSession(page, 'b4s2');

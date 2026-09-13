@@ -156,7 +156,7 @@ export async function completeChapter6UI(page, afterSession = async () => {}) {
     await page.click(`[data-session="${sid}"]`);
     await page.waitForFunction(id=>document.querySelector('.session-link.active')?.dataset.session===id,sid);
     if (['b6s1','b6s2','b6s4','b6s6'].includes(sid)) {
-      check(`${sid} separately gates AI link`, await page.$eval('#labToolLink',el=>el.getAttribute('aria-disabled')==='true'));
+      check(`${sid} separately gates AI link`, await page.$eval('#labToolLink',el=>el.tagName==='BUTTON'&&el.disabled&&!el.hasAttribute('href')));
       await page.click('[data-fallback]');
       check(`${sid} sample fallback visible`, await page.$eval('#labFallback',el=>!el.hidden));
       for (let i=0;i<CHAPTER6_FIELDS[sid].length;i++) await page.fill(`textarea[data-i="${i}"]`,CHAPTER6_FIELDS[sid][i]);
@@ -164,7 +164,7 @@ export async function completeChapter6UI(page, afterSession = async () => {}) {
       await page.click('#saveSession');
       check(`${sid} sample route still requires acknowledgement`, /tick the box|Finish the required/.test(await page.textContent('#lessonFeedback')));
       await page.check('[data-ack]');
-      check(`${sid} acknowledgement enables link`,await page.$eval('#labToolLink',el=>el.getAttribute('aria-disabled')==='false'));
+      check(`${sid} acknowledgement enables link`,await page.$eval('#labToolLink',el=>el.tagName==='A'&&Boolean(el.getAttribute('href'))));
     } else {
       check(`${sid} has no AI tool link`,!(await page.$('#labToolLink')));
     }
@@ -494,14 +494,15 @@ export async function completeChapter8UI(page, afterSession = async () => {}) {
       if (sid==='b8s7') check('b8s7 carries an evidence-driven change, three or more red-team rows and no residual of "none"',/^Change from testing/.test(rows[0][0])&&rows.filter(r=>/^Red-team/.test(r[0])).length>=3&&rows.every(r=>!/^none\.?$/i.test(r[3].trim())));
     } else if (sid==='b8s5') {
       await page.waitForSelector('.lab',{timeout:15000});
-      check('b8s5 is the Chapter 8 session that offers a tool, and it is DuckDuckGo AI Chat',Boolean(await page.$('#labToolLink'))&&/duck\.ai/.test(await page.getAttribute('#labToolLink','href')));
+      check('b8s5 is the Chapter 8 session that offers a tool, and it is DuckDuckGo AI Chat',/DuckDuckGo AI Chat/.test(await page.textContent('#labToolLink')));
       await page.click('button[data-fallback]');
       await page.waitForSelector('#labFallback',{timeout:10000});
       check('b8s5 fallback offers the non-AI build rather than a sample download',/non-AI|without AI|spreadsheet|paper/i.test(await page.textContent('#labFallback')));
       for (let i=0;i<CHAPTER8_FIELDS.b8s5.length;i++) await page.fill(`textarea[data-i="${i}"]`,CHAPTER8_FIELDS.b8s5[i]);
       // The non-AI route needs no tool visit, but the safety notice is acknowledged here as on every other lab.
-      check('b8s5 tool link stays disabled until the safety notice is acknowledged',(await page.getAttribute('#labToolLink','aria-disabled'))==='true');
+      check('b8s5 tool link stays disabled until the safety notice is acknowledged',await page.$eval('#labToolLink',el=>el.tagName==='BUTTON'&&el.disabled&&!el.hasAttribute('href')));
       await page.check('input[data-ack]');
+      check('b8s5 tool address only exists once the safety notice is acknowledged',/duck\.ai/.test(await page.getAttribute('#labToolLink','href')||''));
       check('b8s5 completes on the non-AI route with the tool never opened',(await page.getAttribute('#labFallback','hidden'))===null);
     } else if (sid==='b8s6') {
       await page.waitForSelector('input[data-i="0"][data-f]',{timeout:15000});

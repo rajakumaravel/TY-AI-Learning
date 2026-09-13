@@ -1,0 +1,561 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-12T21:47:06.087Z",
+  "title": "Design System: AI in Practice · TY Student Portal",
+  "extensions": {
+    "colorMeta": {
+      "slate-navy": {
+        "role": "primary",
+        "displayName": "Slate Navy",
+        "canonical": "oklch(28.9% 0.040 262.0)",
+        "tonalRamp": [
+          "oklch(15% 0.040 262.0)",
+          "oklch(25% 0.040 262.0)",
+          "oklch(35% 0.040 262.0)",
+          "oklch(45% 0.040 262.0)",
+          "oklch(55% 0.040 262.0)",
+          "oklch(65% 0.040 262.0)",
+          "oklch(80% 0.040 262.0)",
+          "oklch(95% 0.040 262.0)"
+        ]
+      },
+      "workbench-teal": {
+        "role": "primary",
+        "displayName": "Workbench Teal",
+        "canonical": "oklch(60.4% 0.103 184.7)",
+        "tonalRamp": [
+          "oklch(15% 0.103 184.7)",
+          "oklch(25% 0.103 184.7)",
+          "oklch(35% 0.103 184.7)",
+          "oklch(45% 0.103 184.7)",
+          "oklch(55% 0.103 184.7)",
+          "oklch(65% 0.103 184.7)",
+          "oklch(80% 0.103 184.7)",
+          "oklch(95% 0.103 184.7)"
+        ]
+      },
+      "marker-amber": {
+        "role": "secondary",
+        "displayName": "Marker Amber",
+        "canonical": "oklch(80.6% 0.165 83.5)",
+        "tonalRamp": [
+          "oklch(15% 0.165 83.5)",
+          "oklch(25% 0.165 83.5)",
+          "oklch(35% 0.165 83.5)",
+          "oklch(45% 0.165 83.5)",
+          "oklch(55% 0.165 83.5)",
+          "oklch(65% 0.165 83.5)",
+          "oklch(80% 0.165 83.5)",
+          "oklch(95% 0.165 83.5)"
+        ]
+      },
+      "study-violet": {
+        "role": "secondary",
+        "displayName": "Study Violet",
+        "canonical": "oklch(54.2% 0.173 293.7)",
+        "tonalRamp": [
+          "oklch(15% 0.173 293.7)",
+          "oklch(25% 0.173 293.7)",
+          "oklch(35% 0.173 293.7)",
+          "oklch(45% 0.173 293.7)",
+          "oklch(55% 0.173 293.7)",
+          "oklch(65% 0.173 293.7)",
+          "oklch(80% 0.173 293.7)",
+          "oklch(95% 0.173 293.7)"
+        ]
+      },
+      "cool-paper": {
+        "role": "neutral",
+        "displayName": "Cool Paper",
+        "canonical": "oklch(97.8% 0.005 258.3)",
+        "tonalRamp": [
+          "oklch(15% 0.005 258.3)",
+          "oklch(25% 0.005 258.3)",
+          "oklch(35% 0.005 258.3)",
+          "oklch(45% 0.005 258.3)",
+          "oklch(55% 0.005 258.3)",
+          "oklch(65% 0.005 258.3)",
+          "oklch(80% 0.005 258.3)",
+          "oklch(95% 0.005 258.3)"
+        ]
+      },
+      "warm-paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "canonical": "oklch(97.5% 0.004 106.5)",
+        "tonalRamp": [
+          "oklch(15% 0.004 106.5)",
+          "oklch(25% 0.004 106.5)",
+          "oklch(35% 0.004 106.5)",
+          "oklch(45% 0.004 106.5)",
+          "oklch(55% 0.004 106.5)",
+          "oklch(65% 0.004 106.5)",
+          "oklch(80% 0.004 106.5)",
+          "oklch(95% 0.004 106.5)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(24.5% 0.039 264.4)",
+        "tonalRamp": [
+          "oklch(15% 0.039 264.4)",
+          "oklch(25% 0.039 264.4)",
+          "oklch(35% 0.039 264.4)",
+          "oklch(45% 0.039 264.4)",
+          "oklch(55% 0.039 264.4)",
+          "oklch(65% 0.039 264.4)",
+          "oklch(80% 0.039 264.4)",
+          "oklch(95% 0.039 264.4)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "oklch(51.4% 0.029 257.7)",
+        "tonalRamp": [
+          "oklch(15% 0.029 257.7)",
+          "oklch(25% 0.029 257.7)",
+          "oklch(35% 0.029 257.7)",
+          "oklch(45% 0.029 257.7)",
+          "oklch(55% 0.029 257.7)",
+          "oklch(65% 0.029 257.7)",
+          "oklch(80% 0.029 257.7)",
+          "oklch(95% 0.029 257.7)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Cool Rule",
+        "canonical": "oklch(92.7% 0.010 261.8)",
+        "tonalRamp": [
+          "oklch(15% 0.010 261.8)",
+          "oklch(25% 0.010 261.8)",
+          "oklch(35% 0.010 261.8)",
+          "oklch(45% 0.010 261.8)",
+          "oklch(55% 0.010 261.8)",
+          "oklch(65% 0.010 261.8)",
+          "oklch(80% 0.010 261.8)",
+          "oklch(95% 0.010 261.8)"
+        ]
+      },
+      "state-pass": {
+        "role": "tertiary",
+        "displayName": "Pass Green",
+        "canonical": "oklch(51.3% 0.116 156.9)",
+        "tonalRamp": [
+          "oklch(15% 0.116 156.9)",
+          "oklch(25% 0.116 156.9)",
+          "oklch(35% 0.116 156.9)",
+          "oklch(45% 0.116 156.9)",
+          "oklch(55% 0.116 156.9)",
+          "oklch(65% 0.116 156.9)",
+          "oklch(80% 0.116 156.9)",
+          "oklch(95% 0.116 156.9)"
+        ]
+      },
+      "state-caution": {
+        "role": "tertiary",
+        "displayName": "Caution Ochre",
+        "canonical": "oklch(55.5% 0.146 49.0)",
+        "tonalRamp": [
+          "oklch(15% 0.146 49.0)",
+          "oklch(25% 0.146 49.0)",
+          "oklch(35% 0.146 49.0)",
+          "oklch(45% 0.146 49.0)",
+          "oklch(55% 0.146 49.0)",
+          "oklch(65% 0.146 49.0)",
+          "oklch(80% 0.146 49.0)",
+          "oklch(95% 0.146 49.0)"
+        ]
+      },
+      "state-fail": {
+        "role": "tertiary",
+        "displayName": "Fail Red",
+        "canonical": "oklch(46.5% 0.147 24.9)",
+        "tonalRamp": [
+          "oklch(15% 0.147 24.9)",
+          "oklch(25% 0.147 24.9)",
+          "oklch(35% 0.147 24.9)",
+          "oklch(45% 0.147 24.9)",
+          "oklch(55% 0.147 24.9)",
+          "oklch(65% 0.147 24.9)",
+          "oklch(80% 0.147 24.9)",
+          "oklch(95% 0.147 24.9)"
+        ]
+      },
+      "chapter-1": {
+        "role": "tertiary",
+        "displayName": "Chapter 1 Teal",
+        "canonical": "oklch(60.1% 0.103 183.8)",
+        "tonalRamp": [
+          "oklch(15% 0.103 183.8)",
+          "oklch(25% 0.103 183.8)",
+          "oklch(35% 0.103 183.8)",
+          "oklch(45% 0.103 183.8)",
+          "oklch(55% 0.103 183.8)",
+          "oklch(65% 0.103 183.8)",
+          "oklch(80% 0.103 183.8)",
+          "oklch(95% 0.103 183.8)"
+        ]
+      },
+      "chapter-2": {
+        "role": "tertiary",
+        "displayName": "Chapter 2 Orange",
+        "canonical": "oklch(68.6% 0.165 51.7)",
+        "tonalRamp": [
+          "oklch(15% 0.165 51.7)",
+          "oklch(25% 0.165 51.7)",
+          "oklch(35% 0.165 51.7)",
+          "oklch(45% 0.165 51.7)",
+          "oklch(55% 0.165 51.7)",
+          "oklch(65% 0.165 51.7)",
+          "oklch(80% 0.165 51.7)",
+          "oklch(95% 0.165 51.7)"
+        ]
+      },
+      "chapter-3": {
+        "role": "tertiary",
+        "displayName": "Chapter 3 Violet",
+        "canonical": "oklch(52.3% 0.175 291.8)",
+        "tonalRamp": [
+          "oklch(15% 0.175 291.8)",
+          "oklch(25% 0.175 291.8)",
+          "oklch(35% 0.175 291.8)",
+          "oklch(45% 0.175 291.8)",
+          "oklch(55% 0.175 291.8)",
+          "oklch(65% 0.175 291.8)",
+          "oklch(80% 0.175 291.8)",
+          "oklch(95% 0.175 291.8)"
+        ]
+      },
+      "chapter-4": {
+        "role": "tertiary",
+        "displayName": "Chapter 4 Blue",
+        "canonical": "oklch(48.7% 0.121 257.5)",
+        "tonalRamp": [
+          "oklch(15% 0.121 257.5)",
+          "oklch(25% 0.121 257.5)",
+          "oklch(35% 0.121 257.5)",
+          "oklch(45% 0.121 257.5)",
+          "oklch(55% 0.121 257.5)",
+          "oklch(65% 0.121 257.5)",
+          "oklch(80% 0.121 257.5)",
+          "oklch(95% 0.121 257.5)"
+        ]
+      },
+      "chapter-5": {
+        "role": "tertiary",
+        "displayName": "Chapter 5 Indigo",
+        "canonical": "oklch(47.9% 0.160 288.5)",
+        "tonalRamp": [
+          "oklch(15% 0.160 288.5)",
+          "oklch(25% 0.160 288.5)",
+          "oklch(35% 0.160 288.5)",
+          "oklch(45% 0.160 288.5)",
+          "oklch(55% 0.160 288.5)",
+          "oklch(65% 0.160 288.5)",
+          "oklch(80% 0.160 288.5)",
+          "oklch(95% 0.160 288.5)"
+        ]
+      },
+      "chapter-6": {
+        "role": "tertiary",
+        "displayName": "Chapter 6 Pine",
+        "canonical": "oklch(49.9% 0.079 190.3)",
+        "tonalRamp": [
+          "oklch(15% 0.079 190.3)",
+          "oklch(25% 0.079 190.3)",
+          "oklch(35% 0.079 190.3)",
+          "oklch(45% 0.079 190.3)",
+          "oklch(55% 0.079 190.3)",
+          "oklch(65% 0.079 190.3)",
+          "oklch(80% 0.079 190.3)",
+          "oklch(95% 0.079 190.3)"
+        ]
+      },
+      "chapter-7": {
+        "role": "tertiary",
+        "displayName": "Chapter 7 Plum",
+        "canonical": "oklch(47.7% 0.119 345.7)",
+        "tonalRamp": [
+          "oklch(15% 0.119 345.7)",
+          "oklch(25% 0.119 345.7)",
+          "oklch(35% 0.119 345.7)",
+          "oklch(45% 0.119 345.7)",
+          "oklch(55% 0.119 345.7)",
+          "oklch(65% 0.119 345.7)",
+          "oklch(80% 0.119 345.7)",
+          "oklch(95% 0.119 345.7)"
+        ]
+      },
+      "chapter-8": {
+        "role": "tertiary",
+        "displayName": "Chapter 8 Brick",
+        "canonical": "oklch(49.5% 0.155 26.9)",
+        "tonalRamp": [
+          "oklch(15% 0.155 26.9)",
+          "oklch(25% 0.155 26.9)",
+          "oklch(35% 0.155 26.9)",
+          "oklch(45% 0.155 26.9)",
+          "oklch(55% 0.155 26.9)",
+          "oklch(65% 0.155 26.9)",
+          "oklch(80% 0.155 26.9)",
+          "oklch(95% 0.155 26.9)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Home hero and chapter titles. Set tight (0.94) so it reads as a block, not a line."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section heads and lesson titles — the level that organises a page."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "The heading inside a study / activity / reflect box."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All instructional prose. Supporting paragraphs cap near 540px."
+      },
+      "label": {
+        "displayName": "Label (Eyebrow)",
+        "purpose": "Uppercase micro-label above a heading. Always 800–900 weight with wide tracking."
+      }
+    },
+    "shadows": [
+      {
+        "name": "ambient-panel",
+        "value": "0 8px 28px rgba(31,45,68,.06)",
+        "purpose": "Default lift for every white card, panel and portfolio block on the learner surface."
+      },
+      {
+        "name": "ambient-panel-warm",
+        "value": "0 10px 30px rgba(32,40,48,.05)",
+        "purpose": "The /admin equivalent on the warm ground."
+      },
+      {
+        "name": "ambient-gate",
+        "value": "0 18px 45px rgba(32,40,48,.08)",
+        "purpose": "The /admin sign-in gate, the one card on an otherwise empty page."
+      },
+      {
+        "name": "card-lift",
+        "value": "0 14px 35px rgba(33,43,64,.14)",
+        "purpose": "Chapter cards only. Pairs with a translateY(-3px) hover."
+      },
+      {
+        "name": "overlay",
+        "value": "0 20px 60px rgba(0,0,0,.2)",
+        "purpose": "The Project Workspace modal shell — the only surface that covers the page."
+      },
+      {
+        "name": "focus-ring-teal",
+        "value": "0 0 0 2px rgba(21,148,135,.12)",
+        "purpose": "The active session link in the rail."
+      },
+      {
+        "name": "ring-complete",
+        "value": "0 0 0 3px #f2b400, 0 14px 35px rgba(33,43,64,.14)",
+        "purpose": "Programme-complete state on a chapter card."
+      },
+      {
+        "name": "button-drop",
+        "value": "0 1px 3px rgba(0,0,0,.12)",
+        "purpose": "The Google sign-in button only — a 1px-scale drop, not ambient lift."
+      }
+    ],
+    "motion": [
+      {
+        "name": "card-hover",
+        "value": ".2s transform",
+        "purpose": "The chapter card lifts 3px. One of only two animations in the system."
+      },
+      {
+        "name": "progress-fill",
+        "value": "width .3s",
+        "purpose": "Course and chapter progress bars filling."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "620px"
+      },
+      {
+        "name": "tablet",
+        "value": "900px"
+      },
+      {
+        "name": "admin-stack",
+        "value": "850px"
+      },
+      {
+        "name": "laptop-daymap",
+        "value": "901px–1250px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single committing action in a group — save evidence, submit, run the check.",
+      "html": "<button class=\"ds-btn-primary\">Save evidence</button>",
+      "css": ".ds-btn-primary{font-family:Inter,ui-sans-serif,system-ui,sans-serif;border:0;border-radius:10px;padding:11px 15px;font-weight:900;background:#202b3f;color:#fff;transition:background .2s}.ds-btn-primary:hover{background:#2b3950}.ds-btn-primary:focus-visible{outline:3px solid #139589;outline-offset:2px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "The non-committing companion — reset, skip, show the fallback.",
+      "html": "<button class=\"ds-btn-secondary\">Use the offline fallback</button>",
+      "css": ".ds-btn-secondary{font-family:Inter,ui-sans-serif,system-ui,sans-serif;border:0;border-radius:10px;padding:11px 15px;font-weight:900;background:#e9edf3;color:#273448;transition:background .2s}.ds-btn-secondary:hover{background:#dfe5ee}.ds-btn-secondary:focus-visible{outline:3px solid #139589;outline-offset:2px}"
+    },
+    {
+      "name": "Google Sign-in Button",
+      "kind": "button",
+      "refersTo": "button-google",
+      "description": "The only route to an account. White on navy in the top bar, full-width inside the account card.",
+      "html": "<button class=\"ds-btn-google\"><span class=\"ds-gmark\">G</span><span>Continue with Google</span></button>",
+      "css": ".ds-btn-google{font-family:Inter,ui-sans-serif,system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:10px;background:#fff;color:#182235;padding:10px 14px;font-weight:800;box-shadow:0 1px 3px rgba(0,0,0,.12)}.ds-gmark{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid #d9deea;font-weight:900;color:#4285f4;background:#fff}.ds-btn-google:focus-visible{outline:3px solid #139589;outline-offset:2px}"
+    },
+    {
+      "name": "Evidence Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Where the learner records what they observed. Inherits the page font so typed evidence reads at body size.",
+      "html": "<label class=\"ds-field\"><span>What did the model get wrong?</span><textarea placeholder=\"Describe the failure you saw.\"></textarea></label>",
+      "css": ".ds-field{font-family:Inter,ui-sans-serif,system-ui,sans-serif;display:grid;gap:4px}.ds-field>span{font-size:.88rem;font-weight:600;color:#3b4654;line-height:1.3}.ds-field textarea{font:inherit;width:100%;min-height:95px;resize:vertical;border:1px solid #cfd6df;border-radius:8px;padding:9px;background:#fff;color:#172033}.ds-field textarea:focus-visible{outline:2px solid #139589;outline-offset:1px;border-color:#139589}"
+    },
+    {
+      "name": "Chapter Card",
+      "kind": "card",
+      "refersTo": "card-chapter",
+      "description": "The home grid. One flat saturated field per chapter — the only saturated surface in the system.",
+      "html": "<button class=\"ds-chapter-card\"><div class=\"ds-card-top\"><span>CHAPTER 3</span><span>4 SESSIONS</span></div><h2>Data Detective</h2><p>Audit one real service, trace collection to risk, and write a Responsible Data Card.</p><div class=\"ds-card-bottom\"><span class=\"ds-badge-pill\">Data Detective badge</span><strong>Start →</strong></div></button>",
+      "css": ".ds-chapter-card{font-family:Inter,ui-sans-serif,system-ui,sans-serif;display:block;width:320px;min-height:270px;border:0;border-radius:20px;padding:26px;text-align:left;color:#fff;background:#6f4fc4;box-shadow:0 14px 35px rgba(33,43,64,.14);transition:.2s transform;cursor:pointer}.ds-chapter-card:hover{transform:translateY(-3px)}.ds-chapter-card:focus-visible{outline:3px solid #f2b400;outline-offset:3px}.ds-card-top,.ds-card-bottom{display:flex;justify-content:space-between;gap:10px;align-items:center}.ds-card-top{font-size:.78rem;font-weight:900;letter-spacing:.08em;opacity:.9}.ds-chapter-card h2{font-size:2.1rem;margin:35px 0 12px}.ds-chapter-card p{line-height:1.55;opacity:.95;margin:0}.ds-card-bottom{margin-top:28px}.ds-badge-pill{background:rgba(255,255,255,.17);padding:7px 10px;border-radius:8px;font-size:.82rem}"
+    },
+    {
+      "name": "Session Box Triad",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "The signature pattern. Three sibling boxes in fixed order, distinguished only by hue and a 4px top rule: study, activity, reflect.",
+      "html": "<div class=\"ds-triad\"><section class=\"ds-box ds-studybox\"><h3>What a dataset actually is</h3><p>Every model learns from examples someone chose to collect.</p><div class=\"ds-keywords\"><span>feature</span><span>label</span><span>sample</span></div></section><section class=\"ds-box ds-activitybox\"><h3>Audit one service</h3><p>Pick a service you used today and trace what it collects.</p></section><section class=\"ds-box ds-reflectbox\"><h3>In your own words</h3><p>Which collection surprised you, and why?</p></section></div>",
+      "css": ".ds-triad{font-family:Inter,ui-sans-serif,system-ui,sans-serif;display:grid;gap:14px;color:#172033}.ds-box{padding:22px;border-radius:16px}.ds-box h3{font-size:1.35rem;margin:7px 0 11px}.ds-box p{line-height:1.62;margin:0}.ds-studybox{background:#eaf7f5;border-top:4px solid #159487}.ds-activitybox{background:#fff8ea;border-top:4px solid #f2b400}.ds-reflectbox{background:#f4effb;border-top:4px solid #7754c8}.ds-keywords{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px}.ds-keywords span{background:#d8efeb;padding:6px 9px;border-radius:99px;font-size:.78rem;font-weight:800}"
+    },
+    {
+      "name": "Session Rail Link",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "The sticky 250px rail beside the lesson panel. Numeral bubble, title with muted sub-label, status marker.",
+      "html": "<nav class=\"ds-rail\"><button class=\"ds-session-link ds-active\"><span>1</span><b>Collection chains<small>Trace one service</small></b><i>●</i></button><button class=\"ds-session-link ds-done\"><span>2</span><b>Fairness challenge<small>Flawed sign-up data</small></b><i>✓</i></button></nav>",
+      "css": ".ds-rail{font-family:Inter,ui-sans-serif,system-ui,sans-serif;display:flex;flex-direction:column;gap:8px;width:250px}.ds-session-link{display:grid;grid-template-columns:28px 1fr 20px;gap:8px;align-items:start;border:1px solid #dfe4eb;background:#fff;border-radius:12px;padding:11px;text-align:left;font:inherit;color:#172033;cursor:pointer}.ds-session-link>span{display:grid;place-items:center;width:26px;height:26px;background:#eef4f4;border-radius:50%;font-weight:900;color:#138f84}.ds-session-link b{font-weight:800}.ds-session-link small{display:block;color:#7c8796;margin-top:4px;font-weight:400}.ds-session-link i{font-style:normal;color:#7c8796}.ds-session-link.ds-active{border-color:#159487;box-shadow:0 0 0 2px rgba(21,148,135,.12)}.ds-session-link.ds-done i{color:#188056}.ds-session-link:focus-visible{outline:3px solid #139589;outline-offset:2px}"
+    },
+    {
+      "name": "Completion Chip",
+      "kind": "chip",
+      "refersTo": null,
+      "description": "The only \"you finished this\" marker on a session. Pill geometry, pale green field.",
+      "html": "<span class=\"ds-complete-chip\">Session complete</span>",
+      "css": ".ds-complete-chip{font-family:Inter,ui-sans-serif,system-ui,sans-serif;display:inline-block;background:#e8f7ef;color:#147a4b;padding:8px 11px;border-radius:99px;font-weight:900;font-size:.8rem}"
+    },
+    {
+      "name": "Panel",
+      "kind": "card",
+      "refersTo": "card-panel",
+      "description": "The default white surface: lesson panel, mission card, account card, portfolio block. Border and shadow together.",
+      "html": "<section class=\"ds-panel\"><div class=\"ds-eyebrow\">YOUR MISSION</div><p>Audit one real service and prove which of its data collections you cannot justify.</p></section>",
+      "css": ".ds-panel{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:#fff;border:1px solid #e3e7ee;border-radius:18px;box-shadow:0 8px 28px rgba(31,45,68,.06);padding:28px;color:#172033}.ds-panel p{font-size:1.04rem;line-height:1.6;margin:6px 0 0}.ds-eyebrow{font-size:.76rem;font-weight:900;letter-spacing:.11em;color:#138f84}"
+    },
+    {
+      "name": "Admin Table",
+      "kind": "custom",
+      "refersTo": "table-header",
+      "description": "The coordinator surface at /admin: warm ground, grey type, navy-free except for status. Scrolls horizontally rather than widening the page.",
+      "html": "<div class=\"ds-admin-wrap\"><table class=\"ds-admin-table\"><thead><tr><th>Learner</th><th>Progress</th><th>Status</th></tr></thead><tbody><tr><td>Learner 014<small>Last active 2 days ago</small></td><td><div class=\"ds-mini-progress\"><span style=\"width:62%\"></span></div>62%</td><td><span class=\"ds-status-done\">done</span></td></tr></tbody></table></div>",
+      "css": ".ds-admin-wrap{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:#f7f7f4;padding:16px;overflow-x:auto;color:#1f2933}.ds-admin-table{width:100%;border-collapse:collapse}.ds-admin-table th{text-align:left;padding:12px;border-bottom:2px solid #ecece7;color:#667;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}.ds-admin-table td{padding:15px 12px;border-bottom:1px solid #ecece7;vertical-align:middle}.ds-admin-table td small{display:block;color:#777;margin-top:4px}.ds-mini-progress{width:130px;height:8px;background:#ecece7;border-radius:99px;overflow:hidden;margin-bottom:5px}.ds-mini-progress span{display:block;height:100%;background:#222}.ds-status-done{font-size:.8rem;font-weight:800;border-radius:99px;padding:7px 10px;background:#e9f8ee;color:#216e39}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Workshop Notebook",
+    "overview": "This is not a course you read; it is a bench you work at. The interface behaves like a practical notebook kept open beside the task — a page of tinted paper with white panels laid on it, each panel holding one step of the work. The three recurring task boxes carry the whole pedagogy in colour alone: teal when you are taking something in, amber when you are doing something, violet when you are writing down what you found. A learner who has done two sessions knows which box demands their hands without reading a word of it.\n\nSurfaces are soft-cornered and utilitarian. Rounded white cards, thin cool-grey rules, one faint wide shadow, and a body of straightforward Inter set generously enough to read on a shared training-room laptop. Nothing is decorative for its own sake; every coloured band, pill and rule is a wayfinding signal for where the learner is in the loop. Expression is concentrated in two places — the eight saturated chapter cards on the home grid, and the oversized display headline — and everything between those is deliberately quiet so the learner's own recorded work is the loudest thing on the page.\n\nThe system runs in two tones on purpose. The learner's surface is cool and coloured: a blue-grey paper, a navy structural voice, a teal accent. The coordinator's surface at /admin is warm and almost entirely uncoloured — warm off-white paper, grey type, near-black bars — because reviewing twenty learners' evidence is scanning work, not learning work, and colour there would compete with the data rather than direct it. Same shapes, same type, different temperature.",
+    "keyCharacteristics": [
+      "Tinted paper ground, white panels, one soft wide shadow — depth by lift, never by outline weight.",
+      "Colour is functional: three task-box colours, eight chapter identities, three state colours. No decorative hue.",
+      "Heavy label weights (800–900) at small sizes with wide tracking; light structural weight everywhere else.",
+      "Oversized display type against otherwise restrained body setting.",
+      "Two temperatures: cool for learning, warm-neutral for review."
+    ],
+    "rules": [
+      {
+        "name": "The Three-Box Rule",
+        "body": "Teal, amber and violet are spoken for. A teal top rule means read, amber means do, violet means reflect. Never use one of the three as decoration on a surface that is not that kind of box; the learner navigates the session by that colour and nothing else.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Field Per Chapter Rule",
+        "body": "A chapter's identity colour appears once — as the flat field of its card on the home grid. It does not tint the chapter's headings, boxes, buttons or panels. Inside a chapter, the system palette takes over.",
+        "section": "colors"
+      },
+      {
+        "name": "The Warm Side Rule",
+        "body": "Anything at /admin uses the warm neutral ground and grey type. Accent colour on the coordinator's surface is reserved for status, never for structure.",
+        "section": "colors"
+      },
+      {
+        "name": "The Heavy Label Rule",
+        "body": "Small type is never quiet type. Anything under 0.85rem is set at 800 or 900 with wide tracking, because it is read on a shared low-end laptop at arm's length. A thin 0.75rem caption does not exist in this system.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Family Rule",
+        "body": "No second typeface. Hierarchy comes from size, weight and tracking; introducing a display or mono family would break the notebook's plainness.",
+        "section": "typography"
+      },
+      {
+        "name": "The Shrinkable Grid Rule",
+        "body": "Every grid child carries min-width: 0. Wide evidence tables scroll inside their panel; they never widen the page. This is load-bearing — the system is full of learner-authored tables on a 1280px laptop.",
+        "section": "layout"
+      },
+      {
+        "name": "The 88px Rule",
+        "body": "The top bar is sticky. Anything else that sticks offsets by 88px so it never hides beneath it.",
+        "section": "layout"
+      },
+      {
+        "name": "The Border-And-Shadow Rule",
+        "body": "A white panel gets both a 1px rule and the ambient shadow. Never shadow alone — on a shared low-end laptop at low brightness the shadow disappears and the panel edge must survive.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Coloured Edge Rule",
+        "body": "A box declares its kind with a coloured edge and a pale tint of the same hue — never with a saturated fill behind text. The only saturated fields in the system are the eight chapter cards.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do place every white panel on the tinted ground with both a 1px cool rule and the ambient shadow (0 8px 28px rgba(31,45,68,.06)).",
+      "Do declare a box's kind with a 4px coloured top rule over a pale tint of the same hue — teal read, amber do, violet reflect.",
+      "Do set anything under 0.85rem at 800–900 weight with 0.06–0.11em tracking.",
+      "Do give every grid child min-width: 0 so learner tables scroll inside their panel instead of widening the page.",
+      "Do keep the /admin surface on the warm ground with grey type, reserving colour there for status only.",
+      "Do offset anything sticky by 88px to clear the sticky top bar.",
+      "Do let evidence the learner typed render at full body size — inputs inherit the page font on purpose."
+    ],
+    "donts": [
+      "Don't dim a whole container to express a disabled or locked state. The locked chapter card does this today (opacity: .58 over the card and its text) and drops its instruction to 1.5:1 — a documented defect, not a pattern to copy. Dim the surface, keep the text at full contrast.",
+      "Don't add a ninth flat saturated colour, or let a chapter's identity colour leak past its card into headings, boxes or buttons.",
+      "Don't introduce a second typeface, or a thin small caption.",
+      "Don't stack shadows to express nesting; a nested block changes tint and drops its shadow entirely.",
+      "Don't reach for gamified edtech furniture — no mascots, streaks, confetti, XP meters or cartoon rewards. Badges here mark demonstrated work, and the visual language must not suggest they mark activity.",
+      "Don't animate beyond the two motions that exist: the chapter card's 3px hover lift and the progress bar's width. This system is quiet in motion.",
+      "Don't invent a new shadow or radius value. Six near-duplicate shadows and thirteen radii already exist across four stylesheets; extend the vocabulary above rather than adding to the sprawl."
+    ]
+  }
+}

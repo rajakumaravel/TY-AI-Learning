@@ -232,7 +232,7 @@ test('Chapter 8 is the last chapter, so the portal reports the programme complet
   assert.equal(course.blocks.length,8);
   assert.equal(course.blocks[course.blocks.length-1].id,'block8');
   assert.match(app,/last=i===COURSE\.blocks\.length-1/);
-  assert.match(app,/Badge earned: \$\{b\.badge\} ✓ · Programme complete/);
+  assert.match(app,/Badge earned: \$\{b\.badge\} · Programme complete/);
   assert.match(app,/\$\{done&&last\?'programme-complete':''\}/);
   assert.match(app,/COURSE\.blocks\.every\(b=>blockQualified\(b\)\).*class="programme-complete"/);
   assert.ok(styles.includes('.programme-complete{'),'the programme-complete banner is styled');
