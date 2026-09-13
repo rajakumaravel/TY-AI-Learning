@@ -11,15 +11,15 @@
 |---|---|
 | Roadmap phases 1–10 | complete and accepted on Preview |
 | Cloudflare Production deployments | none — every deployment is Preview |
-| Latest `preview-main` | `380fa82`, deployment `f58928e7` (API 94, browser 234, walkthrough 257) |
-| `design-audit` | 4 commits ahead of `main`, unmerged |
+| Latest `preview-main` | `64fad52`, deployment `2a80d962` (API 94, browser 235, walkthrough 258) |
+| `design-audit` | merged via PR #24 on 2026-09-13 |
 | Supabase migrations | `20260910115137` and `20260910120000` applied remotely; local and remote in sync |
 
 ## Step 0 — decide what ships
 
-`design-audit` carries `78965e0` ("close the student portal's data-loss, safeguarding and a11y gaps") and `30b97d7`. Those are student-facing safeguarding and data-loss fixes, so they should ship in the first Production release rather than after it.
+Done for this release: the portal hardening merged via PR #24 on 2026-09-13, so the safeguarding, data-loss and accessibility fixes are on `main` and will ship with the first Production deployment.
 
-Either merge `design-audit` into `main` through a PR first, or consciously release `main` at `380fa82` and follow up. Do not release a commit that is not on `main`: the workflow defaults to `main` and the `head_sha` input exists for re-releasing an older commit, not for shipping unmerged work.
+For any future release, do not deploy a commit that is not on `main`: the workflow defaults to `main` and the `head_sha` input exists for re-releasing an older commit, not for shipping unmerged work.
 
 ## Step 1 — verify the release commit on Preview
 
