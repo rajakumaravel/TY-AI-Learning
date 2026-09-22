@@ -60,7 +60,11 @@ function show(id){['homeView','blockView','portfolioView'].forEach(x=>document.g
 let routing=false;
 function setRoute(hash){if(typeof window==='undefined'||!window.location)return;if(window.location.hash===hash)return;routing=true;window.location.hash=hash;setTimeout(()=>{routing=false},0)}
 function currentRoute(){const raw=(typeof window!=='undefined'&&window.location?window.location.hash:'')||'';const parts=raw.replace(/^#\/?/,'').split('/').filter(Boolean);return {view:parts[0]||'',sessionId:parts[1]||''}}
-function applyRoute(){if(routing)return;const {view,sessionId}=currentRoute();if(view==='portfolio'){renderPortfolio();show('portfolioView');return}const match=/^b(\d+)$/.exec(view);if(match){const i=COURSE.blocks.findIndex(b=>Number(b.number)===Number(match[1]));if(i>=0){openBlock(i,sessionId);return}}renderHome();show('homeView')}
+// A hashchange that only describes where the learner already is must not re-render: setRoute's `routing` guard
+// clears on a zero timer, so a late hashchange event used to rebuild the whole lesson panel underneath someone
+// mid-activity, dropping their focus and detaching the control they were about to click.
+function atRoute(i,sessionId){return activeBlock===COURSE.blocks[i]&&Boolean(activeSession)&&(!sessionId||activeSession.id===sessionId)&&!document.getElementById('blockView').classList.contains('hidden')}
+function applyRoute(){if(routing)return;const {view,sessionId}=currentRoute();if(view==='portfolio'){renderPortfolio();show('portfolioView');return}const match=/^b(\d+)$/.exec(view);if(match){const i=COURSE.blocks.findIndex(b=>Number(b.number)===Number(match[1]));if(i>=0){if(!atRoute(i,sessionId))openBlock(i,sessionId);return}}renderHome();show('homeView')}
 
 async function scheduleSync(){saveLocal();renderProgress();if(!user||cloudError){setSync(cloudError?'Saved on this device only':'Saved on this device','');return}clearTimeout(syncTimer);setSync('Saving…');syncTimer=setTimeout(async()=>{try{await api('progress',{method:'PUT',body:JSON.stringify({state})});setSync('Saved to your account','online')}catch{setSync('Saved on this device','error')}},400)}
 

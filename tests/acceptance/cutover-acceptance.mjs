@@ -69,7 +69,7 @@ try {
   const save = await api('projects/block2', a.token, { method: 'PUT', body: JSON.stringify({ workspace }) });
   check('student A PUT /api/projects/block2 ok', save.status === 200 && save.body?.project?.status === 'in_progress', JSON.stringify(save.body));
   const projB = await api('projects/block2', b.token);
-  check('student B GET project is own empty workspace', projB.status === 200 && projB.body?.project?.status === 'not_started' && (projB.body?.project?.workspace?.workLog || []).length === 0);
+  check('student B GET project is own empty workspace, never student A\'s', projB.status === 200 && (projB.body?.project?.workspace?.workLog || []).length === 0 && !(projB.body?.project?.workspace?.finalRecommendation));
 
   // RLS: browser role reads own rows only, and cannot write
   const rlsSelf = await rest('student_projects', `select=user_id,project_id&user_id=eq.${a.id}`, a.token);
