@@ -146,9 +146,18 @@ export const CHAPTER6_DISCLOSURE = [
 export const CHAPTER6_RECOMMENDATION = 'Rely on the €249.00 partial subtotal from seven eligible lines and the checked category breakdown, not a complete budget. Keep E07 conflicts, E09 missing quantity and E10 invalid quantity unresolved until source checks. Remove the attendance prediction and keep caveats. A human checks every claim and the events lead approves before spending. Disclose AI tutoring and editing, the sample route and the checks I performed; check training centre expectations for assessed work.';
 
 // Real clicks and typing for all eight sessions, capstone and project; no live chatbot dependency.
+// Server progress arrives after the page has already rendered. The chapter cards used to double as that signal —
+// a later chapter stayed locked until the hydrated state said otherwise — but every chapter is open from the start
+// now (ADR-009), so a script that starts typing immediately can have its work overwritten by the arriving state.
+// Anchor on the progress figure instead: it is non-zero only once the learner's own state is in the page.
+export async function waitForProgress(page, timeout = 20000) {
+  await page.waitForFunction(() => Number((document.getElementById('coursePct')?.textContent || '').replace('%','')) > 0, null, { timeout });
+}
+
 export async function completeChapter6UI(page, afterSession = async () => {}) {
+  await waitForProgress(page);
   await page.click('#homeBtn');
-  await page.waitForFunction(() => { const b=document.querySelector('[data-block="5"]');return b&&!b.disabled&&!b.classList.contains('locked'); }, null, { timeout: 15000 });
+  await page.waitForSelector('[data-block="5"]', { timeout: 15000 });
   await page.click('[data-block="5"]');
   await page.waitForSelector('#labBanner .lab-stage');
   check('Chapter 6 has six stages and book myth-busters', (await page.$$('#labBanner .lab-stage')).length===6 && /automating the right parts/i.test(await page.textContent('#mythBusters')));
@@ -310,8 +319,9 @@ export async function fillDecisionCanvas(page) {
 
 // Real clicks and typing for all eight sessions, the branching simulator, the capstone and the project.
 export async function completeChapter7UI(page, afterSession = async () => {}) {
+  await waitForProgress(page);
   await page.click('#homeBtn');
-  await page.waitForFunction(() => { const b=document.querySelector('[data-block="6"]');return b&&!b.disabled&&!b.classList.contains('locked'); }, null, { timeout: 15000 });
+  await page.waitForSelector('[data-block="6"]', { timeout: 15000 });
   await page.click('[data-block="6"]');
   await page.waitForSelector('#labBanner .lab-stage');
   check('Chapter 7 has six stages and the book myth-busters', (await page.$$('#labBanner .lab-stage')).length===6 && /AGI is a hypothesis/i.test(await page.textContent('#mythBusters')));
@@ -335,9 +345,10 @@ export async function completeChapter7UI(page, afterSession = async () => {}) {
       const revealed=(await page.textContent('#decisionNode')).trim();
       await page.waitForTimeout(2500);
       await page.reload({waitUntil:'load'});
-      await page.waitForFunction(()=>/Welcome/.test(document.getElementById('welcomeName')?.textContent||''),null,{timeout:15000});
-      await page.click('[data-block="6"]'); await page.waitForSelector('#labBanner .lab-stage');
-      await page.click('[data-session="b7s4"]'); await page.waitForSelector('.decision-lab',{timeout:15000});
+      // The hash restores chapter 7 at b7s4, so the reload lands on the session itself and there is no home grid
+      // to click back through; the lab is re-rendered once the learner's own state has arrived.
+      await waitForProgress(page);
+      await page.waitForSelector('.decision-lab',{timeout:15000});
       check('b7s4 restores the unfinished path and revealed node after a reload',(await page.textContent('.decision-path')).includes(CHAPTER7_RUNS[0].start[2].slice(0,24))&&(await page.textContent('#decisionNode')).trim()===revealed);
       await decisionStep(page,...CHAPTER7_RUNS[0].follow);
       await page.waitForSelector('button#decisionRecord',{timeout:10000});
@@ -476,8 +487,9 @@ export const CHAPTER8_RECOMMENDATION = 'I recommend the printed five-minute slot
 // Real clicks and typing for all eight Chapter 8 sessions, including b8s5 by the fallback route with the tool never
 // acknowledged, then the capstone, the programme-complete state and the portfolio project.
 export async function completeChapter8UI(page, afterSession = async () => {}) {
+  await waitForProgress(page);
   await page.click('#homeBtn');
-  await page.waitForFunction(() => { const b=document.querySelector('[data-block="7"]');return b&&!b.disabled&&!b.classList.contains('locked'); }, null, { timeout: 15000 });
+  await page.waitForSelector('[data-block="7"]', { timeout: 15000 });
   await page.click('[data-block="7"]');
   await page.waitForSelector('#labBanner .lab-stage');
   check('Chapter 8 has six stages and the book myth-busters', (await page.$$('#labBanner .lab-stage')).length===6 && /least complex one that works/i.test(await page.textContent('#mythBusters')));
