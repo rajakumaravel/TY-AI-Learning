@@ -35,9 +35,9 @@ try {
   const getB = await api('progress', b.token);
   check('student B sees empty progress, not A\'s', getB.status === 200 && !getB.body?.state?.marker);
 
-  // Chapter capstone gate (server side)
+  // Chapter capstones are open: no session-completion or previous-chapter prerequisite, only answer quality
   const early = await api('chapter-assessment/block1', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE1_ANSWERS }) });
-  check('capstone rejected (409) before chapter sessions complete', early.status === 409, `status ${early.status}`);
+  check('capstone accepted before chapter sessions complete', early.status === 200, `status ${early.status}`);
   const done = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { ...state, completed: CHAPTER1_SESSIONS } }) });
   check('student A marks all Chapter 1 sessions complete', done.status === 200);
   const thin = await api('chapter-assessment/block1', a.token, { method: 'POST', body: JSON.stringify({ answers: { q1: 'too short', q2: 'x', q3: 'y' } }) });
@@ -46,13 +46,13 @@ try {
   check('capstone accepted after sessions complete', cap.status === 200 && Boolean(cap.body?.assessment?.submittedAt) && Boolean(cap.body?.assessment?.suggestedLevel), JSON.stringify(cap.body));
   check('capstone unknown chapter is 404', (await api('chapter-assessment/block9', a.token, { method: 'POST', body: '{}' })).status === 404);
 
-  // Server-side gate: forged qualification is discarded, Chapter 2 writes need Chapter 1 qualified
+  // Forged qualification is still discarded, but no chapter write depends on the previous chapter
   const forged = await api('progress', b.token, { method: 'PUT', body: JSON.stringify({ state: { completed: [], chapterAssessments: { block1: { submittedAt: '2026-01-01T00:00:00Z', level: 'Going further', score: 9 } } } }) });
   const forgedRead = await api('progress', b.token);
   check('forged chapterAssessments in progress PUT is discarded', forged.status === 200 && forgedRead.status === 200 && !forgedRead.body?.state?.chapterAssessments?.block1, JSON.stringify(forgedRead.body?.state));
-  check('student B Chapter 2 capstone is 409 without Chapter 1 qualification', (await api('chapter-assessment/block2', b.token, { method: 'POST', body: '{}' })).status === 409);
-  check('student B Chapter 2 project save is 409 without Chapter 1 qualification', (await api('projects/block2', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
-  check('student B Chapter 2 project submit is 409 without Chapter 1 qualification', (await api('projects/block2/submit', b.token, { method: 'POST' })).status === 409);
+  check('student B Chapter 2 capstone with no answers is 400, not a chapter gate', (await api('chapter-assessment/block2', b.token, { method: 'POST', body: '{}' })).status === 400);
+  check('student B Chapter 2 project save is open without Chapter 1 qualification', (await api('projects/block2', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 200);
+  check('student B Chapter 2 project submit is 400 for empty work, not a chapter gate', (await api('projects/block2/submit', b.token, { method: 'POST' })).status === 400);
   const sessionA = await api('session', a.token);
   check('student A session state carries server-derived Chapter 1 qualification', Boolean(sessionA.body?.state?.chapterAssessments?.block1?.submittedAt) && sessionA.body?.state?.chapterAssessments?.block1?.level === cap.body?.assessment?.suggestedLevel);
 
@@ -112,15 +112,15 @@ try {
   check('admin /api/admin/analytics returns aggregates', analytics.status === 200, JSON.stringify(analytics.body));
   check('pilot analytics body carries no learner id, display name or reviewed_by', noIdentifiers(JSON.stringify(analytics.body), [a.id, b.id, admin.id, a.displayName, b.displayName, admin.displayName]), JSON.stringify(analytics.body));
 
-  // Chapter 2 → 3 gate: Chapter 3 writes need Chapter 2 qualified, then the six Chapter 3 sessions
-  check('student A Chapter 3 capstone is 409 without Chapter 2 qualification', (await api('chapter-assessment/block3', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE3_ANSWERS }) })).status === 409);
-  check('student A Chapter 3 project save is 409 without Chapter 2 qualification', (await api('projects/block3', a.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
+  // Chapter 3 writes are open whether or not Chapter 2 has been qualified
+  check('student A Chapter 3 capstone accepted without Chapter 2 qualification', (await api('chapter-assessment/block3', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE3_ANSWERS }) })).status === 200);
+  check('student A Chapter 3 project save accepted without Chapter 2 qualification', (await api('projects/block3', a.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 200);
   const done2 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { ...state, completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS] } }) });
   check('student A marks all Chapter 2 sessions complete', done2.status === 200);
   const cap2 = await api('chapter-assessment/block2', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE2_ANSWERS }) });
   check('Chapter 2 capstone accepted after sessions complete', cap2.status === 200 && Boolean(cap2.body?.assessment?.submittedAt), JSON.stringify(cap2.body));
   const cap3early = await api('chapter-assessment/block3', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE3_ANSWERS }) });
-  check('Chapter 3 capstone is 409 before Chapter 3 sessions complete', cap3early.status === 409, `status ${cap3early.status}`);
+  check('Chapter 3 capstone accepted before Chapter 3 sessions complete', cap3early.status === 200, `status ${cap3early.status}`);
   const done3 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { ...state, completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS, ...CHAPTER3_SESSIONS] } }) });
   check('student A marks all Chapter 3 sessions complete', done3.status === 200);
   const cap3 = await api('chapter-assessment/block3', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE3_ANSWERS }) });
@@ -138,11 +138,11 @@ try {
   check('student A PUT /api/projects/block3 ok after Chapter 2 qualified', save3.status === 200 && save3.body?.project?.status === 'in_progress' && save3.body?.project?.brief?.chapter === 'Data Detective', JSON.stringify(save3.body));
   const submit3 = await api('projects/block3/submit', a.token, { method: 'POST' });
   check('student A submits Chapter 3 project', submit3.status === 200 && submit3.body?.project?.status === 'submitted' && submit3.body?.project?.submittedSnapshot?.finalRecommendation === workspace3.finalRecommendation, JSON.stringify(submit3.body));
-  check('student B Chapter 3 project save is still 409 without Chapter 2 qualification', (await api('projects/block3', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
+  check('student B Chapter 3 project save is open without Chapter 2 qualification', (await api('projects/block3', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 200);
 
-  // Chapter 3 → 4 gate: student A is Chapter 3 qualified (cap3 above), so Chapter 4 needs only its ten sessions
+  // Chapter 4 capstone needs neither Chapter 3 qualification nor its own ten sessions
   const cap4early = await api('chapter-assessment/block4', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE4_ANSWERS }) });
-  check('Chapter 4 capstone is 409 before Chapter 4 sessions complete', cap4early.status === 409, `status ${cap4early.status}`);
+  check('Chapter 4 capstone accepted before Chapter 4 sessions complete', cap4early.status === 200, `status ${cap4early.status}`);
   const done4 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { ...state, completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS, ...CHAPTER3_SESSIONS, ...CHAPTER4_SESSIONS] } }) });
   check('student A marks all Chapter 4 sessions complete', done4.status === 200);
   const cap4 = await api('chapter-assessment/block4', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE4_ANSWERS }) });
@@ -160,29 +160,29 @@ try {
   check('student A PUT /api/projects/block4 ok after Chapter 3 qualified, brief carries its chapter', save4.status === 200 && save4.body?.project?.status === 'in_progress' && typeof save4.body?.project?.brief?.chapter === 'string' && save4.body.project.brief.chapter.length > 0, JSON.stringify(save4.body));
   const submit4 = await api('projects/block4/submit', a.token, { method: 'POST' });
   check('student A submits Chapter 4 project', submit4.status === 200 && submit4.body?.project?.status === 'submitted' && submit4.body?.project?.submittedSnapshot?.finalRecommendation === workspace4.finalRecommendation, JSON.stringify(submit4.body));
-  check('student B Chapter 4 project save is 409 without Chapter 3 qualification', (await api('projects/block4', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
+  check('student B Chapter 4 project save is open without Chapter 3 qualification', (await api('projects/block4', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 200);
 
-  // Chapter 6 writes are rejected before Chapter 5 qualification, including project submission.
-  for (const [path,method,body] of [['chapter-assessment/block6','POST',{answers:CAPSTONE6_ANSWERS}],['projects/block6','PUT',{workspace:{}}],['projects/block6/submit','POST',{}]]) {
+  // Chapter 6 writes are open before Chapter 5 qualification; only an empty project submission is refused, on its own merits.
+  for (const [path,method,body,want] of [['chapter-assessment/block6','POST',{answers:CAPSTONE6_ANSWERS},200],['projects/block6','PUT',{workspace:{}},200],['projects/block6/submit','POST',{},400]]) {
     const res=await api(path,a.token,{method,body:JSON.stringify(body)});
-    check(`${path} is 409 before Chapter 5 qualification`,res.status===409);
+    check(`${path} is ${want} without Chapter 5 qualification`,res.status===want,`status ${res.status}`);
   }
-  // Chapter 7 writes are rejected before Chapter 6 qualification, including project submission.
-  for (const [path,method,body] of [['chapter-assessment/block7','POST',{answers:CAPSTONE7_ANSWERS}],['projects/block7','PUT',{workspace:{}}],['projects/block7/submit','POST',{}]]) {
+  // Chapter 7 writes are open before Chapter 6 qualification; only an empty project submission is refused, on its own merits.
+  for (const [path,method,body,want] of [['chapter-assessment/block7','POST',{answers:CAPSTONE7_ANSWERS},200],['projects/block7','PUT',{workspace:{}},200],['projects/block7/submit','POST',{},400]]) {
     const res=await api(path,a.token,{method,body:JSON.stringify(body)});
-    check(`${path} is 409 before Chapter 6 qualification`,res.status===409);
+    check(`${path} is ${want} without Chapter 6 qualification`,res.status===want,`status ${res.status}`);
   }
-  // Chapter 8 writes are rejected before Chapter 7 qualification, including project submission.
-  for (const [path,method,body] of [['chapter-assessment/block8','POST',{answers:CAPSTONE8_ANSWERS}],['projects/block8','PUT',{workspace:{}}],['projects/block8/submit','POST',{}]]) {
+  // Chapter 8 writes are open before Chapter 7 qualification; only an empty project submission is refused, on its own merits.
+  for (const [path,method,body,want] of [['chapter-assessment/block8','POST',{answers:CAPSTONE8_ANSWERS},200],['projects/block8','PUT',{workspace:{}},200],['projects/block8/submit','POST',{},400]]) {
     const res=await api(path,a.token,{method,body:JSON.stringify(body)});
-    check(`${path} is 409 before Chapter 7 qualification`,res.status===409);
+    check(`${path} is ${want} without Chapter 7 qualification`,res.status===want,`status ${res.status}`);
   }
-  // Chapter 4 → 5 gate: student A is Chapter 4 qualified (cap4 above), so Chapter 5 needs only its nine sessions
+  // Chapter 5 capstone is open before its nine sessions are complete
   const cap5early = await api('chapter-assessment/block5', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE5_ANSWERS }) });
-  check('Chapter 5 capstone is 409 before Chapter 5 sessions complete', cap5early.status === 409, `status ${cap5early.status}`);
+  check('Chapter 5 capstone accepted before Chapter 5 sessions complete', cap5early.status === 200, `status ${cap5early.status}`);
   const done5 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { ...state, completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS, ...CHAPTER3_SESSIONS, ...CHAPTER4_SESSIONS, ...CHAPTER5_SESSIONS] } }) });
   check('student A marks all Chapter 5 sessions complete', done5.status === 200);
-  check('Chapter 5 practical completion alone does not unlock Chapter 6 project', (await api('projects/block6',a.token,{method:'PUT',body:JSON.stringify({workspace:{}})})).status===409);
+  check('Chapter 6 project is open regardless of Chapter 5 qualification', (await api('projects/block6',a.token,{method:'PUT',body:JSON.stringify({workspace:{}})})).status===200);
   const cap5 = await api('chapter-assessment/block5', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE5_ANSWERS }) });
   check('Chapter 5 capstone accepted after sessions complete', cap5.status === 200 && Boolean(cap5.body?.assessment?.submittedAt) && Boolean(cap5.body?.assessment?.suggestedLevel), JSON.stringify(cap5.body));
   const workspace5 = {
@@ -198,9 +198,8 @@ try {
   check('student A PUT /api/projects/block5 ok after Chapter 4 qualified, brief carries its chapter', save5.status === 200 && save5.body?.project?.status === 'in_progress' && typeof save5.body?.project?.brief?.chapter === 'string' && save5.body.project.brief.chapter.length > 0, JSON.stringify(save5.body));
   const submit5 = await api('projects/block5/submit', a.token, { method: 'POST' });
   check('student A submits Chapter 5 project', submit5.status === 200 && submit5.body?.project?.status === 'submitted' && submit5.body?.project?.submittedSnapshot?.finalRecommendation === workspace5.finalRecommendation, JSON.stringify(submit5.body));
-  check('student B Chapter 5 project save is 409 without Chapter 4 qualification', (await api('projects/block5', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 409);
-  // Chapter 5 qualified; Chapter 6 practical sessions and assessment are now available.
-  check('Chapter 6 capstone requires its own eight sessions',(await api('chapter-assessment/block6',a.token,{method:'POST',body:JSON.stringify({answers:CAPSTONE6_ANSWERS})})).status===409);
+  check('student B Chapter 5 project save is open without Chapter 4 qualification', (await api('projects/block5', b.token, { method: 'PUT', body: JSON.stringify({ workspace: {} }) })).status === 200);
+  check('Chapter 6 capstone does not require its own eight sessions',(await api('chapter-assessment/block6',a.token,{method:'POST',body:JSON.stringify({answers:CAPSTONE6_ANSWERS})})).status===200);
   const activity6=Object.fromEntries(Object.entries(CHAPTER6_FIELDS).map(([sid,fields])=>[sid,{...Object.fromEntries(fields.map((v,i)=>[i,v])),...(['b6s1','b6s2','b6s4','b6s6'].includes(sid)?{ack:true,mode:'fallback'}:{})}]));
   activity6.b6s7=Object.fromEntries(CHAPTER6_DISCLOSURE.map((r,i)=>[i,Object.fromEntries(['scenario','decision','reason','wording'].map((k,j)=>[k,r[j]]))]));
   const done6=await api('progress',a.token,{method:'PUT',body:JSON.stringify({state:{...state,completed:[...CHAPTER1_SESSIONS,...CHAPTER2_SESSIONS,...CHAPTER3_SESSIONS,...CHAPTER4_SESSIONS,...CHAPTER5_SESSIONS,...CHAPTER6_SESSIONS],activity:activity6}})});
@@ -216,10 +215,9 @@ try {
   check('Chapter 6 project write succeeds after Chapter 5 qualification',save6.status===200&&save6.body?.project?.brief?.chapter==='AI for Learning & Work');
   const submit6=await api('projects/block6/submit',a.token,{method:'POST'});
   check('Chapter 6 submitted snapshot retains cleaning, review and disclosure evidence',submit6.status===200&&submit6.body?.project?.status==='submitted'&&(submit6.body?.project?.submittedSnapshot?.evidence||[]).length===workspace6.evidence.length&&workspace6.evidence.every((e,i)=>{const got=(submit6.body?.project?.submittedSnapshot?.evidence||[])[i]||{};return got.label===e.label&&got.note===e.note&&got.url===e.url})&&submit6.body?.project?.submittedSnapshot?.finalRecommendation===CHAPTER6_RECOMMENDATION);
-  check('student B Chapter 6 remains locked',(await api('projects/block6',b.token,{method:'PUT',body:JSON.stringify({workspace:workspace6})})).status===409);
-  // Chapter 6 → 7 gate: Chapter 6 is qualified above, so Chapter 7 needs only its own eight sessions.
+  check('student B Chapter 6 project is open',(await api('projects/block6',b.token,{method:'PUT',body:JSON.stringify({workspace:workspace6})})).status===200);
   const cap7early=await api('chapter-assessment/block7',a.token,{method:'POST',body:JSON.stringify({answers:CAPSTONE7_ANSWERS})});
-  check('Chapter 7 capstone is 409 before its eight sessions complete',cap7early.status===409,`status ${cap7early.status}`);
+  check('Chapter 7 capstone accepted before its eight sessions complete',cap7early.status===200,`status ${cap7early.status}`);
   const decisionRuns=CHAPTER7_RUNS.map((run,i)=>({id:i+1,path:[{nodeId:'start',choiceId:run.start[0],evidenceId:run.start[1],reason:run.start[2]},{nodeId:`${run.start[0]}-review`,choiceId:run.follow[0],evidenceId:run.follow[1],reason:run.follow[2]}],terminalId:`${run.start[0]}-${run.follow[0]}`}));
   const activity7={
     b7s1:Object.fromEntries(CHAPTER7_CHAINS.b7s1.map((r,i)=>[i,Object.fromEntries(['claim','status','basis','check'].map((k,j)=>[k,r[j]]))])),
@@ -250,10 +248,10 @@ try {
   check('Chapter 7 project write succeeds after Chapter 6 qualification',save7.status===200&&save7.body?.project?.status==='in_progress'&&save7.body?.project?.brief?.chapter==='Our AI Future',JSON.stringify(save7.body?.project?.brief||null));
   const submit7=await api('projects/block7/submit',a.token,{method:'POST'});
   check('Chapter 7 submitted snapshot retains all three paths, the three futures and the recommendation',submit7.status===200&&submit7.body?.project?.status==='submitted'&&(submit7.body?.project?.submittedSnapshot?.evidence||[]).length===workspace7.evidence.length&&workspace7.evidence.every((e,i)=>{const got=(submit7.body?.project?.submittedSnapshot?.evidence||[])[i]||{};return got.label===e.label&&got.note===e.note&&got.url===e.url})&&submit7.body?.project?.submittedSnapshot?.finalRecommendation===CHAPTER7_RECOMMENDATION);
-  check('student B Chapter 7 remains locked',(await api('projects/block7',b.token,{method:'PUT',body:JSON.stringify({workspace:workspace7})})).status===409);
+  check('student B Chapter 7 project is open',(await api('projects/block7',b.token,{method:'PUT',body:JSON.stringify({workspace:workspace7})})).status===200);
   // Chapter 7 → 8 gate: Chapter 7 is qualified above, so Chapter 8 needs only its own eight sessions.
   const cap8early=await api('chapter-assessment/block8',a.token,{method:'POST',body:JSON.stringify({answers:CAPSTONE8_ANSWERS})});
-  check('Chapter 8 capstone is 409 before its eight sessions complete',cap8early.status===409,`status ${cap8early.status}`);
+  check('Chapter 8 capstone accepted before its eight sessions complete',cap8early.status===200,`status ${cap8early.status}`);
   const chain8=(rows,keys)=>Object.fromEntries(rows.map((r,i)=>[i,Object.fromEntries(keys.map((k,j)=>[k,r[j]]))]));
   const activity8={
     b8s1:chain8(CHAPTER8_CHAINS.b8s1,['problem','who','tests','verdict']),
@@ -292,7 +290,7 @@ try {
   check('Chapter 8 project keeps all nine portfolio deliverables inside the evidence cap',(save8.body?.project?.workspace?.evidence||[]).length===9&&workspace8.evidence.every((e,i)=>(save8.body?.project?.workspace?.evidence||[])[i]?.label===e.label));
   const submit8=await api('projects/block8/submit',a.token,{method:'POST'});
   check('Chapter 8 submitted snapshot retains the nine deliverables and the final recommendation',submit8.status===200&&submit8.body?.project?.status==='submitted'&&(submit8.body?.project?.submittedSnapshot?.evidence||[]).length===workspace8.evidence.length&&workspace8.evidence.every((e,i)=>{const got=(submit8.body?.project?.submittedSnapshot?.evidence||[])[i]||{};return got.label===e.label&&got.note===e.note&&got.url===e.url})&&submit8.body?.project?.submittedSnapshot?.finalRecommendation===CHAPTER8_RECOMMENDATION);
-  check('student B Chapter 8 remains locked',(await api('projects/block8',b.token,{method:'PUT',body:JSON.stringify({workspace:workspace8})})).status===409);
+  check('student B Chapter 8 project is open',(await api('projects/block8',b.token,{method:'PUT',body:JSON.stringify({workspace:workspace8})})).status===200);
 } catch (error) {
   check('run completed without exception', false, error.message);
 } finally {

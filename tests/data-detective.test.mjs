@@ -132,10 +132,10 @@ test('chapter page renders myth-busters, self-check and level-up for blocks that
   for(const sel of ['.myth-busters:empty{display:none}','.self-check{','.level-up{'])assert.ok(css.includes(sel),`css ${sel}`);
 });
 
-test('server requires the six Chapter 3 sessions before the capstone',()=>{
+test('Chapter 3 carries its six sessions and the server gates none of them',()=>{
   const fn=read('functions/api/[[path]].js');
-  assert.ok(fn.includes("block3:['b3s1','b3s2','b3s3','b3s4','b3s5','b3s6']"));
-  assert.match(fn,/const blockOrder=Object\.keys\(requiredSessions\)/);
+  assert.deepEqual(course().blocks[2].sessions.map(s=>s.id),['b3s1','b3s2','b3s3','b3s4','b3s5','b3s6']);
+  assert.doesNotMatch(fn,/requiredSessions|previousBlockQualified/);
 });
 
 test('block3 capstone and project brief follow the contract',()=>{

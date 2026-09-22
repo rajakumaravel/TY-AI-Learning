@@ -218,8 +218,8 @@ try {
   });
   await page.click('.pw-close');
 
-  // ---------- student, chapter 2 capstone unlocks chapter 3
-  await step(page, 'Chapter 3 locked until the chapter 2 assessment', async () => page.$eval('[data-block="2"]', el => el.classList.contains('locked') && !el.disabled));
+  // ---------- student, chapter 2 capstone earns the chapter 2 badge; chapter 3 was open all along
+  await step(page, 'Chapter 3 open before the chapter 2 assessment', async () => page.$eval('[data-block="2"]', el => !el.classList.contains('locked') && !el.disabled));
   await page.click('[data-block="1"]');
   await page.waitForSelector('#chapterCapstoneHost textarea[data-capstone]', { timeout: 15000 });
   await step(page, 'Submit chapter 2 capstone, formative level returned', async () => submitCapstone(page, CAPSTONE2_ANSWERS));

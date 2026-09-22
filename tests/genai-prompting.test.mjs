@@ -181,10 +181,10 @@ test('home page heading counts the chapters from the curriculum',()=>{
   assert.match(read('app.js'),/document\.getElementById\('chaptersHeading'\)\.textContent=`Chapters 1–\$\{COURSE\.blocks\.length\}`/);
 });
 
-test('server requires the ten Chapter 4 sessions before the capstone',()=>{
+test('Chapter 4 carries its ten sessions and the server gates none of them',()=>{
   const fn=read('functions/api/[[path]].js');
-  assert.ok(fn.includes("block4:['b4s1','b4s2','b4s3','b4s4','b4s5','b4s6','b4s7','b4s8','b4s9','b4s10']"));
-  assert.match(fn,/const blockOrder=Object\.keys\(requiredSessions\)/);
+  assert.deepEqual(course().blocks[3].sessions.map(s=>s.id),['b4s1','b4s2','b4s3','b4s4','b4s5','b4s6','b4s7','b4s8','b4s9','b4s10']);
+  assert.doesNotMatch(fn,/requiredSessions|previousBlockQualified/);
 });
 
 test('block4 capstone and project brief follow the contract',()=>{
