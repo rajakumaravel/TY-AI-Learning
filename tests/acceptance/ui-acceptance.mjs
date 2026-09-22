@@ -37,7 +37,7 @@ try {
   check('device 1 shows signed-in welcome', (await d1.page.textContent('#welcomeName')).includes(a.displayName));
   check('device 1 sync status is not Local mode', !(await d1.page.textContent('#syncStatus')).includes('Local mode'), await d1.page.textContent('#syncStatus'));
   check('device 1 course progress starts at 0%', (await d1.page.textContent('#coursePct')).trim() === '0%');
-  check('device 1 Chapter 2 locked before Chapter 1', await d1.page.$eval('[data-block="1"]', el => el.classList.contains('locked') && !el.disabled));
+  check('device 1 Chapter 2 open before Chapter 1', await d1.page.$eval('[data-block="1"]', el => !el.classList.contains('locked') && !el.disabled));
   // Experience Lab: banner, safety gate, fallback
   await d1.page.click('[data-block="0"]');
   await d1.page.waitForSelector('#labBanner .lab-stage', { timeout: 10000 });
@@ -61,29 +61,27 @@ try {
   const done = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { completed: CHAPTER1_SESSIONS, reflections: {}, activity: {}, badges: [], chapterAssessments: {} } }) });
   check('server accepts Chapter 1 completion', done.status === 200);
 
-  // Device 2: fresh browser, must see Chapter 1 progress from the server, Chapter 2 still locked (no capstone yet)
+  // Device 2: fresh browser, must see Chapter 1 progress from the server; every chapter card stays open
   let d2 = await device(browser, a.session);
   await d2.page.waitForFunction(() => document.getElementById('coursePct')?.textContent !== '0%', null, { timeout: 15000 }).catch(() => {});
   const pct = (await d2.page.textContent('#coursePct')).trim();
   check('device 2 shows Chapter 1 progress persisted across devices', pct !== '0%', `coursePct=${pct}`);
   check('device 2 Chapter 1 card not locked', await d2.page.$eval('[data-block="0"]', el => !el.classList.contains('locked')));
-  check('device 2 Chapter 2 still locked without capstone', await d2.page.$eval('[data-block="1"]', el => el.classList.contains('locked') && !el.disabled));
-  const lockText = await d2.page.$eval('[data-block="1"]', el => el.textContent);
-  check('device 2 Chapter 2 card explains the gate', /Submit your Chapter 0?1 assessment/i.test(lockText), lockText.slice(-80));
+  check('device 2 Chapter 2 open without a Chapter 1 capstone', await d2.page.$eval('[data-block="1"]', el => !el.classList.contains('locked') && !el.disabled));
+  const openText = await d2.page.$eval('[data-block="1"]', el => el.textContent);
+  check('device 2 Chapter 2 card invites the learner in', /Start \/ Continue/i.test(openText), openText.slice(-80));
   await d2.context.close();
 
   // Capstone submitted server-side; qualification is derived by the server, no client mirroring needed
   const cap = await api('chapter-assessment/block1', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE1_ANSWERS }) });
   check('capstone accepted', cap.status === 200 && Boolean(cap.body?.assessment?.submittedAt), JSON.stringify(cap.body));
 
-  // Device 3: Chapter 2 unlocked
+  // Device 3: Chapter 1 is badged, and every later chapter is still open
   let d3 = await device(browser, a.session);
-  await d3.page.waitForFunction(() => { const el = document.querySelector('[data-block="1"]'); return el && !el.classList.contains('locked'); }, null, { timeout: 15000 }).catch(() => {});
-  check('device 3 Chapter 2 unlocked after capstone', await d3.page.$eval('[data-block="1"]', el => !el.classList.contains('locked') && !el.disabled));
+  await d3.page.waitForFunction(() => { const el = document.querySelector('[data-block="0"]'); return el && el.classList.contains('done'); }, null, { timeout: 15000 }).catch(() => {});
   check('device 3 Chapter 1 marked done', await d3.page.$eval('[data-block="0"]', el => el.classList.contains('done')));
-  check('device 3 Chapter 3 locked until Chapter 2 qualified', await d3.page.$eval('[data-block="2"]', el => el.classList.contains('locked') && !el.disabled));
-  const lock3 = await d3.page.$eval('[data-block="2"]', el => el.textContent);
-  check('device 3 Chapter 3 card explains the gate', /Submit your Chapter 0?2 assessment/i.test(lock3), lock3.slice(-80));
+  check('device 3 Chapter 2 open after capstone', await d3.page.$eval('[data-block="1"]', el => !el.classList.contains('locked') && !el.disabled));
+  check('device 3 Chapter 3 open without Chapter 2 qualification', await d3.page.$eval('[data-block="2"]', el => !el.classList.contains('locked') && !el.disabled));
   await d3.context.close();
 
   // Chapter 2 completed and qualified server-side, then Chapter 3 opens with the dataset audit table
@@ -93,9 +91,9 @@ try {
   check('Chapter 2 capstone accepted', cap2.status === 200 && Boolean(cap2.body?.assessment?.submittedAt), JSON.stringify(cap2.body));
 
   let d4 = await device(browser, a.session);
-  await d4.page.waitForFunction(() => { const el = document.querySelector('[data-block="2"]'); return el && !el.classList.contains('locked'); }, null, { timeout: 15000 }).catch(() => {});
-  check('device 4 Chapter 3 unlocked after Chapter 2 capstone', await d4.page.$eval('[data-block="2"]', el => !el.classList.contains('locked') && !el.disabled));
-  check('device 4 Chapter 4 locked until Chapter 3 qualified', await d4.page.$eval('[data-block="3"]', el => el.classList.contains('locked') && !el.disabled));
+  await d4.page.waitForFunction(() => { const el = document.querySelector('[data-block="1"]'); return el && el.classList.contains('done'); }, null, { timeout: 15000 }).catch(() => {});
+  check('device 4 Chapter 3 open after Chapter 2 capstone', await d4.page.$eval('[data-block="2"]', el => !el.classList.contains('locked') && !el.disabled));
+  check('device 4 Chapter 4 open without Chapter 3 qualification', await d4.page.$eval('[data-block="3"]', el => !el.classList.contains('locked') && !el.disabled));
   await d4.page.click('[data-block="2"]');
   await d4.page.waitForSelector('#labBanner .lab-stage', { timeout: 10000 });
   check('chapter 3 shows six Experience Lab stages', (await d4.page.$$('#labBanner .lab-stage')).length === 6);
@@ -129,8 +127,8 @@ try {
   check('Chapter 3 capstone accepted', cap3.status === 200 && Boolean(cap3.body?.assessment?.submittedAt), JSON.stringify(cap3.body));
 
   let d5 = await device(browser, a.session);
-  await d5.page.waitForFunction(() => { const el = document.querySelector('[data-block="3"]'); return el && !el.classList.contains('locked'); }, null, { timeout: 15000 }).catch(() => {});
-  check('device 5 Chapter 4 unlocked after Chapter 3 capstone', await d5.page.$eval('[data-block="3"]', el => !el.classList.contains('locked') && !el.disabled));
+  await d5.page.waitForFunction(() => { const el = document.querySelector('[data-block="2"]'); return el && el.classList.contains('done'); }, null, { timeout: 15000 }).catch(() => {});
+  check('device 5 Chapter 4 open after Chapter 3 capstone', await d5.page.$eval('[data-block="3"]', el => !el.classList.contains('locked') && !el.disabled));
   await d5.page.click('[data-block="3"]');
   await d5.page.waitForSelector('#labBanner .lab-stage', { timeout: 10000 });
   check('chapter 4 shows six Experience Lab stages', (await d5.page.$$('#labBanner .lab-stage')).length === 6);
@@ -144,9 +142,7 @@ try {
   const composed = await d5.page.$eval('textarea[data-version="v2"][data-field="prompt"]', el => el.value);
   check('Compose v2 writes the four C-T-C-F parts into the v2 prompt', Object.values(parts).every(v => composed.includes(v)) && /\n\n/.test(composed), JSON.stringify(composed));
   await d5.page.click('[data-block-home], #homeBtn');
-  check('device 5 Chapter 5 locked until Chapter 4 qualified', await d5.page.$eval('[data-block="4"]', el => el.classList.contains('locked') && !el.disabled));
-  const lock5 = await d5.page.$eval('[data-block="4"]', el => el.textContent);
-  check('device 5 Chapter 5 card explains the gate', /Submit your Chapter 0?4 assessment/i.test(lock5), lock5.slice(-80));
+  check('device 5 Chapter 5 open without Chapter 4 qualification', await d5.page.$eval('[data-block="4"]', el => !el.classList.contains('locked') && !el.disabled));
   await d5.context.close();
 
   // Chapter 4 completed and qualified server-side, then Chapter 5 opens with the annotate and simulator kinds
@@ -156,8 +152,8 @@ try {
   check('Chapter 4 capstone accepted', cap4.status === 200 && Boolean(cap4.body?.assessment?.submittedAt), JSON.stringify(cap4.body));
 
   let d6 = await device(browser, a.session);
-  await d6.page.waitForFunction(() => { const el = document.querySelector('[data-block="4"]'); return el && !el.classList.contains('locked'); }, null, { timeout: 15000 }).catch(() => {});
-  check('device 6 Chapter 5 unlocked after Chapter 4 capstone', await d6.page.$eval('[data-block="4"]', el => !el.classList.contains('locked') && !el.disabled));
+  await d6.page.waitForFunction(() => { const el = document.querySelector('[data-block="3"]'); return el && el.classList.contains('done'); }, null, { timeout: 15000 }).catch(() => {});
+  check('device 6 Chapter 5 open after Chapter 4 capstone', await d6.page.$eval('[data-block="4"]', el => !el.classList.contains('locked') && !el.disabled));
   await d6.page.click('[data-block="4"]');
   await d6.page.waitForSelector('#labBanner .lab-stage', { timeout: 10000 });
   check('chapter 5 shows six Experience Lab stages', (await d6.page.$$('#labBanner .lab-stage')).length === 6);
@@ -205,16 +201,16 @@ try {
   check('chapter 5 downloads are served with HTTP 200', served5.every(s => s === 200), JSON.stringify(served5));
   await d6.context.close();
 
-  // Chapter 5 → 6 gate, then all Chapter 6 sessions and its project through real controls.
+  // Chapter 6 opens without a Chapter 5 capstone, then all Chapter 6 sessions and its project through real controls.
   const done5 = await api('progress', a.token, { method: 'PUT', body: JSON.stringify({ state: { completed: [...CHAPTER1_SESSIONS, ...CHAPTER2_SESSIONS, ...CHAPTER3_SESSIONS, ...CHAPTER4_SESSIONS, ...CHAPTER5_SESSIONS], reflections: {}, activity: {}, badges: [] } }) });
   check('server accepts Chapter 5 completion', done5.status === 200);
-  const locked6 = await device(browser, a.session);
-  await locked6.page.waitForSelector('[data-block="5"]');
-  check('Chapter 6 remains locked before Chapter 5 capstone', await locked6.page.$eval('[data-block="5"]',el=>!el.disabled&&el.classList.contains('locked')));
-  check('Chapter 7 card is locked and names the Chapter 6 gate', await locked6.page.$eval('[data-block="6"]',el=>!el.disabled&&el.classList.contains('locked')&&/Submit your Chapter 0?6 assessment/i.test(el.textContent)));
-  check('Chapter 8 card is locked and names the Chapter 7 gate', await locked6.page.$eval('[data-block="7"]',el=>!el.disabled&&el.classList.contains('locked')&&/Submit your Chapter 0?7 assessment/i.test(el.textContent)));
-  check('no ninth chapter card is offered', (await locked6.page.$$('[data-block="8"]')).length===0);
-  await locked6.context.close();
+  const open6 = await device(browser, a.session);
+  await open6.page.waitForSelector('[data-block="5"]');
+  check('Chapter 6 is open before the Chapter 5 capstone', await open6.page.$eval('[data-block="5"]',el=>!el.disabled&&!el.classList.contains('locked')));
+  check('Chapter 7 card is open', await open6.page.$eval('[data-block="6"]',el=>!el.disabled&&!el.classList.contains('locked')));
+  check('Chapter 8 card is open', await open6.page.$eval('[data-block="7"]',el=>!el.disabled&&!el.classList.contains('locked')));
+  check('no ninth chapter card is offered', (await open6.page.$$('[data-block="8"]')).length===0);
+  await open6.context.close();
   const cap5 = await api('chapter-assessment/block5', a.token, { method: 'POST', body: JSON.stringify({ answers: CAPSTONE5_ANSWERS }) });
   check('Chapter 5 capstone accepted',cap5.status===200&&Boolean(cap5.body?.assessment?.submittedAt));
   const d7 = await device(browser, a.session);
@@ -222,17 +218,17 @@ try {
   await completeChapter6UI(d7.page);
   await d7.context.close();
 
-  // Chapter 6 → 7 gate as rendered, then every Chapter 7 session and the branching decision kind through real controls.
+  // Chapter 7 as rendered, then every Chapter 7 session and the branching decision kind through real controls.
   const d8 = await device(browser, a.session);
-  await d8.page.waitForFunction(()=>{const el=document.querySelector('[data-block="6"]');return el&&!el.classList.contains('locked')},null,{timeout:15000});
-  check('Chapter 7 unlocked after the Chapter 6 capstone', await d8.page.$eval('[data-block="6"]',el=>!el.classList.contains('locked')&&!el.disabled));
+  await d8.page.waitForSelector('[data-block="6"]',{timeout:15000});
+  check('Chapter 7 is open after the Chapter 6 capstone', await d8.page.$eval('[data-block="6"]',el=>!el.classList.contains('locked')&&!el.disabled));
   await completeChapter7UI(d8.page);
   await d8.context.close();
 
-  // Chapter 7 → 8 gate as rendered, then every Chapter 8 session, the fallback build route and the programme-complete state.
+  // Chapter 8 as rendered, then every Chapter 8 session, the fallback build route and the programme-complete state.
   const d9 = await device(browser, a.session);
-  await d9.page.waitForFunction(()=>{const el=document.querySelector('[data-block="7"]');return el&&!el.classList.contains('locked')},null,{timeout:15000});
-  check('Chapter 8 unlocked after the Chapter 7 capstone', await d9.page.$eval('[data-block="7"]',el=>!el.classList.contains('locked')&&!el.disabled));
+  await d9.page.waitForSelector('[data-block="7"]',{timeout:15000});
+  check('Chapter 8 is open after the Chapter 7 capstone', await d9.page.$eval('[data-block="7"]',el=>!el.classList.contains('locked')&&!el.disabled));
   await completeChapter8UI(d9.page);
   await d9.context.close();
 

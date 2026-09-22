@@ -46,17 +46,14 @@ test('migration ADR prevents guessed identity reconciliation and premature cutov
   assert.match(adr,/RLS/i);
 });
 
-test('server derives chapter qualification from chapter_assessments and gates the next chapter',()=>{
+test('server derives chapter qualification from chapter_assessments without gating any chapter',()=>{
   assert.match(fn,/from\('chapter_assessments'\)\.select\('block_id,suggested_level,suggested_score,teacher_level,submitted_at'\)/);
   assert.match(fn,/chapterAssessments:await chapterQualifications\(db,userId\)/);
   assert.match(fn,/state:await withServerQualifications\(db,auth\.user\.id,data\?\.state\)/);
   assert.match(fn,/const trusted=await withServerQualifications\(db,auth\.user\.id,state\)/);
-  assert.equal((fn.match(/previousBlockQualified\(db,auth\.user\.id,(blockId|projectId)\)\)\)return json\(\{error:PREVIOUS_CHAPTER_REQUIRED\},409\)/g)||[]).length,3);
-  assert.match(fn,/block3:\['b3s1','b3s2','b3s3','b3s4','b3s5','b3s6'\]/);
-  assert.match(fn,/block4:\['b4s1','b4s2','b4s3','b4s4','b4s5','b4s6','b4s7','b4s8','b4s9','b4s10'\]/);
-  assert.match(fn,/block5:\['b5s1','b5s2','b5s3','b5s4','b5s5','b5s6','b5s7','b5s8','b5s9'\]/);
-  assert.match(fn,/block7:\['b7s1','b7s2','b7s3','b7s4','b7s5','b7s6','b7s7','b7s8'\]/);
-  assert.match(fn,/block8:\['b8s1','b8s2','b8s3','b8s4','b8s5','b8s6','b8s7','b8s8'\]/);
+  assert.doesNotMatch(fn,/previousBlockQualified/);
+  assert.doesNotMatch(fn,/PREVIOUS_CHAPTER_REQUIRED/);
+  assert.doesNotMatch(fn,/requiredSessions/);
 });
 
 test('admin/analytics is gated by the same requireAdmin check as every other admin route, with no separate or weaker check',()=>{

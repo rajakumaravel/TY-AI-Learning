@@ -283,13 +283,10 @@ test('the Chapter 8 project brief carries the nine portfolio deliverables',()=>{
   assert.ok(cap>=PORTFOLIO.length+6,`evidence cap ${cap} holds nine deliverables and six imported stages`);
 });
 
-test('the server gates Chapter 8 behind Chapter 7',()=>{
+test('Chapter 8 is open: it carries its eight sessions and the server gates nothing behind Chapter 7',()=>{
   const api=read('functions/api/[[path]].js');
-  assert.ok(api.includes("block8:['b8s1','b8s2','b8s3','b8s4','b8s5','b8s6','b8s7','b8s8']"));
-  assert.match(api,/const blockOrder=Object\.keys\(requiredSessions\)/);
-  const server=vm.createContext({});
-  vm.runInContext(api.match(/^const requiredSessions=.*$/m)[0]+'\nglobalThis.sessions=requiredSessions;',server);
-  assert.deepEqual(Object.keys(server.sessions).slice(-2),['block7','block8']);
+  assert.deepEqual(b.sessions.map(s=>s.id),ids);
+  assert.doesNotMatch(api,/requiredSessions|previousBlockQualified|PREVIOUS_CHAPTER_REQUIRED/);
 });
 
 test('the chapter downloads exist, and no student file hands over an answer',()=>{

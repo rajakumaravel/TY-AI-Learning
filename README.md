@@ -4,7 +4,7 @@ The portal follows **AI in Practice · Student Book v1.0 · September 2026** as 
 
 ## Platform status
 
-This branch (`infra-cloudflare-supabase`) targets Cloudflare Pages, Pages Functions, Supabase Auth with Google OAuth, and Supabase Postgres. Phase 1 live acceptance is evidenced on Preview; Production cutover is deferred until all phases are accepted; see [ADR-007](docs/decisions/ADR-007-cloudflare-supabase-platform.md). Netlify code is retained as rollback/reference, not as the runtime for the Cloudflare deployment.
+This branch (`infra-cloudflare-supabase`) targets Cloudflare Pages, Pages Functions, Supabase Auth with Google OAuth, and Supabase Postgres. Phase 1 live acceptance is evidenced on Preview, and Production was deployed on 2026-09-14 (commit `64fad52`, deployment `228b8cd3`); see [ADR-007](docs/decisions/ADR-007-cloudflare-supabase-platform.md) and the [cutover runbook](docs/releases/production-cutover.md). Netlify code is retained as rollback/reference, not as the runtime for the Cloudflare deployment.
 
 ## Pilot features
 
@@ -18,7 +18,7 @@ This branch (`infra-cloudflare-supabase`) targets Cloudflare Pages, Pages Functi
 - Chapter 7, Our AI Future, following Student Book pp. 32–35: observation kept apart from prediction, a narrow AI / AGI / forecast sort, a retail career transformation map, and an in-product AI Adoption Decision Simulator whose four starting choices each reveal new synthetic evidence and two further choices across eight modelled outcomes, feeding a three-future 2035 scenario canvas, a five-stakeholder analysis, a human-review debate, a future skills card and a justified final recommendation; no AI tool is opened, and the teacher key stays outside public files
 - Chapter 8, AI Innovation Project, following Student Book pp. 36–41: four two-hour sprints across eight sessions — five problems screened by the book's five tests, user research with approved, non-identifying questions, three solution options of which at least one uses no AI, a responsible AI and data canvas whose success criteria are written before any building, the smallest prototype that tests the biggest assumption, a three-tester watch-don't-help log, an iteration log and risk register in one table where a residual of "none" is refused, and the book's eight-point presentation with an individual reflection; the six judging criteria are shown before the student starts, AI is optional and building the non-AI version is a full route, and the teacher key stays outside public files
 - Phase 10, Portfolio, School Reporting and Pilot Analytics: a self-contained student portfolio export and a narrower coordinator summary with no free-text student writing, and an admin-only pilot analytics view of aggregate completion, resubmission, drop-off, teacher-agreement, Experience Lab and feedback measures with any cohort under five learners suppressed (ADR-008)
-- Applied chapter capstones, progression gates and badges
+- Applied chapter capstones and badges, with every chapter open in any order (ADR-009)
 - Google sign-in and account-owned progress
 - Chapter 2 Project Workspace with work logs, evidence and submitted snapshots
 - Protected teacher/admin review at `/admin`
@@ -49,18 +49,18 @@ npm ci
 npm run check
 ```
 
-Live cutover acceptance against a deployment (needs `supabase login` and `npx playwright install chromium`; creates and deletes throwaway auth users, prints no keys). The API script covers persistence, the capstone gate, RLS isolation, admin authorisation and project submit/review; the browser script covers cross-device persistence, the Chapter 1→2 lock as rendered, and admin-page rejection:
+Live cutover acceptance against a deployment (needs `supabase login` and `npx playwright install chromium`; creates and deletes throwaway auth users, prints no keys). The API script covers persistence, open chapter access, RLS isolation, admin authorisation and project submit/review; the browser script covers cross-device persistence, every chapter card rendering as open, and admin-page rejection:
 
 ```bash
 ACCEPTANCE_BASE_URL=https://<deployment>.ty-ai-learning.pages.dev npm run acceptance
 ```
 
-To browse every chapter as a reviewer without working through the gates, open a deployment as a throwaway account that has completed Chapters 1–3 (add `--admin` to also open `/admin`); the account is deleted when the browser closes:
+To browse every chapter as a reviewer with Chapter 1–3 evidence already in place, open a deployment as a throwaway account that has completed Chapters 1–3 (add `--admin` to also open `/admin`); the account is deleted when the browser closes:
 
 ```bash
 ACCEPTANCE_BASE_URL=https://preview-main.ty-ai-learning.pages.dev npm run browse -- --admin
 ```
 
-Every branch push, including `main`, deploys to the Cloudflare Pages Preview environment as `preview-<branch>` (so `main` is served at `https://preview-main.ty-ai-learning.pages.dev`). The Production release workflow is manual dispatch only; it applies database migrations before deploying. Production is deferred until all roadmap phases are accepted on Preview.
+Every branch push, including `main`, deploys to the Cloudflare Pages Preview environment as `preview-<branch>` (so `main` is served at `https://preview-main.ty-ai-learning.pages.dev`). The Production release workflow is manual dispatch only; it applies database migrations before deploying. Production is live at https://ty-ai-learning.pages.dev as of 2026-09-14.
 
-The [ADR-007 acceptance checklist](docs/decisions/ADR-007-cloudflare-supabase-platform.md) is evidenced on Preview; only the Production release itself is outstanding. Phase 2 follows; see [ROADMAP](ROADMAP.md).
+The [ADR-007 acceptance checklist](docs/decisions/ADR-007-cloudflare-supabase-platform.md) is evidenced on Preview and, since 2026-09-14, by the same suites against Production; the operator's manual Google sign-in and `/admin` check on the Production URL is outstanding. Phase 2 follows; see [ROADMAP](ROADMAP.md).

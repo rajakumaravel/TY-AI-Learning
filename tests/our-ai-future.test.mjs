@@ -481,14 +481,10 @@ test('Chapter 7 downloads exist on disk and the teacher key never reaches the st
   for(const item of session('b7s2').activity.items)assert.ok(keyText.includes(item[0]),item[0]);
 });
 
-test('the Chapter 7 server list gates the chapter behind Chapter 6',()=>{
+test('Chapter 7 is open: it carries its eight sessions and the server gates nothing behind Chapter 6',()=>{
   const api=read('functions/api/[[path]].js');
-  assert.ok(api.includes("block7:['b7s1','b7s2','b7s3','b7s4','b7s5','b7s6','b7s7','b7s8']"));
-  assert.match(api,/const blockOrder=Object\.keys\(requiredSessions\)/);
-  const server=vm.createContext({});
-  vm.runInContext(api.match(/^const requiredSessions=.*$/m)[0]+'\nglobalThis.sessions=requiredSessions;',server);
-  assert.deepEqual(Object.keys(server.sessions).slice(0,7),['block1','block2','block3','block4','block5','block6','block7']);
-  assert.deepEqual(plain(server.sessions.block7),ids);
+  assert.deepEqual(plain(b.sessions.map(s=>s.id)),ids);
+  assert.doesNotMatch(api,/requiredSessions|previousBlockQualified|PREVIOUS_CHAPTER_REQUIRED/);
 });
 
 test('Chapter 7 project brief and capstone follow the contract',()=>{

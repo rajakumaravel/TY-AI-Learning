@@ -159,7 +159,7 @@ The product should progressively evolve toward this structure rather than a less
 Assessment has two layers:
 
 1. **Session feedback** — formative coaching after practical evidence/reflection; does not gate progression.
-2. **Chapter capstone** — applied competency check after all chapter practical work is complete; submission/evaluation gates the badge and next chapter.
+2. **Chapter capstone** — applied competency check for the chapter; submission/evaluation earns the badge. It gates nothing: every chapter is open in any order (ADR-009).
 
 Automated assessment is formative in the pilot. Teacher judgement is authoritative and is stored separately from automated suggestions.
 
@@ -204,7 +204,6 @@ The following are anti-patterns and require explicit justification before implem
 - mandatory paid accounts;
 - teacher-dependent instruction for core learning;
 - exposing student personal data unnecessarily;
-- unlocking chapters without required practical evidence and capstone submission;
 - badges awarded for clicks rather than demonstrated work.
 
 ## Definition of a successful student experience

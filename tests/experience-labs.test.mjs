@@ -110,9 +110,9 @@ test('lab evidence flows into the project workspace and admin review',()=>{
   assert.match(admin,/activity\.kind === "lab"/);
 });
 
-test('server requires every chapter 1 session, including the lab, before the capstone',()=>{
-  const ids=course.blocks[0].sessions.map(s=>s.id);
-  assert.ok(fn.includes(`block1:[${ids.map(id=>`'${id}'`).join(',')}]`));
+test('chapter 1 keeps its lab session and the server gates no chapter',()=>{
+  assert.ok(course.blocks[0].sessions.some(s=>s.id==='b1lab'));
+  assert.doesNotMatch(fn,/requiredSessions|previousBlockQualified/);
 });
 
 test('chapter 7 lab is the in-product AI Adoption Decision Simulator with no AI tool and no safety notes',()=>{

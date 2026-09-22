@@ -1,5 +1,7 @@
 # ADR-004 — Chapter capstone assessment and progression gate
 
+> **Superseded in part by [ADR-009](ADR-009-open-chapter-access.md) (2026-09-22): the capstone still earns the badge, but it no longer gates the next chapter and no longer waits for the chapter's sessions to be complete.**
+
 - **Status:** Accepted
 - **Date:** 2026-09-10
 - **Programme:** AI in Practice — Transition Year pilot

@@ -4,13 +4,10 @@ import fs from 'node:fs';
 
 const student=fs.readFileSync('project-workspace.js','utf8');
 
-test('project workspaces are gated behind the previous chapter capstone qualification, in COURSE order',()=>{
-  assert.match(student,/function projectUnlocked\(state=\{\},projectId\)/);
-  assert.match(student,/COURSE\.blocks\.findIndex\(b=>b\.id===projectId\)/);
-  assert.match(student,/prev\.sessions\.every/);
-  assert.match(student,/chapterAssessments/);
-  assert.match(student,/submittedAt/);
+test('every project workspace with a brief is open, with no previous-chapter gate',()=>{
+  assert.match(student,/function projectUnlocked\(state=\{\},projectId\)\{return Boolean\(PROJECT_BRIEFS\[projectId\]\)\}/);
   assert.match(student,/if\(!projectUnlocked\(progress\.state,projectId\)\)return/);
+  assert.doesNotMatch(student,/prev\.sessions\.every/);
   assert.doesNotMatch(student,/chapter2Unlocked/);
 });
 

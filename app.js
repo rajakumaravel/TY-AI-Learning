@@ -44,7 +44,8 @@ function setSync(text,kind=''){const targets=document.querySelectorAll('[data-sy
 function allSessions(){return COURSE.blocks.flatMap(b=>b.sessions)}
 function blockDone(b){return b.sessions.every(s=>state.completed.includes(s.id))}
 function blockQualified(b){return Boolean(state.chapterAssessments?.[b.id]?.submittedAt)}
-function blockUnlocked(i){return i===0||(blockDone(COURSE.blocks[i-1])&&blockQualified(COURSE.blocks[i-1]))}
+// Every chapter is open from the start: a learner stuck in one chapter moves on to another rather than stalling.
+// A badge still needs that chapter's own assessment, so the order the work is done in carries no meaning, only the record.
 function reconcileBadges(){state.badges=COURSE.blocks.filter(b=>blockQualified(b)).map(b=>b.badge)}
 function pct(){return Math.round(state.completed.length/allSessions().length*100)}
 function renderProgress(){const p=pct();document.getElementById('coursePct').textContent=p+'%';document.getElementById('courseBar').style.width=p+'%'}
@@ -59,7 +60,11 @@ function show(id){['homeView','blockView','portfolioView'].forEach(x=>document.g
 let routing=false;
 function setRoute(hash){if(typeof window==='undefined'||!window.location)return;if(window.location.hash===hash)return;routing=true;window.location.hash=hash;setTimeout(()=>{routing=false},0)}
 function currentRoute(){const raw=(typeof window!=='undefined'&&window.location?window.location.hash:'')||'';const parts=raw.replace(/^#\/?/,'').split('/').filter(Boolean);return {view:parts[0]||'',sessionId:parts[1]||''}}
-function applyRoute(){if(routing)return;const {view,sessionId}=currentRoute();if(view==='portfolio'){renderPortfolio();show('portfolioView');return}const match=/^b(\d+)$/.exec(view);if(match){const i=COURSE.blocks.findIndex(b=>Number(b.number)===Number(match[1]));if(i>=0&&blockUnlocked(i)){openBlock(i,sessionId);return}}renderHome();show('homeView')}
+// A hashchange that only describes where the learner already is must not re-render: setRoute's `routing` guard
+// clears on a zero timer, so a late hashchange event used to rebuild the whole lesson panel underneath someone
+// mid-activity, dropping their focus and detaching the control they were about to click.
+function atRoute(i,sessionId){return activeBlock===COURSE.blocks[i]&&Boolean(activeSession)&&(!sessionId||activeSession.id===sessionId)&&!document.getElementById('blockView').classList.contains('hidden')}
+function applyRoute(){if(routing)return;const {view,sessionId}=currentRoute();if(view==='portfolio'){renderPortfolio();show('portfolioView');return}const match=/^b(\d+)$/.exec(view);if(match){const i=COURSE.blocks.findIndex(b=>Number(b.number)===Number(match[1]));if(i>=0){if(!atRoute(i,sessionId))openBlock(i,sessionId);return}}renderHome();show('homeView')}
 
 async function scheduleSync(){saveLocal();renderProgress();if(!user||cloudError){setSync(cloudError?'Saved on this device only':'Saved on this device','');return}clearTimeout(syncTimer);setSync('Saving…');syncTimer=setTimeout(async()=>{try{await api('progress',{method:'PUT',body:JSON.stringify({state})});setSync('Saved to your account','online')}catch{setSync('Saved on this device','error')}},400)}
 
@@ -80,22 +85,17 @@ function renderHome(){
   document.getElementById('accountAction').innerHTML=signed?'Sign out':'<span class="gmark">G</span><span>Continue with Google</span>';
   document.getElementById('chaptersHeading').textContent=`Chapters 1–${COURSE.blocks.length}`;
   document.getElementById('blockGrid').innerHTML=COURSE.blocks.map((b,i)=>{
-    const unlocked=blockUnlocked(i),sessionsDone=blockDone(b),qualified=blockQualified(b),done=sessionsDone&&qualified,last=i===COURSE.blocks.length-1;
+    const sessionsDone=blockDone(b),qualified=blockQualified(b),done=sessionsDone&&qualified,last=i===COURSE.blocks.length-1;
     let status='Start / Continue';
     if(done)status=last?`Badge earned: ${b.badge} · Programme complete`:'Complete';
     else if(sessionsDone)status='Chapter assessment required';
-    else if(!unlocked)status=`Submit your Chapter ${COURSE.blocks[i-1].number} assessment`;
-    // A locked card stays focusable and activatable. It used to be `disabled`, so the answer to "I want to go
-    // forward" was a dead click; now it takes the learner to the assessment that is actually blocking them.
-    const meta=unlocked?`<span>CHAPTER ${b.number}</span>`:`<span class="card-locked-label">${LOCK_ICON}CHAPTER ${b.number} · LOCKED</span>`;
-    return `<button class="block-card block-${i+1} ${done?'done':''} ${done&&last?'programme-complete':''} ${!unlocked?'locked':''}" data-block="${i}"><div class="card-top">${meta}<span>${esc(b.duration)}</span></div><h2>${esc(b.title)}</h2><p>${esc(b.description)}</p><div class="card-bottom">${done?`<span class="badge-pill done-pill">${CHECK_ICON}${esc(b.badge)}</span>`:`<span class="badge-pill">${esc(b.badge)}</span>`}<strong>${esc(status)}</strong></div></button>`;
+    const meta=`<span>CHAPTER ${b.number}</span>`;
+    return `<button class="block-card block-${i+1} ${done?'done':''} ${done&&last?'programme-complete':''}" data-block="${i}"><div class="card-top">${meta}<span>${esc(b.duration)}</span></div><h2>${esc(b.title)}</h2><p>${esc(b.description)}</p><div class="card-bottom">${done?`<span class="badge-pill done-pill">${CHECK_ICON}${esc(b.badge)}</span>`:`<span class="badge-pill">${esc(b.badge)}</span>`}<strong>${esc(status)}</strong></div></button>`;
   }).join('');
-  document.querySelectorAll('[data-block]').forEach(x=>x.onclick=()=>{const i=Number(x.dataset.block);if(blockUnlocked(i)){openBlock(i);return}goToBlockingAssessment(i)});
+  document.querySelectorAll('[data-block]').forEach(x=>x.onclick=()=>openBlock(Number(x.dataset.block)));
 }
 
-function openBlock(i,sessionId=''){if(!blockUnlocked(i))return;activeBlock=COURSE.blocks[i];activeSession=(sessionId&&activeBlock.sessions.find(s=>s.id===sessionId))||activeBlock.sessions.find(s=>!state.completed.includes(s.id))||activeBlock.sessions[0];setRoute(`#/b${Number(activeBlock.number)}/${activeSession.id}`);document.getElementById('blockMeta').textContent=`CHAPTER ${activeBlock.number} · ${activeBlock.duration}`;document.getElementById('blockTitle').textContent=activeBlock.title;document.getElementById('blockDesc').textContent=activeBlock.description;document.getElementById('blockBadge').textContent=activeBlock.badge;document.getElementById('blockLO').innerHTML=activeBlock.outcomes.map(x=>`<span class="tag">${esc(x)}</span>`).join('');document.getElementById('blockMission').textContent=activeBlock.mission;document.getElementById('blockRoute').innerHTML=activeBlock.route.map(r=>`<div><strong>${esc(r[0])}</strong><span>${esc(r[1])}</span></div>`).join('');renderRubric();renderLabBanner();renderMyths();renderSessionNav();renderLesson();show('blockView')}
-// Activating a locked chapter opens the previous chapter at the work that is blocking it, rather than doing nothing.
-function goToBlockingAssessment(i){const prev=COURSE.blocks[i-1];if(!prev)return;const prevIndex=i-1;if(!blockUnlocked(prevIndex))return;const pending=prev.sessions.find(s=>!state.completed.includes(s.id));openBlock(prevIndex,pending?pending.id:'');const host=document.getElementById('chapterCapstoneHost');if(host&&host.scrollIntoView)host.scrollIntoView({block:'start'});const heading=host?.querySelector('h3');if(heading){heading.setAttribute('tabindex','-1');heading.focus?.()}feedback('lessonFeedback',pending?`Chapter ${prev.number} still needs this session finished before the next chapter opens.`:`Submit the Chapter ${prev.number} assessment below to unlock the next chapter.`,'warn')}
+function openBlock(i,sessionId=''){activeBlock=COURSE.blocks[i];activeSession=(sessionId&&activeBlock.sessions.find(s=>s.id===sessionId))||activeBlock.sessions.find(s=>!state.completed.includes(s.id))||activeBlock.sessions[0];setRoute(`#/b${Number(activeBlock.number)}/${activeSession.id}`);document.getElementById('blockMeta').textContent=`CHAPTER ${activeBlock.number} · ${activeBlock.duration}`;document.getElementById('blockTitle').textContent=activeBlock.title;document.getElementById('blockDesc').textContent=activeBlock.description;document.getElementById('blockBadge').textContent=activeBlock.badge;document.getElementById('blockLO').innerHTML=activeBlock.outcomes.map(x=>`<span class="tag">${esc(x)}</span>`).join('');document.getElementById('blockMission').textContent=activeBlock.mission;document.getElementById('blockRoute').innerHTML=activeBlock.route.map(r=>`<div><strong>${esc(r[0])}</strong><span>${esc(r[1])}</span></div>`).join('');renderRubric();renderLabBanner();renderMyths();renderSessionNav();renderLesson();show('blockView')}
 function renderMyths(){const el=document.getElementById('mythBusters'),myths=activeBlock?.myths;if(!el)return;if(!Array.isArray(myths)||!myths.length){el.innerHTML='';return}el.innerHTML=`<div class="eyebrow">MYTH-BUSTERS</div><div class="myth-grid"><b>People say</b><b>Actually</b>${myths.map(([say,actually])=>`<p class="myth-say">“${esc(say)}”</p><p class="myth-actually">${esc(actually)}</p>`).join('')}</div>`}
 // Chapter 8 judging criteria (Student Book p.41: “Read them before you start, not after.”). Only a block that sets
 // `rubric` renders a table; every earlier chapter leaves the container empty. Rows are [criterion, started, there, further].
@@ -186,12 +186,12 @@ function decisionEvidenceItems(b){return b.sessions.filter(s=>s.activity.kind===
 function stageEvidenceItems(b){const stageIds=new Set((b?.lab?.stages||[]).map(x=>x[1]));return (b?.sessions||[]).filter(s=>s.activity.kind==='lab'||(stageIds.has(s.id)&&['textfields','chain','testlog'].includes(s.activity.kind))).flatMap(s=>{const a=s.activity,v=state.activity[s.id]||{};if(a.fields)return a.fields.map((f,i)=>[f,String(v[i]||'').trim()]).filter(x=>x[1]);const cols=a.columns||[],rows=Object.keys(v).filter(k=>/^\d+$/.test(k)).sort((x,y)=>x-y).map(k=>v[k]).filter(r=>r&&typeof r==='object');const lines=rows.map(r=>cols.map(([k,l])=>String(r[k]||'').trim()?`${l}: ${String(r[k]).trim()}`:'').filter(Boolean).join(' · ')).filter(Boolean);return lines.length?[[s.title,lines.join(' | ')]]:[]})}
 function labEvidenceHTML(b){const items=[...stageEvidenceItems(b),...decisionEvidenceItems(b)];if(!items.length)return '';return `<div class="lab-evidence"><strong>Your Experience Lab evidence</strong><p class="muted">Use what you actually observed in the lab to support your answers.</p><dl>${items.map(([f,v])=>`<div><dt>${esc(f)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></div>`}
 function capstoneHTML(){
-  if(!activeBlock||!blockDone(activeBlock))return '';
+  if(!activeBlock)return '';
   const cap=CAPSTONES[activeBlock.id];
   if(!cap)return '';
   const saved=state.chapterAssessments?.[activeBlock.id];
   if(saved?.submittedAt)return `<section class="assessment-card chapter-capstone"><div class="eyebrow">CHAPTER ASSESSMENT · COMPLETE</div><h3>${esc(cap.title)}</h3><p><strong>${esc(saved.level||'Evaluated')}</strong> · Your ${esc(activeBlock.badge)} badge is confirmed.</p><p>This is an automatic first judgement. Your training centre can adjust it after reading your work; if that happens, the level shown here changes.</p></section>`;
-  if(!user)return `<section class="assessment-card chapter-capstone"><div class="eyebrow">CHAPTER ASSESSMENT · READY</div><h3>${esc(cap.title)}</h3><p>${esc(cap.brief)}</p><p><strong>Sign in with Google to submit the chapter assessment and unlock the next chapter.</strong></p></section>`;
+  if(!user)return `<section class="assessment-card chapter-capstone"><div class="eyebrow">CHAPTER ASSESSMENT · READY</div><h3>${esc(cap.title)}</h3><p>${esc(cap.brief)}</p><p><strong>Sign in with Google to submit the chapter assessment and earn the badge for this chapter.</strong></p></section>`;
   return `<section class="assessment-card chapter-capstone"><div class="eyebrow">CHAPTER ASSESSMENT · APPLIED CHALLENGE</div><h3>${esc(cap.title)}</h3><p>${esc(cap.brief)}</p><p class="muted">This is a work-like challenge, not a recall quiz. Use what you learned from the chapter and explain your judgement.</p>${selfCheckHTML(activeBlock)}${levelUpHTML(activeBlock)}${labEvidenceHTML(activeBlock)}${cap.prompts.map((p,i)=>`<label class="record"><span>${esc(p)}</span><textarea data-capstone="${i}" placeholder="Explain your decision and evidence in your own words…">${esc(capstoneDraft()[i]||'')}</textarea></label>`).join('')}<div id="capstoneFeedback" class="result" role="status"></div><button id="submitCapstone" class="primary">Submit chapter assessment</button></section>`;
 }
 
@@ -201,7 +201,7 @@ function capstoneHTML(){
 function capstoneDraft(){const rec=activeBlock&&state.chapterAssessments?.[activeBlock.id];const d=rec&&typeof rec.draft==='object'&&rec.draft?rec.draft:{};return d}
 function saveCapstoneDraft(i,value){if(!activeBlock)return;const rec=state.chapterAssessments[activeBlock.id]||{};state.chapterAssessments[activeBlock.id]={...rec,draft:{...(rec.draft&&typeof rec.draft==='object'?rec.draft:{}),[i]:value}};scheduleSync()}
 
-function renderChapterCapstone(){const existing=document.getElementById('chapterCapstoneHost');if(existing)existing.remove();if(!activeBlock||!blockDone(activeBlock))return;const host=document.createElement('div');host.id='chapterCapstoneHost';host.innerHTML=capstoneHTML();document.getElementById('lessonPanel').appendChild(host);const btn=document.getElementById('submitCapstone');if(btn)btn.onclick=submitChapterAssessment;host.querySelectorAll('[data-capstone]').forEach(x=>x.oninput=()=>saveCapstoneDraft(x.dataset.capstone,x.value))}
+function renderChapterCapstone(){const existing=document.getElementById('chapterCapstoneHost');if(existing)existing.remove();if(!activeBlock)return;const host=document.createElement('div');host.id='chapterCapstoneHost';host.innerHTML=capstoneHTML();document.getElementById('lessonPanel').appendChild(host);const btn=document.getElementById('submitCapstone');if(btn)btn.onclick=submitChapterAssessment;host.querySelectorAll('[data-capstone]').forEach(x=>x.oninput=()=>saveCapstoneDraft(x.dataset.capstone,x.value))}
 
 async function submitChapterAssessment(){
   if(cloudError){feedback('capstoneFeedback','Cloud sync is unavailable right now, so the assessment cannot be submitted. Reload the page to reconnect, then submit again.','warn');return}

@@ -232,10 +232,10 @@ test('textfields ready rule honours per-field minimum lengths and keeps the 12-c
   assert.match(app,/if\(a\.kind==='textfields'\)return a\.fields\.every\(\(_,i\)=>String\(v\[i\]\|\|''\)\.trim\(\)\.length>=\(Array\.isArray\(a\.minLengths\)&&Number\.isFinite\(a\.minLengths\[i\]\)\?a\.minLengths\[i\]:12\)\)/);
 });
 
-test('server requires the nine Chapter 5 sessions before the capstone',()=>{
+test('Chapter 5 carries its nine sessions and the server gates none of them',()=>{
   const api=read('functions/api/[[path]].js');
-  assert.ok(api.includes("block5:['b5s1','b5s2','b5s3','b5s4','b5s5','b5s6','b5s7','b5s8','b5s9']"));
-  assert.match(api,/const blockOrder=Object\.keys\(requiredSessions\)/);
+  assert.deepEqual(course().blocks[4].sessions.map(s=>s.id),['b5s1','b5s2','b5s3','b5s4','b5s5','b5s6','b5s7','b5s8','b5s9']);
+  assert.doesNotMatch(api,/requiredSessions|previousBlockQualified/);
 });
 
 test('project workspace summarises the annotate and simulator kinds',()=>{
