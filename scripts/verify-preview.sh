@@ -4,7 +4,10 @@
 # Exit 0 only if API, browser acceptance and the live walkthrough all pass. The API suite is retried once,
 # because Pages Functions can return 404 for a minute after a fresh deployment.
 set -u
-BRANCH="$1"; SHA="${2:-$(git rev-parse --short "$BRANCH")}"; SHA="${SHA:0:7}"
+# The SHA must come from the remote: after a PR is merged on GitHub the local branch ref still points at the
+# previous commit, and polling for a preview of a commit that was never deployed waits for ever.
+BRANCH="$1"; git fetch -q origin "$BRANCH" 2>/dev/null || true
+SHA="${2:-$(git rev-parse --short "origin/$BRANCH" 2>/dev/null || git rev-parse --short "$BRANCH")}"; SHA="${SHA:0:7}"
 until gh run list --branch "$BRANCH" --workflow "Deploy Cloudflare Pages Preview" --limit 1 --json status,headSha \
   -q ".[0] | select(.headSha | startswith(\"$SHA\")) | .status" 2>/dev/null | grep -q completed; do sleep 5; done
 gh run list --branch "$BRANCH" --limit 2 --json workflowName,conclusion -q '.[] | "\(.conclusion)\t\(.workflowName)"'

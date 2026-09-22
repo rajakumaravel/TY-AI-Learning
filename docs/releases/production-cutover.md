@@ -121,6 +121,34 @@ Worth carrying forward: `supabase migration list --linked` passing locally prove
 psql "$SUPABASE_DB_URL" -c 'select 1'
 ```
 
+## Execution record — 2026-09-22 (open chapter access)
+
+Released by Claude Code on the operator's instruction, via the CLI rather than the release workflow. The workflow's
+`environment: production` gate is the reason it normally carries the dispatch; running `wrangler` locally skipped that,
+so this release is absent from the Actions history and is recorded only here.
+
+| Item | Value |
+|---|---|
+| Release commit | `bab0193bbda7399d02a1dea08342af3fc4a41341` (`main`, PR #25 merge) |
+| Production deployment | `9c7118a9` (branch `main`, https://9c7118a9.ty-ai-learning.pages.dev) |
+| Step 1 gate | `ALL SUITES GREEN` on preview `01c2e87a` — API 94/94, browser 233/233, walkthrough 258/258 |
+| Database | `db push --dry-run` reported `Remote database is up to date.`; no migration was applied, and `git diff 64fad52 main -- supabase/` is empty |
+| Step 6 Production acceptance | not run — the suites create and delete auth users in the live database, so Production was verified read-only instead |
+
+Read-only Production verification: `/` 200, `/admin` 200, `/api/session` 401 unauthenticated, the Chapter 2 training-set
+zip 200 at 562,337 bytes as `application/zip`, and the shipped `assets/student-CgyOHiec.js` carries neither
+`blockUnlocked` nor `card-locked-label`, with the chapter card bound straight to `openBlock(Number(e.dataset.block))`.
+
+Row counts before and after the deployment were identical — `learners` 2, `learner_progress` 2,
+`formative_assessments` 8, `chapter_assessments` 1, `student_projects` 0, `auth.users` 2 — so nothing was lost.
+
+### The `verify-preview.sh` hang, diagnosed
+
+The hang recorded below is not intermittent and it is not GitHub. `SHA` defaulted to `git rev-parse --short "$BRANCH"`,
+which reads the **local** ref: after a PR is merged through GitHub, local `main` still points at the previous commit
+until it is fetched, so the poll waited for a Preview run whose `headSha` would never match, with no timeout to end it.
+It cost 40 minutes here. The script now resolves the SHA from `origin/$BRANCH` after fetching.
+
 ### Still outstanding
 
 - The operator has not yet hand-confirmed Google sign-in and `/admin` on the Production URL (the last line of Step 6). Step 4's redirect and Site URL entries were added but could not be read back here — no management-API token is configured — so that hand-check is the only evidence they are correct.
